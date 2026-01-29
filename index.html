@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>後藤 一朗 | コンピュータビジョン研究者</title>
+    <meta name="description" content="コンピュータビジョン・医用画像処理を専門とする研究者のポートフォリオサイト">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- ナビゲーション -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">I.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Research</a></li>
+                <li><a href="#future">Vision</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- ヒーローセクション -->
+    <header class="hero" id="top">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <p class="hero-label">Computer Vision Researcher</p>
+            <h1 class="hero-title">
+                AIの力で、<br>
+                <span class="highlight">医療の未来を守る</span>
+            </h1>
+            <p class="hero-description">
+                コンピュータビジョンと深層学習の研究を通じて、<br class="sp-only">
+                安全で信頼できるAIシステムの実現を目指しています。
+            </p>
+            <div class="hero-info">
+                <div class="hero-info-item">
+                    <i class="fas fa-user"></i>
+                    <span>後藤 一朗（Ichiro Goto）</span>
+                </div>
+                <div class="hero-info-item">
+                    <i class="fas fa-building"></i>
+                    <span>九州工業大学 生命化学情報工学科 4年</span>
+                </div>
+            </div>
+            <div class="hero-actions">
+                <a href="#contact" class="btn btn-primary">お問い合わせ</a>
+                <a href="#projects" class="btn btn-outline">研究内容を見る</a>
+            </div>
+        </div>
+        <a href="#about" class="scroll-indicator">
+            <span>Scroll</span>
+            <i class="fas fa-chevron-down"></i>
+        </a>
+    </header>
+
+    <main>
+        <!-- 自己紹介セクション -->
+        <section class="section" id="about">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">About Me</span>
+                    <h2 class="section-title">自己紹介</h2>
+                </div>
+                
+                <div class="about-grid">
+                    <div class="about-main">
+                        <div class="about-card">
+                            <h3 class="about-card-title">
+                                <i class="fas fa-graduation-cap"></i>
+                                バックグラウンド
+                            </h3>
+                            <p>
+                                九州工業大学 情報工学部 生命化学情報工学科の4年生です。
+                                学部では<strong>コンピュータビジョン</strong>と<strong>深層学習</strong>を中心に学び、
+                                特に医用画像処理とAIセキュリティの分野で研究を進めています。
+                            </p>
+                            <p>
+                                2026年4月より、<strong>筑波大学大学院 システム情報工学研究群 情報理工学位プログラム</strong>に
+                                進学予定です。大学院ではコンピュータビジョンの研究をさらに深めていく予定です。
+                            </p>
+                        </div>
+
+                        <div class="about-card">
+                            <h3 class="about-card-title">
+                                <i class="fas fa-lightbulb"></i>
+                                興味のあるテーマ
+                            </h3>
+                            <div class="interest-tags">
+                                <span class="interest-tag">コンピュータビジョン</span>
+                                <span class="interest-tag">医用画像処理</span>
+                                <span class="interest-tag">敵対的機械学習</span>
+                                <span class="interest-tag">拡散モデル</span>
+                                <span class="interest-tag">AIセキュリティ</span>
+                            </div>
+                            <p class="mt-2">
+                                AIシステムの「安全性」と「信頼性」に強い関心があります。
+                                特に、医療現場で使われるAIが悪意ある攻撃から守られ、
+                                安心して利用できる技術の実現を目指しています。
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="about-sidebar">
+                        <div class="profile-card">
+                            <div class="profile-image">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <h3 class="profile-name">後藤 一朗</h3>
+                            <p class="profile-title">Ichiro Goto</p>
+                            <div class="profile-details">
+                                <div class="profile-item">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <span>福岡県</span>
+                                </div>
+                                <div class="profile-item">
+                                    <i class="fas fa-university"></i>
+                                    <span>九州工業大学 4年</span>
+                                </div>
+                                <div class="profile-item">
+                                    <i class="fas fa-arrow-right"></i>
+                                    <span>筑波大学大学院 進学予定</span>
+                                </div>
+                            </div>
+                            <div class="profile-links">
+                                <a href="#" class="profile-link" title="GitHub">
+                                    <i class="fab fa-github"></i>
+                                </a>
+                                <a href="#" class="profile-link" title="Google Scholar">
+                                    <i class="fas fa-graduation-cap"></i>
+                                </a>
+                                <a href="#" class="profile-link" title="Twitter/X">
+                                    <i class="fab fa-x-twitter"></i>
+                                </a>
+                                <a href="#" class="profile-link" title="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 実績セクション -->
+        <section class="section section-alt" id="projects">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Research</span>
+                    <h2 class="section-title">研究内容</h2>
+                </div>
+
+                <!-- 卒業研究 -->
+                <div class="project-section">
+                    <h3 class="project-section-title">
+                        <i class="fas fa-microscope"></i>
+                        卒業研究
+                    </h3>
+                    <div class="research-detail">
+                        <div class="research-card">
+                            <h4 class="research-title">拡散モデルを用いた敵対的摂動除去による医用画像分類システム防御</h4>
+                            <p class="research-description">
+                                医用画像を用いたAI診断支援システムは、近年急速に発展しています。
+                                しかし、これらのシステムは「敵対的摂動」と呼ばれる人間には知覚できない微小なノイズにより、
+                                誤った診断結果を出力してしまう脆弱性が指摘されています。
+                            </p>
+                            <p class="research-description">
+                                本研究では、<strong>拡散モデル（Diffusion Model）</strong>の持つノイズ除去能力に着目し、
+                                敵対的摂動を受けた医用画像から元の画像を復元することで、
+                                分類システムの頑健性を向上させる手法を提案しています。
+                                医療現場でAIを安全に活用するための基盤技術の確立を目指しています。
+                            </p>
+                            <div class="research-keywords">
+                                <span>敵対的摂動</span>
+                                <span>拡散モデル</span>
+                                <span>医用画像分類</span>
+                                <span>AIセキュリティ</span>
+                                <span>深層学習</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 研究発表 -->
+                <div class="project-section">
+                    <h3 class="project-section-title">
+                        <i class="fas fa-file-alt"></i>
+                        発表予定
+                    </h3>
+                    <div class="publications">
+                        <div class="publication-item">
+                            <span class="publication-badge domestic">国内発表</span>
+                            <h4 class="publication-title">
+                                拡散モデルを用いた敵対的摂動除去による医用画像分類システム防御
+                            </h4>
+                            <p class="publication-authors">
+                                <strong>後藤 一郎</strong>（他、調整中）
+                            </p>
+                            <p class="publication-venue">
+                                SIGBio（情報処理学会 バイオ情報学研究会） 2026年3月 発表予定
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 資格 -->
+                <div class="project-section">
+                    <h3 class="project-section-title">
+                        <i class="fas fa-certificate"></i>
+                        資格
+                    </h3>
+                    <div class="awards-list">
+                        <div class="award-item">
+                            <span class="award-year">取得年</span>
+                            <div class="award-content">
+                                <h4>基本情報技術者試験</h4>
+                                <p>IPA（情報処理推進機構）</p>
+                            </div>
+                        </div>
+                        <div class="award-item">
+                            <span class="award-year">取得年</span>
+                            <div class="award-content">
+                                <h4>TOEIC スコア XXX点</h4>
+                                <p>※実際のスコアに置き換えてください</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 今後やりたいこと -->
+        <section class="section" id="future">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Future Vision</span>
+                    <h2 class="section-title">今後やりたいこと</h2>
+                </div>
+
+                <div class="vision-content">
+                    <div class="vision-statement">
+                        <blockquote>
+                            「AIを安心して使える社会」を技術で支えたい。
+                        </blockquote>
+                    </div>
+
+                    <div class="vision-grid">
+                        <div class="vision-card">
+                            <div class="vision-icon">
+                                <i class="fas fa-microscope"></i>
+                            </div>
+                            <h3>研究</h3>
+                            <p>
+                                筑波大学大学院では、コンピュータビジョンの研究を
+                                さらに深めていきたいと考えています。特に、
+                                AIシステムの頑健性と安全性に関するテーマに取り組みたいです。
+                            </p>
+                        </div>
+
+                        <div class="vision-card">
+                            <div class="vision-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <h3>医療への貢献</h3>
+                            <p>
+                                研究成果を医療現場の課題解決につなげることを重視しています。
+                                AI診断支援システムが安全に普及し、
+                                医療の質向上に貢献できるような研究を目指します。
+                            </p>
+                        </div>
+
+                        <div class="vision-card">
+                            <div class="vision-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <h3>学びと成長</h3>
+                            <p>
+                                大学院では多様なバックグラウンドを持つ仲間との
+                                交流を通じて、新しい視点や知識を吸収し、
+                                研究者として成長していきたいです。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- コンタクトセクション -->
+        <section class="section section-alt" id="contact">
+            <div class="container">
+                <div class="section-header">
+                    <span class="section-label">Contact</span>
+                    <h2 class="section-title">連絡先</h2>
+                </div>
+
+                <div class="contact-content">
+                    <p class="contact-lead">
+                        研究に関するご質問など、お気軽にご連絡ください。
+                    </p>
+
+                    <div class="contact-grid">
+                        <a href="mailto:example@mail.kyutech.jp" class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">Email</span>
+                                <span class="contact-value">example@mail.kyutech.jp</span>
+                            </div>
+                        </a>
+
+                        <a href="#" class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">GitHub</span>
+                                <span class="contact-value">github.com/username</span>
+                            </div>
+                        </a>
+
+                        <a href="#" class="contact-card">
+                            <div class="contact-icon">
+                                <i class="fab fa-x-twitter"></i>
+                            </div>
+                            <div class="contact-info">
+                                <span class="contact-label">X (Twitter)</span>
+                                <span class="contact-value">@username</span>
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- フッター -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p class="footer-copyright">
+                    &copy; 2026 Ichiro Goto. All Rights Reserved.
+                </p>
+                <p class="footer-note">
+                    Last updated: January 2026
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
