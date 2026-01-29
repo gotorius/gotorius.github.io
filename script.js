@@ -1,17 +1,9 @@
-// ========================================
-// DOM Elements
-// ========================================
 const navbar = document.querySelector('.navbar');
 const navToggle = document.querySelector('.nav-toggle');
 const navMenu = document.querySelector('.nav-menu');
 const navLinks = document.querySelectorAll('.nav-menu a');
 const sections = document.querySelectorAll('section[id]');
 
-// ========================================
-// Navigation
-// ========================================
-
-// Scroll effect for navbar
 function handleNavbarScroll() {
     if (window.scrollY > 50) {
         navbar.classList.add('scrolled');
@@ -20,19 +12,16 @@ function handleNavbarScroll() {
     }
 }
 
-// Mobile menu toggle
 function toggleMobileMenu() {
     navToggle.classList.toggle('active');
     navMenu.classList.toggle('active');
 }
 
-// Close mobile menu
 function closeMobileMenu() {
     navToggle.classList.remove('active');
     navMenu.classList.remove('active');
 }
 
-// Update active nav link based on scroll position
 function updateActiveNavLink() {
     const scrollPos = window.scrollY + 150;
 
@@ -52,9 +41,6 @@ function updateActiveNavLink() {
     });
 }
 
-// ========================================
-// Smooth Scroll
-// ========================================
 function smoothScroll(e) {
     const href = e.currentTarget.getAttribute('href');
     
@@ -74,9 +60,6 @@ function smoothScroll(e) {
     }
 }
 
-// ========================================
-// Fade In Animation
-// ========================================
 function initFadeInElements() {
     const fadeSelectors = [
         '.about-card',
@@ -109,9 +92,6 @@ function handleFadeIn() {
     });
 }
 
-// ========================================
-// Intersection Observer for Animations
-// ========================================
 function initIntersectionObserver() {
     if ('IntersectionObserver' in window) {
         const observerOptions = {
@@ -134,9 +114,6 @@ function initIntersectionObserver() {
     }
 }
 
-// ========================================
-// Staggered Animation for Cards
-// ========================================
 function addStaggeredDelay() {
     const cardGroups = [
         '.skills-grid .skill-category',
@@ -152,46 +129,36 @@ function addStaggeredDelay() {
     });
 }
 
-// ========================================
-// Event Listeners
-// ========================================
 function initEventListeners() {
-    // Scroll events
     window.addEventListener('scroll', () => {
         handleNavbarScroll();
         updateActiveNavLink();
         handleFadeIn();
     }, { passive: true });
 
-    // Mobile menu toggle
     if (navToggle) {
         navToggle.addEventListener('click', toggleMobileMenu);
     }
 
-    // Navigation links
     navLinks.forEach(link => {
         link.addEventListener('click', smoothScroll);
     });
 
-    // Scroll indicator
     const scrollIndicator = document.querySelector('.scroll-indicator');
     if (scrollIndicator) {
         scrollIndicator.addEventListener('click', smoothScroll);
     }
 
-    // Hero buttons with anchor links
     document.querySelectorAll('.hero-actions a[href^="#"]').forEach(btn => {
         btn.addEventListener('click', smoothScroll);
     });
 
-    // Close mobile menu on resize
     window.addEventListener('resize', () => {
         if (window.innerWidth > 768) {
             closeMobileMenu();
         }
     });
 
-    // Close mobile menu when clicking outside
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.navbar') && navMenu.classList.contains('active')) {
             closeMobileMenu();
@@ -199,28 +166,22 @@ function initEventListeners() {
     });
 }
 
-// ========================================
-// Initialize
-// ========================================
 function init() {
     initFadeInElements();
     addStaggeredDelay();
     initEventListeners();
     initIntersectionObserver();
     
-    // Initial state
     handleNavbarScroll();
     handleFadeIn();
 }
 
-// Run on DOM ready
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
 } else {
     init();
 }
 
-// Run on full page load
 window.addEventListener('load', () => {
     handleFadeIn();
 });
