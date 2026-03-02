@@ -1,0 +1,40 @@
+/**
+ * 統計学実践ワークブック - 章データ
+ * タイトルを変更する場合はここを編集してください。
+ * ステータス管理は localStorage で行います。
+ */
+const CHAPTERS = [
+  { num: 1,  title: "事象と確率" },
+  { num: 2,  title: "確率分布と母関数" },
+  { num: 3,  title: "分布の特性値" },
+  { num: 4,  title: "変数変換と極限定理" },
+  { num: 5,  title: "離散型確率分布" },
+  { num: 6,  title: "連続型確率分布" },
+  { num: 7,  title: "多次元確率変数の分布" },
+  { num: 8,  title: "大数の法則と中心極限定理" },
+  { num: 9,  title: "標本分布" },
+  { num: 10, title: "点推定" },
+  { num: 11, title: "区間推定" },
+  { num: 12, title: "検定の基礎と検定法の導出" },
+  { num: 13, title: "正規分布に関する検定" },
+  { num: 14, title: "一般の分布に関する検定法" },
+  { num: 15, title: "ノンパラメトリック法" },
+  { num: 16, title: "回帰分析" },
+  { num: 17, title: "重回帰分析" },
+  { num: 18, title: "回帰分析における変数選択" },
+  { num: 19, title: "分散分析" },
+  { num: 20, title: "実験計画法" },
+  { num: 21, title: "標本調査法" },
+  { num: 22, title: "カテゴリカルデータの分析" },
+  { num: 23, title: "多変量解析の基礎" },
+  { num: 24, title: "主成分分析" },
+  { num: 25, title: "因子分析" },
+  { num: 26, title: "判別分析" },
+  { num: 27, title: "クラスター分析" },
+  { num: 28, title: "時系列分析" },
+  { num: 29, title: "ベイズ法" },
+  { num: 30, title: "確率過程" },
+  { num: 31, title: "品質管理" },
+  { num: 32, title: "生存時間分析" },
+  { num: 33, title: "シミュレーション" },
+];

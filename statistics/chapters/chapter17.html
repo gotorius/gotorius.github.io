@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="17">
+    <nav class="stat-nav">
+        <div class="nav-inner">
+            <a href="../index.html" class="nav-back">
+                <i class="fas fa-arrow-left"></i>
+                <span>目次に戻る</span>
+            </a>
+            <span class="nav-title" id="nav-chapter-label"></span>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+            <button class="status-toggle" id="status-toggle"></button>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
+                    <!-- KaTeX の例:
+                    <div class="formula-block">
+                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                    </div>
+                    -->
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <p class="placeholder">自由にメモを記入してください。</p>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
