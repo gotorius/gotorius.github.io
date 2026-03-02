@@ -133,74 +133,14 @@ ul { list-style: none; }
 .hero-sub {
     font-size: 15px;
     color: var(--gray-500);
-    margin-bottom: 32px;
-}
-
-/* Progress Bar */
-.progress-overview {
-    max-width: 400px;
-    margin: 0 auto;
-}
-
-.progress-bar {
-    height: 8px;
-    background: var(--gray-200);
-    border-radius: 4px;
-    overflow: hidden;
-    margin-bottom: 10px;
-}
-
-.progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, var(--primary), var(--accent));
-    border-radius: 4px;
-    transition: width 0.6s ease;
-}
-
-.progress-text {
-    font-size: 13px;
-    color: var(--gray-500);
-    font-weight: 500;
 }
 
 /* ===================================
-   Hub - Filter & Chapter Grid
+   Hub - Chapter Grid
    =================================== */
 
 .stat-main {
     padding: 40px 0 80px;
-}
-
-.filter-bar {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 28px;
-    flex-wrap: wrap;
-}
-
-.filter-btn {
-    padding: 7px 16px;
-    border: 1px solid var(--gray-200);
-    border-radius: 20px;
-    background: white;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--gray-500);
-    cursor: pointer;
-    transition: all var(--transition);
-    font-family: inherit;
-}
-
-.filter-btn:hover {
-    border-color: var(--primary-light);
-    color: var(--primary);
-}
-
-.filter-btn.active {
-    background: var(--primary);
-    border-color: var(--primary);
-    color: white;
 }
 
 .chapter-grid {
@@ -237,7 +177,6 @@ ul { list-style: none; }
 .chapter-card-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
 
 .chapter-num {
@@ -248,17 +187,6 @@ ul { list-style: none; }
     padding: 3px 10px;
     border-radius: 6px;
 }
-
-.chapter-status {
-    font-size: 11px;
-    font-weight: 600;
-    padding: 3px 8px;
-    border-radius: 4px;
-}
-
-.status-not-started { color: var(--gray-400); background: var(--gray-100); }
-.status-in-progress { color: var(--warning); background: var(--warning-bg); }
-.status-completed   { color: var(--success); background: var(--success-bg); }
 
 .chapter-card-title {
     font-size: 15px;
@@ -327,30 +255,6 @@ ul { list-style: none; }
     color: var(--gray-900);
     line-height: 1.4;
 }
-
-/* Status Toggle Button */
-.status-toggle {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 18px;
-    border: 1px solid var(--gray-300);
-    border-radius: var(--radius-sm);
-    background: white;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all var(--transition);
-    margin-top: 16px;
-    font-family: inherit;
-}
-
-.status-btn-not-started { color: var(--gray-500); border-color: var(--gray-300); }
-.status-btn-not-started:hover { color: var(--primary); border-color: var(--primary-light); background: var(--primary-bg); }
-.status-btn-in-progress { color: var(--warning); border-color: var(--warning); background: var(--warning-bg); }
-.status-btn-in-progress:hover { background: #fef3c7; }
-.status-btn-completed { color: var(--success); border-color: var(--success); background: var(--success-bg); }
-.status-btn-completed:hover { background: #d1fae5; }
 
 /* ===================================
    Chapter Page - Content
