@@ -40,32 +40,142 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>
+                        第3章では、確率分布を特徴づける<strong>特性値</strong>を体系的に学ぶ。位置の指標（期待値・中央値・最頻値）、散らばりの指標（標準偏差・四分位範囲・変動係数）、分布の形状を表す歪度・尖度、さらに<strong>相関係数・偏相関係数</strong>、<strong>条件付き期待値・条件付き分散</strong>、データの特性値（加重平均・幾何平均・調和平均）までを扱う。
+                    </p>
+                    <p><strong>キーワード：</strong>歪度、尖度、変動係数、相関係数、偏相関係数、分位点関数、条件付き期待値、条件付き分散</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>位置の指標</h3>
+                    <ul>
+                        <li><strong>期待値</strong> $E[X]$：確率変数の「重心」</li>
+                        <li><strong>中央値（median）</strong>：$P(X \leq a) = 0.5$ となる $a$</li>
+                        <li><strong>最頻値（mode）</strong>：$f(x)$ が最大となる $x$</li>
+                        <li>左右対称かつ単峰なら3つは一致。右に裾が長い → 最頻値 &lt; 中央値 &lt; 期待値</li>
+                    </ul>
+
+                    <h3>散らばりの指標</h3>
+                    <ul>
+                        <li><strong>標準偏差</strong>：$\sqrt{V[X]}$</li>
+                        <li><strong>四分位範囲（IQR）</strong>：第3四分位数 $-$ 第1四分位数</li>
+                        <li><strong>変動係数（CV）</strong>：$\dfrac{\sqrt{V[X]}}{E[X]}$。無次元量なので異なる単位のデータ間で散らばりを比較できる</li>
+                        <li><strong>分位点関数</strong>：$F^{-1}(\alpha) = \inf\{x \mid F_X(x) \geq \alpha\}$。$F^{-1}(\alpha)$ は $100\alpha\%$ 点</li>
+                    </ul>
+
+                    <h3>歪度と尖度</h3>
+                    <ul>
+                        <li><strong>歪度（skewness）</strong>：$\dfrac{E[(X - E[X])^3]}{(V[X])^{3/2}}$。右に裾が長ければ正、左なら負。対称なら0</li>
+                        <li><strong>尖度（kurtosis）</strong>：$\dfrac{E[(X - E[X])^4]}{(V[X])^2}$。必ず0以上。正規分布では3。3との差を尖度とする定義もある</li>
+                    </ul>
+
+                    <h3>同時分布の特性値</h3>
+                    <ul>
+                        <li><strong>共分散</strong>：$\text{Cov}[X,Y] = E[(X-E[X])(Y-E[Y])] = E[XY] - E[X]E[Y]$</li>
+                        <li><strong>相関係数</strong>：$\rho[X,Y] = \dfrac{\text{Cov}[X,Y]}{\sqrt{V[X]}\sqrt{V[Y]}}$。$-1 \leq \rho \leq 1$。$|\rho| = 1$ なら $Y = aX + b$ の1次関係</li>
+                        <li><strong>偏相関係数</strong>：$Z$ の影響を除いた $X$ と $Y$ の相関。擬似相関の除去に使う</li>
+                    </ul>
+
+                    <h3>条件付き期待値・分散</h3>
+                    <ul>
+                        <li>$E[Y|X] = \int y \, f_{Y|X}(y)\,dy$（$X$ の値に依存する確率変数）</li>
+                        <li>$V[Y|X] = E[Y^2|X] - (E[Y|X])^2$</li>
+                    </ul>
+
+                    <h3>データの平均の種類</h3>
+                    <ul>
+                        <li><strong>算術平均</strong>：$\bar{x} = \frac{1}{n}\sum x_i$</li>
+                        <li><strong>加重平均</strong>：$\sum w_i x_i$（$w_i > 0, \sum w_i = 1$）。観測値の出現割合が異なる場合</li>
+                        <li><strong>幾何平均</strong>：$(x_1 \cdots x_n)^{1/n}$。積に関する平均（伸び率の平均など）</li>
+                        <li><strong>調和平均</strong>：$\dfrac{n}{\sum (1/x_i)}$。割合の平均（速度の平均など）</li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
+
+                    <h3>偏相関係数</h3>
+                    <p>$Z$ の影響を除いた $X$ と $Y$ の偏相関係数：</p>
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        $$\rho[X,Y|Z] = \frac{\rho[X,Y] - \rho[X,Z]\,\rho[Y,Z]}{\sqrt{(1-\rho[X,Z]^2)(1-\rho[Y,Z]^2)}}$$
                     </div>
-                    -->
+
+                    <h3>期待値・分散の性質</h3>
+                    <div class="formula-block">
+                        $$E[aX + bY + c] = aE[X] + bE[Y] + c$$
+                    </div>
+                    <div class="formula-block">
+                        $$V[aX + b] = a^2 V[X]$$
+                    </div>
+                    <div class="formula-block">
+                        $$V[X \pm Y] = V[X] + V[Y] \pm 2\text{Cov}[X,Y]$$
+                    </div>
+                    <p>$X$ と $Y$ が独立なら $E[XY] = E[X]E[Y]$、$V[X \pm Y] = V[X] + V[Y]$</p>
+
+                    <h3>繰り返し期待値の法則と分散の分解</h3>
+                    <div class="formula-block">
+                        $$E[E[X|Y]] = E[X]$$
+                    </div>
+                    <div class="formula-block">
+                        $$V[X] = E[V[X|Y]] + V[E[X|Y]]$$
+                    </div>
+
+                    <h3>標本の分散共分散行列</h3>
+                    <p>$k$ 次元確率ベクトル $\boldsymbol{X} = (X_1, \ldots, X_k)^T$ に対し、平均ベクトル $\boldsymbol{\mu}$、分散共分散行列 $\Sigma$（$(i,j)$ 要素は $\sigma_{ij} = E[(X_i - \mu_i)(X_j - \mu_j)]$）を定義。$\Sigma$ は非負定値対称行列。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>例1：変動係数による比較</h3>
+                    <p>18歳男性における身長（期待値 168.9 cm、標準偏差 5.7 cm）と体重（期待値 63.6 kg、標準偏差 15.9 kg）について、期待値に対する散らばりが大きいのはどちらか。変動係数を比較せよ。</p>
+                    <p><strong>解：</strong>身長の変動係数 $= 5.7 / 168.9 = 0.034$、体重の変動係数 $= 15.9 / 63.6 = 0.25$。体重のほうが散らばりが大きい。</p>
+
+                    <h3>例2：調和平均の応用</h3>
+                    <p>ある一定の分量（1人分）の仕事を A さん、B さん、C さんが1人で行うとそれぞれ 5 時間、3 時間、4 時間で完了する。3人分の仕事を3人で分担して行った場合、何時間で完了するか。</p>
+                    <p><strong>解：</strong>1時間あたりの仕事量はそれぞれ $1/5, 1/3, 1/4$（人分）。3人全員だと $1/5 + 1/3 + 1/4$ 人分/時間。3人分の仕事にかかる時間は $3 / (1/5 + 1/3 + 1/4) = \mathbf{3.8}$ 時間。</p>
+
+                    <h3>問3.1：変動係数と標準偏差</h3>
+                    <p>ある種の動物50匹の体重を調べたところ、平均は 60 kg、標準偏差は 12 kg であった。この50匹を1カ月間、餌を替えて飼育したところ、体重の平均は 65 kg に増えたが、変動係数に変化はなかった。</p>
+                    <p><strong>(1) この50匹の餌を替える前の体重の変動係数を求めよ。</strong></p>
+                    <p><strong>解：</strong>変動係数 $= $ 標準偏差 $/$ 平均 $= 12 / 60 = \mathbf{0.2}$（20%）</p>
+                    <p><strong>(2) この50匹を1カ月間、餌を替えて飼育した後の体重の標準偏差を求めよ。</strong></p>
+                    <p><strong>解：</strong>変動係数が変わらないので $\sigma / 65 = 0.2$ より $\sigma = \mathbf{13}$ kg。</p>
+
+                    <h3>問3.2：適切な平均の選択</h3>
+                    <p><strong>(1) 片道 48 km の道のりを、行きは時速 8 km で、帰りは時速 12 km で往復した。このとき、往復の平均時速を求めよ。</strong></p>
+                    <p><strong>解（調和平均）：</strong>往復 96 km にかかる時間は $48/8 + 48/12 = 10$ 時間。平均時速 $= 96/10 = \mathbf{9.6}$ km/時。これは $2/(1/8 + 1/12) = 9.6$ と調和平均の式に一致する。</p>
+                    <p><strong>(2) ある大学の食堂には定食が3種類あり、A定食は 600 円、B定食は 700 円、C定食は 500 円である。1週間の売上げ数を調べたところ、A定食は 500 食、B定食は 700 食、C定食は 800 食の売上げがあった。定食1食に使われた平均金額を求めよ。</strong></p>
+                    <p><strong>解（加重平均）：</strong>$(500 \times 600 + 700 \times 700 + 800 \times 500) / (500 + 700 + 800) = \mathbf{595}$ 円。</p>
+                    <p><strong>(3) 消費者物価指数の4年間の伸び率が 1.15, 0.98, 1.03, 0.99 であった。この4年間の1年あたりの平均伸び率を小数点以下第2位まで求めよ。</strong></p>
+                    <p><strong>解（幾何平均）：</strong>$\sqrt[4]{1.15 \times 0.98 \times 1.03 \times 0.99} = \sqrt[4]{1.14920\ldots} \approx \mathbf{1.04}$</p>
+
+                    <h3>問3.3：サンドイッチの厚さの分散</h3>
+                    <p>あるサンドイッチ工場の生産工程では、2枚のパンと1枚のハムからなるサンドイッチを生産している。パンの厚さを確率変数 $X$（$E[X] = 10, V[X] = 0.5^2$）、ハムの厚さを確率変数 $Y$（$E[Y] = 3, V[Y] = 0.4^2$）とする。同一のパン内・ハム内での厚さのばらつきは無視する。以下の2つの方法について、サンドイッチの厚さの分散を求めよ。</p>
+                    <p><strong>方法1：</strong>パンを半分に切断してストックし、その中からランダムに2枚を選んでハムを挟む。</p>
+                    <p><strong>方法2：</strong>1枚のパンを半分に切断し、その2枚の間にハムを挟む。</p>
+                    <p><strong>解：</strong>方法1では $Z_1 = X_a + X_b + Y$（$X_a, X_b$ は独立な別のパン）、方法2では $Z_2 = 2X + Y$（同じパンを2枚に切断）と表せる。</p>
+                    <div class="formula-block">
+                        $$V[Z_1] = V[X_a] + V[X_b] + V[Y] = 0.5^2 + 0.5^2 + 0.4^2 = \mathbf{0.66}$$
+                    </div>
+                    <div class="formula-block">
+                        $$V[Z_2] = 4V[X] + V[Y] = 4 \times 0.5^2 + 0.4^2 = \mathbf{1.16}$$
+                    </div>
+                    <p>方法2は同じパンを使うため $V[2X] = 4V[X]$ となり、分散が大きくなる。方法1のほうが品質のばらつきが小さい。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>変動係数は無次元量なので、異なる単位間の散らばり比較に最適（身長 cm vs 体重 kg など）</li>
+                        <li>平均の使い分け：速度 → 調和平均、伸び率 → 幾何平均、重み付き → 加重平均</li>
+                        <li>$V[X \pm Y]$ で共分散の符号に注意。独立なら共分散項が消える</li>
+                        <li>繰り返し期待値の法則 $E[E[X|Y]] = E[X]$ と分散の分解公式 $V[X] = E[V[X|Y]] + V[E[X|Y]]$ は頻出</li>
+                        <li>問3.3は「独立な2変数の和」と「同一変数のスカラー倍」の違いが分散に与える影響を示す好例（$V[X_1+X_2] = 2\sigma^2$ vs $V[2X] = 4\sigma^2$）</li>
+                        <li>偏相関係数は、第3の変数による擬似相関を除去するための道具。回帰分析（第16章以降）にも関連</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

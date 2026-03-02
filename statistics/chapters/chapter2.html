@@ -40,32 +40,145 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>
+                        第2章では、確率変数の分布を記述・分析するための重要なツールである<strong>累積分布関数</strong>、<strong>生存関数</strong>、<strong>同時確率密度関数</strong>（周辺・条件付き）、そして<strong>母関数</strong>（モーメント母関数・確率母関数）を扱う。
+                        母関数は確率分布との1対1対応や、独立な変数の和の分布を求める際に極めて有用な道具である。
+                    </p>
+                    <p><strong>キーワード：</strong>累積分布関数、生存関数、同時確率関数、同時確率密度関数、周辺確率関数、周辺確率密度関数、条件付き確率関数、条件付き確率密度関数、モーメント母関数（積率母関数）、確率母関数</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>累積分布関数と生存関数</h3>
+                    <ul>
+                        <li><strong>累積分布関数（CDF）</strong>：$F(x) = P(X \leq x)$。離散・連続どちらでも同じ形で定義される</li>
+                        <li>離散型：$F(x) = \sum_{x_i \leq x} p(x_i)$、連続型：$F(x) = \int_{-\infty}^{x} f(t)\,dt$</li>
+                        <li>連続型では $f(x) = F'(x)$（確率密度関数はCDFの微分）</li>
+                        <li>離散型では $p(x) = F(x) - F(x-)$（CDFの不連続点での「とび」の大きさ）</li>
+                        <li><strong>生存関数</strong>：$S(x) = 1 - F(x)$（時刻 $x$ にまだ生存している確率）</li>
+                        <li><strong>ハザード関数</strong>：$h(x) = \dfrac{f(x)}{1 - F(x)} = (-\log S(x))'$（生存者のうち短時間内に死亡する率）</li>
+                    </ul>
+
+                    <h3>同時分布と周辺・条件付き分布</h3>
+                    <ul>
+                        <li><strong>同時確率関数</strong>（離散型）：$p(x, y) = P(X = x, Y = y)$</li>
+                        <li><strong>周辺確率関数</strong>：$p_X(x) = \sum_y p(x, y)$（$y$ について和をとる）</li>
+                        <li><strong>条件付き確率関数</strong>：$p_{Y|X}(y|x) = \dfrac{p(x, y)}{p_X(x)}$</li>
+                        <li><strong>同時確率密度関数</strong>（連続型）：$f(x, y) = \dfrac{\partial^2}{\partial x \, \partial y} F(x, y)$</li>
+                        <li><strong>周辺確率密度関数</strong>：$f_X(x) = \int_{-\infty}^{\infty} f(x, y)\,dy$</li>
+                        <li><strong>条件付き確率密度関数</strong>：$f_{Y|X}(y|x) = \dfrac{f(x, y)}{f_X(x)}$</li>
+                        <li><strong>条件付き独立</strong>：$f_{X,Y|Z}(x, y|z) = f_{X|Z}(x|z) \cdot f_{Y|Z}(y|z)$ が成り立つとき</li>
+                    </ul>
+
+                    <h3>母関数</h3>
+                    <ul>
+                        <li><strong>確率母関数（PGF）</strong>：整数値をとる確率変数に主に使用。$G(s) = E[s^X] = \sum_x s^x p(x)$</li>
+                        <li><strong>モーメント母関数（MGF）</strong>：$m(\theta) = E[e^{\theta X}] = G(e^\theta)$。連続確率変数に多く使用</li>
+                        <li><strong>特性関数</strong>：$\varphi(t) = m(it) = E[e^{itX}]$。広義積分の収束問題を回避</li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
+
+                    <h3>確率母関数による期待値・分散</h3>
+                    <p>確率母関数 $G(s)$ を微分して $s = 1$ とおくと：</p>
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        $$G'(1) = E[X], \quad G''(1) = E[X(X-1)]$$
                     </div>
-                    -->
+                    <div class="formula-block">
+                        $$E[X] = G'(1), \quad V[X] = G''(1) + G'(1) - (G'(1))^2$$
+                    </div>
+
+                    <h3>モーメント母関数による原点まわりのモーメント</h3>
+                    <p>$m(\theta) = E[e^{\theta X}]$ を微分して $\theta = 0$ とおくと：</p>
+                    <div class="formula-block">
+                        $$m'(0) = E[X], \quad m''(0) = E[X^2], \quad \ldots, \quad m^{(k)}(0) = E[X^k]$$
+                    </div>
+
+                    <h3>母関数の重要な性質</h3>
+                    <ol>
+                        <li><strong>確率分布との1対1対応</strong>：分布が異なれば母関数も異なる → 母関数が一致すれば分布が同じ</li>
+                        <li><strong>独立な変数の和 → 母関数の積</strong>：$X_1, X_2$ が独立なら $$m_{X_1+X_2}(\theta) = m_1(\theta) \cdot m_2(\theta)$$</li>
+                    </ol>
+                    <p>特に $X_1, \ldots, X_n$ が i.i.d. で共通のMGFが $m(\theta)$ なら、$X_1 + \cdots + X_n$ のMGFは $m(\theta)^n$。</p>
+
+                    <h3>例：ベルヌーイ → 二項分布の確率母関数</h3>
+                    <p>ベルヌーイ確率変数（$P(X=1)=p, P(X=0)=1-p$）の確率母関数は $(1-p)+ps = 1+p(s-1)$。</p>
+                    <p>二項分布は独立な $n$ 個のベルヌーイ変数の和なので、確率母関数は $(1+p(s-1))^n$。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>例1：単位円内の一様分布</h3>
+                    <p>$xy$-平面の単位円内部 $\{(x,y) \mid x^2 + y^2 \leq 1\}$ から無作為に1点を抽出する。単位円内の一様分布の同時確率密度関数を</p>
+                    <div class="formula-block">
+                        $$f(x, y) = \begin{cases} \dfrac{1}{\pi} & (x^2 + y^2 \leq 1) \\ 0 & (\text{その他}) \end{cases}$$
+                    </div>
+                    <p>とおく。$x$ の周辺確率密度関数および $x$ を与えたときの $y$ の条件付き確率密度関数を求めよ。</p>
+                    <p><strong>解：</strong>$-1 \leq x \leq 1$ のとき、$f(x,y)$ が正となる $y$ の範囲は $-\sqrt{1-x^2} \leq y \leq \sqrt{1-x^2}$ であるから、</p>
+                    <div class="formula-block">
+                        $$f_X(x) = \int_{-\sqrt{1-x^2}}^{\sqrt{1-x^2}} \frac{1}{\pi}\,dy = \frac{2\sqrt{1-x^2}}{\pi}$$
+                    </div>
+                    <p>条件付き確率密度関数 $f_{Y|X}(y|x)$ は区間 $[-\sqrt{1-x^2},\;\sqrt{1-x^2}]$ 上の一様分布となり、</p>
+                    <div class="formula-block">
+                        $$f_{Y|X}(y|x) = \frac{1}{2\sqrt{1-x^2}} \quad (-\sqrt{1-x^2} \leq y \leq \sqrt{1-x^2})$$
+                    </div>
+
+                    <h3>問2.1：単位正方形上の確率密度関数</h3>
+                    <p>$xy$-平面の単位正方形 $\{(x, y) \mid 0 \leq x \leq 1,\; 0 \leq y \leq 1\}$ 上の確率密度関数を $f(x, y) = c(x + y)$ とおく。</p>
+                    <p><strong>(1) 基準化定数 $c$ を求めよ。</strong></p>
+                    <p><strong>解：</strong>$\iint f(x,y)\,dx\,dy = 1$ となるように定める。$x$ と $y$ の対称性より</p>
+                    <div class="formula-block">
+                        $$\int_0^1 \int_0^1 c(x+y)\,dx\,dy = c \cdot 1 = 1 \implies \mathbf{c = 1}$$
+                    </div>
+                    <p><strong>(2) $X$ の周辺確率密度関数を求めよ。</strong></p>
+                    <div class="formula-block">
+                        $$f_X(x) = \int_0^1 (x + y)\,dy = x + \frac{1}{2}$$
+                    </div>
+                    <p><strong>(3) $X$ を与えたときの $Y$ の条件付き確率密度関数を求めよ。</strong></p>
+                    <div class="formula-block">
+                        $$f_{Y|X}(y|x) = \frac{f(x,y)}{f_X(x)} = \frac{x + y}{x + 1/2}$$
+                    </div>
+
+                    <h3>問2.2：幾何分布の確率母関数・期待値・分散</h3>
+                    <p>$X$ を幾何分布に従う離散確率変数とする。すなわち $X$ は非負整数値をとり、その確率関数を $p(x) = p(1-p)^x,\; x = 0, 1, 2, \ldots$ とする。ただし $0 &lt; p &lt; 1$ は幾何分布のパラメータである。$X$ の確率母関数 $G(s)$ を求めよ。また確率母関数を微分することにより $X$ の期待値と分散を求めよ。</p>
+                    <p><strong>解：</strong>確率母関数は</p>
+                    <div class="formula-block">
+                        $$G(s) = E[s^X] = \sum_{x=0}^{\infty} s^x p(1-p)^x = p \sum_{x=0}^{\infty} (s(1-p))^x = \frac{p}{1 - s(1-p)}$$
+                    </div>
+                    <p>微分して $s = 1$ とおくと、</p>
+                    <div class="formula-block">
+                        $$G'(1) = \frac{1-p}{p}, \quad G''(1) = \frac{2(1-p)^2}{p^2}$$
+                    </div>
+                    <p>これより</p>
+                    <div class="formula-block">
+                        $$E[X] = \frac{1-p}{p}, \quad V[X] = G''(1) + G'(1) - (G'(1))^2 = \frac{1-p}{p^2}$$
+                    </div>
+
+                    <h3>問2.3：指数分布のモーメント母関数・期待値・分散</h3>
+                    <p>$X$ を指数分布に従う連続確率変数とする。すなわち $X \geq 0$ の確率密度関数を $f(x) = \lambda e^{-\lambda x}$ とする。ただし $\lambda > 0$ はパラメータである。$X$ のモーメント母関数を求めよ。またモーメント母関数を微分することにより $X$ の期待値と分散を求めよ。</p>
+                    <p><strong>解：</strong>$\theta < \lambda$ に対してモーメント母関数は</p>
+                    <div class="formula-block">
+                        $$m(\theta) = E[e^{\theta X}] = \int_0^{\infty} e^{\theta x} \lambda e^{-\lambda x}\,dx = \frac{\lambda}{\lambda - \theta}$$
+                    </div>
+                    <p>微分して $\theta = 0$ とおくと、$m'(0) = 1/\lambda,\; m''(0) = 2/\lambda^2$ より</p>
+                    <div class="formula-block">
+                        $$E[X] = \frac{1}{\lambda}, \quad V[X] = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}$$
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>確率母関数は整数値をとる確率変数向け（$s=1$ で微分）、モーメント母関数はより一般的（$\theta=0$ で微分）</li>
+                        <li>母関数の最大の利点は「独立な変数の和 → 母関数の積」。畳み込みを計算せずに和の分布を求められる</li>
+                        <li>特性関数 $\varphi(t) = E[e^{itX}]$ は常に存在するため、MGFが存在しない分布（コーシー分布など）にも使える</li>
+                        <li>ハザード関数は生存時間解析（第32章）で再登場する重要概念</li>
+                        <li>条件付き確率密度関数は、同時密度を周辺密度で割るだけ。「同時 ÷ 周辺 = 条件付き」と覚える</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">
