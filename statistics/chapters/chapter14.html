@@ -40,32 +40,121 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>
+                        第14章では<strong>マルコフ連鎖</strong>を扱う。マルコフ性、有限マルコフ連鎖、推移確率行列、
+                        状態確率ベクトル、定常分布の概念を学び、パラメータの最尤推定法を理解する。
+                    </p>
+                    <p><strong>キーワード：</strong>マルコフ性、有限マルコフ連鎖、推移確率行列、定常分布</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>マルコフ性</h3>
+                    <p>確率変数列 $X = (X_n)_{n=0,1,2,\ldots}$ が以下を満たすとき<strong>マルコフ性</strong>をもつ：</p>
+                    <div class="formula-block">
+                        $$P(X_{n+1} \in B \mid X_n, X_{n-1}, \ldots, X_0) = P(X_{n+1} \in B \mid X_n)$$
+                    </div>
+                    <p>「現在の状態 $X_n$ が与えられれば、過去の情報は未来 $X_{n+1}$ の予測に不要」</p>
+
+                    <h3>有限マルコフ連鎖</h3>
+                    <ul>
+                        <li>状態空間 $S = \{1, 2, \ldots, N\}$ が有限個の要素からなるマルコフ連鎖</li>
+                        <li>斉時的（time homogeneous）：推移確率が時点 $n$ によらない</li>
+                    </ul>
+
+                    <h3>推移確率行列</h3>
+                    <p>状態 $i$ から状態 $j$ への推移確率 $p(i,j) = P(X_{n+1} = j \mid X_n = i)$ を成分とする $N \times N$ 行列：</p>
+                    <div class="formula-block">
+                        $$Q = \begin{pmatrix} p(1,1) & p(1,2) & \cdots & p(1,N) \\ p(2,1) & p(2,2) & \cdots & p(2,N) \\ \vdots & \vdots & \ddots & \vdots \\ p(N,1) & p(N,2) & \cdots & p(N,N) \end{pmatrix}$$
+                    </div>
+                    <p>各行の和が1：$\sum_{j \in S} p(i,j) = 1$（確率行列）</p>
+
+                    <h3>状態確率ベクトルと推移</h3>
+                    <ul>
+                        <li>時点 $n$ の状態確率ベクトル：$\pi_n = (P_n(1), P_n(2), \ldots, P_n(N))$</li>
+                        <li>初期分布 $\pi_0$</li>
+                        <li>$m$ ステップ推移：$Q(m+l) = Q(m)Q(l) = Q^m Q^l$</li>
+                        <li>状態確率の更新：$\pi_n = \pi_0 Q^n$</li>
+                    </ul>
+
+                    <h3>定常分布</h3>
+                    <p>$\pi = \lim_{n \to \infty} \pi_n$ が存在するとき、$\pi$ は以下を満たす：</p>
+                    <div class="formula-block">
+                        $$\pi = \pi Q$$
+                    </div>
+                    <p>すなわち $\pi$ は行列 $Q$ の固有値1に対する左固有ベクトル。定常分布を初期分布とすると、どの時点でも状態確率は変化しない。</p>
+                    <p>吸収状態（absorbing state）：そこから別の状態へ推移する確率が0の状態</p>
+
+                    <h3>パラメータ推定</h3>
+                    <p>推移確率行列 $Q_\theta$ が未知パラメータ $\theta$ に依存するとき、観測データ $x_0, x_1, \ldots, x_n$ の対数尤度：</p>
+                    <div class="formula-block">
+                        $$\ell_n(\theta) = \sum_{j=1}^{n} \log p_\theta(x_{j-1}, x_j)$$
+                    </div>
+                    <p>尤度方程式 $\frac{\partial}{\partial \theta}\ell_n(\theta) = 0$ を解いて最尤推定値を求める。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
+
+                    <h3>定常分布の求め方</h3>
+                    <p>$\pi = \pi Q$ と $\sum_k \pi(k) = 1$ を連立して解く。$Q^n$ を直接計算する必要はない。</p>
+
+                    <h3>独立同一分布の系列（複数マルコフ連鎖）</h3>
+                    <p>$M$ 組の独立なマルコフ連鎖 $X^{(k)}$（$k = 1, \ldots, M$）が同一の $Q_\theta$ をもつとき：</p>
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        $$\ell_n(\theta) = \sum_{k=1}^{M} \sum_{j=1}^{n} \log p_\theta(x_j^{(k)}, x_{j+1}^{(k)})$$
                     </div>
-                    -->
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>問14.1：サイコロの駒移動</h3>
+                    <p>2マス上の駒。マス1で6の目が出たら留まり、それ以外はマス2へ。マス2で偶数の目なら留まり、奇数なら1へ。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) 推移確率行列：</strong></p>
+                    <div class="formula-block">
+                        $$Q = \begin{pmatrix} 1/6 & 5/6 \\ 1/2 & 1/2 \end{pmatrix}$$
+                    </div>
+
+                    <p><strong>(2) 定常分布：</strong></p>
+                    <p>$\pi = \pi Q$ と $a + b = 1$ を解いて $\pi = \mathbf{(3/8,\; 5/8)}$</p>
+                    </div>
+
+                    <h3>問14.2：カード引きのマルコフ連鎖</h3>
+                    <p>$S = \{1,2,3\}$、カード $a_1 < a_2 < a_3$ を引き、確率 $c_{ij} = \min\{i/j, 1\}$ で推移。</p>
+                    <div class="answer-block">
+                    <p><strong>(2) $\pi_0 = (0,0,1)$ のとき $\pi_2$：</strong>$\mathbf{(4/27,\; 8/27,\; 5/9)}$</p>
+                    <p><strong>(3) 定常分布：</strong>$\pi = \mathbf{(1/6,\; 1/3,\; 1/2)}$</p>
+                    </div>
+
+                    <h3>問14.3：傘の問題</h3>
+                    <p>家と職場に傘を1本ずつ。降雨確率 $\theta$ で傘の持ち運びを決定。</p>
+                    <div class="answer-block">
+                    <p><strong>(1)</strong> $S = \{0, 1, 2\}$、$\pi_0 = (0, 1, 0)$</p>
+                    <div class="formula-block">
+                        $$Q = \begin{pmatrix} 0 & \theta & 1-\theta \\ 0 & 1-\theta & \theta \\ 0 & 0 & 1 \end{pmatrix}$$
+                    </div>
+                    <p>※ 状態0のときは傘がないので雨でも傘なし移動。移動先に2本あるはず。</p>
+
+                    <p><strong>(2) 最尤推定値：</strong></p>
+                    <p>$(X_1, \ldots, X_8) = (1,1,2,0,2,1,1,1)$ の実現確率から対数尤度を微分して $\hat{\theta} = \mathbf{1/3}$</p>
+
+                    <p><strong>(3) 傘がない確率の推定値：</strong></p>
+                    <p>定常分布の状態0の確率 $a = (1-\theta)/(3-\theta)$ に $\hat{\theta} = 1/3$ を代入：$a = \mathbf{1/4}$</p>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>マルコフ性は「未来は現在にのみ依存し、過去には依存しない」という強い条件</li>
+                        <li>定常分布は $\pi = \pi Q$ を解けばよく、$Q^n$ の計算は不要</li>
+                        <li>吸収状態がある場合、その状態に一度入ると出られない → 定常分布はその状態に集中</li>
+                        <li>独立試行は定常マルコフ連鎖の特別な場合</li>
+                        <li>パラメータ推定では「同じクラスに留まる」推移も忘れずに尤度に含める</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

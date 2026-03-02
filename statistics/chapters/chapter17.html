@@ -40,32 +40,127 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>
+                        第17章では<strong>回帰診断法</strong>を扱う。回帰モデルの当てはまりや仮定の妥当性を
+                        診断するための残差プロット、正規Q-Qプロット、てこ比（leverage）、Cookの距離、
+                        ダービン・ワトソン比などの手法を学ぶ。
+                    </p>
+                    <p><strong>キーワード：</strong>残差プロット、てこ比、Cookの距離、ダービン・ワトソン比</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>回帰診断とは</h3>
+                    <p>回帰分析の結果が妥当かを確認するための事後解析。以下の点をチェックする：</p>
+                    <ul>
+                        <li>外れ値の存在</li>
+                        <li>等分散性の仮定</li>
+                        <li>独立性の仮定</li>
+                        <li>正規性の仮定</li>
+                        <li>影響力の強い観測値</li>
+                    </ul>
+
+                    <h3>残差プロット</h3>
+                    <p>予測値 $\hat{y}_i$ に対する残差 $e_i = y_i - \hat{y}_i$ の散布図。以下を診断：</p>
+                    <ul>
+                        <li><strong>外れ値：</strong>他の残差から大きく離れた点</li>
+                        <li><strong>等分散性：</strong>残差がランダムに散らばっているか（漏斗型ならNG）</li>
+                        <li><strong>独立性：</strong>残差にパターン・トレンドがないか</li>
+                    </ul>
+
+                    <h3>正規Q-Qプロット</h3>
+                    <p>標準化残差の順序統計量を正規分布の理論分位点と比較。直線上に並べば正規性が妥当。</p>
+
+                    <h3>Scale-Location プロット</h3>
+                    <p>予測値に対する $\sqrt{|\text{標準化残差}|}$ のプロット。等分散性を確認。水平な傾向なら等分散。</p>
+
+                    <h3>ハット行列とてこ比（leverage）</h3>
+                    <p>ハット行列 $H = X(X^TX)^{-1}X^T$ の対角要素 $h_{ii}$ が<strong>てこ比</strong>：</p>
+                    <div class="formula-block">
+                        $$h_{ii} = x_i^T (X^T X)^{-1} x_i$$
+                    </div>
+                    <ul>
+                        <li>$0 \leq h_{ii} \leq 1$</li>
+                        <li>$\sum_{i=1}^{n} h_{ii} = p + 1$（= 説明変数の数 + 切片）</li>
+                        <li>$h_{ii}$ が大きい → 説明変数空間で中心から遠い → 回帰直線に大きな影響</li>
+                    </ul>
+
+                    <h3>Cookの距離</h3>
+                    <p>$i$ 番目の観測を除いたときの推定値の変化を測る：</p>
+                    <div class="formula-block">
+                        $$D_i = \frac{(\hat{\beta} - \hat{\beta}_{(-i)})^T X^TX (\hat{\beta} - \hat{\beta}_{(-i)})}{(p+1)\hat{\sigma}^2} = \frac{e_i^2}{(p+1)\hat{\sigma}^2} \cdot \frac{h_{ii}}{(1 - h_{ii})^2}$$
+                    </div>
+                    <p>目安：$D_i > 0.5$ で要注意、$D_i > 1$ で影響大（外れ値候補）。</p>
+
+                    <h3>自己相関とダービン・ワトソン（DW）比</h3>
+                    <p>残差の系列相関（時系列的な依存性）を検出：</p>
+                    <div class="formula-block">
+                        $$DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n} e_i^2}$$
+                    </div>
+                    <ul>
+                        <li>$0 \leq DW \leq 4$</li>
+                        <li>$DW \approx 2$：自己相関なし</li>
+                        <li>$DW \ll 2$：正の自己相関（残差が連続して同符号）</li>
+                        <li>$DW \gg 2$：負の自己相関（残差が交互に符号変化）</li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
+
+                    <h3>残差の分散</h3>
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        $$\text{Var}[e_i] = \sigma^2 (1 - h_{ii})$$
                     </div>
-                    -->
+                    <p>てこ比の大きい観測は残差の分散が小さく抑えられる → 外れ値が見えにくい。</p>
+
+                    <h3>標準化残差</h3>
+                    <div class="formula-block">
+                        $$r_i = \frac{e_i}{\hat{\sigma}\sqrt{1 - h_{ii}}}$$
+                    </div>
+                    <p>$|r_i| > 2$ なら外れ値の可能性。</p>
+
+                    <h3>Cookの距離と残差・leverageの関係</h3>
+                    <div class="formula-block">
+                        $$D_i \propto r_i^2 \times \frac{h_{ii}}{1 - h_{ii}}$$
+                    </div>
+                    <p>Cookの距離は「残差の大きさ」と「leverageの大きさ」の両方を考慮した総合指標。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>問17.1：道府県別乗用車所有率データ</h3>
+                    <p>47道府県の乗用車保有率を収入・道路延長などで重回帰。診断プロットから影響の大きい観測を除外する。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) 47道府県での回帰：</strong></p>
+                    <ul>
+                        <li>残差プロット・Q-Qプロットを確認</li>
+                        <li>Cook の距離が大きい3つの道府県（例：東京、大阪、北海道）を特定</li>
+                    </ul>
+
+                    <p><strong>(2) 外れ値3つを除いた44道府県での再分析：</strong></p>
+                    <ul>
+                        <li>leverage が全体的に小さくなる</li>
+                        <li>Cook の距離が改善（全て0.5以下に）</li>
+                        <li>$R^{*2}$ が向上 → モデルの当てはまりが改善</li>
+                    </ul>
+
+                    <p><strong>(3) DW比：</strong>2に近く、残差の自己相関はほとんどない</p>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>回帰分析は「モデルを当てはめて終わり」ではなく、診断プロットで仮定の妥当性を必ず確認する</li>
+                        <li>Cookの距離は「外れ値」と「leverage」を同時に評価する強力な指標</li>
+                        <li>leverage が大きい点は必ずしも外れ値ではない（説明変数空間の端にあるだけ）</li>
+                        <li>DW比はデータの並び順に依存するため、時系列データやソートされたデータで意味をもつ</li>
+                        <li>4つの診断プロット：残差 vs 予測値、正規Q-Q、Scale-Location、residuals vs leverage</li>
+                        <li>外れ値の除外は安易に行わず、その理由を明確にすることが重要</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

@@ -40,32 +40,167 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>
+                        第16章では<strong>重回帰分析</strong>を扱う。ガウス・マルコフモデルによる定式化、
+                        最小二乗推定量の性質、決定係数、F検定・t検定による変数の有意性評価、
+                        正則化手法（Ridge回帰・Lasso・Elastic-Net）、およびモデル選択規準を学ぶ。
+                    </p>
+                    <p><strong>キーワード：</strong>ガウス・マルコフモデル、最小二乗法、決定係数、F検定、正則化</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>ガウス・マルコフモデル</h3>
+                    <p>$n$ 個の観測に対し、$p$ 個の説明変数をもつ線形モデル：</p>
+                    <div class="formula-block">
+                        $$Y = X\beta + \varepsilon, \quad \varepsilon \sim N_n(0, \sigma^2 I_n)$$
+                    </div>
+                    <ul>
+                        <li>$Y$：$n \times 1$ の応答変数ベクトル</li>
+                        <li>$X$：$n \times (p+1)$ の計画行列（第1列が1ベクトル → 切片）</li>
+                        <li>$\beta = (\beta_0, \beta_1, \ldots, \beta_p)^T$：回帰係数</li>
+                        <li>$\varepsilon$：誤差項（独立正規分布）</li>
+                    </ul>
+
+                    <h3>最小二乗推定量（OLS）</h3>
+                    <p>残差平方和 $\|Y - X\beta\|^2$ を最小化する $\hat{\beta}$：</p>
+                    <div class="formula-block">
+                        $$\hat{\beta} = (X^T X)^{-1} X^T Y$$
+                    </div>
+                    <p><strong>正規方程式</strong>：$X^T X \hat{\beta} = X^T Y$</p>
+
+                    <h3>射影行列と予測値</h3>
+                    <div class="formula-block">
+                        $$\hat{Y} = X\hat{\beta} = P_X Y, \quad P_X = X(X^T X)^{-1}X^T$$
+                    </div>
+                    <p>$P_X$ は $X$ の列空間への直交射影行列。残差 $e = Y - \hat{Y} = (I - P_X)Y$。</p>
+
+                    <h3>変動の分解</h3>
+                    <div class="formula-block">
+                        $$\underbrace{\|Y - \bar{Y}\mathbf{1}\|^2}_{S_T\text{（総変動）}} = \underbrace{\|\hat{Y} - \bar{Y}\mathbf{1}\|^2}_{S_R\text{（回帰変動）}} + \underbrace{\|Y - \hat{Y}\|^2}_{S_e\text{（残差変動）}}$$
+                    </div>
+
+                    <h3>決定係数</h3>
+                    <div class="formula-block">
+                        $$R^2 = \frac{S_R}{S_T} = 1 - \frac{S_e}{S_T}$$
+                    </div>
+                    <p>$0 \leq R^2 \leq 1$。変数を追加すると必ず増加するため、自由度調整済み決定係数を用いる：</p>
+                    <div class="formula-block">
+                        $$R^{*2} = 1 - \frac{S_e / (n - p - 1)}{S_T / (n - 1)}$$
+                    </div>
+
+                    <h3>OLS推定量の性質</h3>
+                    <ul>
+                        <li><strong>不偏性</strong>：$E[\hat{\beta}] = \beta$</li>
+                        <li><strong>最小分散性（ガウス・マルコフの定理）</strong>：線形不偏推定量の中で分散最小</li>
+                        <li><strong>分散共分散行列</strong>：$\text{Cov}[\hat{\beta}] = \sigma^2 (X^T X)^{-1}$</li>
+                        <li><strong>$\sigma^2$ の不偏推定量</strong>：$\hat{\sigma}^2 = S_e / (n - p - 1)$</li>
+                    </ul>
+
+                    <h3>F検定</h3>
+                    <p>帰無仮説 $H_0$：一部の回帰係数が0 を検定する。</p>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>検定対象</th><th>帰無仮説</th><th>F統計量</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>$\beta_k$ の有意性</td><td>$H_0: \beta_k = 0$</td><td>$\frac{(S_e^{(-k)} - S_e)/1}{S_e/(n-p-1)} \sim F(1, n-p-1)$</td></tr>
+                            <tr><td>切片以外全体</td><td>$H_0: \beta_1 = \cdots = \beta_p = 0$</td><td>$\frac{S_R/p}{S_e/(n-p-1)} \sim F(p, n-p-1)$</td></tr>
+                        </tbody>
+                    </table>
+                    <p>個別の $\beta_k$ に対するF検定は $t$ 検定（$t^2 = F$）と等価。</p>
+
+                    <h3>正則化（ペナルティ付き回帰）</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>手法</th><th>ペナルティ</th><th>特徴</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Ridge回帰</td><td>$\lambda \sum \beta_j^2$（L2）</td><td>係数を縮小、変数選択なし</td></tr>
+                            <tr><td>Lasso</td><td>$\lambda \sum |\beta_j|$（L1）</td><td>係数をスパースに → 変数選択</td></tr>
+                            <tr><td>Elastic-Net</td><td>$\alpha\lambda\sum|\beta_j| + \frac{(1-\alpha)\lambda}{2}\sum\beta_j^2$</td><td>L1とL2の混合</td></tr>
+                            <tr><td>Fused Lasso</td><td>L1 + 隣接係数差のL1</td><td>隣接するパラメータの融合</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>モデル選択：Mallows' $C_p$ 規準</h3>
+                    <div class="formula-block">
+                        $$C_p = \frac{S_e^{(p')}}{\hat{\sigma}^2} - n + 2(p'+1)$$
+                    </div>
+                    <p>$p'$ は候補モデルの変数の数、$\hat{\sigma}^2$ はフルモデルの残差分散。$C_p \approx p'+1$ となるモデルが望ましい。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
-                    <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
-                    </div>
-                    -->
+
+                    <h3>ガウス・マルコフの定理</h3>
+                    <p>ガウス・マルコフモデルのもとで、OLS推定量 $\hat{\beta}$ は<strong>BLUE（Best Linear Unbiased Estimator）</strong>、すなわちすべての線形不偏推定量の中で分散が最小。</p>
+
+                    <h3>分散分析表（ANOVA Table）</h3>
+                    <table class="data-table">
+                        <thead>
+                            <tr><th>要因</th><th>平方和</th><th>自由度</th><th>平均平方</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>回帰</td><td>$S_R$</td><td>$p$</td><td>$S_R / p$</td></tr>
+                            <tr><td>残差</td><td>$S_e$</td><td>$n - p - 1$</td><td>$S_e / (n-p-1)$</td></tr>
+                            <tr><td>全体</td><td>$S_T$</td><td>$n - 1$</td><td></td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>Lasso の解パス</h3>
+                    <p>$\lambda$ を大きくすると多くの係数が0に → 変数が脱落。$\lambda$ を小さくするとOLS解に近づく。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>問16.1：アミトリプチリン中毒データ</h3>
+                    <p>応答変数 TOT（トータル TCAD 血漿レベル）に対し、5つの説明変数（AMT, GEN, PR, DIAP, QRS）を用いた重回帰。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) モデル3の選択：</strong></p>
+                    <ul>
+                        <li>3つの候補モデルのうち $C_p$ が最小のモデル3を選択</li>
+                        <li>モデル3の $R^{*2} = 0.477$</li>
+                    </ul>
+
+                    <p><strong>(2) 有意な変数：</strong></p>
+                    <ul>
+                        <li>GEN（性別）：$p < 0.05$ で有意</li>
+                        <li>AMT（服用量）：$p < 0.05$ で有意</li>
+                    </ul>
+                    </div>
+
+                    <h3>問16.2：airquality データ</h3>
+                    <p>オゾン濃度を Solar.R, Wind, Temp, Month, Day で回帰。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) 非有意な変数：</strong>Day は有意でない</p>
+                    <p><strong>(2) AIC によるモデル選択：</strong></p>
+                    <ul>
+                        <li>3つの候補モデルのうちモデル1（Day を除いたモデル）が AIC 最小</li>
+                    </ul>
+                    </div>
+
+                    <h3>問16.3：AquaticToxicity データ（正則化）</h3>
+                    <p>9つの説明変数に対し Lasso を適用。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) $\lambda = 1$ のときの係数推定：</strong></p>
+                    <p>多くの係数が0になり、スパースな解が得られる。</p>
+                    <p><strong>(2) 解パス：</strong>$\lambda$ の変化に伴う各係数の推移を描画し、変数のスパース性を確認。</p>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>$R^2$ は変数追加で必ず増加 → モデル比較には $R^{*2}$ や AIC / $C_p$ を使う</li>
+                        <li>多重共線性がある場合、$(X^TX)^{-1}$ が不安定 → Ridge 回帰で対処</li>
+                        <li>Lasso は変数選択と推定を同時に行える利点がある</li>
+                        <li>F検定の $F$ 値と $t$ 検定の $t$ 値には $t^2 = F$ の関係がある（自由度1の場合）</li>
+                        <li>切片 $\beta_0$ はデータの中心化によって影響を受ける。F検定の「全変数」では切片を除いた仮説を検定</li>
+                        <li>Elastic-Net は Lasso（$\alpha=1$）と Ridge（$\alpha=0$）の中間</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">
