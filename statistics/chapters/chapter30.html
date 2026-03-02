@@ -40,32 +40,123 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>多変量解析では、すべての変数を用いるのではなく、何らかの規準に基づき適切な変数やモデルを選択したい場合がある。本章では、<strong>情報量規準</strong>（AIC、BIC）、<strong>クロスバリデーション</strong>、<strong>過学習</strong>の問題について学ぶ。</p>
+                    <p>仮説検定（F検定）による変数選択とは異なり、尤度とパラメータ数に基づいた情報量規準によるモデル選択法が提案されている。データへの当てはまりのよさとモデルの簡潔さのバランスをとることが重要である。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>赤池情報量規準（AIC）</h3>
+                    <p>最大尤度 $L$、推定するパラメータ数 $k$ として：</p>
+                    <div class="formula-block">
+                        $$\mathrm{AIC} = -2\log L + 2k$$
+                    </div>
+                    <p>AICはカルバック・ライブラー情報量の期待値の漸近的な不偏推定量、あるいは期待平均対数尤度の漸近的な不偏推定量の観点で導かれたもの。<strong>AICが最小のモデルを選択</strong>する。導出には大標本の仮定を用いている。</p>
+
+                    <h3>BIC（ベイズ情報量規準）</h3>
+                    <div class="formula-block">
+                        $$\mathrm{BIC} = -2\log L + k\log n$$
+                    </div>
+                    <p>AICと比較してペナルティが $2k$ から $k\log n$ に変化。$n \ge 8$ のとき BIC の方がより簡潔なモデルを選ぶ傾向がある。$n \to \infty$ のとき確率1で真のモデルを選択する（AICはそうとは限らない）。</p>
+
+                    <h3>その他の情報量規準</h3>
+                    <ul>
+                        <li><strong>c-AIC</strong>：AICの有限修正。標本が小さいときも期待平均対数尤度の不偏推定量を与える</li>
+                        <li><strong>MDL（最小記述長）</strong>：minimum description length</li>
+                    </ul>
+
+                    <h3>クロスバリデーション（交差検証法）</h3>
+                    <p>データを $K$ 分割し、1セットをテスト用、$K-1$ セットで学習を行い、テスト用データで精度を評価。テスト用の選択を $K$ 通りすべて試して平均をとる。</p>
+                    <ul>
+                        <li><strong>$K$ 分割交差検証</strong>：データを $K$ グループに分けて繰り返す</li>
+                        <li><strong>Leave-one-out法</strong>：$K = n$ とした場合。1つだけ省いてテスト用とし、残り全てで学習</li>
+                    </ul>
+                    <p>変数選択・モデル選択の規準としても用いられるが、計算量が大きくなることに注意。</p>
+
+                    <h3>過学習（Overfitting）</h3>
+                    <p>複雑なモデルほど学習データへの適合はよくなるが、将来のデータに対する予測精度はかえって落ちる現象。パラメータ数が大きすぎるモデルやデータ数に近いパラメータ数のモデルの使用を避け、<strong>当てはまりのよさと簡潔さのバランス</strong>をとることが重要。</p>
+                    <p>関連：正則化によるモデル選択（16章参照）</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
+
+                    <h3>重回帰分析におけるAIC</h3>
+                    <p>重回帰モデル $y = X\beta + \varepsilon$（$\varepsilon \sim N_n(0, \sigma^2 I_n)$）で、$\beta$ は $(p+1) \times 1$、$X$ は $n \times (p+1)$ とする。</p>
+                    <p>最大尤度：</p>
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        $$L = \left(\frac{2\pi S_e}{n}\right)^{-n/2} \exp\!\left(-\frac{n}{2}\right) \tag{30.2}$$
                     </div>
-                    -->
+                    <p>ただし $S_e$ は残差平方和 $S_e = y^T(I_n - X(X^TX)^{-1}X^T)y$。</p>
+                    <p>推定パラメータ数は $\beta$ と $\sigma^2$ を合わせて $k + 2$ 個：</p>
+                    <div class="formula-block">
+                        $$\mathrm{AIC}(k) = n\!\left(\log S_e^{(k)} + \log\frac{2\pi}{n} + 1\right) + 2(k+2)$$
+                    </div>
+                    <p>選択する説明変数によって変化しない項を省くと $\mathrm{AIC}' = n\log S_e + 2p$ とも書ける。</p>
+
+                    <h3>AICとF検定統計量の関係</h3>
+                    <p>$\mathrm{AIC}(k) > \mathrm{AIC}(k+1)$ の条件は、$n$ が大きいとき、F検定統計量 $F > 2$ を基準とした変数選択とほぼ同じ結果を与える。すなわち：</p>
+                    <div class="formula-block">
+                        $$F = \frac{S_e^{(k)} - S_e^{(k+1)}}{S_e^{(k+1)} / (n - k - 2)}$$
+                    </div>
+                    <p>の棄却限界値が $(\exp(2/n) - 1)(n - k - 2) \to 2$（$n \to \infty$）となることから確かめられる。</p>
+
+                    <h3>重回帰分析におけるBIC</h3>
+                    <div class="formula-block">
+                        $$\mathrm{BIC}(k) = n\!\left(\log S_e^{(k)} + \log\frac{2\pi}{n} + 1\right) + (k+2)\log n$$
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>問30.1：最大尤度の導出</h3>
+                    <p>式(30.2)を示せ。</p>
+                    <p><strong>ヒント</strong>：$\hat{\beta} = (X^TX)^{-1}X^Ty$, $\hat{\sigma}^2 = S_e / n$</p>
+                    <div class="qa-box">
+                        <p><strong>解答</strong>：$y \sim N_n(X\beta, \sigma^2 I_n)$ より最大尤度は</p>
+                        <p>$$L = (2\pi)^{-n/2}(\hat{\sigma}^2)^{-n/2}\exp\!\left(-\frac{1}{2\hat{\sigma}^2}(y - X\hat{\beta})^T(y - X\hat{\beta})\right)$$</p>
+                        <p>$\hat{\sigma}^2 = S_e/n$ および $(y - X\hat{\beta})^T(y - X\hat{\beta}) = S_e$ を代入すると</p>
+                        <p>$$L = (2\pi)^{-n/2}\left(\frac{S_e}{n}\right)^{-n/2}\exp\!\left(-\frac{n}{2}\right) = \left(\frac{2\pi S_e}{n}\right)^{-n/2}\exp\!\left(-\frac{n}{2}\right)$$</p>
+                    </div>
+
+                    <h3>問30.2：AICとBICによる変数選択</h3>
+                    <p>$n = 20$ のデータで、$y$ を目的変数、$x_1, x_2, x_3$ を説明変数の候補として回帰分析。</p>
+                    <table>
+                        <thead><tr><th>説明変数</th><th>$k$</th><th>$S_e$</th><th>$\log S_e$</th></tr></thead>
+                        <tbody>
+                            <tr><td>なし</td><td>0</td><td>53180</td><td>10.881</td></tr>
+                            <tr><td>$x_1$</td><td>1</td><td>41499</td><td>10.633</td></tr>
+                            <tr><td>$x_2$</td><td>1</td><td>30338</td><td>10.320</td></tr>
+                            <tr><td>$x_3$</td><td>1</td><td>40420</td><td>10.607</td></tr>
+                            <tr><td>$x_1, x_2$</td><td>2</td><td>29727</td><td>10.300</td></tr>
+                            <tr><td>$x_1, x_3$</td><td>2</td><td>26252</td><td>10.176</td></tr>
+                            <tr><td>$x_2, x_3$</td><td>2</td><td>26923</td><td>10.201</td></tr>
+                            <tr><td>$x_1, x_2, x_3$</td><td>3</td><td>23893</td><td>10.081</td></tr>
+                        </tbody>
+                    </table>
+                    <p>$\log 2\pi = 1.838$, $\log 20 = 2.996$ として計算する。</p>
+                    <div class="qa-box">
+                        <p><strong>解答</strong>：各組合せについて AIC$(k) = n(\log S_e^{(k)} + \log(2\pi/n) + 1) + 2(k+2)$ と BIC$(k) = n(\log S_e^{(k)} + \log(2\pi/n) + 1) + (k+2)\log n$ を計算：</p>
+                        <ul>
+                            <li><strong>AICによる変数選択</strong>：$\{x_1, x_3\}$ が選ばれる</li>
+                            <li><strong>BICによる変数選択</strong>：$\{x_2\}$ が選ばれる</li>
+                        </ul>
+                        <p>BICの方がペナルティが大きいため、より簡潔なモデルが選ばれている。</p>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>AIC = $-2\log L + 2k$：当てはまりのよさ（尤度）とモデルの簡潔さ（パラメータ数の少なさ）のバランス</li>
+                        <li>BIC = $-2\log L + k\log n$：$n \ge 8$ でAICより簡潔なモデルを選ぶ。$n \to \infty$ で確率1で真のモデルを選択</li>
+                        <li>重回帰のAIC：$n$ が大きいとき F > 2 の変数選択と近い結果</li>
+                        <li>クロスバリデーション：学習データとテストデータの分離により過適合を検出。Leave-one-out（$K = n$）が特殊ケース</li>
+                        <li>過学習を避けるには、パラメータ数が大きすぎるモデルを避け、情報量規準などでバランスをとる</li>
+                        <li>問30.2の結果：AICは $\{x_1, x_3\}$、BICは $\{x_2\}$ → BICの方が簡潔なモデルを好む典型例</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

@@ -40,32 +40,101 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>クラスター分析（cluster analysis）は、クラスラベルの情報が与えられない状況で、特徴量の類似度や距離に基づきデータをいくつかのグループに分類する方法である。判別分析があらかじめラベルの付いたデータを用いるのに対し、クラスター分析はラベルなしで個体間の関係を理解するのに有用な手法である。</p>
+                    <p>クラスタリング手法は<strong>階層的手法</strong>と<strong>非階層的手法</strong>に大別される。階層的手法はデンドログラムで視覚的に確認でき、非階層的手法（K-means法など）はあらかじめ指定したクラスター数に分類する。結果は採用する距離尺度やアルゴリズムに大きく影響を受けるため、データの性質に応じた選択が重要である。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+                    <div class="concept-list">
+                        <h3>距離尺度</h3>
+                        <ul>
+                            <li><strong>ミンコフスキー距離</strong>：$d_m(\mathbf{x}, \mathbf{y}) = \left(\sum_{j} |x_j - y_j|^m\right)^{1/m}$（$m=2$：ユークリッド距離、$m=1$：マンハッタン距離）</li>
+                            <li><strong>マハラノビス距離</strong>：$d_M(\mathbf{x}, \mathbf{y}) = \sqrt{(\mathbf{x}-\mathbf{y})^T \Sigma^{-1} (\mathbf{x}-\mathbf{y})}$（共分散行列 $\Sigma$ を考慮）</li>
+                        </ul>
+                        <h3>階層的クラスタリング</h3>
+                        <ul>
+                            <li><strong>デンドログラム</strong>（樹状図）：クラスター形成のプロセスを視覚的に表現する二分木</li>
+                            <li><strong>コーフェン行列</strong>：併合途中のクラスター間距離行列</li>
+                            <li>計算量 $O(n^2)$</li>
+                        </ul>
+                        <h3>クラスター間距離</h3>
+                        <ul>
+                            <li><strong>最近隣法</strong>（単リンク法）：$d(C_1,C_2) = \min_{x \in C_1, y \in C_2} d(x,y)$</li>
+                            <li><strong>最遠隣法</strong>（最長距離法）：$d(C_1,C_2) = \max_{x \in C_1, y \in C_2} d(x,y)$</li>
+                            <li><strong>重心法</strong>（セントロイド法）：クラスター重心間の距離</li>
+                            <li><strong>群平均法</strong>：すべての組合せの距離の平均</li>
+                            <li><strong>ウォード法</strong>：併合によるクラスター内ばらつき増加量を最小にする</li>
+                        </ul>
+                        <h3>非階層的クラスタリング</h3>
+                        <ul>
+                            <li><strong>K-means法</strong>：K個のクラスターに分類、計算量 $O(nK)$</li>
+                            <li>初期クラスター中心の選び方に依存</li>
+                            <li><strong>混合分布とEMアルゴリズム</strong>：混合比 $\pi_k$ と成分分布 $f_k(x;\theta_k)$ でモデル化</li>
+                        </ul>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        <p><strong>K-means法の目的関数</strong></p>
+                        $$J(\{C_k\}) = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \bar{\mu}_k\|^2$$
+                        <p>$\bar{\mu}_k$：$k$番目のクラスターに属するサンプルの平均ベクトル</p>
                     </div>
-                    -->
+                    <div class="formula-block">
+                        <p><strong>K-meansの反復手順</strong></p>
+                        <ol>
+                            <li>クラスター中心の更新：$\bar{\mu}_k = \frac{1}{|C_k|}\sum_{x \in C_k} x$</li>
+                            <li>クラスター割当の更新：各サンプルを最も近い中心のクラスターに再割当</li>
+                        </ol>
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>混合分布モデル</strong></p>
+                        $$f(x;\{\pi_k,\theta_k\}) = \sum_{k=1}^{K} \pi_k f_k(x;\theta_k), \quad \sum_{k=1}^{K}\pi_k = 1$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>ウォード法のクラスター間距離</strong></p>
+                        $$d(C_1,C_2) = \sum_{z \in C_1 \cup C_2} \|z - \bar{z}\|^2 - \sum_{x \in C_1}\|x - \bar{x}\|^2 - \sum_{y \in C_2}\|y - \bar{y}\|^2$$
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+                    <div class="example-block">
+                        <p><strong>問24.1</strong> TripAdvisor の6人ユーザによるレストラン・劇場・ビーチの平均評価点データから、ユークリッド距離行列をもとにクラスター分析を行う。</p>
+                        <p><strong>[1] デンドログラムの対応</strong></p>
+                        <div class="answer-block">
+                            <p>(a) が<strong>最遠隣法</strong>、(b) が<strong>最近隣法</strong>に対応する。</p>
+                            <p>A=3, B=6, C=4, D=2, E=1, F=5（A,Cおよび D,Eはそれぞれ入替可能）</p>
+                            <p><strong>解法の手順：</strong></p>
+                            <ul>
+                                <li>距離行列で最も小さい非対角成分 $d(3,4)=1.4$ から $\{A,C\}=\{3,4\}$</li>
+                                <li>次に $\{3,4\}$ と結合される $F$ は $\min\{d(3,F),d(4,F)\}=1.6$ より $F=5$</li>
+                                <li>残りで最短 $d(E,D)=2.4$ より $\{E,D\}=\{1,2\}$、残り $B=6$</li>
+                                <li>最近隣法で $d(\{3,4,5\},\{1,2\})=2.5 < d(\{3,4,5\},6)=2.7$ → 先に $\{3,4,5\}$ と $\{1,2\}$ が結合 → (b)</li>
+                            </ul>
+                        </div>
+                        <p><strong>[2] K-means法（K=2）</strong></p>
+                        <div class="answer-block">
+                            <p>初期中心 $\mu_1^{(0)}=(9,6,7)$、$\mu_2^{(0)}=(5,5,10)$ として各ユーザとの距離を計算すると、$C_1 = \{1,2\}$、$C_2 = \{3,4,5,6\}$ に割当。</p>
+                            <p>更新後のクラスター中心：</p>
+                            <ul>
+                                <li>$\bar{\mu}_1 = (8.9, 5.9, 7.5)$</li>
+                                <li>$\bar{\mu}_2 = (5.0, 4.5, 9.1)$</li>
+                            </ul>
+                        </div>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>階層的手法は $O(n^2)$、K-means は $O(nK)$ → サンプルサイズが大きい場合は非階層的手法が実用的</li>
+                        <li>K-means法の結果は初期中心の選び方に依存するため、複数回実行して目的関数 $J$ が最小の結果を選ぶ</li>
+                        <li>ウォード法はクラスター内のばらつき増加を最小にする方法で、球状クラスターの発見に適している</li>
+                        <li>混合分布によるクラスタリングではEMアルゴリズムが用いられる（→29章参照）</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

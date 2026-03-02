@@ -40,32 +40,101 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>本章では、主成分分析・因子分析・判別分析・クラスター分析以外の多変量解析手法として、<strong>多次元尺度法（MDS）</strong>、<strong>正準相関分析</strong>、<strong>数量化法</strong>、<strong>対応分析</strong>を扱う。</p>
+                    <p>多次元尺度法は個体間の距離・非類似度データから低次元の座標表現を求める手法であり、正準相関分析は2つの変数群の線形結合の相関を最大化する手法である。数量化法は質的データに対する多変量解析手法で、対応分析は分割表データの分析手法である。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+                    <div class="concept-list">
+                        <h3>多次元尺度法（MDS）</h3>
+                        <ul>
+                            <li><strong>計量MDS</strong>：距離行列 $D$（$d_{ij}^2$ の行列）を二重中心化して $B = -\frac{1}{2}(I_n - \frac{1}{n}J_n)D(I_n - \frac{1}{n}J_n)$ を計算</li>
+                            <li><strong>エッカート・ヤング分解</strong>（Eckart-Young）：$B = U\Lambda U^T$ から座標行列 $X = U\Lambda^{1/2}$</li>
+                            <li><strong>寄与率</strong>：$\frac{\lambda_1 + \lambda_2}{\lambda_1 + \lambda_2 + \cdots + \lambda_r}$（$k=2$ の場合）</li>
+                            <li><strong>ユークリッド距離行列</strong>：$B$ が非負定符号行列 $\Leftrightarrow$ $D$ がユークリッド距離行列</li>
+                            <li><strong>非計量MDS</strong>：非類似度データに単調変換を前提とし、ストレス値を最小化して座標を求める</li>
+                        </ul>
+                        <h3>正準相関分析</h3>
+                        <ul>
+                            <li>2つの変数群 $(x_1,\ldots,x_p)$ と $(y_1,\ldots,y_q)$ の線形結合の相関を最大化</li>
+                            <li><strong>正準変数</strong>（canonical variable）：最適な線形結合 $a^Tx$, $b^Ty$</li>
+                            <li><strong>正準相関係数</strong>：$S_{xx}^{-1/2}S_{xy}S_{yy}^{-1}S_{yx}S_{xx}^{-1/2}$ の固有値問題に帰着</li>
+                            <li>主成分分析は変数群が1つの場合、重回帰分析は片方が1変数の場合に相当</li>
+                        </ul>
+                        <h3>数量化法</h3>
+                        <ul>
+                            <li><strong>数量化I類</strong>：質的説明変数（ダミー変数）のみによる重回帰分析</li>
+                            <li><strong>数量化II類</strong>：質的説明変数による判別分析</li>
+                            <li><strong>数量化III類</strong>：質的データに対する主成分分析（0/1行列を用いる）</li>
+                        </ul>
+                        <h3>対応分析</h3>
+                        <ul>
+                            <li><strong>対応分析</strong>（correspondence analysis）：分割表で表されるデータの分析手法</li>
+                            <li>数量化III類の一般化（1より大きいカウント数を含むデータ行列に適用可能）</li>
+                        </ul>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        <p><strong>計量MDSの二重中心化</strong></p>
+                        $$B = -\frac{1}{2}\left(I_n - \frac{1}{n}J_n\right)D\left(I_n - \frac{1}{n}J_n\right) = XX^T$$
+                        <p>$D$：距離の2乗行列、$J_n$：全要素1の $n \times n$ 行列</p>
                     </div>
-                    -->
+                    <div class="formula-block">
+                        <p><strong>座標行列の復元</strong></p>
+                        $$B = U\Lambda U^T \quad \Rightarrow \quad X = U\Lambda^{1/2}$$
+                        <p>$\Lambda = \text{diag}(\lambda_1, \lambda_2, \ldots, \lambda_r)$：$B$ の正の固有値、$U$：対応する固有ベクトル行列</p>
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>非計量MDSのストレス値</strong></p>
+                        $$S = \sqrt{\frac{\sum_{i<j}(\hat{d}_{ij} - d_{ij})^2}{\sum_{i<j}d_{ij}^2}}$$
+                        <p>$\hat{d}_{ij}$：単調変換後の距離、$d_{ij}$：座標から計算された距離</p>
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>正準相関分析の固有値問題</strong></p>
+                        $$S_{xx}^{-1/2}S_{xy}S_{yy}^{-1}S_{yx}S_{xx}^{-1/2}\mathbf{c} = \lambda^2 \mathbf{c}$$
+                        <p>$\mathbf{a} = S_{xx}^{-1/2}\mathbf{c}$, $\mathbf{b} = S_{yy}^{-1}S_{yx}\mathbf{a}$ で正準変数の係数を求める</p>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+                    <div class="example-block">
+                        <p><strong>問26.1</strong> 4個体間の非類似度の2乗が以下の距離行列で与えられている：</p>
+                        $$D = \begin{pmatrix} 0 & 5 & 4 & 16 \\ 5 & 0 & 5 & 5 \\ 4 & 5 & 0 & 5 \\ 16 & 5 & 5 & 0 \end{pmatrix}$$
+                        <p><strong>[1] $B$ の固有値・固有ベクトル</strong></p>
+                        <div class="answer-block">
+                            <p>$B = -\frac{1}{2}(I_4 - \frac{1}{4}J_4)D(I_4 - \frac{1}{4}J_4)$ を計算すると、固有値は $8, 2, 0, 0$。</p>
+                            <p>ノルム1に基準化された固有ベクトル：$(\frac{1}{2}, 0, 0, -\frac{1}{2})^T$, $( 0, \frac{1}{\sqrt{2}}, -\frac{1}{\sqrt{2}}, 0)^T$ 等。</p>
+                        </div>
+                        <p><strong>[2] 次数 $k=1$ の場合</strong></p>
+                        <div class="answer-block">
+                            <p>第1固有値 $\lambda_1=8$ と対応する固有ベクトルを用いて：</p>
+                            <p>座標 $= (\frac{1}{2}, 0, 0, -\frac{1}{2})^T \times \sqrt{8} = (2, 0, 0, -2)^T$</p>
+                            <p>距離行列は $D$ を<strong>完全に再現できない</strong>（例：$d_{23}^2 = 0$ となってしまう）。</p>
+                        </div>
+                        <p><strong>[3] 次数 $k=2$ の場合</strong></p>
+                        <div class="answer-block">
+                            <p>第1・第2固有値を用いて座標を計算：</p>
+                            <ul>
+                                <li>個体1: $(2, 0)$、個体2: $(0, 1)$、個体3: $(0, -1)$、個体4: $(-2, 0)$</li>
+                            </ul>
+                            <p>この座標から計算した距離行列は $D$ を<strong>完全に再現できる</strong>。</p>
+                        </div>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>計量MDSは主成分分析と密接に関連：データ行列 $X$ から出発すれば $XX^T$ の固有値分解に帰着</li>
+                        <li>$B$ が非負定符号でない場合（負の固有値がある場合）は完全な再現不可能だが、正の固有値部分で近似座標を得られる</li>
+                        <li>数量化法の名称対応：I類＝重回帰、II類＝判別、III類＝PCA（すべて質的変数版）</li>
+                        <li>正準相関分析は標準化しても正準変数自体は変わらない（主成分分析との違い）</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

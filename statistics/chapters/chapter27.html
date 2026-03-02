@@ -40,32 +40,127 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>時系列解析（time-series analysis）は、時間の経過とともに観測されたデータ（時系列データ）を分析する手法である。時系列データは自己共分散・自己相関係数で特徴づけられ、定常性の有無で適用するモデルが異なる。</p>
+                    <p>代表的なモデルとして、AR（自己回帰）過程、MA（移動平均）過程、ARMA過程、ARIMA過程がある。時間領域での分析に加え、スペクトラム・ペリオドグラムによる周波数領域での分析もある。また、状態空間モデルやダービン・ワトソン検定など、実用的なツールも多い。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+                    <div class="concept-list">
+                        <h3>基本概念</h3>
+                        <ul>
+                            <li><strong>自己共分散</strong>（autocovariance）：$\gamma_h = \text{Cov}[Y_t, Y_{t-h}]$</li>
+                            <li><strong>自己相関係数</strong>（autocorrelation coefficient）：$\rho_h = \gamma_h / \gamma_0$</li>
+                            <li><strong>共分散定常過程</strong>（弱定常過程）：$E[Y_t] = \mu$（一定）、$\text{Cov}[Y_t, Y_{t-h}] = \gamma_{|h|}$（時点に依存しない）</li>
+                            <li><strong>強定常過程</strong>：任意の時間差に対して同時分布が時点に依存しない</li>
+                            <li><strong>ホワイトノイズ</strong>：平均0、$h \neq 0$ のすべての自己共分散が0</li>
+                        </ul>
+                        <h3>AR過程</h3>
+                        <ul>
+                            <li><strong>AR(1)</strong>：$Y_t = c + \phi_1 Y_{t-1} + U_t$。$|\phi_1| < 1$ で定常</li>
+                            <li>平均 $\mu = c/(1-\phi_1)$、分散 $\gamma_0 = \sigma^2/(1-\phi_1^2)$、自己相関 $\rho_h = \phi_1^h$</li>
+                            <li><strong>AR(p)</strong>：定常性条件は特性多項式 $1 - \phi_1 z - \cdots - \phi_p z^p = 0$ の解がすべて単位円外</li>
+                        </ul>
+                        <h3>MA過程</h3>
+                        <ul>
+                            <li><strong>MA(1)</strong>：$Y_t = \mu + U_t + \theta_1 U_{t-1}$。常に定常</li>
+                            <li><strong>MA(q)</strong>：$q$ 次以降の自己共分散が0（重要な特徴）</li>
+                        </ul>
+                        <h3>ARMA・ARIMA</h3>
+                        <ul>
+                            <li><strong>ARMA(p,q)</strong>：AR過程とMA過程の組合せ</li>
+                            <li><strong>ARIMA(p,1,q)</strong>：階差 $\Delta Y_t = Y_t - Y_{t-1}$ がARMA(p,q)に従う</li>
+                            <li><strong>単位根検定</strong>（DF検定・拡張DF検定）：$\phi_1 = 1$ を検定（特別な分布表が必要）</li>
+                        </ul>
+                        <h3>その他の手法</h3>
+                        <ul>
+                            <li><strong>ラグ多項式</strong>：$\phi(L)Y_t = c + \theta(L)U_t$（$L$：ラグオペレーター、$LY_t = Y_{t-1}$）</li>
+                            <li><strong>スペクトラム密度</strong>：$f(\lambda) = \frac{1}{2\pi}\sum_{h=-\infty}^{\infty}\gamma_h e^{-i\lambda h}$</li>
+                            <li><strong>ペリオドグラム</strong>：標本自己共分散を用いたスペクトラムの推定量（一致推定量ではない）</li>
+                            <li><strong>状態空間モデル</strong>：観測方程式＋状態方程式、カルマンフィルターで推定</li>
+                            <li><strong>ダービン・ワトソン検定</strong>：回帰モデルの誤差項の系列相関を検定</li>
+                        </ul>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        <p><strong>AR(1)過程の性質（$|\phi_1| < 1$）</strong></p>
+                        $$\mu = \frac{c}{1-\phi_1}, \quad \gamma_0 = \frac{\sigma^2}{1-\phi_1^2}, \quad \gamma_h = \phi_1^h \gamma_0, \quad \rho_h = \phi_1^h$$
                     </div>
-                    -->
+                    <div class="formula-block">
+                        <p><strong>MA(q)過程の自己共分散</strong></p>
+                        $$\gamma_h = \begin{cases} (1+\theta_1^2+\cdots+\theta_q^2)\sigma^2 & (h=0) \\ (\theta_h + \theta_1\theta_{h+1} + \cdots + \theta_{q-h}\theta_q)\sigma^2 & (1 \leq h \leq q) \\ 0 & (h > q) \end{cases}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>AR(1)のスペクトラム</strong></p>
+                        $$f(\lambda) = \frac{\sigma^2}{2\pi(1+\phi_1^2-2\phi_1\cos\lambda)}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>ダービン・ワトソン比</strong></p>
+                        $$DW = \frac{\sum_{t=2}^{T}(\hat{U}_t - \hat{U}_{t-1})^2}{\sum_{t=1}^{T}\hat{U}_t^2} \approx 2(1-\hat{\rho})$$
+                        <p>$\hat{\rho}$：1次の自己相関係数の推定量。$DW \approx 2$：相関なし、$DW < 2$：正の相関、$DW > 2$：負の相関</p>
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>次数選択の目安</strong></p>
+                        <table style="width:100%; border-collapse:collapse; margin-top:0.5em;">
+                            <tr><th style="border:1px solid #ccc; padding:4px;">自己相関係数</th><th style="border:1px solid #ccc; padding:4px;">偏自己相関係数</th><th style="border:1px solid #ccc; padding:4px;">選択モデル</th></tr>
+                            <tr><td style="border:1px solid #ccc; padding:4px;">2次以降0</td><td style="border:1px solid #ccc; padding:4px;">ゆっくり減衰</td><td style="border:1px solid #ccc; padding:4px;">MA(1)</td></tr>
+                            <tr><td style="border:1px solid #ccc; padding:4px;">ゆっくり減衰</td><td style="border:1px solid #ccc; padding:4px;">2次以降0</td><td style="border:1px solid #ccc; padding:4px;">AR(1)</td></tr>
+                            <tr><td style="border:1px solid #ccc; padding:4px;">ゆっくり減衰</td><td style="border:1px solid #ccc; padding:4px;">ゆっくり減衰</td><td style="border:1px solid #ccc; padding:4px;">ARMA(1,1)</td></tr>
+                        </table>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+                    <div class="example-block">
+                        <p><strong>問27.1</strong> AR(1)過程 $Y_t = 2(1-\phi_1) + \phi_1 Y_{t-1} + U_t$ のグラフ対応</p>
+                        <p><strong>[1] $\phi_1 = -0.8, 0, 0.7, 1$ のグラフ対応</strong></p>
+                        <div class="answer-block">
+                            <ul>
+                                <li>(a) $\phi_1 = 0.7$：隣接データが似た値、変動が穏やか</li>
+                                <li>(b) $\phi_1 = 0$：ホワイトノイズ、不規則変動</li>
+                                <li>(c) $\phi_1 = 1$：非定常、平均が一定でない</li>
+                                <li>(d) $\phi_1 = -0.8$：上下に激しく変動（符号が交互）</li>
+                            </ul>
+                        </div>
+                        <p><strong>[2] DW比</strong></p>
+                        <div class="answer-block">
+                            <p>正の自己相関がある場合、最小二乗推定量は不偏だが最小分散ではない。DW比は0に近い値をとる。</p>
+                        </div>
+                    </div>
+                    <div class="example-block">
+                        <p><strong>問27.2</strong> MA(2)過程 $Y_t = U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2}$ の共分散</p>
+                        <div class="answer-block">
+                            $$\gamma_0 = (1+\theta_1^2+\theta_2^2)\sigma^2, \quad \gamma_1 = (\theta_1+\theta_1\theta_2)\sigma^2, \quad \gamma_2 = \theta_2\sigma^2, \quad \gamma_h = 0 \ (h>2)$$
+                        </div>
+                    </div>
+                    <div class="example-block">
+                        <p><strong>問27.3</strong> 残差系列のコレログラムから次数決定</p>
+                        <div class="answer-block">
+                            <p>[1] 偏自己相関係数が3次以降有意に0と異ならない → <strong>AR(2)</strong>モデルが適切。</p>
+                            <p>[2] $DW \approx 2(1-\hat{\rho}_1) = 2(1-0.691) = 0.618$（実際の値は0.568）</p>
+                        </div>
+                    </div>
+                    <div class="example-block">
+                        <p><strong>問27.4</strong> AICによるモデル選択</p>
+                        <div class="answer-block">
+                            <p>AIC最小のモデル → <strong>AR(3)</strong>（AIC = -4.771）を選択。</p>
+                        </div>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>AR過程の自己相関は幾何級数的に減衰、MA(q)の自己共分散は $q$ 次で打ち切り → 標本からの次数選択に利用</li>
+                        <li>偏自己相関係数はAR次数選択に有用：AR(p)は $p+1$ 次以降が0</li>
+                        <li>DW検定の注意：検定不能領域あり、被説明変数の過去値を含むモデルには適用不可</li>
+                        <li>ペリオドグラムは漸近不偏だが一致推定量ではない → 平滑化が必要</li>
+                        <li>状態空間モデルは可変パラメータモデルや潜在変数モデルなど柔軟な表現が可能</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

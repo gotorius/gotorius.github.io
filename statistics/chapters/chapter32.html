@@ -40,32 +40,156 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>本章では、統計学におけるシミュレーション手法を学ぶ。乱数の生成方法（逆関数法、採択棄却法）、<strong>モンテカルロ法</strong>による積分の近似とその精度向上法、そして統計量の標準誤差やバイアスを推定する<strong>ジャックナイフ法</strong>・<strong>ブートストラップ法</strong>について扱う。</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>乱数（Random Number）</h3>
+                    <ul>
+                        <li><strong>物理乱数（physical random number）</strong>：熱雑音や原子核分裂など物理現象を利用。周期や再現性がない。専用ハードウェアが必要</li>
+                        <li><strong>擬似乱数（pseudo random number）</strong>：漸化式に基づく。計算機と合った速度で生成可能。一様性・独立性・高次元での稠密性が必要</li>
+                        <li><strong>メルセンヌツイスター</strong>：非常に長い周期と高次元での稠密性をもつ擬似乱数生成法</li>
+                    </ul>
+
+                    <h3>逆関数法（Inverse Transformation Method）</h3>
+                    <p>$F_X(x)$ の逆関数 $F_X^{-1}$ が陽に得られる場合：</p>
+                    <ol>
+                        <li>$U(0,1)$ から一様乱数 $u$ をサンプリング</li>
+                        <li>$x = F_X^{-1}(u)$ とする</li>
+                    </ol>
+                    <p>指数分布、コーシー分布、レイリー分布などに適用可能。$F_X^{-1}$ が陽に表現できなくてもニュートン法等で近似可能。</p>
+
+                    <h3>採択棄却法（Acceptance-Rejection Method）</h3>
+                    <p>目標密度 $f(x) = c^{-1}h(x)$ に対し、$Mg(x) \ge h(x)$ を満たす密度 $g(x)$ と定数 $M > 0$ を用いる：</p>
+                    <ol>
+                        <li>$g(x)$ から乱数 $x$、$U(0,1)$ から $u$ をサンプリング</li>
+                        <li>$u \le h(x)/(Mg(x))$ なら $x$ を出力、そうでなければ1に戻る</li>
+                    </ol>
+                    <p>採択確率は $1/M$。$M$ が小さいほど効率がよい。</p>
+
+                    <h3>モンテカルロ法の精度向上</h3>
+                    <ul>
+                        <li><strong>主部の分離</strong>：$g(x)$ のマクローリン展開等で主部 $l(x)$ を取り出し、$g(x) - l(x) + \int l\,dx$ の分散を低減</li>
+                        <li><strong>負の相関を利用</strong>：$g(X)$ と $g(1-X)$ の負の相関を利用。$\text{se}(\hat{I}_2) = \sqrt{(1+\rho)/2}\;\text{se}(\hat{I}_1)$</li>
+                        <li><strong>加重サンプリング</strong></li>
+                        <li><strong>層別サンプリング</strong></li>
+                    </ul>
+
+                    <h3>ジャックナイフ法</h3>
+                    <p>$n$ 個のデータから $i$ 番目を除いた $n-1$ 個で統計量を計算する方法。標準誤差の推定に利用。</p>
+
+                    <h3>ブートストラップ法（Bootstrap Method）</h3>
+                    <p>経験分布関数（各 $x_i$ に確率 $1/n$ を与えた分布）からの<strong>リサンプリング</strong>を $B$ 回繰り返し、統計量の分布を推定する方法。</p>
+                    <ul>
+                        <li><strong>ノンパラメトリックブートストラップ</strong>：経験分布から復元抽出</li>
+                        <li><strong>パラメトリックブートストラップ</strong>：推定パラメータを代入した確率分布からリサンプリング</li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
+
+                    <h3>逆関数法の原理</h3>
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        $$P(F_X^{-1}(U) \le x) = P(U \le F_X(x)) = F_X(x) \tag{32.1}$$
                     </div>
-                    -->
+
+                    <h3>単純モンテカルロ法</h3>
+                    <p>$\theta = \int g(x)f(x)\,dx = E[g(X)]$ を推定。$X_1, \ldots, X_m \sim f$ として：</p>
+                    <div class="formula-block">
+                        $$\hat{\theta} = \frac{1}{m}\sum_{i=1}^{m} g(X_i) \tag{32.2}$$
+                    </div>
+                    <p>分散と標準誤差：</p>
+                    <div class="formula-block">
+                        $$V[\hat{\theta}] = \frac{\sigma^2}{m}, \quad \sigma^2 = E[(g(X) - \theta)^2], \quad \text{se}(\hat{\theta}) = \frac{\hat{\sigma}}{\sqrt{m}}$$
+                    </div>
+                    <p>$\hat{\sigma}^2 = \frac{1}{m}\sum_{i=1}^{m}(g(X_i) - \hat{\theta})^2$ で推定。中心極限定理より $(\hat{\theta} - \theta)/\text{se}(\hat{\theta}) \to N(0,1)$。</p>
+
+                    <h3>モンテカルロ法による $\pi$ の近似</h3>
+                    <p>$(U_i, V_i) \sim U(0,1)^2$ を $N$ 組生成し、$U_i^2 + V_i^2 < 1$ の個数 $M$ として $\hat{\pi} = 4M/N$。</p>
+                    <div class="formula-block">
+                        $$\text{SD}[4M/N] = \sqrt{\frac{\pi(4-\pi)}{N}} \le 0.01 \implies N \ge \frac{\pi(4-\pi)}{0.0001} \approx 27000$$
+                    </div>
+
+                    <h3>ジャックナイフ標準誤差</h3>
+                    <p>$\hat{\theta}_{(i)} = T_{n-1}(x_{(-i)})$（$i$ 番目を除いた統計量）、$\bar{\hat{\theta}}_{(\cdot)} = \frac{1}{n}\sum \hat{\theta}_{(i)}$ として：</p>
+                    <div class="formula-block">
+                        $$\text{se}_{\mathrm{jack}} = \sqrt{\frac{n-1}{n}\sum_{i=1}^{n}\left(\hat{\theta}_{(i)} - \bar{\hat{\theta}}_{(\cdot)}\right)^2}$$
+                    </div>
+
+                    <h3>ブートストラップ標準誤差</h3>
+                    <p>$B$ 回のリサンプリングで $\hat{\theta}^{*(b)} = T_n(x^{*(b)})$, $b = 1, \ldots, B$ として：</p>
+                    <div class="formula-block">
+                        $$\text{se}_B = \sqrt{\frac{1}{B-1}\sum_{b=1}^{B}\left(\hat{\theta}^{*(b)} - \bar{\hat{\theta}}^*\right)^2}, \quad \bar{\hat{\theta}}^* = \frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{*(b)}$$
+                    </div>
+                    <p>標準誤差の推定では $B$ は 50〜200 程度で十分。</p>
+
+                    <h3>バイアスのブートストラップ推定量</h3>
+                    <div class="formula-block">
+                        $$\widehat{\text{bias}}(\hat{\theta}) = \bar{\hat{\theta}}^* - \hat{\theta}$$
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>例1：モンテカルロ法で $\pi$ を近似</h3>
+                    <p>$\hat{\pi} = 4M/N$ の標準偏差を 0.01 以下にするには $N \ge \pi(4-\pi)/0.0001 \approx 27000$ 組。</p>
+
+                    <h3>例2：逆関数法（指数分布）</h3>
+                    <p>平均 $1/2$ の指数分布。$F_X(x) = 1 - e^{-2x}$, $F_X^{-1}(u) = -\frac{1}{2}\log(1-u)$。</p>
+                    <div class="qa-box">
+                        <p>$U \sim U(0,1)$ から $u$ をサンプリングし、$x = -\frac{1}{2}\log u$ とする（$1-U \sim U(0,1)$ を利用）。</p>
+                    </div>
+
+                    <h3>例3：採択棄却法（$\mathrm{Be}(2,2)$）</h3>
+                    <p>$f(x) = 6x(1-x)$、$g(x) = 1$（一様分布）。$M_1 = 1$, $M_2 = 1/4$。</p>
+                    <div class="qa-box">
+                        <p>$M_1$ の採択確率 $1/6$、$M_2$ の採択確率 $2/3$。$M_2$ の方が $M_1/M_2 = 4$ 倍効率がよい。</p>
+                    </div>
+
+                    <h3>例5：主部の分離による精度向上</h3>
+                    <p>$I = \int_0^1 e^x\,dx = e - 1 = 1.718$。$g_1(x) = e^x$、$g_2(x) = e^x - (x+1) + 3/2$（主部 $l(x) = x + 1$ を分離）。</p>
+                    <div class="qa-box">
+                        <p>$\sigma_1^2 = 0.242$, $\sigma_2^2 = 0.0044$ → $\text{se}(\hat{I}_1) = 0.00492$, $\text{se}(\hat{I}_2) = 0.00210$（$m = 10^4$）</p>
+                    </div>
+
+                    <h3>例6：負の相関を利用する方法</h3>
+                    <p>$g_2(x) = (e^x + e^{1-x})/2$ として $\hat{I}_2 = \frac{1}{m}\sum g_2(X_i)$。2m個の乱数で比較。</p>
+                    <div class="qa-box">
+                        <p>$\rho = \text{Cor}[e^X, e^{1-X}] = -0.234/0.242 = -0.967$</p>
+                        <p>$\text{se}(\hat{I}_2) = \sqrt{(1+\rho)/2}\;\text{se}(\hat{I}_1) = 0.033 \times \text{se}(\hat{I}_1)$</p>
+                    </div>
+
+                    <h3>例7-8：ブートストラップとジャックナイフ</h3>
+                    <p>東京都の月別交通事故死者数（$n=12$）。標本平均 $11.083$、標本分散 $13.538$。</p>
+                    <div class="qa-box">
+                        <p>(1) バイアス修正後の推定値：$11.083 - 0.021 = 11.062$</p>
+                        <p>(2) $\text{se}(\bar{x}) = \sqrt{13.538/12} = 1.062$, $\text{se}_B/\text{se}(\bar{x}) = 1.010/1.062 = 0.951$</p>
+                        <p>ジャックナイフ推定量：$\sqrt{11 \times 0.10256} = 1.062$（ブートストラップとほぼ同じ）</p>
+                    </div>
+
+                    <h3>問32.1：$\pi$ 近似の2通りの方法</h3>
+                    <p>$U \sim U(0,1)$ として $\sqrt{1-U^2}$ の標本平均で $\pi/4$ を推定。</p>
+                    <div class="qa-box">
+                        <p>(1) 単純法：$\text{Var}[\sqrt{1-U^2}] = \pi/4 - (\pi/4)^2 \approx 0.05$ → $n \ge 16 \times 0.05 / 0.0001 = 8000$</p>
+                        <p>(2) 主部分離法：$h(x) = \sqrt{1-x^2} - (1-x) + 1/2$ を利用。分散 $\approx 0.0144$ → $n \ge 16 \times 0.0144 / 0.0001 = 2304$</p>
+                        <p>方法(2)は方法(1)の約 $8000/2304 \approx 3.75$ 倍効率がよい</p>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>乱数生成の基本：逆関数法（$F^{-1}(U)$）と採択棄却法（$Mg(x) \ge h(x)$、$M$ が小さいほど効率的）</li>
+                        <li>モンテカルロ法の精度は $\text{se} = \sigma/\sqrt{m}$ で $m$ に依存。精度向上法：主部分離、負の相関、加重/層別サンプリング</li>
+                        <li>$\pi$ の近似：$N \ge 27000$ で SD $\le 0.01$（$4M/N$ 法）</li>
+                        <li>ジャックナイフ法：1個ずつ除いた統計量の変動から標準誤差を推定。$\text{se}_{\text{jack}} = \sqrt{(n-1)/n \cdot \sum(\hat{\theta}_{(i)} - \bar{\hat{\theta}})^2}$</li>
+                        <li>ブートストラップ法：経験分布からの復元抽出を $B$ 回繰り返し。標準誤差は $B = 50$〜$200$ で十分。バイアス推定は $\bar{\hat{\theta}}^* - \hat{\theta}$</li>
+                        <li>例7-8の結果：ブートストラップ（$\text{se}_B = 1.010$）とジャックナイフ（$\text{se}_{\text{jack}} = 1.062$）はほぼ同じ結果</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

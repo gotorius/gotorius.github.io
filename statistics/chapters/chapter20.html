@@ -40,32 +40,161 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>
+                        第20章では<strong>分散分析と実験計画法</strong>を扱う。フィッシャーの三原則に基づく
+                        実験計画、1元配置・2元配置分散分析、乱塊法、直交表を用いた一部実施要因計画を学ぶ。
+                    </p>
+                    <p><strong>キーワード：</strong>フィッシャーの三原則、1元配置、2元配置、乱塊法、直交表、交互作用、交絡</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>フィッシャーの三原則</h3>
+                    <ol>
+                        <li><strong>反復（繰り返し）の原則：</strong>同じ条件で複数回実験し、偶然誤差を推定</li>
+                        <li><strong>ランダム化の原則：</strong>実験順序・割り当てを乱数で決定し、系統的偏りを排除</li>
+                        <li><strong>局所管理の原則：</strong>均一とみなせるブロックに分け、各ブロック内で一揃いの水準を実験</li>
+                    </ol>
+
+                    <h3>1元配置分散分析</h3>
+                    <p>モデル：$y_{ij} = \mu + \alpha_i + \varepsilon_{ij}$, $\varepsilon_{ij} \sim N(0, \sigma^2)$</p>
+                    <ul>
+                        <li>帰無仮説 $H_0: \alpha_1 = \cdots = \alpha_a = 0$</li>
+                        <li>平方和の分解：$S_T = S_A + S_E$</li>
+                        <li>F検定：$F = V_A / V_E \sim F(\phi_A, \phi_E)$</li>
+                    </ul>
+
+                    <h3>2元配置分散分析</h3>
+                    <p>モデル：$y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}$</p>
+                    <ul>
+                        <li>主効果 $\alpha_i, \beta_j$ と交互作用 $(\alpha\beta)_{ij}$</li>
+                        <li>平方和の分解：$S_T = S_A + S_B + S_{A \times B} + S_E$</li>
+                        <li>交互作用が有意なら、主効果だけでなく水準の組み合わせで評価</li>
+                    </ul>
+
+                    <h3>乱塊法</h3>
+                    <p>ブロック因子を導入し、ブロック間変動を誤差から分離：</p>
+                    <p>$y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \gamma_k + \varepsilon_{ijk}$</p>
+                    <ul>
+                        <li>ブロック因子による変動が大きい場合、誤差分散が小さくなり検出力が向上</li>
+                        <li>ブロック因子の変動がほとんどない場合は、誤差の自由度が減り検出しにくくなる</li>
+                    </ul>
+
+                    <h3>直交表と一部実施要因計画</h3>
+                    <ul>
+                        <li><strong>$L_8(2^7)$ 直交表：</strong>2水準7因子を8回の実験で評価</li>
+                        <li>因子を列に割り付け、主効果と交互作用の推定を行う</li>
+                        <li><strong>交絡（別名関係）：</strong>主効果と交互作用、または交互作用同士が区別できない関係</li>
+                        <li><strong>成分記号：</strong>列の積で交互作用が現れる列を特定</li>
+                    </ul>
+
+                    <h3>一部実施要因計画 $2^{k-1}$</h3>
+                    <ul>
+                        <li>$D = A \times B \times C$：主効果と2因子交互作用の交絡なし、2因子交互作用同士が交絡</li>
+                        <li>$D = A \times B$：一部の主効果と2因子交互作用が交絡</li>
+                        <li>目的に応じた使い分けが重要</li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
+
+                    <h3>1元配置の平方和</h3>
                     <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
+                        $$S_T = \sum_{i=1}^{a}\sum_{j=1}^{n_i}(y_{ij}-\bar{y})^2 = S_A + S_E$$
                     </div>
-                    -->
+                    <div class="formula-block">
+                        $$F = \frac{S_A / (a-1)}{S_E / (n-a)} = \frac{V_A}{V_E} \sim F(a-1, n-a)$$
+                    </div>
+
+                    <h3>2元配置の平方和分解</h3>
+                    <div class="formula-block">
+                        $$S_T = S_A + S_B + S_{A \times B} + S_E$$
+                    </div>
+
+                    <h3>ネイマン配分法（層化抽出法）</h3>
+                    <div class="formula-block">
+                        $$n_h = \frac{N_h \sigma_h}{\sum_{k=1}^{L} N_k \sigma_k} \times n$$
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>問20.1：フィッシャーの三原則</h3>
+                    <div class="answer-block">
+                        <p><strong>(1)</strong> ランダム化の原則 → 苗の大小の影響を除くためランダムに割当て</p>
+                        <p><strong>(2)</strong> 局所管理の原則 → 均一な区画内で $A_1, A_2$ の一揃いを実験</p>
+                        <p><strong>(3)</strong> 反復の原則＋局所管理 → 複数区画で $A_1, A_2$ の一揃いをランダムに実施</p>
+                    </div>
+
+                    <h3>問20.2：研磨機械の1元配置分散分析</h3>
+                    <div class="answer-block">
+                        <p><strong>(1)</strong> モデル：$y_{ij} = \mu + \alpha_i + \varepsilon_{ij}$, $H_0: \alpha_1 = \cdots = \alpha_4 = 0$</p>
+                        <p><strong>(2)</strong> 分散分析表：$S_A = 21.47$, $\phi_A = 3$, $V_A = 7.157$。$S_E = 19.00$, $\phi_E = 13$, $V_E = 1.462$。$F = 4.897$。$F_{0.05}(3,13)=3.41$ より $H_0$ 棄却。機械により生産個数の母平均は異なる。</p>
+                        <p><strong>(3)</strong> $\hat{\mu} = 17.5$, 95%信頼区間：$17.5 \pm 2.16\sqrt{1.462/4} = (16.19,\; 18.81)$</p>
+                    </div>
+
+                    <h3>問20.4：ゴムの2元配置分散分析</h3>
+                    <div class="answer-block">
+                        <p>$S_T = 57$, $S_A = 3$, $S_B = 18$, $S_{A \times B} = 32$, $S_E = 4$</p>
+                        <table>
+                            <thead><tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr></thead>
+                            <tbody>
+                                <tr><td>A</td><td>3.00</td><td>1</td><td>3.00</td><td>4.50</td></tr>
+                                <tr><td>B</td><td>18.00</td><td>2</td><td>9.00</td><td><strong>13.50</strong></td></tr>
+                                <tr><td>$A \times B$</td><td>32.00</td><td>2</td><td>16.00</td><td><strong>24.00</strong></td></tr>
+                                <tr><td>誤差</td><td>4.00</td><td>6</td><td>0.67</td><td>-</td></tr>
+                            </tbody>
+                        </table>
+                        <p>Bの主効果と$A \times B$の交互作用が有意（5%水準）。交互作用があるため $A_2, B_3$ の組合せが最も好ましい。</p>
+                    </div>
+
+                    <h3>問20.5：タイヤ耐摩耗（乱塊法）</h3>
+                    <div class="answer-block">
+                        <p><strong>3元配置（ブロック因子なし）：</strong>$A, B$ の主効果、$A \times B$ は5%で有意とならない。</p>
+                        <p><strong>乱塊法（ブロック因子あり）：</strong>$A, B, V$ の主効果、$A \times B$ が5%で有意。ブロック因子による変動を分離したことで検出力が向上。</p>
+                    </div>
+
+                    <h3>問20.6：$2^{4-1}$ 一部実施要因計画</h3>
+                    <div class="answer-block">
+                        <p><strong>$D=A \times B \times C$：</strong>主効果と2因子交互作用の交絡なし。2因子交互作用同士が交絡（$A \times B$ と $C \times D$ など）。</p>
+                        <p><strong>$D=A \times B$：</strong>$A$ と $B \times D$, $B$ と $A \times D$, $D$ と $A \times B$ が交絡。</p>
+                        <p>特定の因子に興味があり交互作用を調べたい場合は $D=A \times B$、まんべんなく交絡を避けたい場合は $D=A \times B \times C$ を使用。</p>
+                    </div>
+
+                    <h3>問20.7：クランクシャフト研磨（直交表）</h3>
+                    <div class="answer-block">
+                        <p><strong>(1)</strong> $A \times B$：第[3]列、$A \times C$：第[5]列</p>
+                        <p><strong>(2)</strong> 成分記号の積から、主効果と2因子交互作用は直交（交絡しない）。</p>
+                        <p><strong>(3)</strong> 分散分析表（$A \times B, A \times C$ 以外を誤差とみなす）：</p>
+                        <table>
+                            <thead><tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr></thead>
+                            <tbody>
+                                <tr><td>A</td><td>171.13</td><td>1</td><td>171.13</td><td><strong>6.08</strong></td></tr>
+                                <tr><td>B</td><td>45.13</td><td>1</td><td>45.13</td><td>1.60</td></tr>
+                                <tr><td>C</td><td>66.13</td><td>1</td><td>66.13</td><td><strong>2.35</strong></td></tr>
+                                <tr><td>D</td><td>6.13</td><td>1</td><td>6.13</td><td>0.22</td></tr>
+                                <tr><td>$A \times B$</td><td>3.13</td><td>1</td><td>3.13</td><td>0.11</td></tr>
+                                <tr><td>$A \times C$</td><td>136.13</td><td>1</td><td>136.13</td><td><strong>4.84</strong></td></tr>
+                                <tr><td>誤差</td><td>28.13</td><td>1</td><td>28.13</td><td>-</td></tr>
+                            </tbody>
+                        </table>
+                        <p><strong>(4)</strong> $F = 2$ を目安とすると $A, C, A \times C$ を考慮。表面粗さを小さくするには $A_1, C_2$ の組み合わせがよい。</p>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>分散分析はF検定に基づく → 平方和の分解が基本</li>
+                        <li>交互作用が有意なら主効果だけでなく、水準の組み合わせで最適条件を判断</li>
+                        <li>乱塊法：ブロック変動が大きいほど有効 → 誤差分散が減り検出力が上がる</li>
+                        <li>直交表：少ない実験回数で多くの因子の効果を推定。ただし交絡に注意</li>
+                        <li>$2^{k-1}$ 計画で $D=A \times B \times C$ は解像度IV → 主効果と2因子交互作用は交絡しない</li>
+                        <li>誤差の自由度が小さい場合は $F=2$ 程度でも考慮（AICとの対応）</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">
