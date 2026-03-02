@@ -40,32 +40,216 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>
+                        第5章では、代表的な<strong>離散型分布</strong>を体系的に学ぶ。
+                        離散一様分布、ベルヌーイ分布、二項分布、超幾何分布、ポアソン分布、幾何分布、負の二項分布、多項分布を扱い、
+                        それぞれの確率関数・期待値・分散・確率母関数と、分布間の関係（再生性・極限関係）を整理する。
+                    </p>
+                    <p><strong>キーワード：</strong>離散一様分布、ベルヌーイ分布、二項分布、超幾何分布、ポアソン分布、幾何分布、負の二項分布、多項分布</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>離散一様分布</h3>
+                    <ul>
+                        <li>$X$ が $1, 2, \ldots, K$ を等確率 $1/K$ でとる分布</li>
+                        <li>$E[X] = \dfrac{K+1}{2}$、$V[X] = \dfrac{K^2 - 1}{12}$</li>
+                        <li>確率母関数：$G(s) = \dfrac{s(1 - s^K)}{K(1 - s)}$</li>
+                    </ul>
+
+                    <h3>ベルヌーイ分布 $\mathrm{Bin}(1, p)$</h3>
+                    <ul>
+                        <li>成功（$X=1$）確率 $p$、失敗（$X=0$）確率 $q = 1-p$ の分布</li>
+                        <li>確率関数：$P(X = x) = p^x q^{1-x},\; x = 0, 1$</li>
+                        <li>$E[X] = p$、$V[X] = pq$</li>
+                        <li>確率母関数：$G(s) = ps + q$</li>
+                    </ul>
+
+                    <h3>二項分布 $\mathrm{Bin}(n, p)$</h3>
+                    <ul>
+                        <li>独立なベルヌーイ試行（成功確率 $p$）を $n$ 回行ったときの成功回数 $Y$ の分布</li>
+                        <li>確率関数：$P(Y = y) = \binom{n}{y} p^y q^{n-y},\; y = 0, 1, \ldots, n$</li>
+                        <li>$E[Y] = np$、$V[Y] = npq$</li>
+                        <li>確率母関数：$G(s) = (ps + q)^n$</li>
+                        <li><strong>再生性</strong>：$Y_1 \sim \mathrm{Bin}(n_1, p),\; Y_2 \sim \mathrm{Bin}(n_2, p)$ が独立 $\Rightarrow$ $Y_1 + Y_2 \sim \mathrm{Bin}(n_1 + n_2, p)$</li>
+                    </ul>
+
+                    <h3>超幾何分布 $\mathrm{HG}(N, M, n)$</h3>
+                    <ul>
+                        <li>$N$ 個の玉（赤 $M$ 個、白 $N-M$ 個）から非復元抽出で $n$ 個を取り出したとき、赤玉の個数 $Y$ の分布</li>
+                        <li>確率関数：$P(Y = y) = \dfrac{\binom{M}{y}\binom{N-M}{n-y}}{\binom{N}{n}}$</li>
+                        <li>$E[Y] = n\dfrac{M}{N}$、$V[Y] = n\dfrac{M}{N}\dfrac{N-M}{N}\dfrac{N-n}{N-1}$</li>
+                        <li>$\dfrac{N-n}{N-1}$ を<strong>有限母集団修正</strong>という。$n$ と $M/N$ を固定し $N \to \infty$ とすると二項分布に収束</li>
+                    </ul>
+
+                    <h3>ポアソン分布 $\mathrm{Po}(\lambda)$</h3>
+                    <ul>
+                        <li>確率関数：$P(Y = y) = \dfrac{\lambda^y e^{-\lambda}}{y!},\; y = 0, 1, 2, \ldots$</li>
+                        <li>$E[Y] = \lambda$、$V[Y] = \lambda$（期待値と分散が等しい）</li>
+                        <li>確率母関数：$G(s) = e^{\lambda(s-1)}$</li>
+                        <li>二項分布 $\mathrm{Bin}(n, p)$ で $np = \lambda$ に固定して $n \to \infty$ とした極限</li>
+                        <li><strong>再生性</strong>：$Y_1 \sim \mathrm{Po}(\lambda_1),\; Y_2 \sim \mathrm{Po}(\lambda_2)$ が独立 $\Rightarrow$ $Y_1 + Y_2 \sim \mathrm{Po}(\lambda_1 + \lambda_2)$</li>
+                    </ul>
+
+                    <h3>幾何分布 $\mathrm{Geo}(p)$</h3>
+                    <ul>
+                        <li>独立なベルヌーイ試行ではじめて成功するまでの失敗回数 $X$ の分布</li>
+                        <li>確率関数：$P(X = x) = pq^x,\; x = 0, 1, 2, \ldots$（幾何数列）</li>
+                        <li>$E[X] = \dfrac{q}{p}$、$V[X] = \dfrac{q}{p^2}$</li>
+                        <li>確率母関数：$G(s) = \dfrac{p}{1 - qs},\; |s| < 1/q$</li>
+                        <li><strong>無記憶性</strong>：$P(X \geq t_1 + t_2 \mid X \geq t_1) = P(X \geq t_2)$</li>
+                    </ul>
+
+                    <h3>負の二項分布 $\mathrm{NB}(r, p)$</h3>
+                    <ul>
+                        <li>$r$ 回目の成功が起こるまでの失敗回数 $Y$ の分布。$\mathrm{NB}(1, p) = \mathrm{Geo}(p)$</li>
+                        <li>確率関数：$P(Y = y) = \binom{y+r-1}{y} p^r q^y,\; y = 0, 1, 2, \ldots$</li>
+                        <li>$E[Y] = \dfrac{rq}{p}$、$V[Y] = \dfrac{rq}{p^2}$</li>
+                        <li>確率母関数：$G(s) = \left(\dfrac{p}{1 - qs}\right)^r$</li>
+                        <li>互いに独立な $X_1, \ldots, X_r \sim \mathrm{Geo}(p)$ の和 $X_1 + \cdots + X_r \sim \mathrm{NB}(r, p)$</li>
+                        <li><strong>再生性</strong>：$Y_1 \sim \mathrm{NB}(r_1, p),\; Y_2 \sim \mathrm{NB}(r_2, p)$ が独立 $\Rightarrow$ $Y_1 + Y_2 \sim \mathrm{NB}(r_1 + r_2, p)$</li>
+                    </ul>
+
+                    <h3>多項分布 $\mathrm{Mn}(n;\, p_1, \ldots, p_K)$</h3>
+                    <ul>
+                        <li>$K$ 個の結果が起こる試行を独立に $n$ 回行い、各結果の出現回数 $(Y^{(1)}, \ldots, Y^{(K)})$ の分布</li>
+                        <li>$K = 2$ のとき二項分布に帰着</li>
+                        <li>確率関数：$P(Y^{(1)} = y^{(1)}, \ldots) = \dfrac{n!}{y^{(1)}! \cdots y^{(K)}!}\, p_1^{y^{(1)}} \cdots p_K^{y^{(K)}}$</li>
+                        <li>$E[Y^{(j)}] = np_j$、$V[Y^{(j)}] = np_j(1 - p_j)$</li>
+                        <li>$\mathrm{Cov}(Y^{(i)}, Y^{(j)}) = -np_i p_j \quad (i \neq j)$</li>
+                        <li>確率母関数：$G(s_1, \ldots, s_K) = (p_1 s_1 + \cdots + p_K s_K)^n$</li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
-                    <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
-                    </div>
-                    -->
+
+                    <h3>離散型分布の一覧</h3>
+                    <ul>
+                        <li><strong>離散一様分布</strong>：$E = (K+1)/2$、$V = (K^2-1)/12$</li>
+                        <li><strong>ベルヌーイ</strong>：$E = p$、$V = pq$</li>
+                        <li><strong>二項</strong>：$E = np$、$V = npq$、再生性あり</li>
+                        <li><strong>超幾何</strong>：$E = nM/N$、$V = npq \cdot (N-n)/(N-1)$（$p = M/N$）</li>
+                        <li><strong>ポアソン</strong>：$E = V = \lambda$、再生性あり</li>
+                        <li><strong>幾何</strong>：$E = q/p$、$V = q/p^2$、無記憶性</li>
+                        <li><strong>負の二項</strong>：$E = rq/p$、$V = rq/p^2$、再生性あり</li>
+                        <li><strong>多項</strong>：$E[Y^{(j)}] = np_j$、$V[Y^{(j)}] = np_j(1-p_j)$、$\mathrm{Cov} = -np_ip_j$</li>
+                    </ul>
+
+                    <h3>分布間の関係</h3>
+                    <ul>
+                        <li>ベルヌーイ $\xrightarrow{n\text{個の和}}$ 二項</li>
+                        <li>二項 $\xrightarrow{np=\lambda,\; n\to\infty}$ ポアソン</li>
+                        <li>超幾何 $\xrightarrow{N\to\infty}$ 二項</li>
+                        <li>幾何 $\xrightarrow{r\text{個の和}}$ 負の二項</li>
+                        <li>多項 $\xrightarrow{K=2}$ 二項</li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>例1：超幾何分布によるA型識別力の検証</h3>
+                    <p>ゼミ生10人のうちA型は5人いる。学生が性格からA型5人を当てようとし、結果を分割表にまとめた。A型を4人正しく当てた場合、識別力があると主張できるか。</p>
+                    <div class="answer-block">
+                    <p><strong>解：</strong>識別力がまったくない場合、正解数 $Y$ は超幾何分布 $\mathrm{HG}(10, 5, 5)$ に従う。$Y \geq 4$ の確率は</p>
+                    <div class="formula-block">
+                        $$P(Y=4) + P(Y=5) = \frac{\binom{5}{4}\binom{5}{1}}{\binom{10}{5}} + \frac{\binom{5}{5}\binom{5}{0}}{\binom{10}{5}} = \frac{25}{252} + \frac{1}{252} = 0.103$$
+                    </div>
+                    <p>まったく識別力がなくても10.3%は起こるので、A型を見分けられると主張するには無理がある。この考え方が<strong>フィッシャーの正確検定</strong>（第28章）の基礎となる。</p>
+                    </div>
+
+                    <h3>問5.1：ウイルス発見確率</h3>
+                    <p>$n$ 株のウイルスを検査し、各株の発見率は $p$ で独立とする。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) 少なくとも1株ウイルスAがみつかる確率 $\beta$ を求める式を示せ。</strong></p>
+                    <div class="formula-block">
+                        $$\beta = 1 - (1 - p)^n$$
+                    </div>
+                    <p>$Y \sim \mathrm{Bin}(n, p)$ より $\beta = P(Y \geq 1) = 1 - P(Y = 0) = 1 - (1-p)^n$。</p>
+
+                    <p><strong>(2) $p = 1/5000,\; \beta = 0.98$ のとき $n$ を求めよ。</strong></p>
+                    <p>$(1 - 1/5000)^n = 0.02$ の両辺の対数をとり、$\log(1 - 1/5000) \approx -1/5000$ を用いると</p>
+                    <div class="formula-block">
+                        $$n \approx \frac{-3.9}{-1/5000} = \mathbf{19500}$$
+                    </div>
+                    </div>
+
+                    <h3>問5.2：超幾何分布の確率関数</h3>
+                    <p>79人から25人を無作為に選ぶとき、男性就業者（40人）の人数 $X$ の確率関数を求めよ。</p>
+                    <div class="answer-block">
+                    <p><strong>解：</strong>$X \sim \mathrm{HG}(79, 40, 25)$ より</p>
+                    <div class="formula-block">
+                        $$P(X = x) = \frac{\binom{40}{x}\binom{39}{25-x}}{\binom{79}{25}}, \quad 0 \leq x \leq 25$$
+                    </div>
+                    </div>
+
+                    <h3>問5.3：非復元抽出の期待値・分散</h3>
+                    <p>9人中3人が関東出身。非復元抽出で4人を選び、$i$ 番目が関東出身なら $X_i = 1$、そうでなければ $X_i = 0$ とする。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) $E[X_i]$ を求めよ。</strong></p>
+                    <div class="formula-block">
+                        $$E[X_i] = P(X_i = 1) = \frac{3}{9} = \mathbf{\frac{1}{3}}$$
+                    </div>
+
+                    <p><strong>(2) $i \neq j$ に対し $E[X_i X_j]$ を求めよ。</strong></p>
+                    <div class="formula-block">
+                        $$E[X_i X_j] = P(X_i = 1 \text{ かつ } X_j = 1) = \frac{3}{9} \times \frac{2}{8} = \mathbf{\frac{1}{12}}$$
+                    </div>
+
+                    <p><strong>(3) 標本平均 $\bar{X} = \frac{1}{4}\sum_{i=1}^{4} X_i$ の分散を求めよ。</strong></p>
+                    <p>$V[X_i] = 1/3 - (1/3)^2 = 2/9$、$\mathrm{Cov}[X_i, X_j] = 1/12 - (1/3)^2 = -1/36$ より</p>
+                    <div class="formula-block">
+                        $$V\!\left[\sum X_i\right] = 4 \times \frac{2}{9} + 4 \cdot 3 \times \left(-\frac{1}{36}\right) = \frac{8}{9} - \frac{1}{3} = \frac{5}{9}$$
+                    </div>
+                    <div class="formula-block">
+                        $$V[\bar{X}] = \frac{1}{16} \times \frac{5}{9} = \mathbf{\frac{5}{144}}$$
+                    </div>
+                    </div>
+
+                    <h3>問5.4：ポアソン分布の再生性と条件付き分布</h3>
+                    <p>チーム $T_1$ の得点 $X \sim \mathrm{Po}(1.5)$、$T_2$ の得点 $Y \sim \mathrm{Po}(3)$ が独立とする。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) $X + Y$ の分布は？</strong></p>
+                    <p>再生性より $X + Y \sim \mathrm{Po}(4.5)$。平均 $\mathbf{4.5}$、分散 $\mathbf{4.5}$。</p>
+
+                    <p><strong>(2) $X + Y = 5$ のもとでの $X$ の分布は？</strong></p>
+                    <div class="formula-block">
+                        $$P(X = x \mid X + Y = 5) = \binom{5}{x}\left(\frac{1.5}{4.5}\right)^x\left(\frac{3}{4.5}\right)^{5-x} = \binom{5}{x}\left(\frac{1}{3}\right)^x\left(\frac{2}{3}\right)^{5-x}$$
+                    </div>
+                    <p>よって $X \mid (X+Y=5) \sim \mathrm{Bin}(5, 1/3)$。平均は $\mathbf{5/3}$。</p>
+                    </div>
+
+                    <h3>問5.5：カード収集問題（クーポンコレクター問題）</h3>
+                    <p>4種類のカードが等確率で付いてくるお菓子を買う。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) 4種類すべてを揃えるまでの購入回数の期待値を求めよ。</strong></p>
+                    <p>$k$ 種類揃ったあと $k+1$ 種類目を引く確率は $p_k = (4-k)/4$。期待値は $1/p_k = 4/(4-k)$ 回。</p>
+                    <div class="formula-block">
+                        $$\sum_{k=0}^{3} \frac{4}{4-k} = \frac{4}{4} + \frac{4}{3} + \frac{4}{2} + \frac{4}{1} = 1 + \frac{4}{3} + 2 + 4 = \mathbf{\frac{25}{3}} \approx 8.33$$
+                    </div>
+
+                    <p><strong>(2) 4種類揃えた後に新1種類追加された場合と、最初から5種類の場合の期待値の差 $z_1 - z_2$ を求めよ。</strong></p>
+                    <p>$z_1$：4種類揃えた後に5種類目を引く期待値は $5/(5-4) = 5$ 回。$z_1 = 25/3 + 5 = 40/3$。</p>
+                    <p>$z_2$：最初から5種類の場合 $\displaystyle\sum_{k=0}^{4} \frac{5}{5-k} = 1 + \frac{5}{4} + \frac{5}{3} + \frac{5}{2} + 5 = \frac{137}{12}$。</p>
+                    <div class="formula-block">
+                        $$z_1 - z_2 = \frac{40}{3} - \frac{137}{12} = \mathbf{\frac{23}{12}} \approx 1.92$$
+                    </div>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>二項分布・ポアソン分布・負の二項分布はいずれも<strong>再生性</strong>（独立な同種分布の和が同種分布）をもつ</li>
+                        <li>超幾何分布は非復元抽出、二項分布は復元抽出に対応。$N$ が十分大きければ両者は近似する</li>
+                        <li>ポアソン分布は「稀な事象の回数」のモデルとして広く使われる。期待値＝分散が特徴</li>
+                        <li>幾何分布の<strong>無記憶性</strong>は離散分布では幾何分布のみがもつ性質。連続分布では指数分布が対応</li>
+                        <li>問5.4(2)のように、独立なポアソン変数の合計を条件としたとき、各変数は二項分布に従う（ポアソン分布と二項分布の関係）</li>
+                        <li>問5.5はクーポンコレクター問題。幾何分布の期待値 $1/p$ を各段階で合計する方法で解ける</li>
+                        <li>多項分布は二項分布の多次元への一般化。共分散が負になる点に注意</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

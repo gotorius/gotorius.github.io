@@ -40,32 +40,134 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p class="placeholder">ここにこの章の概要を記入してください。</p>
+                    <p>
+                        第4章では、確率変数の<strong>変数変換</strong>による確率密度関数の変化と、<strong>確率変数の線形結合の分布</strong>を求める方法、さらに<strong>データの変換</strong>（対数変換・ベキ乗変換・Box-Cox変換・ロジット変換・プロビット変換）について扱う。
+                        1変数・2変数の変数変換の手法はヤコビアンを用いた一般的な方法として統計学全体で頻出する。
+                    </p>
+                    <p><strong>キーワード：</strong>変数変換、確率変数の線形結合の分布、ヤコビアン、対数変換、ベキ乗変換、Box-Cox変換、ロジット変換、プロビット変換</p>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <p class="placeholder">ここに重要な概念や用語をまとめてください。</p>
+
+                    <h3>1変数の変数変換</h3>
+                    <ul>
+                        <li>連続型確率変数 $X$ の確率密度関数を $f(x)$ とする</li>
+                        <li>新たな確率変数 $Y = g(X)$（$g$ は1対1の関数）の確率密度関数は：
+                            $$f_Y(y) = f\!\left(g^{-1}(y)\right) \left|\frac{d}{dy}g^{-1}(y)\right|$$
+                        </li>
+                        <li>すなわち $f(x) / |g'(x)|$ の $x$ を $y$ に変換したもの</li>
+                    </ul>
+
+                    <h3>2変数の変数変換（ヤコビアン）</h3>
+                    <ul>
+                        <li>$(X, Y)$ の同時確率密度関数を $f(x, y)$ とし、1対1の変換 $(Z, W) = (u(X,Y),\, v(X,Y))$ を考える</li>
+                        <li>逆変換を $(X, Y) = (s(z, w),\, t(z, w))$ とする</li>
+                        <li><strong>ヤコビアン</strong>：
+                            $$J(X, Y) = \frac{\partial(u, v)}{\partial(x, y)} = \begin{vmatrix} \dfrac{\partial u}{\partial x} & \dfrac{\partial u}{\partial y} \\[6pt] \dfrac{\partial v}{\partial x} & \dfrac{\partial v}{\partial y} \end{vmatrix}$$
+                        </li>
+                        <li>$(Z, W)$ の確率密度関数は $f(s(z, w),\, t(z, w)) / |J(s(z,w),\, t(z,w))|$</li>
+                    </ul>
+
+                    <h3>確率変数の線形結合の分布</h3>
+                    <ul>
+                        <li>独立な $X, Y$ の線形結合 $aX + bY$ の分布を求める方法：
+                            <ol>
+                                <li><strong>母関数を使う方法</strong>：$E[e^{\theta(aX+bY)}] = E[e^{\theta aX}] \cdot E[e^{\theta bY}]$ を計算し、既知の分布と比較</li>
+                                <li><strong>変数変換を使う方法</strong>：$Z = aX + bY,\; W = Y$ と置き、$W$ について積分して $Z$ の周辺分布を得る</li>
+                            </ol>
+                        </li>
+                        <li>変数変換の方法では、逆変換 $(X, Y) = ((z - bw)/a,\; w)$ のヤコビアンは $|a|$</li>
+                        <li>$Z$ の確率密度関数：
+                            $$f_Z(z) = \frac{1}{|a|} \int_{-\infty}^{\infty} f_X\!\left(\frac{z - bw}{a}\right) f_Y(w)\,dw$$
+                        </li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <p class="placeholder">ここに重要な公式や定理を記入してください。</p>
-                    <!-- KaTeX の例:
-                    <div class="formula-block">
-                        <span class="katex-display">E[X] = \sum_{i} x_i P(X = x_i)</span>
-                    </div>
-                    -->
+
+                    <h3>線形結合の重要な結果</h3>
+                    <ul>
+                        <li>$X \sim N(\mu_1, \sigma_1^2),\; Y \sim N(\mu_2, \sigma_2^2)$ が独立 $\Rightarrow$ $aX + bY + c \sim N(a\mu_1 + b\mu_2 + c,\; a^2\sigma_1^2 + b^2\sigma_2^2)$</li>
+                        <li>$X \sim \mathrm{Bin}(n_1, p),\; Y \sim \mathrm{Bin}(n_2, p)$ が独立 $\Rightarrow$ $X + Y \sim \mathrm{Bin}(n_1 + n_2, p)$</li>
+                        <li>$X \sim \mathrm{Po}(\lambda_1),\; Y \sim \mathrm{Po}(\lambda_2)$ が独立 $\Rightarrow$ $X + Y \sim \mathrm{Po}(\lambda_1 + \lambda_2)$</li>
+                    </ul>
+
+                    <h3>データの変換法</h3>
+                    <ul>
+                        <li><strong>対数変換</strong>：積が積み重なるデータ（人口・株価・所得）に使用。非負値を $(-\infty, \infty)$ に変換可能</li>
+                        <li><strong>ベキ乗変換</strong>：$x \mapsto x^a$。正規化のための変換</li>
+                        <li><strong>Box-Cox変換</strong>：パラメータ $\lambda$ に対して
+                            $$y = \begin{cases} \dfrac{x^\lambda - 1}{\lambda} & (\lambda \neq 0) \\[6pt] \log x & (\lambda = 0) \end{cases}$$
+                            注意：非負のデータしか変換できない
+                        </li>
+                        <li><strong>ロジット変換</strong>：$\log \dfrac{p}{1-p}$。確率 $p \in (0,1)$ を $(-\infty, \infty)$ に変換。ロジスティック回帰</li>
+                        <li><strong>ロジスティック変換</strong>：$\dfrac{1}{1 + e^{-(a + bx)}}$（ロジット変換の逆）</li>
+                        <li><strong>プロビット変換</strong>：標準正規分布の累積分布関数の逆関数 $\Phi^{-1}(p)$。詳細は第18章</li>
+                    </ul>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <p class="placeholder">ここに例題や演習問題の解法をまとめてください。</p>
+
+                    <h3>例1：自由度1のカイ二乗分布</h3>
+                    <p>標準正規分布に従う $X$ に対する $Y = X^2$ の確率密度関数を求めよ。</p>
+                    <div class="answer-block">
+                    <p><strong>解：</strong>標準正規分布に従う $X$ の確率密度関数は $\dfrac{1}{\sqrt{2\pi}} \exp\!\left(-\dfrac{x^2}{2}\right)$ である。$Y = X^2$ は1対1ではない。$Y = y$ となるケースは $X = \sqrt{y}$ と $X = -\sqrt{y}$ の2通りあるので、$X > 0$ の場合のみ考え、確率密度関数を2倍とすればよい。</p>
+                    <p>$Y = X^2$ を $X$ で微分すると $2X$ となるので、</p>
+                    <div class="formula-block">
+                        $$f_Y(y) = 2 \times \frac{1}{\sqrt{2\pi}} \exp\!\left(-\frac{x^2}{2}\right) \times \frac{1}{2x} = \frac{1}{\sqrt{2\pi y}} \exp\!\left(-\frac{y}{2}\right) \quad (y > 0)$$
+                    </div>
+                    </div>
+
+                    <h3>問4.1：対数正規分布</h3>
+                    <p>確率変数 $X$ は正規分布 $N(\mu, \sigma^2)$ に従い、確率密度関数は $f(x) = \dfrac{1}{\sqrt{2\pi}\,\sigma} \exp\!\left[-\dfrac{(x - \mu)^2}{2\sigma^2}\right]$ である。$Y = \exp(X)$ とする（$Y$ の対数が正規分布に従うので、$Y$ の分布は対数正規分布と呼ばれる）。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) $Y$ の期待値を求めよ。</strong></p>
+                    <div class="formula-block">
+                        $$E[Y] = E[\exp(X)] = \exp\!\left(\mu + \frac{\sigma^2}{2}\right)$$
+                    </div>
+                    <p>正規分布 $N(\mu, \sigma^2)$ のモーメント母関数は $E[\exp(\theta X)] = \exp(\mu\theta + \sigma^2\theta^2/2)$ であるので、$\theta = 1$ とすればよい。</p>
+
+                    <p><strong>(2) $Y$ の分散を求めよ。</strong></p>
+                    <p>$\theta = 2$ として $E[\exp(2X)] = E[Y^2] = \exp(2\mu + 2\sigma^2)$ となるので、</p>
+                    <div class="formula-block">
+                        $$V[Y] = E[Y^2] - (E[Y])^2 = \exp(2\mu + 2\sigma^2) - \exp(2\mu + \sigma^2) = \exp(2\mu + \sigma^2)\big(\exp(\sigma^2) - 1\big)$$
+                    </div>
+
+                    <p><strong>(3) $Y$ の確率密度関数を求めよ。</strong></p>
+                    <p>$Y = \exp(X)$ を $X$ で微分すると $\exp(X)$ である。よって</p>
+                    <div class="formula-block">
+                        $$f_Y(y) = \frac{1}{\sqrt{2\pi}\,\sigma\,y} \exp\!\left[-\frac{(\log y - \mu)^2}{2\sigma^2}\right] \quad (y > 0)$$
+                    </div>
+                    </div>
+
+                    <h3>問4.2：独立な指数分布の和</h3>
+                    <p>確率変数 $X, Y$ が独立でそれぞれパラメータ $\lambda$ の指数分布に従う、つまり確率密度関数が $f(x) = \lambda e^{-\lambda x}$ で与えられるとする。$X + Y$ の確率密度関数を求めよ。</p>
+                    <div class="answer-block">
+                    <p><strong>解：</strong>$Z = X + Y,\; W = Y$ とすることで、$(Z, W)$ の同時確率密度関数は</p>
+                    <div class="formula-block">
+                        $$f_X(z - w) \cdot f_Y(w) = \lambda e^{-\lambda(z-w)} \cdot \lambda e^{-\lambda w} = \lambda^2 e^{-\lambda z}$$
+                    </div>
+                    <p>ここで $X, Y$ ともに非負であるので、$z$ が与えられたもとで $w$ は $0$ から $z$ の値をとりうる。よって $Z$ の確率密度関数は</p>
+                    <div class="formula-block">
+                        $$f_Z(z) = \int_0^z \lambda^2 e^{-\lambda z}\,dw = \lambda^2 z\, e^{-\lambda z} \quad (z \geq 0)$$
+                    </div>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <p class="placeholder">自由にメモを記入してください。</p>
+                    <ul>
+                        <li>1変数の変数変換：$f(x)/|g'(x)|$ の $x$ を $y$ に置換するだけ。$g$ が1対1でない場合は場合分けが必要（例1のカイ二乗分布）</li>
+                        <li>2変数の変数変換ではヤコビアンの絶対値で割る。行列式の計算を正確に</li>
+                        <li>線形結合の分布：母関数が既知なら母関数法が楽。未知なら変数変換法を用いる</li>
+                        <li>対数変換は「積の蓄積」による偏りを正規化する基本的な手法</li>
+                        <li>Box-Cox変換は $\lambda = 0$ で対数変換、$\lambda = 1$ で線形変換に対応するファミリー</li>
+                        <li>ロジット変換はロジスティック回帰（第18章）、プロビット変換はプロビット回帰で再登場</li>
+                        <li>問4.2の結果 $\lambda^2 z e^{-\lambda z}$ はガンマ分布 $\mathrm{Ga}(2, \lambda)$ の確率密度関数（第6章で詳しく扱う）</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">

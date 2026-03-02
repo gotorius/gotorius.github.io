@@ -118,7 +118,8 @@
                         $$f(x, y) = \begin{cases} \dfrac{1}{\pi} & (x^2 + y^2 \leq 1) \\ 0 & (\text{その他}) \end{cases}$$
                     </div>
                     <p>とおく。$x$ の周辺確率密度関数および $x$ を与えたときの $y$ の条件付き確率密度関数を求めよ。</p>
-                    <p><strong>解：</strong>$-1 \leq x \leq 1$ のとき、$f(x,y)$ が正となる $y$ の範囲は $-\sqrt{1-x^2} \leq y \leq \sqrt{1-x^2}$ であるから、</p>
+                    <div class="answer-block">
+                    <p><strong>解：</strong>$-1 \leq x \leq 1$ のとき、$f(x,y)$ が正となる $y$ の範囲は $-\sqrt{1-x^2} \leq y \leq \sqrt{1-x^2}$ であるから、</p></p>
                     <div class="formula-block">
                         $$f_X(x) = \int_{-\sqrt{1-x^2}}^{\sqrt{1-x^2}} \frac{1}{\pi}\,dy = \frac{2\sqrt{1-x^2}}{\pi}$$
                     </div>
@@ -126,9 +127,11 @@
                     <div class="formula-block">
                         $$f_{Y|X}(y|x) = \frac{1}{2\sqrt{1-x^2}} \quad (-\sqrt{1-x^2} \leq y \leq \sqrt{1-x^2})$$
                     </div>
+                    </div>
 
                     <h3>問2.1：単位正方形上の確率密度関数</h3>
                     <p>$xy$-平面の単位正方形 $\{(x, y) \mid 0 \leq x \leq 1,\; 0 \leq y \leq 1\}$ 上の確率密度関数を $f(x, y) = c(x + y)$ とおく。</p>
+                    <div class="answer-block">
                     <p><strong>(1) 基準化定数 $c$ を求めよ。</strong></p>
                     <p><strong>解：</strong>$\iint f(x,y)\,dx\,dy = 1$ となるように定める。$x$ と $y$ の対称性より</p>
                     <div class="formula-block">
@@ -142,9 +145,11 @@
                     <div class="formula-block">
                         $$f_{Y|X}(y|x) = \frac{f(x,y)}{f_X(x)} = \frac{x + y}{x + 1/2}$$
                     </div>
+                    </div>
 
                     <h3>問2.2：幾何分布の確率母関数・期待値・分散</h3>
                     <p>$X$ を幾何分布に従う離散確率変数とする。すなわち $X$ は非負整数値をとり、その確率関数を $p(x) = p(1-p)^x,\; x = 0, 1, 2, \ldots$ とする。ただし $0 &lt; p &lt; 1$ は幾何分布のパラメータである。$X$ の確率母関数 $G(s)$ を求めよ。また確率母関数を微分することにより $X$ の期待値と分散を求めよ。</p>
+                    <div class="answer-block">
                     <p><strong>解：</strong>確率母関数は</p>
                     <div class="formula-block">
                         $$G(s) = E[s^X] = \sum_{x=0}^{\infty} s^x p(1-p)^x = p \sum_{x=0}^{\infty} (s(1-p))^x = \frac{p}{1 - s(1-p)}$$
@@ -157,9 +162,11 @@
                     <div class="formula-block">
                         $$E[X] = \frac{1-p}{p}, \quad V[X] = G''(1) + G'(1) - (G'(1))^2 = \frac{1-p}{p^2}$$
                     </div>
+                    </div>
 
                     <h3>問2.3：指数分布のモーメント母関数・期待値・分散</h3>
                     <p>$X$ を指数分布に従う連続確率変数とする。すなわち $X \geq 0$ の確率密度関数を $f(x) = \lambda e^{-\lambda x}$ とする。ただし $\lambda > 0$ はパラメータである。$X$ のモーメント母関数を求めよ。またモーメント母関数を微分することにより $X$ の期待値と分散を求めよ。</p>
+                    <div class="answer-block">
                     <p><strong>解：</strong>$\theta < \lambda$ に対してモーメント母関数は</p>
                     <div class="formula-block">
                         $$m(\theta) = E[e^{\theta X}] = \int_0^{\infty} e^{\theta x} \lambda e^{-\lambda x}\,dx = \frac{\lambda}{\lambda - \theta}$$
@@ -167,6 +174,7 @@
                     <p>微分して $\theta = 0$ とおくと、$m'(0) = 1/\lambda,\; m''(0) = 2/\lambda^2$ より</p>
                     <div class="formula-block">
                         $$E[X] = \frac{1}{\lambda}, \quad V[X] = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}$$
+                    </div>
                     </div>
                 </section>
 
