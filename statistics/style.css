@@ -407,14 +407,14 @@ ul { list-style: none; }
     margin: 10px 0;
 }
 .example-block table th {
-    background: #fde68a;
+    background: #faedb9;
     color: #78350f;
     border: 1px solid #fcd34d;
     padding: 7px 10px;
     text-align: center;
 }
 .example-block table td {
-    background: #fffbeb;
+    background: #f8f4e1;
     border: 1px solid #fcd34d;
     padding: 6px 10px;
     text-align: center;
