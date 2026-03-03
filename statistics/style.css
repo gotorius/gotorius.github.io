@@ -357,11 +357,24 @@ ul { list-style: none; }
     font-style: italic;
 }
 
-/* Answer / Solution block — adds spacing between problem text and explanation */
+/* Problem / Question block */
+.example-block {
+    background: #fffbeb;
+    border: 1.5px solid #f59e0b;
+    border-left: 5px solid #f59e0b;
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    margin: 16px 0;
+}
+
+/* Answer / Solution block */
 .answer-block {
-    margin-top: 18px;
-    padding-top: 14px;
-    border-top: 1px dashed var(--gray-300);
+    background: #f0fdf4;
+    border: 1.5px solid #86efac;
+    border-left: 5px solid #22c55e;
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    margin: 16px 0;
 }
 
 /* KaTeX formula blocks */
