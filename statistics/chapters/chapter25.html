@@ -110,38 +110,334 @@
 
                 <section class="content-section">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <p style="color:#555; font-style:italic;">以下の問題はすべて自作問題です。教科書の内容を参考にしながら、オリジナルの数値で構成しています。問題文をよく読んでから解答を確認してください。</p>
+
+                    <!-- ============================================================ -->
+                    <!-- 問1：1因子モデル                                              -->
+                    <!-- ============================================================ -->
                     <div class="example-block">
-                        <p><strong>問25.1</strong> コーヒー豆10種類×5評価項目の2因子モデル（バリマックス回転後の因子負荷量が与えられている）</p>
-                        <p><strong>[1] |ア| の値</strong></p>
-                        <div class="answer-block">
-                            <p>「苦味」の共通性 0.8545 と第1因子負荷量 $(-0.92)^2 = 0.8464$ から：</p>
-                            $$|\text{ア}| = \sqrt{0.8545 - 0.92^2} = \sqrt{0.0081} = 0.09$$
+                        <p><strong>問1（1因子モデル）</strong></p>
+                        <p>
+                            ある高校の理科テストでは、「力学」「電磁気」「熱力学」「光学」の4問題からなる試験を10名の生徒が受験した。
+                            各変数はすでに平均0・分散1に標準化されているものとする。
+                            1因子モデル $y_{ij} = a_j f_i + d_j u_{ij}$ を当てはめたところ、
+                            推定された因子負荷量は以下の表のようになった。
+                        </p>
+                        <table style="border-collapse:collapse; margin: 1em auto; text-align:center;">
+                            <thead>
+                                <tr style="background:#e8f0fe;">
+                                    <th style="border:1px solid #ccc; padding:8px 16px;">問題</th>
+                                    <th style="border:1px solid #ccc; padding:8px 16px;">因子負荷量 $a_j$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:6px 16px;">力学</td><td style="border:1px solid #ccc; padding:6px 16px;">0.8</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 16px;">電磁気</td><td style="border:1px solid #ccc; padding:6px 16px;">0.8</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 16px;">熱力学</td><td style="border:1px solid #ccc; padding:6px 16px;">0.6</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 16px;">光学</td><td style="border:1px solid #ccc; padding:6px 16px;">0.6</td></tr>
+                            </tbody>
+                        </table>
+                        <p>次の問いに答えよ。</p>
+                        <ol>
+                            <li>各問題の共通性 $a_j^2$ と独自性 $d_j^2 = 1 - a_j^2$ を求めよ。</li>
+                            <li>共通因子はどのような能力を表していると解釈できるか、理由とともに述べよ。</li>
+                            <li>
+                                3名の生徒 A, B, C の各問題の標準化スコアが以下の表の通りであった。
+                                因子スコアの推定値 $\hat{f}_i = \dfrac{\sum_j a_j y_{ij}}{\sum_j a_j^2}$ を用いて、各生徒の因子スコアを求めよ。
+                                <table style="border-collapse:collapse; margin:1em auto; text-align:center;">
+                                    <thead>
+                                        <tr style="background:#e8f0fe;">
+                                            <th style="border:1px solid #ccc; padding:6px 12px;">生徒</th>
+                                            <th style="border:1px solid #ccc; padding:6px 12px;">力学 $y_1$</th>
+                                            <th style="border:1px solid #ccc; padding:6px 12px;">電磁気 $y_2$</th>
+                                            <th style="border:1px solid #ccc; padding:6px 12px;">熱力学 $y_3$</th>
+                                            <th style="border:1px solid #ccc; padding:6px 12px;">光学 $y_4$</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td style="border:1px solid #ccc; padding:6px 12px;">A</td><td style="border:1px solid #ccc; padding:6px 12px;">1.5</td><td style="border:1px solid #ccc; padding:6px 12px;">1.0</td><td style="border:1px solid #ccc; padding:6px 12px;">1.5</td><td style="border:1px solid #ccc; padding:6px 12px;">1.0</td></tr>
+                                        <tr><td style="border:1px solid #ccc; padding:6px 12px;">B</td><td style="border:1px solid #ccc; padding:6px 12px;">−1.0</td><td style="border:1px solid #ccc; padding:6px 12px;">−1.5</td><td style="border:1px solid #ccc; padding:6px 12px;">−1.0</td><td style="border:1px solid #ccc; padding:6px 12px;">−0.5</td></tr>
+                                        <tr><td style="border:1px solid #ccc; padding:6px 12px;">C</td><td style="border:1px solid #ccc; padding:6px 12px;">0.5</td><td style="border:1px solid #ccc; padding:6px 12px;">0.0</td><td style="border:1px solid #ccc; padding:6px 12px;">−0.5</td><td style="border:1px solid #ccc; padding:6px 12px;">1.0</td></tr>
+                                    </tbody>
+                                </table>
+                            </li>
+                        </ol>
+                    </div><!-- /example-block -->
+
+                    <div class="answer-block">
+                        <p><strong>【解答】問1</strong></p>
+
+                        <p><strong>(1) 共通性と独自性</strong></p>
+                        <p>各問題について $a_j^2$ と $d_j^2 = 1 - a_j^2$ を計算する。</p>
+                        <table style="border-collapse:collapse; margin:1em auto; text-align:center;">
+                            <thead>
+                                <tr style="background:#e8f0fe;">
+                                    <th style="border:1px solid #ccc; padding:6px 14px;">問題</th>
+                                    <th style="border:1px solid #ccc; padding:6px 14px;">$a_j$</th>
+                                    <th style="border:1px solid #ccc; padding:6px 14px;">共通性 $a_j^2$</th>
+                                    <th style="border:1px solid #ccc; padding:6px 14px;">独自性 $d_j^2$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">力学</td><td style="border:1px solid #ccc; padding:6px 14px;">0.8</td><td style="border:1px solid #ccc; padding:6px 14px;">$0.8^2 = 0.64$</td><td style="border:1px solid #ccc; padding:6px 14px;">$1 - 0.64 = 0.36$</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">電磁気</td><td style="border:1px solid #ccc; padding:6px 14px;">0.8</td><td style="border:1px solid #ccc; padding:6px 14px;">$0.8^2 = 0.64$</td><td style="border:1px solid #ccc; padding:6px 14px;">$1 - 0.64 = 0.36$</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">熱力学</td><td style="border:1px solid #ccc; padding:6px 14px;">0.6</td><td style="border:1px solid #ccc; padding:6px 14px;">$0.6^2 = 0.36$</td><td style="border:1px solid #ccc; padding:6px 14px;">$1 - 0.36 = 0.64$</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">光学</td><td style="border:1px solid #ccc; padding:6px 14px;">0.6</td><td style="border:1px solid #ccc; padding:6px 14px;">$0.6^2 = 0.36$</td><td style="border:1px solid #ccc; padding:6px 14px;">$1 - 0.36 = 0.64$</td></tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            <strong>解釈</strong>：「力学」「電磁気」の共通性は 0.64 と高く、「熱力学」「光学」は 0.36 とやや低い。
+                            すなわち、力学と電磁気の変動の 64% が共通因子で説明されるのに対し、熱力学と光学は 36% にとどまる。
+                            独自性が高い問題は、その問題に特有の要因（例：光学は色覚など）が影響していることを示す。
+                        </p>
+
+                        <p><strong>(2) 共通因子の解釈</strong></p>
+                        <p>
+                            4問すべての因子負荷量が正（力学・電磁気は 0.8、熱力学・光学は 0.6）であることから、
+                            共通因子はすべての科目に同じ方向の影響を与えている。
+                            特に力学と電磁気への影響が強く、これらは物理の「計算・論理的思考」に関わる問題である。
+                            したがって、共通因子は <strong>「物理全般の基礎的な理解力（理系思考力）」</strong> と解釈できる。
+                        </p>
+
+                        <p><strong>(3) 因子スコアの推定</strong></p>
+                        <p>まず分母の $\sum_j a_j^2$ を計算する：</p>
+                        $$\sum_j a_j^2 = 0.64 + 0.64 + 0.36 + 0.36 = 2.00$$
+                        <p><strong>生徒A</strong>（$y_1=1.5,\ y_2=1.0,\ y_3=1.5,\ y_4=1.0$）：</p>
+                        $$\sum_j a_j y_{Aj} = 0.8 \times 1.5 + 0.8 \times 1.0 + 0.6 \times 1.5 + 0.6 \times 1.0$$
+                        $$= 1.20 + 0.80 + 0.90 + 0.60 = 3.50$$
+                        $$\hat{f}_A = \frac{3.50}{2.00} = 1.75$$
+                        <p><strong>生徒B</strong>（$y_1=-1.0,\ y_2=-1.5,\ y_3=-1.0,\ y_4=-0.5$）：</p>
+                        $$\sum_j a_j y_{Bj} = 0.8 \times (-1.0) + 0.8 \times (-1.5) + 0.6 \times (-1.0) + 0.6 \times (-0.5)$$
+                        $$= -0.80 - 1.20 - 0.60 - 0.30 = -2.90$$
+                        $$\hat{f}_B = \frac{-2.90}{2.00} = -1.45$$
+                        <p><strong>生徒C</strong>（$y_1=0.5,\ y_2=0.0,\ y_3=-0.5,\ y_4=1.0$）：</p>
+                        $$\sum_j a_j y_{Cj} = 0.8 \times 0.5 + 0.8 \times 0.0 + 0.6 \times (-0.5) + 0.6 \times 1.0$$
+                        $$= 0.40 + 0.00 - 0.30 + 0.60 = 0.70$$
+                        $$\hat{f}_C = \frac{0.70}{2.00} = 0.35$$
+                        <div class="formula-block">
+                            ✅ <strong>まとめ</strong>：$\hat{f}_A = 1.75 > \hat{f}_C = 0.35 > \hat{f}_B = -1.45$<br>
+                            生徒Aが最も「物理全般の理解力」が高く、生徒Bが最も低い。
+                            因子スコアが正の生徒は平均より理解力が高く、負の生徒は低いことを意味する。
                         </div>
-                        <p><strong>[2] 勧めるコーヒー</strong></p>
-                        <div class="answer-block">
-                            <p>「苦味が強い」→ 第1因子スコアが最も小さい、「コクがある」→ 第2因子スコアが最も大きい → <strong>Jを勧める</strong>のが最も適切。</p>
-                        </div>
-                    </div>
+                    </div><!-- /answer-block -->
+
+
+                    <!-- ============================================================ -->
+                    <!-- 問2：2因子モデルと回転解の解釈                               -->
+                    <!-- ============================================================ -->
                     <div class="example-block">
-                        <p><strong>問25.2</strong> 4変数 $X, Y, Z, W$ の構造方程式：$Y = aX + bW + v$, $Z = cX + dY + u$</p>
-                        <p><strong>[1] パス係数の推定</strong></p>
-                        <div class="answer-block">
-                            <p>操作変数法により：</p>
-                            <ul>
-                                <li>$a = \rho_{XY}$, $b = \rho_{YW}$</li>
-                                <li>$c$ と $d$ は連立方程式を解いて：</li>
-                            </ul>
-                            $$c = \frac{\rho_{XZ} - \rho_{XY}\rho_{YZ}}{1 - \rho_{XY}^2}, \quad d = \frac{\rho_{YZ} - \rho_{XY}\rho_{XZ}}{1 - \rho_{XY}^2}$$
+                        <p><strong>問2（2因子モデルと回転解の解釈）</strong></p>
+                        <p>
+                            あるファミリーレストランチェーンの顧客満足度調査で、
+                            5項目（接客態度・対応速度・メニューの豊富さ・価格の手ごろさ・清潔感）について
+                            アンケートを実施した。2因子モデルをバリマックス回転で推定したところ、
+                            因子負荷行列の回転解は次の通りであった（値はすべて小数第2位まで）。
+                        </p>
+                        <table style="border-collapse:collapse; margin:1em auto; text-align:center;">
+                            <thead>
+                                <tr style="background:#e8f0fe;">
+                                    <th style="border:1px solid #ccc; padding:8px 14px;">項目</th>
+                                    <th style="border:1px solid #ccc; padding:8px 14px;">第1因子 $\hat{a}_{j1}$</th>
+                                    <th style="border:1px solid #ccc; padding:8px 14px;">第2因子 $\hat{a}_{j2}$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">接客態度</td><td style="border:1px solid #ccc; padding:6px 14px;">0.85</td><td style="border:1px solid #ccc; padding:6px 14px;">0.10</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">対応速度</td><td style="border:1px solid #ccc; padding:6px 14px;">0.78</td><td style="border:1px solid #ccc; padding:6px 14px;">0.15</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">メニューの豊富さ</td><td style="border:1px solid #ccc; padding:6px 14px;">0.12</td><td style="border:1px solid #ccc; padding:6px 14px;">0.82</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">価格の手ごろさ</td><td style="border:1px solid #ccc; padding:6px 14px;">−0.08</td><td style="border:1px solid #ccc; padding:6px 14px;">0.76</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:6px 14px;">清潔感</td><td style="border:1px solid #ccc; padding:6px 14px;">0.45</td><td style="border:1px solid #ccc; padding:6px 14px;">0.48</td></tr>
+                            </tbody>
+                        </table>
+                        <p>次の問いに答えよ。ただし因子は互いに独立と仮定する（直交回転）。</p>
+                        <ol>
+                            <li>各項目の共通性 $a_{j1}^2 + a_{j2}^2$ を求めよ。</li>
+                            <li>第1因子・第2因子それぞれがどのような概念を表すか、回転解の数値をもとに解釈せよ。</li>
+                            <li>「清潔感」の共通性が他の項目より低いことの意味を述べよ。</li>
+                        </ol>
+                    </div><!-- /example-block -->
+
+                    <div class="answer-block">
+                        <p><strong>【解答】問2</strong></p>
+
+                        <p><strong>(1) 各項目の共通性</strong></p>
+                        <p>直交回転を用いているので、共通性 $= a_{j1}^2 + a_{j2}^2$ となる。</p>
+                        <table style="border-collapse:collapse; margin:1em auto; text-align:center;">
+                            <thead>
+                                <tr style="background:#e8f0fe;">
+                                    <th style="border:1px solid #ccc; padding:6px 14px;">項目</th>
+                                    <th style="border:1px solid #ccc; padding:6px 14px;">$a_{j1}^2$</th>
+                                    <th style="border:1px solid #ccc; padding:6px 14px;">$a_{j2}^2$</th>
+                                    <th style="border:1px solid #ccc; padding:6px 14px;">共通性</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">接客態度</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.85^2 = 0.7225$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.10^2 = 0.0100$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;"><strong>0.7325</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">対応速度</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.78^2 = 0.6084$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.15^2 = 0.0225$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;"><strong>0.6309</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">メニューの豊富さ</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.12^2 = 0.0144$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.82^2 = 0.6724$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;"><strong>0.6868</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">価格の手ごろさ</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$(-0.08)^2 = 0.0064$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.76^2 = 0.5776$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;"><strong>0.5840</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">清潔感</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.45^2 = 0.2025$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;">$0.48^2 = 0.2304$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 14px;"><strong>0.4329</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p><strong>(2) 各因子の解釈</strong></p>
+                        <p>回転解を見ると：</p>
+                        <ul>
+                            <li>
+                                <strong>第1因子</strong>：「接客態度（0.85）」「対応速度（0.78）」が大きな正の値を持ち、「清潔感（0.45）」も中程度の値。
+                                「メニューの豊富さ」「価格の手ごろさ」はほぼ0。
+                                → 第1因子は「<strong>接客・サービスの質</strong>」を表していると解釈できる。
+                            </li>
+                            <li>
+                                <strong>第2因子</strong>：「メニューの豊富さ（0.82）」「価格の手ごろさ（0.76）」が大きな正の値を持ち、「清潔感（0.48）」も中程度。
+                                「接客態度」「対応速度」はほぼ0。
+                                → 第2因子は「<strong>コストパフォーマンス（費用対効果）</strong>」を表していると解釈できる。
+                            </li>
+                        </ul>
+
+                        <p><strong>(3) 「清潔感」の共通性が低いことの意味</strong></p>
+                        <p>
+                            「清潔感」の共通性は 0.4329 であり、他の項目（0.58〜0.73）と比べて低い。
+                            これは「清潔感」の変動の約 43% しか2因子（接客の質・コスパ）で説明できていないことを意味する。
+                            残りの約 57%（独自性 $d_j^2 = 1 - 0.4329 = 0.5671$）は、
+                            これら2因子に含まれない「清潔感」固有の要因（例：厨房・トイレの衛生管理など）によるものである。
+                            2因子では「清潔感」を十分に説明できていないことを示唆しており、
+                            <strong>もう1つ追加の因子（例：「店舗環境の質」）が存在するかもしれない</strong>。
+                        </p>
+                        <div class="formula-block">
+                            ✅ <strong>ポイント</strong>：共通性が低い変数は、抽出した因子では説明できない固有の情報を多く含んでいる。
+                            因子数を増やすことで共通性が上がる可能性がある。
                         </div>
-                        <p><strong>[2] $\rho_{XZ} = c + ad$ の証明</strong></p>
-                        <div class="answer-block">
-                            <p>$c$は直接効果（$X \to Z$）、$ad$は間接効果（$X \to Y \to Z$）。$X$ と $W$ が独立であれば、$Z$ が $X$ から受ける影響は直接効果と間接効果に分離できる。</p>
+                    </div><!-- /answer-block -->
+
+
+                    <!-- ============================================================ -->
+                    <!-- 問3：構造方程式モデルと操作変数法                            -->
+                    <!-- ============================================================ -->
+                    <div class="example-block">
+                        <p><strong>問3（構造方程式モデルと操作変数法）</strong></p>
+                        <p>
+                            3変数 $X_1$（1日の勉強時間）、$X_2$（内容の理解度）、$X_3$（定期試験の得点）の関係を
+                            次の有向グラフが定義する構造方程式を考える。
+                        </p>
+                        <div style="text-align:center; margin: 1.2em 0; font-size: 1.1em;">
+                            $X_1 \;\longrightarrow\; X_2 \;\longrightarrow\; X_3$
                         </div>
-                        <p><strong>[3] モラルグラフ</strong></p>
-                        <div class="answer-block">
-                            <p>有向グラフから無向グラフを構成。$W$ と $Z$ は $X, Y$ を条件付けたとき条件付き独立。（$X$-$Y$, $X$-$Z$, $Y$-$Z$, $X$-$W$, $Y$-$W$ に辺あり）</p>
+                        <p>構造方程式は次の通りとする。</p>
+                        $$X_2 = a X_1 + v, \qquad X_3 = b X_2 + u \tag{*}$$
+                        <p>
+                            ここで $X_1, X_2, X_3$ は平均0・分散1に標準化されており、
+                            $v$ は $X_1$ と無相関、$u$ は $X_1, X_2$ と無相関と仮定する。
+                            また、3変数の相関係数（＝共分散）が以下の通りであった。
+                        </p>
+                        $$\rho_{12} = 0.60, \qquad \rho_{23} = 0.70, \qquad \rho_{13} = 0.42$$
+                        <p>次の問いに答えよ。</p>
+                        <ol>
+                            <li>
+                                操作変数法を用いて、パス係数 $a$ および $b$ を推定せよ。<br>
+                                <small>ヒント：$(*)$ の第1式の両辺に $X_1$ を掛けて期待値をとると $a$ が求まる。同様に第2式で $b$ が求まる。</small>
+                            </li>
+                            <li>$\rho_{13} = a \cdot b$ が成立することを確かめよ。</li>
+                            <li>
+                                上記の有向グラフのモラルグラフ（無向グラフ）を描き、
+                                そこから読み取れる条件付き独立関係を述べよ。
+                            </li>
+                        </ol>
+                    </div><!-- /example-block -->
+
+                    <div class="answer-block">
+                        <p><strong>【解答】問3</strong></p>
+
+                        <p><strong>(1) パス係数の推定（操作変数法）</strong></p>
+
+                        <p><u>パス係数 $a$ の推定</u>（第1式：$X_2 = aX_1 + v$）</p>
+                        <p>両辺に $X_1$ を掛けて期待値をとる：</p>
+                        $$E[X_1 X_2] = a \cdot E[X_1^2] + E[X_1 v]$$
+                        <p>
+                            ここで $X_1$ は標準化されているので $E[X_1^2] = V[X_1] = 1$、
+                            また $v$ は $X_1$ と無相関なので $E[X_1 v] = 0$。よって：
+                        </p>
+                        $$\rho_{12} = a \cdot 1 \quad \Longrightarrow \quad \boxed{a = \rho_{12} = 0.60}$$
+
+                        <p><u>パス係数 $b$ の推定</u>（第2式：$X_3 = bX_2 + u$）</p>
+                        <p>両辺に $X_2$ を掛けて期待値をとる：</p>
+                        $$E[X_2 X_3] = b \cdot E[X_2^2] + E[X_2 u]$$
+                        <p>
+                            $E[X_2^2] = 1$（標準化）、$E[X_2 u] = 0$（$u$ と $X_2$ が無相関）より：
+                        </p>
+                        $$\rho_{23} = b \cdot 1 \quad \Longrightarrow \quad \boxed{b = \rho_{23} = 0.70}$$
+
+                        <hr style="border:none; border-top:1px dashed #ccc; margin:1em 0;">
+
+                        <p><strong>(2) $\rho_{13} = a \cdot b$ の確認</strong></p>
+                        <p>$a \cdot b$ を計算し、観測された $\rho_{13}$ と比較する：</p>
+                        $$a \cdot b = 0.60 \times 0.70 = 0.42 = \rho_{13} \quad \checkmark$$
+                        <p>
+                            <strong>直感的な説明</strong>：$X_1$ と $X_3$ の間には直接の矢線がなく、$X_2$ を経由してのみつながっている。
+                            したがって $X_1$ と $X_3$ の相関は、パス係数の積 $a \cdot b$ に等しくなる。
+                            これは <strong>間接効果（indirect effect）</strong> の考え方であり、
+                            「勉強時間が試験点数に与える影響は、理解度を通じた間接的な影響のみ」を数値で表している。
+                        </p>
+                        <p>
+                            なお、$X_1$ を操作変数として第2式の両辺に掛けると：
+                        </p>
+                        $$E[X_1 X_3] = b \cdot E[X_1 X_2] + E[X_1 u]$$
+                        $$\rho_{13} = b \cdot \rho_{12} + 0 \quad \Longrightarrow \quad b = \frac{\rho_{13}}{\rho_{12}} = \frac{0.42}{0.60} = 0.70$$
+                        <p>これは $(1)$ で求めた $b = \rho_{23} = 0.70$ と一致する（<strong>過剰識別</strong>）。</p>
+
+                        <hr style="border:none; border-top:1px dashed #ccc; margin:1em 0;">
+
+                        <p><strong>(3) モラルグラフの構成と条件付き独立</strong></p>
+                        <p>有向グラフ $X_1 \to X_2 \to X_3$ からモラルグラフを構成する手順：</p>
+                        <ul>
+                            <li>同じ頂点集合 $\{X_1, X_2, X_3\}$ を持つ無向グラフを作る。</li>
+                            <li>有向グラフで矢線が引かれている頂点間に無向辺を引く：$X_1$–$X_2$、$X_2$–$X_3$。</li>
+                            <li>各頂点の「親」が複数いる場合は親どうしも結ぶ（今回は親が1つなので省略）。</li>
+                        </ul>
+                        <p><strong>モラルグラフ</strong>：</p>
+                        <div style="text-align:center; margin: 1.2em 0; font-size: 1.1em;">
+                            $X_1 \;{-}\; X_2 \;{-}\; X_3$　（無向辺）
                         </div>
-                    </div>
+                        <p>
+                            このグラフでは $X_1$ と $X_3$ の間に直接の辺がない。
+                            グラフィカルモデルの定義より、
+                            <strong>$X_1$ と $X_3$ は $X_2$ を与えたとき（$X_2$ で条件付けたとき）条件付き独立</strong> である。
+                        </p>
+                        <p>数式で確認：精度行列 $\Sigma^{-1}$ の $(1,3)$ 成分が 0 であることが条件付き独立に対応する。</p>
+                        <div class="formula-block">
+                            ✅ <strong>まとめ</strong><br>
+                            $a = 0.60$（勉強時間 → 理解度）、$b = 0.70$（理解度 → 試験点数）<br>
+                            $\rho_{13} = 0.60 \times 0.70 = 0.42$ ✓（間接効果のみ）<br>
+                            条件付き独立：$X_1 \perp X_3 \mid X_2$（理解度を知っていれば、勉強時間は試験点数に追加情報を与えない）
+                        </div>
+                    </div><!-- /answer-block -->
+
                 </section>
 
                 <section class="content-section">
