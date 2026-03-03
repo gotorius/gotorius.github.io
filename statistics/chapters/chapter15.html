@@ -404,20 +404,21 @@
                         <p>2次モーメント法：$E[Z_k^2] = \sigma^2\Delta = \sigma^2$（$\Delta=1$ なので）なので、</p>
                         $$V_1 = \frac{1}{n}\sum Z_k^2 \approx E[Z_k^2] = \sigma^2$$
                         $$\hat{\sigma}^2 = V_1 = 9.00 \quad\Rightarrow\quad \hat{\sigma} = 3.00$$
-                        $\hat{\sigma} = 3.00$（日次ボラティリティ）
+                        <div class="formula-block"> $\hat{\sigma} = 3.00$（日次ボラティリティ）</div>
 
                         <p><strong>（2）高頻度（$\Delta = 1/12$ 日）の推定</strong></p>
                         <p>今度は $\Delta = 1/12$、$n = 2400$ 観測。増分 $Z_k \sim N(0, \sigma^2/12)$ なので $E[Z_k^2] = \sigma^2\Delta = \sigma^2/12$。</p>
                         $$V_2 = \hat{\sigma}^2 \cdot \Delta \quad\Rightarrow\quad \hat{\sigma}^2 = \frac{V_2}{\Delta} = 0.750 \times 12 = 9.00$$
                         $$\hat{\sigma} = 3.00$$
                         <p>（1）と同じ結果になった。</p>
-                        $\hat{\sigma} = 3.00$（観測間隔が変わっても $\sigma^2$ の推定値は同じ。ただし、高頻度で得た（2）の結果の方が<strong>統計的精度（推定量の分散）が高い</strong>。サンプルサイズが200→2400と12倍になっているため。）
+                        <div class="formula-block"> $\hat{\sigma} = 3.00$（観測間隔が変わっても $\sigma^2$ の推定値は同じ。ただし、高頻度で得た（2）の結果の方が<strong>統計的精度（推定量の分散）が高い</strong>。サンプルサイズが200→2400と12倍になっているため。）</div>
 
                         <p><strong>（3）$\hat{\mu}$ の精度改善</strong></p>
                         <p>$\hat{\mu} = B_{n\Delta}/(n\Delta) = (S_{n\Delta} - S_0)/(n\Delta)$。これはスタートと終点のみで決まる。</p>
-                        
-                        <p> $\hat{\mu}$ の推定精度は<strong>観測期間 $T = n\Delta$ の長さ</strong>にのみ依存する。観測間隔を細かくしても $T$ が変わらなければ精度は改善しない。したがって「<strong>観測期間を延ばす</strong>」ことが有効。</p>
-                        <p>直感：ドリフト（全体的なトレンド）は「長期間眺める」ことで初めて推測できる。日中の細かい動きをいくら観察しても、年間のトレンドはわからない。</p>
+                        <div class="formula-block">
+                            <p> $\hat{\mu}$ の推定精度は<strong>観測期間 $T = n\Delta$ の長さ</strong>にのみ依存する。観測間隔を細かくしても $T$ が変わらなければ精度は改善しない。したがって「<strong>観測期間を延ばす</strong>」ことが有効。</p>
+                            <p>直感：ドリフト（全体的なトレンド）は「長期間眺める」ことで初めて推測できる。日中の細かい動きをいくら観察しても、年間のトレンドはわからない。</p>
+                        </div>
                     </div>
 
                     <!-- 問2 -->
@@ -444,23 +445,23 @@
 
                         <p><strong>（1）発生時刻データの場合</strong></p>
                         <p>$W_k \sim \mathrm{Exp}(\lambda)$（独立）なので、公式 $\hat{\lambda} = n/T_n$ を使う：</p>
-                        
+                        <div class="formula-block">
                             $$\hat{\lambda} = \frac{n}{T_n} = \frac{24}{7.85} \approx 3.06 \text{（件/時間）}$$
-                        
+                        </div>
 
                         <p><strong>（2）区間カウントデータの場合</strong></p>
                         <p>合計件数 $= 3+4+2+5+3+4+2+1 = 24$、観測時間 $= 8$ 時間。公式 $\hat{\lambda} = N_{n\Delta}/(n\Delta)$ を使う：</p>
-                        
+                        <div class="formula-block">
                             $$\hat{\lambda} = \frac{24}{8} = 3.00 \text{（件/時間）}$$
-                        
+                        </div>
 
                         <p><strong>（3）まとめ・比較</strong></p>
                         <p>（1）は 3.06件/時間、（2）は 3.00件/時間。わずかに違うのは（1）の $T_{24}=7.85$ が8時間を少し下回るから。どちらの手法を使っても概ね同じ結果になる。</p>
-                        
+                        <div class="formula-block">
                             <p> 一般的な推定量の形：</p>
                             $$\hat{\lambda} = \frac{\text{イベントの総件数}}{\text{観測時間}}$$
                             <p>データ形式（発生時刻か区間カウントか）に関わらずこの共通した形になる。直感的にも「1時間あたり平均何件起きたか」そのままなので覚えやすい。</p>
-                        
+                        </div>
                     </div>
 
                     <!-- 問3 -->
@@ -484,12 +485,12 @@
 
                         <p><strong>（1）期待値と分散の公式適用</strong></p>
                         <p>複合ポアソン過程の公式 $E[X_t] = \lambda t \cdot E[U_k]$、$\mathrm{Var}[X_t] = \lambda t \cdot E[U_k^2]$ を使う。</p>
-                        
+                        <div class="formula-block">
                             $$E[X_t] = \lambda t \cdot E[U_k] = 50t \times 30 = 1500t \text{（万円）}$$
                             $$\mathrm{Var}[X_t] = \lambda t \cdot E[U_k^2] = 50t \times 1300 = 65000t \text{（万円²）}$$
                         </div>
                         <p>$t = 2$ のとき：</p>
-                        
+                        <div class="formula-block">
                             $$E[X_2] = 1500 \times 2 = \mathbf{3000} \text{ 万円}$$
                             $$\mathrm{Var}[X_2] = 65000 \times 2 = 130000 \text{ 万円}^2$$
                             $$\mathrm{SD}[X_2] = \sqrt{130000} \approx 360.6 \text{ 万円}$$
@@ -502,17 +503,17 @@
                         <p>つまり $E[X_t \mid N_t] = 30 N_t$（$N_t$ の関数として）。</p>
                         <p><strong>ステップ2</strong>：$N_t$ に関して期待値をとる（$E[N_t] = \lambda t = 50t$）：</p>
                         $$E[X_t] = E\!\left[E[X_t \mid N_t]\right] = E[30N_t] = 30\,E[N_t] = 30 \times 50t = 1500t$$
-                        公式と一致。条件付き期待値の考え方：「まず発生件数を固定して計算し、次に発生件数のランダム性を考慮する」という2段階の計算がポイント。
+                        <div class="formula-block"> 公式と一致。条件付き期待値の考え方：「まず発生件数を固定して計算し、次に発生件数のランダム性を考慮する」という2段階の計算がポイント。</div>
 
                         <p><strong>（3）準備金の考察</strong></p>
                         <p>$t=2$ 年後の総支払額 $X_2$ について：</p>
-                        
+                        <div class="formula-block">
                             $$E[X_2] = 3000 \text{ 万円}, \quad \mathrm{SD}[X_2] \approx 361 \text{ 万円}$$
                             <p>「4000万円を超えない」には、平均（3000万）から約 $\frac{4000-3000}{361} \approx 2.8$ 標準偏差分の余裕が必要。</p>
                             <p>正規分布近似（件数が多いのである程度正当化される）を使うと：</p>
                             <p>$P(X_2 \leq 4000) \approx P\!\left(Z \leq 2.77\right) \approx 99.7\%$（約99.7%の確率で4000万以内）。</p>
                             <p> 準備金は平均（3000万円）の約<strong>1.33倍</strong>（4000万円）を用意すれば、約99.7%の安全率が確保できる。</p>
-                        
+                        </div>
                     </div>
 
                     <!-- 学習メモ -->

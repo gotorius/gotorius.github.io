@@ -396,7 +396,7 @@ ul { list-style: none; }
 
 /* formula-block inside answer block → green tint */
 .answer-block .formula-block {
-    background: #dcfce7;
+    background: #e6f6eb;
     border-color: #86efac;
 }
 
