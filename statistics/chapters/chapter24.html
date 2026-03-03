@@ -281,192 +281,364 @@
                     </div>
                 </section>
 
-                <!-- ======== 5. 例題 ======== -->
+                <!-- ======== 5. 例題・練習問題 ======== -->
                 <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習（問24.1）</h2>
+                    <h2><i class="fas fa-pencil"></i> 例題・練習問題</h2>
+                    <p style="color:#555; font-style:italic;">以下の問題はすべて自作問題です。解答は各問の下に折りたたまずに記載しています。まず自分で解いてから確認してください。</p>
+
+                    <!-- ===== 問1 ===== -->
                     <div class="example-block">
+                        <h3>問 1　距離の計算（ウォームアップ）</h3>
                         <p>
-                            <strong>問24.1</strong>　TripAdvisor の 6 人のユーザが、レストラン・劇場・ビーチに与えた平均評価点データを使う。
+                            2次元平面上に3点 $P_1=(1,3)$、$P_2=(4,7)$、$P_3=(1,7)$ がある。
                         </p>
+                        <ol>
+                            <li>$P_1$ と $P_2$ のユークリッド距離 $d_2(P_1, P_2)$ を求めよ。</li>
+                            <li>$P_1$ と $P_2$ のマンハッタン距離 $d_1(P_1, P_2)$ を求めよ。</li>
+                            <li>3点 $P_1, P_2, P_3$ の間のユークリッド距離をすべて求め、この3点が作る三角形の形（直角三角形・鋭角三角形・鈍角三角形）を判定せよ。</li>
+                        </ol>
+                    </div>
 
-                        <h3>データ確認</h3>
-                        <p>各ユーザのデータ（3次元ベクトル）：</p>
-                        <div style="overflow-x:auto;">
-                        <table style="border-collapse:collapse; width:100%; text-align:center; margin: 1em 0;">
-                            <thead>
-                                <tr style="background:#f0f4ff;">
-                                    <th style="border:1px solid #ccc; padding:8px;">ユーザ</th>
-                                    <th style="border:1px solid #ccc; padding:8px;">レストラン</th>
-                                    <th style="border:1px solid #ccc; padding:8px;">劇場</th>
-                                    <th style="border:1px solid #ccc; padding:8px;">ビーチ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr><td style="border:1px solid #ccc; padding:8px;">1</td><td style="border:1px solid #ccc; padding:8px;">7.7</td><td style="border:1px solid #ccc; padding:8px;">5.8</td><td style="border:1px solid #ccc; padding:8px;">7.7</td></tr>
-                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px;">2</td><td style="border:1px solid #ccc; padding:8px;">10.1</td><td style="border:1px solid #ccc; padding:8px;">5.9</td><td style="border:1px solid #ccc; padding:8px;">7.3</td></tr>
-                                <tr><td style="border:1px solid #ccc; padding:8px;">3</td><td style="border:1px solid #ccc; padding:8px;">4.9</td><td style="border:1px solid #ccc; padding:8px;">4.1</td><td style="border:1px solid #ccc; padding:8px;">7.9</td></tr>
-                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px;">4</td><td style="border:1px solid #ccc; padding:8px;">4.8</td><td style="border:1px solid #ccc; padding:8px;">5.0</td><td style="border:1px solid #ccc; padding:8px;">9.0</td></tr>
-                                <tr><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">6.4</td><td style="border:1px solid #ccc; padding:8px;">3.7</td><td style="border:1px solid #ccc; padding:8px;">8.0</td></tr>
-                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">4.0</td><td style="border:1px solid #ccc; padding:8px;">5.2</td><td style="border:1px solid #ccc; padding:8px;">11.6</td></tr>
-                            </tbody>
-                        </table>
+                    <!-- 問1 解答 -->
+                    <div class="answer-block">
+                        <h3>問 1　解答</h3>
+
+                        <h4>（1）ユークリッド距離 $d_2(P_1, P_2)$</h4>
+                        <p>定義式に代入する。</p>
+                        $$d_2(P_1, P_2) = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$
+                        <p>各座標の差を計算する：</p>
+                        <ul>
+                            <li>$x$ 方向：$4 - 1 = 3$</li>
+                            <li>$y$ 方向：$7 - 3 = 4$</li>
+                        </ul>
+                        <p>二乗して足し合わせ、平方根をとる：</p>
+                        $$d_2(P_1, P_2) = \sqrt{3^2 + 4^2} = \sqrt{9 + 16} = \sqrt{25} = \boldsymbol{5}$$
+
+                        <h4>（2）マンハッタン距離 $d_1(P_1, P_2)$</h4>
+                        <p>差の絶対値を単純に足し合わせる：</p>
+                        $$d_1(P_1, P_2) = |4-1| + |7-3| = 3 + 4 = \boldsymbol{7}$$
+                        <p>ユークリッド距離（5）よりマンハッタン距離（7）のほうが大きい。これは「斜め移動」が許可される（ユークリッド）か「縦横移動のみ」（マンハッタン）かの違いによる。</p>
+
+                        <h4>（3）3辺すべてのユークリッド距離と三角形の形</h4>
+                        <p>$d_2(P_1, P_2)$ は（1）で求めた。残り2辺を計算する。</p>
+
+                        <p><strong>$d_2(P_1, P_3)$：</strong></p>
+                        $$d_2(P_1, P_3) = \sqrt{(1-1)^2 + (7-3)^2} = \sqrt{0 + 16} = 4$$
+
+                        <p><strong>$d_2(P_2, P_3)$：</strong></p>
+                        $$d_2(P_2, P_3) = \sqrt{(4-1)^2 + (7-7)^2} = \sqrt{9 + 0} = 3$$
+
+                        <p>3辺の長さ：$d_2(P_1,P_2)=5$、$d_2(P_1,P_3)=4$、$d_2(P_2,P_3)=3$</p>
+                        <p>ピタゴラスの定理 $a^2 + b^2 = c^2$ が成立するか確認する：</p>
+                        $$3^2 + 4^2 = 9 + 16 = 25 = 5^2 \quad \checkmark$$
+                        <div class="formula-block">
+                            <p>✅ $3$ – $4$ – $5$ の辺の比をもつ <strong>直角三角形</strong>（$P_3$ が直角）である。</p>
+                            <p>💡 $P_3 = (1,7)$ は $P_1$ の真上、$P_2$ の真左に位置しているため、$P_3$ での角が直角になる。</p>
                         </div>
+                    </div>
 
-                        <h3>ユークリッド距離行列の確認</h3>
-                        <p>例として $d(\mathbf{x}_3, \mathbf{x}_4)$ を計算して確認してみましょう。</p>
-                        $$d(\mathbf{x}_3, \mathbf{x}_4) = \sqrt{(4.9-4.8)^2 + (4.1-5.0)^2 + (7.9-9.0)^2}$$
-                        $$= \sqrt{(0.1)^2 + (-0.9)^2 + (-1.1)^2} = \sqrt{0.01 + 0.81 + 1.21} = \sqrt{2.03} \approx 1.4$$
-                        <p>✅ 距離行列の $(3,4)$ 成分 $1.4$ と一致。これが<strong>6人の中で最も小さい距離</strong>なので、階層的クラスタリングではユーザ3と4が最初に結合されます。</p>
-
+                    <!-- ===== 問2 ===== -->
+                    <div class="example-block" style="margin-top: 2em;">
+                        <h3>問 2　階層的クラスタリング（最近隣法 vs 最遠隣法）</h3>
+                        <p>
+                            5つのサンプル A, B, C, D, E に対して、ユークリッド距離に基づくサンプル間距離行列が次のように与えられているとする。
+                        </p>
                         <div style="overflow-x:auto;">
-                        <table style="border-collapse:collapse; width:100%; text-align:center; margin: 1em 0;">
+                        <table style="border-collapse:collapse; width:70%; text-align:center; margin:1em auto;">
                             <thead>
                                 <tr style="background:#f0f4ff;">
                                     <th style="border:1px solid #ccc; padding:8px;"></th>
-                                    <th style="border:1px solid #ccc; padding:8px;">1</th>
-                                    <th style="border:1px solid #ccc; padding:8px;">2</th>
-                                    <th style="border:1px solid #ccc; padding:8px;">3</th>
-                                    <th style="border:1px solid #ccc; padding:8px;">4</th>
-                                    <th style="border:1px solid #ccc; padding:8px;">5</th>
-                                    <th style="border:1px solid #ccc; padding:8px;">6</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">A</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">B</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">C</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">D</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">E</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">1</td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px;">2.4</td><td style="border:1px solid #ccc; padding:8px;">3.3</td><td style="border:1px solid #ccc; padding:8px;">3.3</td><td style="border:1px solid #ccc; padding:8px;">2.5</td><td style="border:1px solid #ccc; padding:8px;">5.4</td></tr>
-                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">2</td><td style="border:1px solid #ccc; padding:8px;">2.4</td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px;">5.5</td><td style="border:1px solid #ccc; padding:8px;">5.6</td><td style="border:1px solid #ccc; padding:8px;">4.4</td><td style="border:1px solid #ccc; padding:8px;">7.5</td></tr>
-                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">3</td><td style="border:1px solid #ccc; padding:8px;">3.3</td><td style="border:1px solid #ccc; padding:8px;">5.5</td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>1.4 ★</strong></td><td style="border:1px solid #ccc; padding:8px;">1.6</td><td style="border:1px solid #ccc; padding:8px;">4.0</td></tr>
-                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">4</td><td style="border:1px solid #ccc; padding:8px;">3.3</td><td style="border:1px solid #ccc; padding:8px;">5.6</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>1.4 ★</strong></td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px;">2.3</td><td style="border:1px solid #ccc; padding:8px;">2.7</td></tr>
-                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">5</td><td style="border:1px solid #ccc; padding:8px;">2.5</td><td style="border:1px solid #ccc; padding:8px;">4.4</td><td style="border:1px solid #ccc; padding:8px;">1.6</td><td style="border:1px solid #ccc; padding:8px;">2.3</td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px;">4.6</td></tr>
-                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">6</td><td style="border:1px solid #ccc; padding:8px;">5.4</td><td style="border:1px solid #ccc; padding:8px;">7.5</td><td style="border:1px solid #ccc; padding:8px;">4.0</td><td style="border:1px solid #ccc; padding:8px;">2.7</td><td style="border:1px solid #ccc; padding:8px;">4.6</td><td style="border:1px solid #ccc; padding:8px;">0.0</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">A</td><td style="border:1px solid #ccc; padding:8px;">0</td><td style="border:1px solid #ccc; padding:8px;">2</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">10</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">B</td><td style="border:1px solid #ccc; padding:8px;">2</td><td style="border:1px solid #ccc; padding:8px;">0</td><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">4</td><td style="border:1px solid #ccc; padding:8px;">8</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">C</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">0</td><td style="border:1px solid #ccc; padding:8px;">3</td><td style="border:1px solid #ccc; padding:8px;">5</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">D</td><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">4</td><td style="border:1px solid #ccc; padding:8px;">3</td><td style="border:1px solid #ccc; padding:8px;">0</td><td style="border:1px solid #ccc; padding:8px;">5</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">E</td><td style="border:1px solid #ccc; padding:8px;">10</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">0</td></tr>
                             </tbody>
                         </table>
                         </div>
 
+                        <ol>
+                            <li><strong>最近隣法</strong>（単リンク法）を用いて、この5サンプルを階層的にクラスタリングする過程をすべて示せ。各ステップで距離表を更新しながら、どのクラスターが結合されるかを明示すること。</li>
+                            <li><strong>最遠隣法</strong>を用いて、同じ5サンプルをクラスタリングする過程を示せ。</li>
+                            <li>（1）と（2）のデンドログラムの形（特に後半の結合順序）がどのように異なるか、理由とともに説明せよ。</li>
+                        </ol>
+                    </div>
+
+                    <!-- 問2 解答 -->
+                    <div class="answer-block">
+                        <h3>問 2　解答</h3>
+
+                        <h4>（1）最近隣法（単リンク法）</h4>
+                        <p>非対角成分の最小値を順番に探して結合していく。</p>
+
+                        <p><strong>◆ イテレーション 1：最初の結合</strong></p>
+                        <p>距離行列の全非対角成分のうち最小値を探すと：</p>
+                        $$d(A,B) = 2 \quad \leftarrow \text{最小}$$
+                        <p>→ <strong>A と B を結合</strong>して、新クラスター $\{A,B\}$ を作る。</p>
+
+                        <p>$\{A,B\}$ と残りのサンプル（C, D, E）との最近隣距離を計算する。</p>
+                        <p>最近隣法では $d(\{A,B\}, X) = \min\{d(A,X),\ d(B,X)\}$。</p>
+                        <ul>
+                            <li>$d(\{A,B\},C) = \min\{d(A,C), d(B,C)\} = \min\{8, 6\} = 6$</li>
+                            <li>$d(\{A,B\},D) = \min\{d(A,D), d(B,D)\} = \min\{6, 4\} = 4$</li>
+                            <li>$d(\{A,B\},E) = \min\{d(A,E), d(B,E)\} = \min\{10, 8\} = 8$</li>
+                        </ul>
+                        <p>更新後の距離行列（3クラスター）：</p>
+                        <div style="overflow-x:auto;">
+                        <table style="border-collapse:collapse; width:60%; text-align:center; margin:0.5em auto;">
+                            <thead><tr style="background:#f0f4ff;">
+                                <th style="border:1px solid #ccc; padding:8px;"></th>
+                                <th style="border:1px solid #ccc; padding:8px;">{A,B}</th>
+                                <th style="border:1px solid #ccc; padding:8px;">C</th>
+                                <th style="border:1px solid #ccc; padding:8px;">D</th>
+                                <th style="border:1px solid #ccc; padding:8px;">E</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">{A,B}</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>4 ★</strong></td><td style="border:1px solid #ccc; padding:8px;">8</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">C</td><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>3 ★</strong></td><td style="border:1px solid #ccc; padding:8px;">5</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">D</td><td style="border:1px solid #ccc; padding:8px;">4</td><td style="border:1px solid #ccc; padding:8px;">3</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px;">5</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">E</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">—</td></tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <p><strong>◆ イテレーション 2：次の結合</strong></p>
+                        <p>最小値は $d(C,D) = 3$。</p>
+                        <p>→ <strong>C と D を結合</strong>して $\{C,D\}$ を作る。</p>
+                        <p>$\{C,D\}$ と残りとの最近隣距離：</p>
+                        <ul>
+                            <li>$d(\{C,D\},\{A,B\}) = \min\{d(C,\{A,B\}), d(D,\{A,B\})\} = \min\{6, 4\} = 4$</li>
+                            <li>$d(\{C,D\},E) = \min\{d(C,E), d(D,E)\} = \min\{5, 5\} = 5$</li>
+                        </ul>
+                        <p>更新後の距離行列（3クラスター）：</p>
+                        <div style="overflow-x:auto;">
+                        <table style="border-collapse:collapse; width:50%; text-align:center; margin:0.5em auto;">
+                            <thead><tr style="background:#f0f4ff;">
+                                <th style="border:1px solid #ccc; padding:8px;"></th>
+                                <th style="border:1px solid #ccc; padding:8px;">{A,B}</th>
+                                <th style="border:1px solid #ccc; padding:8px;">{C,D}</th>
+                                <th style="border:1px solid #ccc; padding:8px;">E</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">{A,B}</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>4 ★</strong></td><td style="border:1px solid #ccc; padding:8px;">8</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">{C,D}</td><td style="border:1px solid #ccc; padding:8px;">4</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px;">5</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">E</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">—</td></tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <p><strong>◆ イテレーション 3：次の結合</strong></p>
+                        <p>最小値は $d(\{A,B\},\{C,D\}) = 4$。</p>
+                        <p>→ <strong>$\{A,B\}$ と $\{C,D\}$ を結合</strong>して $\{A,B,C,D\}$ を作る。</p>
+                        <p>$\{A,B,C,D\}$ と E の最近隣距離：</p>
+                        $$d(\{A,B,C,D\}, E) = \min\{d(A,E), d(B,E), d(C,E), d(D,E)\} = \min\{10, 8, 5, 5\} = 5$$
+
+                        <p><strong>◆ イテレーション 4：最終結合</strong></p>
+                        <p>→ <strong>$\{A,B,C,D\}$ と $E$ を結合</strong>して全体の1クラスター $\{A,B,C,D,E\}$ になる。</p>
+
+                        <div class="formula-block">
+                            <p>✅ <strong>最近隣法の結合順序：</strong></p>
+                            <ol>
+                                <li>$\{A,B\}$（距離2）</li>
+                                <li>$\{C,D\}$（距離3）</li>
+                                <li>$\{A,B\} + \{C,D\} \to \{A,B,C,D\}$（距離4）</li>
+                                <li>$\{A,B,C,D\} + E \to$ 全体（距離5）</li>
+                            </ol>
+                        </div>
+
                         <hr>
 
-                        <h3>[1] デンドログラムの対応とラベルの特定</h3>
-                        <div class="answer-block">
-                            <p><strong>答：(a) が最遠隣法、(b) が最近隣法</strong><br>
-                               A, C, D, E, F のユーザ対応：A = 3（または 4）、B = 6、C = 4（または 3）、D = 2（または 1）、E = 1（または 2）、F = 5</p>
+                        <h4>（2）最遠隣法（最長距離法）</h4>
+                        <p>最遠隣法では $d(\{A,B\}, X) = \max\{d(A,X),\ d(B,X)\}$。</p>
+
+                        <p><strong>◆ イテレーション 1：</strong>最初の結合は最近隣法と同じ。非対角最小値 $d(A,B)=2$ で <strong>$\{A,B\}$</strong> を作る。</p>
+                        <p>最遠隣距離の更新：</p>
+                        <ul>
+                            <li>$d(\{A,B\},C) = \max\{8, 6\} = 8$</li>
+                            <li>$d(\{A,B\},D) = \max\{6, 4\} = 6$</li>
+                            <li>$d(\{A,B\},E) = \max\{10, 8\} = 10$</li>
+                        </ul>
+                        <p>更新後（最遠隣）の距離行列：</p>
+                        <div style="overflow-x:auto;">
+                        <table style="border-collapse:collapse; width:60%; text-align:center; margin:0.5em auto;">
+                            <thead><tr style="background:#f0f4ff;">
+                                <th style="border:1px solid #ccc; padding:8px;"></th>
+                                <th style="border:1px solid #ccc; padding:8px;">{A,B}</th>
+                                <th style="border:1px solid #ccc; padding:8px;">C</th>
+                                <th style="border:1px solid #ccc; padding:8px;">D</th>
+                                <th style="border:1px solid #ccc; padding:8px;">E</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">{A,B}</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">10</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">C</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>3 ★</strong></td><td style="border:1px solid #ccc; padding:8px;">5</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">D</td><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">3</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px;">5</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">E</td><td style="border:1px solid #ccc; padding:8px;">10</td><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">—</td></tr>
+                            </tbody>
+                        </table>
                         </div>
 
-                        <h4>解き方を順番に追いかける</h4>
-                        <p><strong>ステップ 1：最初に結合されるペアを特定</strong></p>
-                        <p>距離行列を見ると、最も小さい非対角成分は $d(3, 4) = 1.4$ です。よってどちらの手法でも最初に<strong>ユーザ3とユーザ4が結合</strong>されます。デンドログラムの最初に結合されるノードが $A$ と $C$（または $C$ と $A$）なので：</p>
-                        $$\{A,\, C\} = \{3,\, 4\}$$
-
-                        <p><strong>ステップ 2：{3,4}に次に結合するのは誰？</strong></p>
-                        <p>デンドログラムでは $\{A,C\}$ と $F$ が次に結合されています。これを特定します。</p>
-                        <p>どちらの手法でも $\{3,4\}$ と他のユーザとの距離を計算できます（最近隣法で計算）：</p>
+                        <p><strong>◆ イテレーション 2：</strong>最小値は $d(C,D)=3$（個体間距離そのものなので最近・最遠で同値）。<strong>$\{C,D\}$</strong> を作る。</p>
+                        <p>最遠隣距離の更新：</p>
                         <ul>
-                            <li>$d(\{3,4\},\ 1) = \min\{d(3,1), d(4,1)\} = \min\{3.3, 3.3\} = 3.3$</li>
-                            <li>$d(\{3,4\},\ 2) = \min\{d(3,2), d(4,2)\} = \min\{5.5, 5.6\} = 5.5$</li>
-                            <li>$d(\{3,4\},\ 5) = \min\{d(3,5), d(4,5)\} = \min\{1.6, 2.3\} = 1.6$ ← 最小！</li>
-                            <li>$d(\{3,4\},\ 6) = \min\{d(3,6), d(4,6)\} = \min\{4.0, 2.7\} = 2.7$</li>
+                            <li>$d(\{C,D\},\{A,B\}) = \max\{d(C,\{A,B\}), d(D,\{A,B\})\} = \max\{8, 6\} = 8$</li>
+                            <li>$d(\{C,D\},E) = \max\{d(C,E), d(D,E)\} = \max\{5, 5\} = 5$</li>
                         </ul>
-                        <p>最小は $d(\{3,4\},5) = 1.6$ なので $F = 5$ です。</p>
-                        $$\{A,\, C,\, F\} = \{3,\, 4,\, 5\}$$
+                        <p>更新後（最遠隣）の距離行列：</p>
+                        <div style="overflow-x:auto;">
+                        <table style="border-collapse:collapse; width:50%; text-align:center; margin:0.5em auto;">
+                            <thead><tr style="background:#f0f4ff;">
+                                <th style="border:1px solid #ccc; padding:8px;"></th>
+                                <th style="border:1px solid #ccc; padding:8px;">{A,B}</th>
+                                <th style="border:1px solid #ccc; padding:8px;">{C,D}</th>
+                                <th style="border:1px solid #ccc; padding:8px;">E</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">{A,B}</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">10</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">{C,D}</td><td style="border:1px solid #ccc; padding:8px;">8</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>5 ★</strong></td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">E</td><td style="border:1px solid #ccc; padding:8px;">10</td><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">—</td></tr>
+                            </tbody>
+                        </table>
+                        </div>
 
-                        <p><strong>ステップ 3：残りの {1, 2, 6} の割当</strong></p>
-                        <p>残り $\{1, 2, 6\}$ の中で最も距離が小さいのは $d(1, 2) = 2.4$ です。デンドログラムで $E, D$ が結合されているので：</p>
-                        $$\{E,\, D\} = \{1,\, 2\}$$
-                        <p>残った 6 が $B$：</p>
-                        $$B = 6$$
+                        <p><strong>◆ イテレーション 3：</strong>最小値は $d(\{C,D\},E)=5$。</p>
+                        <p>→ <strong>$\{C,D\}$ と $E$ を結合</strong>して $\{C,D,E\}$ を作る。</p>
+                        <p>$\{C,D,E\}$ と $\{A,B\}$ の最遠隣距離：</p>
+                        $$d(\{C,D,E\},\{A,B\}) = \max\{d(C,A), d(C,B), d(D,A), d(D,B), d(E,A), d(E,B)\}$$
+                        $$= \max\{8, 6, 6, 4, 10, 8\} = 10$$
 
-                        <p><strong>ステップ 4：(a)(b) のどちらが最近隣か最遠隣かを判定</strong></p>
-                        <p>$\{3,4,5\}$ と $\{1,2\}$ の距離、$\{3,4,5\}$ と $\{6\}$ の距離を比較します。</p>
-                        <p>最近隣法で計算すると：</p>
-                        $$d_{\min}(\{3,4,5\},\, \{1,2\}) = \min\{d(3,1),d(3,2),d(4,1),d(4,2),d(5,1),d(5,2)\}$$
-                        $$= \min\{3.3, 5.5, 3.3, 5.6, 2.5, 4.4\} = 2.5$$
-                        $$d_{\min}(\{3,4,5\},\, \{6\}) = \min\{d(3,6),d(4,6),d(5,6)\} = \min\{4.0, 2.7, 4.6\} = 2.7$$
-                        <p>最近隣法では $2.5 < 2.7$ なので、$\{3,4,5\}$ と $\{1,2\}$ が先に結合されます（デンドログラム (b) の形）。</p>
-                        <p>最遠隣法で計算すると：</p>
-                        $$d_{\max}(\{3,4,5\},\, \{1,2\}) = \max\{3.3, 5.5, 3.3, 5.6, 2.5, 4.4\} = 5.6$$
-                        $$d_{\max}(\{3,4,5\},\, \{6\}) = \max\{4.0, 2.7, 4.6\} = 4.6$$
-                        <p>最遠隣法では $4.6 < 5.6$ なので、$\{3,4,5\}$ と $\{6\}$ が先に結合されます（デンドログラム (a) の形）。</p>
+                        <p><strong>◆ イテレーション 4：</strong>→ <strong>$\{A,B\}$ と $\{C,D,E\}$ を結合</strong>して全体 $\{A,B,C,D,E\}$ になる。</p>
+
                         <div class="formula-block">
-                            <p>✅ <strong>結論</strong>：(a) が<strong>最遠隣法</strong>、(b) が<strong>最近隣法</strong></p>
+                            <p>✅ <strong>最遠隣法の結合順序：</strong></p>
+                            <ol>
+                                <li>$\{A,B\}$（距離2）</li>
+                                <li>$\{C,D\}$（距離3）</li>
+                                <li>$\{C,D\} + E \to \{C,D,E\}$（距離5）</li>
+                                <li>$\{A,B\} + \{C,D,E\} \to$ 全体（距離10）</li>
+                            </ol>
                         </div>
 
                         <hr>
 
-                        <h3>[2] K-means法（K=2）の実行</h3>
-                        <p>初期クラスター中心：$\boldsymbol{\mu}_1^{(0)} = (9, 6, 7)$、$\boldsymbol{\mu}_2^{(0)} = (5, 5, 10)$</p>
-
-                        <h4>ステップ 1：各サンプルとの距離計算（クラスター割当）</h4>
-                        <p>各ユーザのベクトルと 2 つの初期中心とのユークリッド距離を計算します。</p>
-
-                        <p><strong>ユーザ 1：$\mathbf{x}_1 = (7.7, 5.8, 7.7)$</strong></p>
-                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_1) = \sqrt{(9-7.7)^2 + (6-5.8)^2 + (7-7.7)^2}$$
-                        $$= \sqrt{1.69 + 0.04 + 0.49} = \sqrt{2.22} \approx 1.49$$
-                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_1) = \sqrt{(5-7.7)^2 + (5-5.8)^2 + (10-7.7)^2}$$
-                        $$= \sqrt{7.29 + 0.64 + 5.29} = \sqrt{13.22} \approx 3.64$$
-                        <p>$1.49 < 3.64$ なので ユーザ 1 → $C_1$</p>
-
-                        <p><strong>ユーザ 2：$\mathbf{x}_2 = (10.1, 5.9, 7.3)$</strong></p>
-                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_2) = \sqrt{(9-10.1)^2 + (6-5.9)^2 + (7-7.3)^2}$$
-                        $$= \sqrt{1.21 + 0.01 + 0.09} = \sqrt{1.31} \approx 1.14$$
-                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_2) = \sqrt{(5-10.1)^2 + (5-5.9)^2 + (10-7.3)^2}$$
-                        $$= \sqrt{26.01 + 0.81 + 7.29} = \sqrt{34.11} \approx 5.84$$
-                        <p>$1.14 < 5.84$ なので ユーザ 2 → $C_1$</p>
-
-                        <p><strong>ユーザ 3：$\mathbf{x}_3 = (4.9, 4.1, 7.9)$</strong></p>
-                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_3) = \sqrt{(9-4.9)^2 + (6-4.1)^2 + (7-7.9)^2}$$
-                        $$= \sqrt{16.81 + 3.61 + 0.81} = \sqrt{21.23} \approx 4.61$$
-                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_3) = \sqrt{(5-4.9)^2 + (5-4.1)^2 + (10-7.9)^2}$$
-                        $$= \sqrt{0.01 + 0.81 + 4.41} = \sqrt{5.23} \approx 2.29$$
-                        <p>$2.29 < 4.61$ なので ユーザ 3 → $C_2$</p>
-
-                        <p><strong>ユーザ 4：$\mathbf{x}_4 = (4.8, 5.0, 9.0)$</strong></p>
-                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_4) = \sqrt{(9-4.8)^2 + (6-5.0)^2 + (7-9.0)^2}$$
-                        $$= \sqrt{17.64 + 1.00 + 4.00} = \sqrt{22.64} \approx 4.76$$
-                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_4) = \sqrt{(5-4.8)^2 + (5-5.0)^2 + (10-9.0)^2}$$
-                        $$= \sqrt{0.04 + 0.00 + 1.00} = \sqrt{1.04} \approx 1.02$$
-                        <p>$1.02 < 4.76$ なので ユーザ 4 → $C_2$</p>
-
-                        <p><strong>ユーザ 5：$\mathbf{x}_5 = (6.4, 3.7, 8.0)$</strong></p>
-                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_5) = \sqrt{(9-6.4)^2 + (6-3.7)^2 + (7-8.0)^2}$$
-                        $$= \sqrt{6.76 + 5.29 + 1.00} = \sqrt{13.05} \approx 3.61$$
-                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_5) = \sqrt{(5-6.4)^2 + (5-3.7)^2 + (10-8.0)^2}$$
-                        $$= \sqrt{1.96 + 1.69 + 4.00} = \sqrt{7.65} \approx 2.77$$
-                        <p>$2.77 < 3.61$ なので ユーザ 5 → $C_2$</p>
-
-                        <p><strong>ユーザ 6：$\mathbf{x}_6 = (4.0, 5.2, 11.6)$</strong></p>
-                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_6) = \sqrt{(9-4.0)^2 + (6-5.2)^2 + (7-11.6)^2}$$
-                        $$= \sqrt{25.00 + 0.64 + 21.16} = \sqrt{46.80} \approx 6.84$$
-                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_6) = \sqrt{(5-4.0)^2 + (5-5.2)^2 + (10-11.6)^2}$$
-                        $$= \sqrt{1.00 + 0.04 + 2.56} = \sqrt{3.60} \approx 1.90$$
-                        <p>$1.90 < 6.84$ なので ユーザ 6 → $C_2$</p>
-
+                        <h4>（3）デンドログラムの違いと理由</h4>
                         <div class="formula-block">
-                            <p>✅ <strong>割当結果</strong>：$C_1 = \{1, 2\}$、$C_2 = \{3, 4, 5, 6\}$</p>
+                            <p><strong>最近隣法</strong>：イテレーション3で $\{A,B\}$ と $\{C,D\}$ が「距離4」で先に結合し、その後 $E$ が「距離5」で加わった。</p>
+                            <p><strong>最遠隣法</strong>：イテレーション3で $\{C,D\}$ と $E$ が「距離5」で先に結合し、最後に $\{A,B\}$ が「距離10」で加わった。</p>
+                            <p>
+                                違いの理由：$\{A,B\}$ と $E$ の間には $d(A,E)=10$ という大きな距離がある。<br>
+                                <strong>最近隣法</strong>は「最も近いペアさえ近ければ結合する」ため、$\{C,D\}$ の中に $B$ に近い $D$（$d(B,D)=4$）がいることで $\{A,B\}$ と $\{C,D\}$ が先に引き寄せられる。<br>
+                                <strong>最遠隣法</strong>は「最も遠いペアの距離」で評価するため、$A$ と $E$ の遠さ（10）が足を引っ張り $\{A,B\}$-$\{C,D,E\}$ の結合が最後になる。
+                            </p>
                         </div>
+                    </div>
 
-                        <h4>ステップ 2：クラスター中心の更新</h4>
-                        <p><strong>クラスター $C_1 = \{1, 2\}$ の新しい重心 $\bar{\boldsymbol{\mu}}_1$</strong>：</p>
-                        $$\bar{\boldsymbol{\mu}}_1 = \frac{1}{2}(\mathbf{x}_1 + \mathbf{x}_2) = \frac{1}{2}\big((7.7, 5.8, 7.7) + (10.1, 5.9, 7.3)\big)$$
-                        $$= \frac{1}{2}(17.8,\ 11.7,\ 15.0) = (8.9,\ 5.9,\ 7.5)$$
+                    <!-- ===== 問3 ===== -->
+                    <div class="example-block" style="margin-top: 2em;">
+                        <h3>問 3　K-means 法（$K=2$）</h3>
+                        <p>
+                            2次元空間上の4つのデータ点
+                            $\mathbf{x}_1 = (1,1)$、$\mathbf{x}_2 = (1,3)$、$\mathbf{x}_3 = (5,4)$、$\mathbf{x}_4 = (7,4)$
+                            に対して、$K=2$ の K-means 法を適用する。
+                        </p>
+                        <p>初期クラスター中心を $\boldsymbol{\mu}_1^{(0)} = (0, 2)$、$\boldsymbol{\mu}_2^{(0)} = (6, 5)$ とする。</p>
+                        <ol>
+                            <li>各データ点と 2 つの初期中心とのユークリッド距離をすべて計算し、各データを $C_1$ または $C_2$ に割当よ。</li>
+                            <li>割当結果から新しいクラスター中心 $\bar{\boldsymbol{\mu}}_1$、$\bar{\boldsymbol{\mu}}_2$ を計算せよ。</li>
+                            <li>新しい中心をもとに再度クラスター割当を行い、割当が変化するかどうかを確認せよ。変化しない場合は「収束した」と判断できる。</li>
+                        </ol>
+                    </div>
 
-                        <p><strong>クラスター $C_2 = \{3, 4, 5, 6\}$ の新しい重心 $\bar{\boldsymbol{\mu}}_2$</strong>：</p>
-                        $$\bar{\boldsymbol{\mu}}_2 = \frac{1}{4}(\mathbf{x}_3 + \mathbf{x}_4 + \mathbf{x}_5 + \mathbf{x}_6)$$
-                        $$= \frac{1}{4}\big((4.9,4.1,7.9) + (4.8,5.0,9.0) + (6.4,3.7,8.0) + (4.0,5.2,11.6)\big)$$
-                        <p>各次元ごとに：</p>
-                        <ul>
-                            <li>レストラン：$\frac{4.9+4.8+6.4+4.0}{4} = \frac{20.1}{4} = 5.025 \approx 5.0$</li>
-                            <li>劇場：$\frac{4.1+5.0+3.7+5.2}{4} = \frac{18.0}{4} = 4.5$</li>
-                            <li>ビーチ：$\frac{7.9+9.0+8.0+11.6}{4} = \frac{36.5}{4} = 9.125 \approx 9.1$</li>
-                        </ul>
-                        $$\bar{\boldsymbol{\mu}}_2 \approx (5.0,\ 4.5,\ 9.1)$$
+                    <!-- 問3 解答 -->
+                    <div class="answer-block">
+                        <h3>問 3　解答</h3>
 
-                        <h4>ステップ 3：収束判定</h4>
-                        <p>新しい中心 $(8.9, 5.9, 7.5)$ と $(5.0, 4.5, 9.1)$ をもとに再割当すると、割当が変化しないことが確認できます（重心が各ユーザのもとのクラスター外に近づかない）。よって<strong>1回の繰り返しで収束</strong>します。</p>
+                        <h4>（1）初期中心との距離計算とクラスター割当</h4>
+                        <p>ユークリッド距離の定義 $d(\boldsymbol{\mu}, \mathbf{x}) = \sqrt{(\mu_1 - x_1)^2 + (\mu_2 - x_2)^2}$ を使う。</p>
+
+                        <p><strong>$\mathbf{x}_1 = (1,1)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_1) = \sqrt{(0-1)^2 + (2-1)^2} = \sqrt{1 + 1} = \sqrt{2} \approx 1.41$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_1) = \sqrt{(6-1)^2 + (5-1)^2} = \sqrt{25 + 16} = \sqrt{41} \approx 6.40$$
+                        <p>$1.41 < 6.40$ なので $\mathbf{x}_1 \to C_1$</p>
+
+                        <p><strong>$\mathbf{x}_2 = (1,3)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_2) = \sqrt{(0-1)^2 + (2-3)^2} = \sqrt{1 + 1} = \sqrt{2} \approx 1.41$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_2) = \sqrt{(6-1)^2 + (5-3)^2} = \sqrt{25 + 4} = \sqrt{29} \approx 5.39$$
+                        <p>$1.41 < 5.39$ なので $\mathbf{x}_2 \to C_1$</p>
+
+                        <p><strong>$\mathbf{x}_3 = (5,4)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_3) = \sqrt{(0-5)^2 + (2-4)^2} = \sqrt{25 + 4} = \sqrt{29} \approx 5.39$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_3) = \sqrt{(6-5)^2 + (5-4)^2} = \sqrt{1 + 1} = \sqrt{2} \approx 1.41$$
+                        <p>$1.41 < 5.39$ なので $\mathbf{x}_3 \to C_2$</p>
+
+                        <p><strong>$\mathbf{x}_4 = (7,4)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_4) = \sqrt{(0-7)^2 + (2-4)^2} = \sqrt{49 + 4} = \sqrt{53} \approx 7.28$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_4) = \sqrt{(6-7)^2 + (5-4)^2} = \sqrt{1 + 1} = \sqrt{2} \approx 1.41$$
+                        <p>$1.41 < 7.28$ なので $\mathbf{x}_4 \to C_2$</p>
 
                         <div class="formula-block">
-                            <p>✅ <strong>最終的なクラスター中心（小数点以下1位まで）：</strong></p>
+                            <p>✅ <strong>割当結果（1回目）：</strong></p>
                             <ul>
-                                <li>$\bar{\boldsymbol{\mu}}_1 = (8.9,\ 5.9,\ 7.5)$ → レストランと劇場の評価が高めのグループ</li>
-                                <li>$\bar{\boldsymbol{\mu}}_2 = (5.0,\ 4.5,\ 9.1)$ → ビーチ評価が高めのグループ</li>
+                                <li>$C_1 = \{\mathbf{x}_1, \mathbf{x}_2\} = \{(1,1),\ (1,3)\}$</li>
+                                <li>$C_2 = \{\mathbf{x}_3, \mathbf{x}_4\} = \{(5,4),\ (7,4)\}$</li>
                             </ul>
+                        </div>
+
+                        <h4>（2）クラスター中心の更新</h4>
+                        <p>各クラスターに属するデータ点の座標を次元ごとに平均する。</p>
+
+                        <p><strong>$C_1 = \{\mathbf{x}_1, \mathbf{x}_2\}$ の新しい重心 $\bar{\boldsymbol{\mu}}_1$：</strong></p>
+                        $$\bar{\boldsymbol{\mu}}_1 = \frac{1}{2}(\mathbf{x}_1 + \mathbf{x}_2) = \frac{1}{2}\big((1,1) + (1,3)\big) = \frac{1}{2}(2, 4) = (1, 2)$$
+
+                        <p><strong>$C_2 = \{\mathbf{x}_3, \mathbf{x}_4\}$ の新しい重心 $\bar{\boldsymbol{\mu}}_2$：</strong></p>
+                        $$\bar{\boldsymbol{\mu}}_2 = \frac{1}{2}(\mathbf{x}_3 + \mathbf{x}_4) = \frac{1}{2}\big((5,4) + (7,4)\big) = \frac{1}{2}(12, 8) = (6, 4)$$
+
+                        <div class="formula-block">
+                            <p>✅ <strong>更新後のクラスター中心：</strong></p>
+                            <ul>
+                                <li>$\bar{\boldsymbol{\mu}}_1 = (1, 2)$</li>
+                                <li>$\bar{\boldsymbol{\mu}}_2 = (6, 4)$</li>
+                            </ul>
+                        </div>
+
+                        <h4>（3）再割当と収束確認</h4>
+                        <p>新しい中心 $\bar{\boldsymbol{\mu}}_1=(1,2)$、$\bar{\boldsymbol{\mu}}_2=(6,4)$ に対して、各データ点との距離を計算する。</p>
+
+                        <p><strong>$\mathbf{x}_1 = (1,1)$：</strong></p>
+                        $$d(\bar{\boldsymbol{\mu}}_1, \mathbf{x}_1) = \sqrt{(1-1)^2+(2-1)^2} = \sqrt{0+1} = 1$$
+                        $$d(\bar{\boldsymbol{\mu}}_2, \mathbf{x}_1) = \sqrt{(6-1)^2+(4-1)^2} = \sqrt{25+9} = \sqrt{34} \approx 5.83$$
+                        <p>$1 < 5.83$ → $C_1$（変化なし）</p>
+
+                        <p><strong>$\mathbf{x}_2 = (1,3)$：</strong></p>
+                        $$d(\bar{\boldsymbol{\mu}}_1, \mathbf{x}_2) = \sqrt{(1-1)^2+(2-3)^2} = \sqrt{0+1} = 1$$
+                        $$d(\bar{\boldsymbol{\mu}}_2, \mathbf{x}_2) = \sqrt{(6-1)^2+(4-3)^2} = \sqrt{25+1} = \sqrt{26} \approx 5.10$$
+                        <p>$1 < 5.10$ → $C_1$（変化なし）</p>
+
+                        <p><strong>$\mathbf{x}_3 = (5,4)$：</strong></p>
+                        $$d(\bar{\boldsymbol{\mu}}_1, \mathbf{x}_3) = \sqrt{(1-5)^2+(2-4)^2} = \sqrt{16+4} = \sqrt{20} \approx 4.47$$
+                        $$d(\bar{\boldsymbol{\mu}}_2, \mathbf{x}_3) = \sqrt{(6-5)^2+(4-4)^2} = \sqrt{1+0} = 1$$
+                        <p>$1 < 4.47$ → $C_2$（変化なし）</p>
+
+                        <p><strong>$\mathbf{x}_4 = (7,4)$：</strong></p>
+                        $$d(\bar{\boldsymbol{\mu}}_1, \mathbf{x}_4) = \sqrt{(1-7)^2+(2-4)^2} = \sqrt{36+4} = \sqrt{40} \approx 6.32$$
+                        $$d(\bar{\boldsymbol{\mu}}_2, \mathbf{x}_4) = \sqrt{(6-7)^2+(4-4)^2} = \sqrt{1+0} = 1$$
+                        <p>$1 < 6.32$ → $C_2$（変化なし）</p>
+
+                        <div class="formula-block">
+                            <p>✅ <strong>すべてのデータ点の割当が変化しなかったため、アルゴリズムは収束した。</strong></p>
+                            <p>最終クラスター中心：</p>
+                            <ul>
+                                <li>$\bar{\boldsymbol{\mu}}_1 = (1, 2)$：左下グループ（$\mathbf{x}_1, \mathbf{x}_2$）</li>
+                                <li>$\bar{\boldsymbol{\mu}}_2 = (6, 4)$：右上グループ（$\mathbf{x}_3, \mathbf{x}_4$）</li>
+                            </ul>
+                            <p>💡 初期中心 $(0,2)$ と $(6,5)$ は最終重心 $(1,2)$ と $(6,4)$ に非常に近かったため、1回の反復で収束した。</p>
                         </div>
                     </div>
                 </section>
