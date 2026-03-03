@@ -124,7 +124,7 @@
                     </p>
                     <div class="formula-block">
                         <p><strong>ストレス値（Stress）</strong></p>
-                        $$S = \sqrt{\frac{\displaystyle\sum_{i<j}(\hat{d}_{ij} - d_{ij})^2}{\displaystyle\sum_{i<j}d_{ij}^2}}$$
+                        $$S = \sqrt{\frac{\displaystyle\sum_{i<j}(\hat{d}_{ij} - d_{ij})^2}{\displaystyle\sum_{i&lt;j}d_{ij}^2}}$$
                         <p>
                             $d_{ij}$：座標から計算した距離、$\hat{d}_{ij}$：元の非類似度を単調変換した値。<br>
                             $S$ が小さいほど良い近似。Kruskalのアルゴリズムなどで $S$ を繰り返し最小化する。
@@ -287,7 +287,7 @@
                     </div>
                     <div class="formula-block">
                         <p><strong>非計量MDS：ストレス値</strong></p>
-                        $$S = \sqrt{\frac{\sum_{i<j}(\hat{d}_{ij}-d_{ij})^2}{\sum_{i<j}d_{ij}^2}}$$
+                        $$S = \sqrt{\frac{\sum_{i<j}(\hat{d}_{ij}-d_{ij})^2}{\sum_{i&lt;j}d_{ij}^2}}$$
                         <p>$\hat{d}_{ij}$：元の非類似度を単調変換した値、$d_{ij}$：座標から計算した距離</p>
                     </div>
                     <div class="formula-block">
@@ -370,16 +370,16 @@
                         </p>
                         <ul>
                             <li>$k=1$ の寄与率：$4/8 = 50\%$</li>
-                            <li>$k=2$ の寄与率：$(4+4)/8 = 100\%$ ✅</li>
+                            <li>$k=2$ の寄与率：$(4+4)/8 = 100\%$ </li>
                         </ul>
                         <p>$k=2$ の座標から距離の2乗を計算して確認：</p>
                         <ul>
-                            <li>$d_{AB}^2 = (\sqrt{2}-0)^2 + (0-\sqrt{2})^2 = 2+2 = 4$ ✅</li>
-                            <li>$d_{AC}^2 = (\sqrt{2}+\sqrt{2})^2 + 0 = 8$ ✅</li>
-                            <li>$d_{BC}^2 = (\sqrt{2})^2+(\sqrt{2})^2 = 4$ ✅</li>
+                            <li>$d_{AB}^2 = (\sqrt{2}-0)^2 + (0-\sqrt{2})^2 = 2+2 = 4$ </li>
+                            <li>$d_{AC}^2 = (\sqrt{2}+\sqrt{2})^2 + 0 = 8$ </li>
+                            <li>$d_{BC}^2 = (\sqrt{2})^2+(\sqrt{2})^2 = 4$ </li>
                         </ul>
                         <div class="formula-block">
-                            <p>✅ $k=2$ のとき寄与率100%で $D$ を<strong>完全に再現</strong>できる。これは元の4都市が2次元ユークリッド空間上に乗っている（$B$ が半正定値で正の固有値が2つ）からである。</p>
+                            <p> $k=2$ のとき寄与率100%で $D$ を<strong>完全に再現</strong>できる。これは元の4都市が2次元ユークリッド空間上に乗っている（$B$ が半正定値で正の固有値が2つ）からである。</p>
                         </div>
                     </div>
 
@@ -418,7 +418,7 @@
                             $R_{xy} = O$ のとき $M = R_{xx}^{-1} \cdot O \cdot R_{yy}^{-1} \cdot O^T = O$（零行列）。零行列の固有値はすべて $0$ なので、第1正準相関係数 $= \sqrt{0} = 0$。
                         </p>
                         <div class="formula-block">
-                            <p>✅ 直感的に正しい：2変数群の間に一切の相関がない（$R_{xy}=O$）なら、どんな線形結合を作っても相関は0にしかならない。</p>
+                            <p> 直感的に正しい：2変数群の間に一切の相関がない（$R_{xy}=O$）なら、どんな線形結合を作っても相関は0にしかならない。</p>
                         </div>
 
                         <p><strong>（3）標準化しても変わらない理由</strong></p>
@@ -485,7 +485,7 @@
                                 $\beta_1$：運動部であることの得点への効果（カテゴリースコア）、<br>
                                 $\beta_2$：3年生であることの得点への効果（カテゴリースコア）
                             </p>
-                            <p>✅ 通常の重回帰分析と全く同じ手順で $\hat{\boldsymbol{\beta}} = (X^TX)^{-1}X^T\mathbf{y}$ を計算すればよい。</p>
+                            <p> 通常の重回帰分析と全く同じ手順で $\hat{\boldsymbol{\beta}} = (X^TX)^{-1}X^T\mathbf{y}$ を計算すればよい。</p>
                         </div>
                     </div>
 
