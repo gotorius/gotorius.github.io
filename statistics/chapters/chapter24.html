@@ -38,102 +38,462 @@
         <div class="container">
             <div class="chapter-content">
 
+                <!-- ======== 0. イントロ ======== -->
                 <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p>クラスター分析（cluster analysis）は、クラスラベルの情報が与えられない状況で、特徴量の類似度や距離に基づきデータをいくつかのグループに分類する方法である。判別分析があらかじめラベルの付いたデータを用いるのに対し、クラスター分析はラベルなしで個体間の関係を理解するのに有用な手法である。</p>
-                    <p>クラスタリング手法は<strong>階層的手法</strong>と<strong>非階層的手法</strong>に大別される。階層的手法はデンドログラムで視覚的に確認でき、非階層的手法（K-means法など）はあらかじめ指定したクラスター数に分類する。結果は採用する距離尺度やアルゴリズムに大きく影響を受けるため、データの性質に応じた選択が重要である。</p>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <div class="concept-list">
-                        <h3>距離尺度</h3>
+                    <h2><i class="fas fa-book-open"></i> クラスター分析とは？――直感的なイメージから</h2>
+                    <p>
+                        まずクラスター分析（cluster analysis）が何をするものか、日常的な例で考えてみましょう。
+                    </p>
+                    <p>
+                        たとえばあなたが図書館で本を整理するとします。最初は本にジャンルのラベルが貼られていません。
+                        それでも「似たような内容の本を近くに並べよう」と考えながら棚に分類するはずです。
+                        これがクラスター分析の本質です。<br>
+                        <strong>ラベル（答え）なしで、似ているもの同士をグループ（クラスター）にまとめる</strong>方法です。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>判別分析との違い</strong></p>
                         <ul>
-                            <li><strong>ミンコフスキー距離</strong>：$d_m(\mathbf{x}, \mathbf{y}) = \left(\sum_{j} |x_j - y_j|^m\right)^{1/m}$（$m=2$：ユークリッド距離、$m=1$：マンハッタン距離）</li>
-                            <li><strong>マハラノビス距離</strong>：$d_M(\mathbf{x}, \mathbf{y}) = \sqrt{(\mathbf{x}-\mathbf{y})^T \Sigma^{-1} (\mathbf{x}-\mathbf{y})}$（共分散行列 $\Sigma$ を考慮）</li>
-                        </ul>
-                        <h3>階層的クラスタリング</h3>
-                        <ul>
-                            <li><strong>デンドログラム</strong>（樹状図）：クラスター形成のプロセスを視覚的に表現する二分木</li>
-                            <li><strong>コーフェン行列</strong>：併合途中のクラスター間距離行列</li>
-                            <li>計算量 $O(n^2)$</li>
-                        </ul>
-                        <h3>クラスター間距離</h3>
-                        <ul>
-                            <li><strong>最近隣法</strong>（単リンク法）：$d(C_1,C_2) = \min_{x \in C_1, y \in C_2} d(x,y)$</li>
-                            <li><strong>最遠隣法</strong>（最長距離法）：$d(C_1,C_2) = \max_{x \in C_1, y \in C_2} d(x,y)$</li>
-                            <li><strong>重心法</strong>（セントロイド法）：クラスター重心間の距離</li>
-                            <li><strong>群平均法</strong>：すべての組合せの距離の平均</li>
-                            <li><strong>ウォード法</strong>：併合によるクラスター内ばらつき増加量を最小にする</li>
-                        </ul>
-                        <h3>非階層的クラスタリング</h3>
-                        <ul>
-                            <li><strong>K-means法</strong>：K個のクラスターに分類、計算量 $O(nK)$</li>
-                            <li>初期クラスター中心の選び方に依存</li>
-                            <li><strong>混合分布とEMアルゴリズム</strong>：混合比 $\pi_k$ と成分分布 $f_k(x;\theta_k)$ でモデル化</li>
+                            <li><strong>判別分析</strong>：「この本は理工書」「この本は小説」などラベルが最初から付いている。新しい本のラベルを予測するルールを学ぶ。<br>→ <em>教師あり学習</em></li>
+                            <li><strong>クラスター分析</strong>：ラベルがない。データの似ている・似ていないだけを手がかりにグループを作る。<br>→ <em>教師なし学習</em></li>
                         </ul>
                     </div>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-                    <div class="formula-block">
-                        <p><strong>K-means法の目的関数</strong></p>
-                        $$J(\{C_k\}) = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \bar{\mu}_k\|^2$$
-                        <p>$\bar{\mu}_k$：$k$番目のクラスターに属するサンプルの平均ベクトル</p>
-                    </div>
-                    <div class="formula-block">
-                        <p><strong>K-meansの反復手順</strong></p>
-                        <ol>
-                            <li>クラスター中心の更新：$\bar{\mu}_k = \frac{1}{|C_k|}\sum_{x \in C_k} x$</li>
-                            <li>クラスター割当の更新：各サンプルを最も近い中心のクラスターに再割当</li>
-                        </ol>
-                    </div>
-                    <div class="formula-block">
-                        <p><strong>混合分布モデル</strong></p>
-                        $$f(x;\{\pi_k,\theta_k\}) = \sum_{k=1}^{K} \pi_k f_k(x;\theta_k), \quad \sum_{k=1}^{K}\pi_k = 1$$
-                    </div>
-                    <div class="formula-block">
-                        <p><strong>ウォード法のクラスター間距離</strong></p>
-                        $$d(C_1,C_2) = \sum_{z \in C_1 \cup C_2} \|z - \bar{z}\|^2 - \sum_{x \in C_1}\|x - \bar{x}\|^2 - \sum_{y \in C_2}\|y - \bar{y}\|^2$$
-                    </div>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-                    <div class="example-block">
-                        <p><strong>問24.1</strong> TripAdvisor の6人ユーザによるレストラン・劇場・ビーチの平均評価点データから、ユークリッド距離行列をもとにクラスター分析を行う。</p>
-                        <p><strong>[1] デンドログラムの対応</strong></p>
-                        <div class="answer-block">
-                            <p>(a) が<strong>最遠隣法</strong>、(b) が<strong>最近隣法</strong>に対応する。</p>
-                            <p>A=3, B=6, C=4, D=2, E=1, F=5（A,Cおよび D,Eはそれぞれ入替可能）</p>
-                            <p><strong>解法の手順：</strong></p>
-                            <ul>
-                                <li>距離行列で最も小さい非対角成分 $d(3,4)=1.4$ から $\{A,C\}=\{3,4\}$</li>
-                                <li>次に $\{3,4\}$ と結合される $F$ は $\min\{d(3,F),d(4,F)\}=1.6$ より $F=5$</li>
-                                <li>残りで最短 $d(E,D)=2.4$ より $\{E,D\}=\{1,2\}$、残り $B=6$</li>
-                                <li>最近隣法で $d(\{3,4,5\},\{1,2\})=2.5 < d(\{3,4,5\},6)=2.7$ → 先に $\{3,4,5\}$ と $\{1,2\}$ が結合 → (b)</li>
-                            </ul>
-                        </div>
-                        <p><strong>[2] K-means法（K=2）</strong></p>
-                        <div class="answer-block">
-                            <p>初期中心 $\mu_1^{(0)}=(9,6,7)$、$\mu_2^{(0)}=(5,5,10)$ として各ユーザとの距離を計算すると、$C_1 = \{1,2\}$、$C_2 = \{3,4,5,6\}$ に割当。</p>
-                            <p>更新後のクラスター中心：</p>
-                            <ul>
-                                <li>$\bar{\mu}_1 = (8.9, 5.9, 7.5)$</li>
-                                <li>$\bar{\mu}_2 = (5.0, 4.5, 9.1)$</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <p>クラスタリング手法は大きく 2 種類に分かれます。</p>
                     <ul>
-                        <li>階層的手法は $O(n^2)$、K-means は $O(nK)$ → サンプルサイズが大きい場合は非階層的手法が実用的</li>
-                        <li>K-means法の結果は初期中心の選び方に依存するため、複数回実行して目的関数 $J$ が最小の結果を選ぶ</li>
-                        <li>ウォード法はクラスター内のばらつき増加を最小にする方法で、球状クラスターの発見に適している</li>
-                        <li>混合分布によるクラスタリングではEMアルゴリズムが用いられる（→29章参照）</li>
+                        <li><strong>階層的手法</strong>：まず全員をバラバラ（個別）として、近い者から順番にくっつけていく。デンドログラム（樹状図）で可視化できる。</li>
+                        <li><strong>非階層的手法</strong>：最初に「グループ数K」を決めてから、各データを適切なグループに割り振る（K-means法が代表例）。</li>
+                    </ul>
+                    <p>どちらの手法の結果も、<strong>データ間の「距離」の定義</strong>に大きく左右されます。まず距離の話から始めましょう。</p>
+                </section>
+
+                <!-- ======== 1. 距離尺度 ======== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-ruler"></i> ① 距離尺度――「似ている」を数値化する</h2>
+
+                    <h3>データのベクトル表現</h3>
+                    <p>
+                        各データ（人・物・観測値）は複数の特徴量をまとめた <strong>$p$ 次元ベクトル</strong> で表します。
+                        例えば今回の TripAdvisor データでは「レストラン評価」「劇場評価」「ビーチ評価」の3次元ベクトルです。
+                    </p>
+                    <div class="formula-block">
+                        <p>ユーザ1のベクトル $\mathbf{x}_1 = (7.7,\ 5.8,\ 7.7)$、ユーザ2のベクトル $\mathbf{x}_2 = (10.1,\ 5.9,\ 7.3)$</p>
+                    </div>
+
+                    <h3>1-1. ミンコフスキー距離</h3>
+                    <p>
+                        $p$ 次元のベクトル $\mathbf{x} = (x_1, x_2, \ldots, x_p)$ と
+                        $\mathbf{y} = (y_1, y_2, \ldots, y_p)$ の間のミンコフスキー距離は次の式で定義されます。
+                    </p>
+                    $$d_m(\mathbf{x}, \mathbf{y}) = \left(\sum_{j=1}^{p} |x_j - y_j|^m\right)^{1/m}$$
+                    <p>式を言葉で分解すると：</p>
+                    <ol>
+                        <li>各次元 $j$ で差の絶対値 $|x_j - y_j|$ を計算する</li>
+                        <li>その $m$ 乗を全次元で足し合わせる</li>
+                        <li>最後に $1/m$ 乗（= $m$ 乗根）をとる</li>
+                    </ol>
+                    <p>パラメータ $m$ の値によって、具体的な距離が変わります。</p>
+
+                    <h3>1-2. ユークリッド距離（$m=2$ の場合）</h3>
+                    <p>
+                        $m=2$ のとき、ミンコフスキー距離は私たちが日常的に使う「まっすぐな距離」＝<strong>ユークリッド距離</strong>になります。
+                    </p>
+                    $$d_2(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{j=1}^{p} (x_j - y_j)^2}$$
+                    <div class="formula-block">
+                        <p>💡 <strong>具体例</strong>：ユーザ1 $\mathbf{x}_1=(7.7, 5.8, 7.7)$ とユーザ2 $\mathbf{x}_2=(10.1, 5.9, 7.3)$ の距離</p>
+                        <p>各次元の差：</p>
+                        <ul>
+                            <li>レストラン：$10.1 - 7.7 = 2.4$</li>
+                            <li>劇場：$5.9 - 5.8 = 0.1$</li>
+                            <li>ビーチ：$7.3 - 7.7 = -0.4$</li>
+                        </ul>
+                        <p>差の二乗和：</p>
+                        $$2.4^2 + 0.1^2 + (-0.4)^2 = 5.76 + 0.01 + 0.16 = 5.93$$
+                        <p>平方根をとる：</p>
+                        $$d_2(\mathbf{x}_1, \mathbf{x}_2) = \sqrt{5.93} \approx 2.4$$
+                        <p>✅ これが距離行列の $(1,2)$ 成分 $2.4$ と一致します。</p>
+                    </div>
+
+                    <h3>1-3. マンハッタン距離（$m=1$ の場合）</h3>
+                    <p>
+                        $m=1$ のとき、各次元の差の絶対値を単純に足し合わせた距離になります。
+                        碁盤の目の街（マンハッタン）を歩く距離のイメージです。
+                    </p>
+                    $$d_1(\mathbf{x}, \mathbf{y}) = \sum_{j=1}^{p} |x_j - y_j|$$
+                    <div class="formula-block">
+                        <p>💡 <strong>具体例</strong>：同じユーザ1とユーザ2で計算すると：</p>
+                        $$d_1(\mathbf{x}_1, \mathbf{x}_2) = |2.4| + |0.1| + |-0.4| = 2.4 + 0.1 + 0.4 = 2.9$$
+                        <p>ユークリッド距離は斜め移動、マンハッタン距離は縦横移動のイメージです。</p>
+                    </div>
+
+                    <h3>1-4. マハラノビス距離</h3>
+                    <p>
+                        ユークリッド距離は「各特徴量が同じスケールで独立」と仮定しています。
+                        しかし実際のデータでは特徴量間に相関があったり、スケールが大きく異なることがあります。
+                        <strong>マハラノビス距離</strong>は、共分散行列 $\Sigma$ を使ってそれを補正した距離です。
+                    </p>
+                    $$d_M(\mathbf{x}, \mathbf{y}) = \sqrt{(\mathbf{x} - \mathbf{y})^T \Sigma^{-1} (\mathbf{x} - \mathbf{y})}$$
+                    <p>式の意味：</p>
+                    <ul>
+                        <li>$(\mathbf{x} - \mathbf{y})$：差のベクトル（縦ベクトル）</li>
+                        <li>$(\mathbf{x} - \mathbf{y})^T$：差のベクトルの転置（横ベクトル）</li>
+                        <li>$\Sigma^{-1}$：共分散行列の逆行列。特徴量間の相関・スケール差を吸収する役割を果たす</li>
+                        <li>$\Sigma = I$（単位行列）のとき、マハラノビス距離はユークリッド距離に一致する</li>
+                    </ul>
+                    <div class="formula-block">
+                        <p>💡 <strong>直感的なイメージ</strong>：身長（cm単位）と体重（kg単位）を使う場合、身長の差 10cm と体重の差 10kg は「同じ 10」でも意味が違います。共分散行列でスケールを揃えることで、フェアな距離計算ができます。</p>
+                    </div>
+                    <p>
+                        共分散行列 $\Sigma$ は、$n$ 個のサンプル $\mathbf{x}_1, \ldots, \mathbf{x}_n$ から次のように推定します（経験（標本）分散共分散行列）：
+                    </p>
+                    $$\hat{\Sigma} = \frac{1}{n} \sum_{i=1}^{n} (\mathbf{x}_i - \bar{\mathbf{x}})(\mathbf{x}_i - \bar{\mathbf{x}})^T, \quad \bar{\mathbf{x}} = \frac{1}{n}\sum_{i=1}^{n}\mathbf{x}_i$$
+                </section>
+
+                <!-- ======== 2. 階層的手法 ======== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-sitemap"></i> ② 階層的クラスタリング</h2>
+
+                    <h3>アルゴリズムの流れ（アグロメラティブ法）</h3>
+                    <p>階層的クラスタリングの代表的な手順（凝集型：下から上へ積み上げていく方法）は以下のとおりです。</p>
+                    <ol>
+                        <li><strong>初期状態</strong>：$n$ 個のサンプルを、それぞれ1つのクラスターとして扱う（$n$ 個のクラスター）</li>
+                        <li><strong>最近傍クラスターを探す</strong>：すべてのクラスターのペアの中で、距離が最小のペアを見つける</li>
+                        <li><strong>クラスターを併合</strong>：選んだペアを1つのクラスターにまとめる（クラスター数が1つ減る）</li>
+                        <li><strong>繰り返す</strong>：クラスターが1つになるまで 2〜3 を繰り返す</li>
+                    </ol>
+                    <p>この過程を樹状図（<strong>デンドログラム</strong>）で描くと、どのクラスターがどの高さ（距離）で結合されたかが一目で分かります。</p>
+
+                    <h3>クラスター間距離の測り方（リンケージ）</h3>
+                    <p>
+                        個々のサンプル間の距離は定義できても、<strong>クラスター同士の距離</strong>はどう測るかで複数の方法があります。
+                        以下では $C_1, C_2$ という 2 つのクラスターの間の距離 $d(C_1, C_2)$ を説明します。
+                    </p>
+
+                    <h4>① 最近隣法（単リンク法 / 最短距離法）</h4>
+                    $$d(C_1, C_2) = \min_{\mathbf{x} \in C_1,\, \mathbf{y} \in C_2} d(\mathbf{x}, \mathbf{y})$$
+                    <p>
+                        2つのクラスターから1点ずつ選ぶすべての組合せで距離を計算し、<strong>その中で最も近い（小さい）距離</strong>をクラスター間距離とします。
+                    </p>
+                    <div class="formula-block">
+                        <p>💡 <strong>直感</strong>：2つのグループで「一番仲良しのペアの距離」でグループ間の近さを測るイメージ。<br>
+                        特性：鎖状の細長いクラスターができやすい（チェーン効果）。</p>
+                    </div>
+
+                    <h4>② 最遠隣法（最長距離法）</h4>
+                    $$d(C_1, C_2) = \max_{\mathbf{x} \in C_1,\, \mathbf{y} \in C_2} d(\mathbf{x}, \mathbf{y})$$
+                    <p><strong>最も遠い（大きい）距離</strong>をクラスター間距離とします。</p>
+                    <div class="formula-block">
+                        <p>💡 <strong>直感</strong>：「2つのグループで最も疎遠なペアの距離」でグループ間の距離を測る。コンパクトで球状のクラスターが得られやすい。</p>
+                    </div>
+
+                    <h4>③ 重心法（セントロイド法）</h4>
+                    $$d_{\text{centroid}}(C_1, C_2) = d(\bar{\mathbf{x}}_1, \bar{\mathbf{x}}_2), \quad \bar{\mathbf{x}}_k = \frac{1}{|C_k|}\sum_{\mathbf{x} \in C_k} \mathbf{x}$$
+                    <p>各クラスターの<strong>重心（平均ベクトル）</strong>を求め、重心間の距離をクラスター間距離とします。</p>
+                    <div class="formula-block">
+                        <p>💡 <strong>直感</strong>：クラスターを「重心=代表点」1点で表し、代表点間の距離を使う。</p>
+                    </div>
+
+                    <h4>④ 群平均法（グループ平均法）</h4>
+                    $$d(C_1, C_2) = \frac{1}{|C_1|\,|C_2|} \sum_{\mathbf{x} \in C_1} \sum_{\mathbf{y} \in C_2} d(\mathbf{x}, \mathbf{y})$$
+                    <p>すべてのペア組合せの距離の<strong>平均</strong>をクラスター間距離とします。</p>
+                    <div class="formula-block">
+                        <p>💡 <strong>直感</strong>：「全員同士の距離を総当たりして平均をとる」公平な方法。最近隣法と最遠隣法の中間的な性質がある。</p>
+                    </div>
+
+                    <h4>⑤ ウォード法</h4>
+                    <p>少し複雑ですが、考え方は「合併するとクラスター内のばらつきがどれだけ増えるか」を最小にする手法です。</p>
+                    <p>クラスター $C$ 内のばらつき（クラスター内二乗和）を次のように定義します。</p>
+                    $$W(C) = \sum_{\mathbf{x} \in C} \|\mathbf{x} - \bar{\mathbf{x}}\|^2$$
+                    <p>ここで $\bar{\mathbf{x}} = \frac{1}{|C|}\sum_{\mathbf{x} \in C}\mathbf{x}$ はクラスター重心です。</p>
+                    <p>$C_1$ と $C_2$ を合併したとき増えるばらつきを「クラスター間距離」として定義します。</p>
+                    $$d_{\text{Ward}}(C_1, C_2) = W(C_1 \cup C_2) - W(C_1) - W(C_2)$$
+                    <p>展開すると以下の公式と同値です。</p>
+                    $$d_{\text{Ward}}(C_1, C_2) = \sum_{\mathbf{z} \in C_1 \cup C_2}\|\mathbf{z} - \bar{\mathbf{z}}\|^2 - \sum_{\mathbf{x} \in C_1}\|\mathbf{x} - \bar{\mathbf{x}}_1\|^2 - \sum_{\mathbf{y} \in C_2}\|\mathbf{y} - \bar{\mathbf{y}}_2\|^2$$
+                    <p>ここで $\bar{\mathbf{z}}$ は $C_1 \cup C_2$ 全体の重心です。</p>
+                    <div class="formula-block">
+                        <p>💡 <strong>重心の加重平均</strong>：合併後の重心は次の式で求まります（逐一全データを足さなくてもよい）。</p>
+                        $$\bar{\mathbf{z}} = \frac{|C_1|\,\bar{\mathbf{x}}_1 + |C_2|\,\bar{\mathbf{x}}_2}{|C_1| + |C_2|}$$
+                        <p>💡 <strong>直感</strong>：「合併してもばらつきがあまり増えないペアを選ぶ」→ コンパクトで自然なクラスターが得られやすい。実務でよく使われる手法。</p>
+                    </div>
+                </section>
+
+                <!-- ======== 3. K-means ======== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-bullseye"></i> ③ K-means法（非階層的クラスタリング）</h2>
+
+                    <h3>考え方</h3>
+                    <p>
+                        K-means 法は「K 個のクラスターに分けたい」と最初から決める方法です。
+                        目標は、<strong>各クラスターの中心からサンプルへの距離の二乗和（目的関数 $J$）を最小にする</strong>クラスター割当を見つけることです。
+                    </p>
+                    <h3>目的関数</h3>
+                    $$J(\{C_k\}) = \sum_{k=1}^{K} \sum_{\mathbf{x}_i \in C_k} \|\mathbf{x}_i - \bar{\boldsymbol{\mu}}_k\|^2$$
+                    <p>式を言葉で解読すると：</p>
+                    <ul>
+                        <li>$\bar{\boldsymbol{\mu}}_k$：クラスター $k$ に属するサンプルの<strong>平均ベクトル（重心）</strong></li>
+                        <li>$\|\mathbf{x}_i - \bar{\boldsymbol{\mu}}_k\|^2$：サンプル $\mathbf{x}_i$ と重心 $\bar{\boldsymbol{\mu}}_k$ の距離の二乗</li>
+                        <li>$\sum_{\mathbf{x}_i \in C_k}$：クラスター $k$ 内のすべてのサンプルについて足す</li>
+                        <li>$\sum_{k=1}^{K}$：全 $K$ クラスターについて足す</li>
+                    </ul>
+                    <p>つまり $J$ は「クラスター内のばらつき（散らばり）の合計」であり、これが小さいほど密なクラスターが得られます。</p>
+
+                    <h3>アルゴリズムの手順</h3>
+                    <p>この最適化問題を厳密に解くのは計算量が大きいため、以下の 2 ステップを繰り返す<strong>反復アルゴリズム</strong>を使います。</p>
+                    <ol>
+                        <li>
+                            <strong>クラスター中心の更新</strong>：現在の割当のもとで、各クラスターの重心（平均）を計算する。
+                            $$\bar{\boldsymbol{\mu}}_k \leftarrow \frac{1}{|C_k|} \sum_{\mathbf{x} \in C_k} \mathbf{x}$$
+                        </li>
+                        <li>
+                            <strong>クラスター割当の更新</strong>：各サンプル $\mathbf{x}_i$ を、距離が最も近い中心のクラスターに再割当する。
+                            $$\text{クラスター}(\mathbf{x}_i) \leftarrow \underset{k \in \{1,\ldots,K\}}{\arg\min}\ \|\mathbf{x}_i - \bar{\boldsymbol{\mu}}_k\|^2$$
+                        </li>
+                    </ol>
+                    <p>割当が変化しなくなったら（収束したら）終了です。目的関数 $J$ はステップごとに単調減少することが保証されています。</p>
+
+                    <div class="formula-block">
+                        <p>⚠️ <strong>初期値依存性</strong>：K-means は最初のクラスター中心の選び方によって解が異なる局所最適解に収束します。対策として：</p>
+                        <ul>
+                            <li>異なる初期値で複数回実行し、$J$ が最小の結果を採用する</li>
+                            <li><strong>K-means++</strong>：最初の重心を1つランダムに選び、以降「既存の重心から遠いほど選ばれやすい」ように確率的に初期重心を選ぶ方法</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======== 4. 混合分布 ======== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-chart-pie"></i> ④ 混合分布と EM アルゴリズムによるクラスタリング</h2>
+                    <p>
+                        データが「$K$ 種類の確率分布の混合から生成された」とモデル化する方法です。
+                        たとえば「2つのグループがそれぞれガウス分布に従う」と仮定するのが混合ガウス分布（GMM）です。
+                    </p>
+                    <h3>混合分布の式</h3>
+                    $$f(\mathbf{x};\{\pi_k, \theta_k\}_{k=1}^{K}) = \sum_{k=1}^{K} \pi_k f_k(\mathbf{x}; \theta_k)$$
+                    <p>各記号の意味：</p>
+                    <ul>
+                        <li>$f_k(\mathbf{x}; \theta_k)$：$k$ 番目のクラスターの確率密度関数（パラメータ $\theta_k$ をもつ）</li>
+                        <li>$\pi_k$：$k$ 番目のクラスターの<strong>混合比（重み）</strong>。$\pi_k \ge 0$ かつ $\sum_{k=1}^{K}\pi_k = 1$</li>
+                    </ul>
+                    <p>
+                        あるサンプル $\mathbf{x}$ がクラスター $k$ に属する確率は $\pi_k f_k(\mathbf{x};\theta_k)$ に比例します。
+                        パラメータ $\pi_k, \theta_k$ の推定には<strong>EM アルゴリズム</strong>（29章参照）が用いられます。
+                    </p>
+                    <div class="formula-block">
+                        <p>💡 <strong>K-means との違い</strong>：K-means では各サンプルを「どれか1つのクラスターに必ず割当」（ハード割当）しますが、混合分布では「クラスター $k$ に属する確率が $p_{ik}$」という<strong>ソフト割当</strong>が可能です。</p>
+                    </div>
+                </section>
+
+                <!-- ======== 5. 例題 ======== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習（問24.1）</h2>
+                    <div class="example-block">
+                        <p>
+                            <strong>問24.1</strong>　TripAdvisor の 6 人のユーザが、レストラン・劇場・ビーチに与えた平均評価点データを使う。
+                        </p>
+
+                        <h3>データ確認</h3>
+                        <p>各ユーザのデータ（3次元ベクトル）：</p>
+                        <div style="overflow-x:auto;">
+                        <table style="border-collapse:collapse; width:100%; text-align:center; margin: 1em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="border:1px solid #ccc; padding:8px;">ユーザ</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">レストラン</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">劇場</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">ビーチ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:8px;">1</td><td style="border:1px solid #ccc; padding:8px;">7.7</td><td style="border:1px solid #ccc; padding:8px;">5.8</td><td style="border:1px solid #ccc; padding:8px;">7.7</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px;">2</td><td style="border:1px solid #ccc; padding:8px;">10.1</td><td style="border:1px solid #ccc; padding:8px;">5.9</td><td style="border:1px solid #ccc; padding:8px;">7.3</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px;">3</td><td style="border:1px solid #ccc; padding:8px;">4.9</td><td style="border:1px solid #ccc; padding:8px;">4.1</td><td style="border:1px solid #ccc; padding:8px;">7.9</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px;">4</td><td style="border:1px solid #ccc; padding:8px;">4.8</td><td style="border:1px solid #ccc; padding:8px;">5.0</td><td style="border:1px solid #ccc; padding:8px;">9.0</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px;">5</td><td style="border:1px solid #ccc; padding:8px;">6.4</td><td style="border:1px solid #ccc; padding:8px;">3.7</td><td style="border:1px solid #ccc; padding:8px;">8.0</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px;">6</td><td style="border:1px solid #ccc; padding:8px;">4.0</td><td style="border:1px solid #ccc; padding:8px;">5.2</td><td style="border:1px solid #ccc; padding:8px;">11.6</td></tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <h3>ユークリッド距離行列の確認</h3>
+                        <p>例として $d(\mathbf{x}_3, \mathbf{x}_4)$ を計算して確認してみましょう。</p>
+                        $$d(\mathbf{x}_3, \mathbf{x}_4) = \sqrt{(4.9-4.8)^2 + (4.1-5.0)^2 + (7.9-9.0)^2}$$
+                        $$= \sqrt{(0.1)^2 + (-0.9)^2 + (-1.1)^2} = \sqrt{0.01 + 0.81 + 1.21} = \sqrt{2.03} \approx 1.4$$
+                        <p>✅ 距離行列の $(3,4)$ 成分 $1.4$ と一致。これが<strong>6人の中で最も小さい距離</strong>なので、階層的クラスタリングではユーザ3と4が最初に結合されます。</p>
+
+                        <div style="overflow-x:auto;">
+                        <table style="border-collapse:collapse; width:100%; text-align:center; margin: 1em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="border:1px solid #ccc; padding:8px;"></th>
+                                    <th style="border:1px solid #ccc; padding:8px;">1</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">2</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">3</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">4</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">5</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">6</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">1</td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px;">2.4</td><td style="border:1px solid #ccc; padding:8px;">3.3</td><td style="border:1px solid #ccc; padding:8px;">3.3</td><td style="border:1px solid #ccc; padding:8px;">2.5</td><td style="border:1px solid #ccc; padding:8px;">5.4</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">2</td><td style="border:1px solid #ccc; padding:8px;">2.4</td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px;">5.5</td><td style="border:1px solid #ccc; padding:8px;">5.6</td><td style="border:1px solid #ccc; padding:8px;">4.4</td><td style="border:1px solid #ccc; padding:8px;">7.5</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">3</td><td style="border:1px solid #ccc; padding:8px;">3.3</td><td style="border:1px solid #ccc; padding:8px;">5.5</td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>1.4 ★</strong></td><td style="border:1px solid #ccc; padding:8px;">1.6</td><td style="border:1px solid #ccc; padding:8px;">4.0</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">4</td><td style="border:1px solid #ccc; padding:8px;">3.3</td><td style="border:1px solid #ccc; padding:8px;">5.6</td><td style="border:1px solid #ccc; padding:8px; background:#ffe0b2;"><strong>1.4 ★</strong></td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px;">2.3</td><td style="border:1px solid #ccc; padding:8px;">2.7</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">5</td><td style="border:1px solid #ccc; padding:8px;">2.5</td><td style="border:1px solid #ccc; padding:8px;">4.4</td><td style="border:1px solid #ccc; padding:8px;">1.6</td><td style="border:1px solid #ccc; padding:8px;">2.3</td><td style="border:1px solid #ccc; padding:8px;">0.0</td><td style="border:1px solid #ccc; padding:8px;">4.6</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px; font-weight:bold;">6</td><td style="border:1px solid #ccc; padding:8px;">5.4</td><td style="border:1px solid #ccc; padding:8px;">7.5</td><td style="border:1px solid #ccc; padding:8px;">4.0</td><td style="border:1px solid #ccc; padding:8px;">2.7</td><td style="border:1px solid #ccc; padding:8px;">4.6</td><td style="border:1px solid #ccc; padding:8px;">0.0</td></tr>
+                            </tbody>
+                        </table>
+                        </div>
+
+                        <hr>
+
+                        <h3>[1] デンドログラムの対応とラベルの特定</h3>
+                        <div class="answer-block">
+                            <p><strong>答：(a) が最遠隣法、(b) が最近隣法</strong><br>
+                               A, C, D, E, F のユーザ対応：A = 3（または 4）、B = 6、C = 4（または 3）、D = 2（または 1）、E = 1（または 2）、F = 5</p>
+                        </div>
+
+                        <h4>解き方を順番に追いかける</h4>
+                        <p><strong>ステップ 1：最初に結合されるペアを特定</strong></p>
+                        <p>距離行列を見ると、最も小さい非対角成分は $d(3, 4) = 1.4$ です。よってどちらの手法でも最初に<strong>ユーザ3とユーザ4が結合</strong>されます。デンドログラムの最初に結合されるノードが $A$ と $C$（または $C$ と $A$）なので：</p>
+                        $$\{A,\, C\} = \{3,\, 4\}$$
+
+                        <p><strong>ステップ 2：{3,4}に次に結合するのは誰？</strong></p>
+                        <p>デンドログラムでは $\{A,C\}$ と $F$ が次に結合されています。これを特定します。</p>
+                        <p>どちらの手法でも $\{3,4\}$ と他のユーザとの距離を計算できます（最近隣法で計算）：</p>
+                        <ul>
+                            <li>$d(\{3,4\},\ 1) = \min\{d(3,1), d(4,1)\} = \min\{3.3, 3.3\} = 3.3$</li>
+                            <li>$d(\{3,4\},\ 2) = \min\{d(3,2), d(4,2)\} = \min\{5.5, 5.6\} = 5.5$</li>
+                            <li>$d(\{3,4\},\ 5) = \min\{d(3,5), d(4,5)\} = \min\{1.6, 2.3\} = 1.6$ ← 最小！</li>
+                            <li>$d(\{3,4\},\ 6) = \min\{d(3,6), d(4,6)\} = \min\{4.0, 2.7\} = 2.7$</li>
+                        </ul>
+                        <p>最小は $d(\{3,4\},5) = 1.6$ なので $F = 5$ です。</p>
+                        $$\{A,\, C,\, F\} = \{3,\, 4,\, 5\}$$
+
+                        <p><strong>ステップ 3：残りの {1, 2, 6} の割当</strong></p>
+                        <p>残り $\{1, 2, 6\}$ の中で最も距離が小さいのは $d(1, 2) = 2.4$ です。デンドログラムで $E, D$ が結合されているので：</p>
+                        $$\{E,\, D\} = \{1,\, 2\}$$
+                        <p>残った 6 が $B$：</p>
+                        $$B = 6$$
+
+                        <p><strong>ステップ 4：(a)(b) のどちらが最近隣か最遠隣かを判定</strong></p>
+                        <p>$\{3,4,5\}$ と $\{1,2\}$ の距離、$\{3,4,5\}$ と $\{6\}$ の距離を比較します。</p>
+                        <p>最近隣法で計算すると：</p>
+                        $$d_{\min}(\{3,4,5\},\, \{1,2\}) = \min\{d(3,1),d(3,2),d(4,1),d(4,2),d(5,1),d(5,2)\}$$
+                        $$= \min\{3.3, 5.5, 3.3, 5.6, 2.5, 4.4\} = 2.5$$
+                        $$d_{\min}(\{3,4,5\},\, \{6\}) = \min\{d(3,6),d(4,6),d(5,6)\} = \min\{4.0, 2.7, 4.6\} = 2.7$$
+                        <p>最近隣法では $2.5 < 2.7$ なので、$\{3,4,5\}$ と $\{1,2\}$ が先に結合されます（デンドログラム (b) の形）。</p>
+                        <p>最遠隣法で計算すると：</p>
+                        $$d_{\max}(\{3,4,5\},\, \{1,2\}) = \max\{3.3, 5.5, 3.3, 5.6, 2.5, 4.4\} = 5.6$$
+                        $$d_{\max}(\{3,4,5\},\, \{6\}) = \max\{4.0, 2.7, 4.6\} = 4.6$$
+                        <p>最遠隣法では $4.6 < 5.6$ なので、$\{3,4,5\}$ と $\{6\}$ が先に結合されます（デンドログラム (a) の形）。</p>
+                        <div class="formula-block">
+                            <p>✅ <strong>結論</strong>：(a) が<strong>最遠隣法</strong>、(b) が<strong>最近隣法</strong></p>
+                        </div>
+
+                        <hr>
+
+                        <h3>[2] K-means法（K=2）の実行</h3>
+                        <p>初期クラスター中心：$\boldsymbol{\mu}_1^{(0)} = (9, 6, 7)$、$\boldsymbol{\mu}_2^{(0)} = (5, 5, 10)$</p>
+
+                        <h4>ステップ 1：各サンプルとの距離計算（クラスター割当）</h4>
+                        <p>各ユーザのベクトルと 2 つの初期中心とのユークリッド距離を計算します。</p>
+
+                        <p><strong>ユーザ 1：$\mathbf{x}_1 = (7.7, 5.8, 7.7)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_1) = \sqrt{(9-7.7)^2 + (6-5.8)^2 + (7-7.7)^2}$$
+                        $$= \sqrt{1.69 + 0.04 + 0.49} = \sqrt{2.22} \approx 1.49$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_1) = \sqrt{(5-7.7)^2 + (5-5.8)^2 + (10-7.7)^2}$$
+                        $$= \sqrt{7.29 + 0.64 + 5.29} = \sqrt{13.22} \approx 3.64$$
+                        <p>$1.49 < 3.64$ なので ユーザ 1 → $C_1$</p>
+
+                        <p><strong>ユーザ 2：$\mathbf{x}_2 = (10.1, 5.9, 7.3)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_2) = \sqrt{(9-10.1)^2 + (6-5.9)^2 + (7-7.3)^2}$$
+                        $$= \sqrt{1.21 + 0.01 + 0.09} = \sqrt{1.31} \approx 1.14$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_2) = \sqrt{(5-10.1)^2 + (5-5.9)^2 + (10-7.3)^2}$$
+                        $$= \sqrt{26.01 + 0.81 + 7.29} = \sqrt{34.11} \approx 5.84$$
+                        <p>$1.14 < 5.84$ なので ユーザ 2 → $C_1$</p>
+
+                        <p><strong>ユーザ 3：$\mathbf{x}_3 = (4.9, 4.1, 7.9)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_3) = \sqrt{(9-4.9)^2 + (6-4.1)^2 + (7-7.9)^2}$$
+                        $$= \sqrt{16.81 + 3.61 + 0.81} = \sqrt{21.23} \approx 4.61$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_3) = \sqrt{(5-4.9)^2 + (5-4.1)^2 + (10-7.9)^2}$$
+                        $$= \sqrt{0.01 + 0.81 + 4.41} = \sqrt{5.23} \approx 2.29$$
+                        <p>$2.29 < 4.61$ なので ユーザ 3 → $C_2$</p>
+
+                        <p><strong>ユーザ 4：$\mathbf{x}_4 = (4.8, 5.0, 9.0)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_4) = \sqrt{(9-4.8)^2 + (6-5.0)^2 + (7-9.0)^2}$$
+                        $$= \sqrt{17.64 + 1.00 + 4.00} = \sqrt{22.64} \approx 4.76$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_4) = \sqrt{(5-4.8)^2 + (5-5.0)^2 + (10-9.0)^2}$$
+                        $$= \sqrt{0.04 + 0.00 + 1.00} = \sqrt{1.04} \approx 1.02$$
+                        <p>$1.02 < 4.76$ なので ユーザ 4 → $C_2$</p>
+
+                        <p><strong>ユーザ 5：$\mathbf{x}_5 = (6.4, 3.7, 8.0)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_5) = \sqrt{(9-6.4)^2 + (6-3.7)^2 + (7-8.0)^2}$$
+                        $$= \sqrt{6.76 + 5.29 + 1.00} = \sqrt{13.05} \approx 3.61$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_5) = \sqrt{(5-6.4)^2 + (5-3.7)^2 + (10-8.0)^2}$$
+                        $$= \sqrt{1.96 + 1.69 + 4.00} = \sqrt{7.65} \approx 2.77$$
+                        <p>$2.77 < 3.61$ なので ユーザ 5 → $C_2$</p>
+
+                        <p><strong>ユーザ 6：$\mathbf{x}_6 = (4.0, 5.2, 11.6)$</strong></p>
+                        $$d(\boldsymbol{\mu}_1^{(0)}, \mathbf{x}_6) = \sqrt{(9-4.0)^2 + (6-5.2)^2 + (7-11.6)^2}$$
+                        $$= \sqrt{25.00 + 0.64 + 21.16} = \sqrt{46.80} \approx 6.84$$
+                        $$d(\boldsymbol{\mu}_2^{(0)}, \mathbf{x}_6) = \sqrt{(5-4.0)^2 + (5-5.2)^2 + (10-11.6)^2}$$
+                        $$= \sqrt{1.00 + 0.04 + 2.56} = \sqrt{3.60} \approx 1.90$$
+                        <p>$1.90 < 6.84$ なので ユーザ 6 → $C_2$</p>
+
+                        <div class="formula-block">
+                            <p>✅ <strong>割当結果</strong>：$C_1 = \{1, 2\}$、$C_2 = \{3, 4, 5, 6\}$</p>
+                        </div>
+
+                        <h4>ステップ 2：クラスター中心の更新</h4>
+                        <p><strong>クラスター $C_1 = \{1, 2\}$ の新しい重心 $\bar{\boldsymbol{\mu}}_1$</strong>：</p>
+                        $$\bar{\boldsymbol{\mu}}_1 = \frac{1}{2}(\mathbf{x}_1 + \mathbf{x}_2) = \frac{1}{2}\big((7.7, 5.8, 7.7) + (10.1, 5.9, 7.3)\big)$$
+                        $$= \frac{1}{2}(17.8,\ 11.7,\ 15.0) = (8.9,\ 5.9,\ 7.5)$$
+
+                        <p><strong>クラスター $C_2 = \{3, 4, 5, 6\}$ の新しい重心 $\bar{\boldsymbol{\mu}}_2$</strong>：</p>
+                        $$\bar{\boldsymbol{\mu}}_2 = \frac{1}{4}(\mathbf{x}_3 + \mathbf{x}_4 + \mathbf{x}_5 + \mathbf{x}_6)$$
+                        $$= \frac{1}{4}\big((4.9,4.1,7.9) + (4.8,5.0,9.0) + (6.4,3.7,8.0) + (4.0,5.2,11.6)\big)$$
+                        <p>各次元ごとに：</p>
+                        <ul>
+                            <li>レストラン：$\frac{4.9+4.8+6.4+4.0}{4} = \frac{20.1}{4} = 5.025 \approx 5.0$</li>
+                            <li>劇場：$\frac{4.1+5.0+3.7+5.2}{4} = \frac{18.0}{4} = 4.5$</li>
+                            <li>ビーチ：$\frac{7.9+9.0+8.0+11.6}{4} = \frac{36.5}{4} = 9.125 \approx 9.1$</li>
+                        </ul>
+                        $$\bar{\boldsymbol{\mu}}_2 \approx (5.0,\ 4.5,\ 9.1)$$
+
+                        <h4>ステップ 3：収束判定</h4>
+                        <p>新しい中心 $(8.9, 5.9, 7.5)$ と $(5.0, 4.5, 9.1)$ をもとに再割当すると、割当が変化しないことが確認できます（重心が各ユーザのもとのクラスター外に近づかない）。よって<strong>1回の繰り返しで収束</strong>します。</p>
+
+                        <div class="formula-block">
+                            <p>✅ <strong>最終的なクラスター中心（小数点以下1位まで）：</strong></p>
+                            <ul>
+                                <li>$\bar{\boldsymbol{\mu}}_1 = (8.9,\ 5.9,\ 7.5)$ → レストランと劇場の評価が高めのグループ</li>
+                                <li>$\bar{\boldsymbol{\mu}}_2 = (5.0,\ 4.5,\ 9.1)$ → ビーチ評価が高めのグループ</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======== 6. まとめ ======== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> まとめと注意点</h2>
+                    <div class="formula-block">
+                        <table style="border-collapse:collapse; width:100%;">
+                            <thead><tr style="background:#f0f4ff;">
+                                <th style="border:1px solid #ccc; padding:8px;">手法</th>
+                                <th style="border:1px solid #ccc; padding:8px;">計算量</th>
+                                <th style="border:1px solid #ccc; padding:8px;">特徴</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr><td style="border:1px solid #ccc; padding:8px;">階層的クラスタリング</td><td style="border:1px solid #ccc; padding:8px;">$O(n^2)$</td><td style="border:1px solid #ccc; padding:8px;">デンドログラムで可視化可。Kを事前決定不要</td></tr>
+                                <tr style="background:#fafafa;"><td style="border:1px solid #ccc; padding:8px;">K-means法</td><td style="border:1px solid #ccc; padding:8px;">$O(nK)$</td><td style="border:1px solid #ccc; padding:8px;">大規模データに適用可。K を事前決定が必要</td></tr>
+                                <tr><td style="border:1px solid #ccc; padding:8px;">混合分布（GMM）</td><td style="border:1px solid #ccc; padding:8px;">—</td><td style="border:1px solid #ccc; padding:8px;">ソフト割当・確率的解釈が可能。EM法で推定</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ul>
+                        <li>クラスター分析の結果は<strong>距離尺度</strong>（ユークリッド, マハラノビス, etc.）と<strong>リンケージ手法</strong>（最近隣, 最遠隣, ウォード, etc.）の両方に大きく依存する。</li>
+                        <li>K-means は初期値依存性があるため、複数回実行して目的関数 $J$ 最小の結果を採用すること。</li>
+                        <li>サンプルサイズが大きい（$n$ が大きい）場合、$O(n^2)$ の階層的手法は計算が重くなるので K-means が有利。</li>
+                        <li>ウォード法は球状のコンパクトなクラスターを見つけやすく、実務では特によく使われる。</li>
+                        <li>混合分布によるクラスタリングの詳細は <strong>29章（EMアルゴリズム）</strong>で扱う。</li>
                     </ul>
                 </section>
 
