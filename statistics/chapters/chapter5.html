@@ -8,146 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <link rel="stylesheet" href="../style.css">
-
-    <style>
-        /* ── 追加スタイル ── */
-        .concept-box {
-            background: #f0f9ff;
-            border: 1.5px solid #7dd3fc;
-            border-left: 5px solid #0ea5e9;
-            border-radius: 8px;
-            padding: 16px 20px;
-            margin: 14px 0;
-        }
-        .concept-box .box-title {
-            font-weight: 700;
-            color: #0369a1;
-            margin-bottom: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        .memo-box {
-            background: #fdf4ff;
-            border: 1.5px solid #d8b4fe;
-            border-left: 5px solid #a855f7;
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin: 12px 0;
-        }
-        .memo-box .box-title {
-            font-weight: 700;
-            color: #7e22ce;
-            margin-bottom: 6px;
-        }
-        .warn-box {
-            background: #fff7ed;
-            border: 1.5px solid #fdba74;
-            border-left: 5px solid #f97316;
-            border-radius: 8px;
-            padding: 14px 18px;
-            margin: 12px 0;
-        }
-        .warn-box .box-title {
-            font-weight: 700;
-            color: #c2410c;
-            margin-bottom: 6px;
-        }
-        .step-list {
-            counter-reset: step-counter;
-            list-style: none !important;
-            padding-left: 0 !important;
-        }
-        .step-list li {
-            counter-increment: step-counter;
-            position: relative;
-            padding-left: 38px;
-            margin-bottom: 10px;
-        }
-        .step-list li::before {
-            content: counter(step-counter);
-            position: absolute;
-            left: 0;
-            top: 2px;
-            width: 26px;
-            height: 26px;
-            background: #2563eb;
-            color: white;
-            border-radius: 50%;
-            font-size: 13px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .section-anchor {
-            padding-top: 72px;
-            margin-top: -72px;
-        }
-        .toc-box {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px 28px;
-            margin-bottom: 20px;
-        }
-        .toc-box h2 {
-            font-size: 15px;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 12px;
-            padding-bottom: 8px;
-            border-bottom: 2px solid #eff6ff;
-        }
-        .toc-box ol {
-            list-style: decimal;
-            padding-left: 20px;
-            color: #475569;
-            font-size: 14px;
-            line-height: 2;
-        }
-        .toc-box ol a {
-            color: #2563eb;
-            text-decoration: none;
-        }
-        .toc-box ol a:hover {
-            text-decoration: underline;
-        }
-        .dist-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 14px;
-            margin: 14px 0;
-        }
-        .dist-table th {
-            background: #eff6ff;
-            color: #1e40af;
-            border: 1px solid #bfdbfe;
-            padding: 8px 12px;
-            text-align: center;
-            font-weight: 700;
-        }
-        .dist-table td {
-            border: 1px solid #e2e8f0;
-            padding: 8px 12px;
-            text-align: center;
-            background: white;
-            vertical-align: middle;
-        }
-        .dist-table tr:hover td {
-            background: #f8fafc;
-        }
-        .prob-badge {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 20px;
-            margin-left: 6px;
-        }
-        .badge-q { background: #fef3c7; color: #92400e; }
-        .badge-a { background: #d1fae5; color: #065f46; }
-    </style>
 </head>
 <body data-chapter="5">
 
@@ -177,25 +37,29 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <!-- ====== 目次 ====== -->
-                <div class="toc-box">
-                    <h2><i class="fas fa-list" style="color:#2563eb;margin-right:6px;"></i>目次</h2>
-                    <ol>
-                        <li><a href="#intro">離散型確率分布とは何か</a></li>
-                        <li><a href="#uniform">離散一様分布</a></li>
-                        <li><a href="#bernoulli">ベルヌーイ分布</a></li>
-                        <li><a href="#binomial">二項分布</a></li>
-                        <li><a href="#hypergeometric">超幾何分布</a></li>
-                        <li><a href="#poisson">ポアソン分布</a></li>
-                        <li><a href="#geometric">幾何分布</a></li>
-                        <li><a href="#negbin">負の二項分布</a></li>
-                        <li><a href="#multinomial">多項分布</a></li>
-                        <li><a href="#relations">分布間の関係まとめ</a></li>
-                        <li><a href="#problems">例題・演習（オリジナル問題）</a></li>
-                    </ol>
-                </div>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">離散型分布とは</a></li>
+                            <li><a href="#uniform">離散一様分布</a></li>
+                            <li><a href="#bernoulli">ベルヌーイ分布</a></li>
+                            <li><a href="#binomial">二項分布</a></li>
+                            <li><a href="#hypergeometric">超幾何分布</a></li>
+                            <li><a href="#poisson">ポアソン分布</a></li>
+                            <li><a href="#geometric">幾何分布</a></li>
+                            <li><a href="#negbin">負の二項分布</a></li>
+                            <li><a href="#multinomial">多項分布</a></li>
+                            <li><a href="#relations">分布間の関係</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
 
                 <!-- ====== 1. 離散型確率分布とは ====== -->
                 <section class="content-section section-anchor" id="intro">
@@ -1154,7 +1018,8 @@
                     </a>
                 </nav>
 
-            </div>
+                </div><!-- /.chapter-content -->
+            </div><!-- /.chapter-layout -->
         </div>
     </main>
 
@@ -1164,13 +1029,10 @@
         </div>
     </footer>
 
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
-        onload="renderMathInElement(document.body, {
-            delimiters: [
-                {left: '$$', right: '$$', display: true},
-                {left: '$', right: '$', display: false}
-            ]
-        });"></script>
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 </body>
 </html>
