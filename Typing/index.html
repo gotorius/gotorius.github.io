@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>タイピング道場 - ことわざで学ぶタイピング練習</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== 共通ナビバー ===== -->
+  <nav class="navbar">
+        <div class="nav-container">
+            <a href="javascript:void(0)" id="nav-home" class="nav-logo">タイピング道場</a>
+            <ul class="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../statistics/index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="#" class="active"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+  <main class="main-content">
+
+    <!-- ===== ホーム画面（説明ページ） ===== -->
+    <section id="home-screen" class="home-screen">
+      <!-- Hero -->
+      <div class="hero">
+        <span class="hero-badge">
+          <i class="fas fa-keyboard"></i> タイピング練習
+        </span>
+        <h1 class="hero-title">タイピング道場</h1>
+        <p class="hero-subtitle">ことわざや名言を覚えながら、タイピングスキルを鍛えよう</p>
+        <div class="hero-actions">
+        </div>
+      </div>
+
+      <!-- モードカード -->
+      <div class="mode-grid">
+        <div class="mode-card" id="mode-card-proverbs">
+          <div class="mode-card-icon"><i class="fas fa-book-open"></i></div>
+          <div class="mode-card-body">
+            <h3>ことわざモード</h3>
+            <p>日本のことわざ<strong>500</strong>問をランダム出題。ことわざ本文と意味の2フェーズで練習。</p>
+          </div>
+          <span class="mode-card-badge">500問</span>
+        </div>
+        <div class="mode-card" id="mode-card-quotes">
+          <div class="mode-card-icon"><i class="fas fa-quote-left"></i></div>
+          <div class="mode-card-body">
+            <h3>名言モード</h3>
+            <p>古今東西の偉人の名言<strong>500</strong>問。名言と人名の2フェーズで練習。</p>
+          </div>
+          <span class="mode-card-badge">500問</span>
+        </div>
+      </div>
+
+      <div class="how-to">
+        <h2><i class="fas fa-info-circle"></i> 遊び方</h2>
+        <ol class="how-to-steps">
+          <li><span class="step-num">1</span>上のメニューバーからモードを選択</li>
+          <li><span class="step-num">2</span>スペースキーを押してカウントダウン開始</li>
+          <li><span class="step-num">3</span>表示されたひらがなをローマ字で入力</li>
+          <li><span class="step-num">4</span>10問終了後、速度・正確率の結果を確認</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ===== カウントダウンオーバーレイ ===== -->
+    <div id="countdown-overlay" class="countdown-overlay hidden">
+      <div id="countdown-number" class="countdown-number">3</div>
+    </div>
+
+    <!-- ===== タイピング画面 ===== -->
+    <section id="typing-area" class="typing-area hidden">
+
+      <!-- プログレスバー -->
+      <div class="progress-container">
+        <div class="progress-bar">
+          <div id="progress-bar-fill" class="progress-bar-fill"></div>
+        </div>
+        <span id="progress-text" class="progress-text">1 / 10</span>
+      </div>
+
+      <!-- スペースキー案内 -->
+      <div id="space-prompt" class="space-prompt">
+        <div class="space-prompt-text">スペースキーを押してスタート</div>
+      </div>
+
+      <!-- 問題表示 -->
+      <div id="question-section" class="question-section hidden">
+        <div class="question-box">
+          <div id="question-label" class="question-label">📖 ことわざ</div>
+          <div id="question-text" class="question-text"></div>
+          <div id="kana-display" class="kana-display"></div>
+          <div id="romaji-display" class="romaji-display"></div>
+        </div>
+
+        <!-- キーボードガイド -->
+        <div class="keyboard-section">
+          <div id="finger-label" class="finger-label"></div>
+          <div id="keyboard-container" class="keyboard-container"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===== 結果画面 ===== -->
+    <section id="result-screen" class="result-screen hidden">
+      <h2>🎉 結果発表</h2>
+      <div id="result-rating" class="result-rating"></div>
+      <div id="result-comment" class="result-comment"></div>
+
+      <div class="result-grid">
+        <div class="result-item">
+          <div class="result-label">タイピング速度</div>
+          <div class="result-value"><span id="result-wpm">0</span> WPM</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">正確率</div>
+          <div class="result-value" id="result-accuracy">100%</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">ミス数</div>
+          <div class="result-value" id="result-miss">0</div>
+        </div>
+        <div class="result-item">
+          <div class="result-label">所要時間</div>
+          <div class="result-value" id="result-time">0:00</div>
+        </div>
+        <div class="result-item" style="grid-column: 1 / -1;">
+          <div class="result-label">入力文字数</div>
+          <div class="result-value" id="result-chars">0</div>
+        </div>
+      </div>
+
+      <div class="result-actions">
+        <button id="retry-btn" class="retry-btn">もう一度挑戦する</button>
+        <button id="home-btn" class="home-btn">ホームに戻る</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- スクリプト読み込み（順序重要） -->
+  <script src="data.js"></script>
+  <script src="romaji.js"></script>
+  <script src="sound.js"></script>
+  <script src="keyboard.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>

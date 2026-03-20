@@ -3,6 +3,23 @@
  * ハブページとチャプターページの両方で使用
  */
 document.addEventListener('DOMContentLoaded', () => {
+    // 共通ナビバー: モバイルハンバーガーメニュー
+    const navToggle = document.querySelector('.nav-toggle');
+    const navMenu = document.querySelector('.nav-menu');
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+        // メニュー外クリックで閉じる
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                navToggle.classList.remove('active');
+                navMenu.classList.remove('active');
+            }
+        });
+    }
+
     const isHub = document.getElementById('chapter-grid');
     isHub ? initHub() : initChapter();
 });

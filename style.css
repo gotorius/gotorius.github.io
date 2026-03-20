@@ -41,7 +41,7 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 80px;
+    scroll-padding-top: 64px;
 }
 
 body {
@@ -156,13 +156,13 @@ strong {
 }
 
 .nav-container {
-    max-width: var(--container-max);
+    max-width: 1200px;
     margin: 0 auto;
     padding: 0 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    height: 72px;
+    height: 60px;
 }
 
 .nav-logo {
@@ -175,18 +175,22 @@ strong {
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: 36px;
+    gap: 28px;
 }
 
-.nav-menu a {
+/* トップレベルのリンク（Home） */
+.nav-menu > li > a {
     font-size: 0.9rem;
     font-weight: 500;
     color: var(--text-secondary);
     position: relative;
     padding: 4px 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
 }
 
-.nav-menu a::after {
+.nav-menu > li > a::after {
     content: '';
     position: absolute;
     bottom: 0;
@@ -197,14 +201,81 @@ strong {
     transition: width var(--transition);
 }
 
-.nav-menu a:hover,
-.nav-menu a.active {
+.nav-menu > li > a:hover,
+.nav-menu > li > a.active {
     color: var(--primary);
 }
 
-.nav-menu a:hover::after,
-.nav-menu a.active::after {
+.nav-menu > li > a:hover::after,
+.nav-menu > li > a.active::after {
     width: 100%;
+}
+
+/* ===== ドロップダウン ===== */
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-dropdown-toggle .fa-chevron-down {
+    font-size: 0.6rem;
+    transition: transform 0.2s;
+}
+
+.nav-dropdown:hover .nav-dropdown-toggle .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    min-width: 200px;
+    background: #ffffff;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    padding: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s;
+    z-index: 500;
+    list-style: none;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* ドロップダウン内部リンク: アンダーラインなし */
+.nav-dropdown-menu li a {
+    display: flex !important;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px !important;
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--gray-700) !important;
+    border-radius: 8px;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.nav-dropdown-menu li a::after {
+    display: none !important;
+}
+
+.nav-dropdown-menu li a:hover {
+    background: var(--gray-50);
+    color: var(--primary) !important;
+}
+
+.nav-dropdown-menu li a.active {
+    color: var(--primary) !important;
+    background: #eff6ff;
+    font-weight: 600;
 }
 
 .nav-toggle {
@@ -1186,7 +1257,7 @@ strong {
 
     .nav-menu {
         position: fixed;
-        top: 72px;
+        top: 60px;
         left: 0;
         right: 0;
         background: white;
@@ -1202,15 +1273,44 @@ strong {
     }
 
     .nav-menu.active {
-        max-height: 400px;
+        max-height: 500px;
         padding: 16px 0;
     }
 
-    .nav-menu a {
-        display: block;
-        padding: 16px 24px;
+    .nav-menu > li {
         width: 100%;
         text-align: center;
+    }
+
+    .nav-menu > li > a {
+        display: flex;
+        justify-content: center;
+        padding: 14px 24px;
+        width: 100%;
+    }
+
+    /* モバイル: ドロップダウンは常に展開表示 */
+    .nav-dropdown-menu {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: none;
+        border-top: 1px solid var(--gray-100);
+        border-radius: 0;
+        background: var(--gray-50);
+        padding: 4px 0;
+        min-width: unset;
+    }
+
+    .nav-dropdown:hover .nav-dropdown-menu {
+        transform: none;
+    }
+
+    .nav-dropdown-menu li a {
+        justify-content: center;
+        padding: 12px 24px !important;
     }
 
     .nav-toggle {

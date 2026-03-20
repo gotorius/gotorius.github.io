@@ -10,13 +10,29 @@
     <link rel="stylesheet" href="../style.css">
 </head>
 <body data-chapter="2">
-    <nav class="stat-nav">
-        <div class="nav-inner">
-            <a href="../index.html" class="nav-back">
-                <i class="fas fa-arrow-left"></i>
-                <span>目次に戻る</span>
-            </a>
-            <span class="nav-title" id="nav-chapter-label"></span>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
