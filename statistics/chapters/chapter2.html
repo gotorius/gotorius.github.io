@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="2">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <!-- ===== 概要 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>
+                        第2章では、確率変数の分布を「道具」を使って体系的に分析する方法を学びます。
+                        具体的には次の4つのテーマを扱います。
+                    </p>
+                    <ol>
+                        <li><strong>累積分布関数（CDF）・生存関数・ハザード関数</strong>：確率変数がある値以下になる確率を関数として捉える</li>
+                        <li><strong>同時分布・周辺分布・条件付き分布</strong>：2つ以上の確率変数の「関係」を記述する</li>
+                        <li><strong>確率母関数（PGF）・モーメント母関数（MGF）</strong>：確率分布を1つの関数として要約し、期待値・分散を機械的に求める</li>
+                        <li><strong>母関数の応用</strong>：独立な確率変数の和の分布を効率よく求める</li>
+                    </ol>
+                    <p>
+                        <strong>この章のキモ：</strong>母関数を使うと、複雑な計算を「微分するだけ」に変換できます。
+                        また「独立な変数の和 → 母関数の積」という性質により、和の分布を直接計算せずに特定できます。
+                    </p>
+                    <p><strong>キーワード：</strong>累積分布関数、生存関数、ハザード関数、同時確率密度関数、周辺確率密度関数、条件付き確率密度関数、モーメント母関数（積率母関数）、確率母関数</p>
+                </section>
+
+                <!-- ===== 1. 累積分布関数と生存関数 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-chart-line"></i> 1．累積分布関数・生存関数・ハザード関数</h2>
+
+                    <h3>累積分布関数（CDF）とは</h3>
+                    <p>
+                        確率変数 $X$ の <strong>累積分布関数（cumulative distribution function, CDF）</strong> $F(x)$ は
+                    </p>
+                    <div class="formula-block">
+                        $$F(x) = P(X \leq x)$$
+                    </div>
+                    <p>と定義されます。「$X$ が値 $x$ <em>以下</em>になる確率」を表します。</p>
+                    <p>直感的には、数直線を左端から $x$ まで「塗りつぶした」部分の確率の合計です。</p>
+
+                    <h4>離散型の場合</h4>
+                    <p>確率変数 $X$ が整数値などの離散的な値をとる場合、CDF は確率関数 $p(x_i) = P(X = x_i)$ の累積和です：</p>
+                    <div class="formula-block">
+                        $$F(x) = \sum_{x_i \leq x} p(x_i)$$
+                    </div>
+                    <p>
+                        逆に、確率関数は CDF の「跳び」から取り戻せます：
+                        $$p(x) = F(x) - F(x-)$$
+                        ここで $F(x-) = \lim_{x' \uparrow x} F(x')$ は、$x$ に左から近づいたときの極限値（左極限）です。
+                        離散型では CDF は階段関数になるため、各 $x_i$ でジャンプし、そのジャンプの大きさが $p(x_i)$ です。
+                    </p>
+
+                    <h4>連続型の場合</h4>
+                    <p>確率変数 $X$ が連続的な値をとる場合、確率密度関数（pdf）$f(x)$ を使って CDF を積分で書けます：</p>
+                    <div class="formula-block">
+                        $$F(x) = \int_{-\infty}^{x} f(t)\,dt$$
+                    </div>
+                    <p>
+                        これを微分すると確率密度関数が戻ってきます（微分積分学の基本定理）：
+                        $$f(x) = F'(x)$$
+                    </p>
+                    <p>
+                        <strong>イメージ：</strong>$f(x)$ はグラフの「高さ」、$F(x)$ は「グラフの左側の面積の合計」です。
+                        $F(x)$ を微分すると高さ $f(x)$ が復元されます。
+                    </p>
+
+                    <h3>生存関数（Survival Function）</h3>
+                    <p>
+                        $X$ が（機械や生物の）寿命を表す確率変数の場合、
+                        「時刻 $x$ にまだ生きている（故障していない）確率」を <strong>生存関数</strong> $S(x)$ と呼びます：
+                    </p>
+                    <div class="formula-block">
+                        $$S(x) = P(X > x) = 1 - F(x)$$
+                    </div>
+                    <p>CDF が「$x$ 以前に死亡した確率」なら、生存関数は「$x$ より後まで生き延びた確率」です。</p>
+
+                    <h3>ハザード関数（Hazard Function）</h3>
+                    <p>
+                        ハザード関数 $h(x)$ は「時刻 $x$ に生存している人が、その直後の短時間 $\Delta x$ 内に死亡する率」です。
+                        式で書くと
+                    </p>
+                    <div class="formula-block">
+                        $$h(x) = \frac{f(x)}{S(x)} = \frac{f(x)}{1 - F(x)}$$
+                    </div>
+                    <p>
+                        <strong>【式の読み方】</strong>分子 $f(x)$ は「ちょうど時刻 $x$ に死亡する密度」、
+                        分母 $S(x) = 1 - F(x)$ は「時刻 $x$ まで生き延びてきた確率」です。
+                        ハザード関数はこの比なので、「生き残っている人のうち何割が直後に死ぬか」を表しています。
+                    </p>
+                    <p>また、$S(x)$ を使うと次のように書けます：</p>
+                    <div class="formula-block">
+                        $$h(x) = -\frac{d}{dx} \log S(x)$$
+                    </div>
+                    <p><strong>【導出】</strong>$S(x) = 1 - F(x)$ を微分すると $S'(x) = -f(x)$。したがって</p>
+                    <div class="formula-block">
+                        $$-\frac{d}{dx}\log S(x) = -\frac{S'(x)}{S(x)} = \frac{f(x)}{S(x)} = h(x)$$
+                    </div>
+                    <p>ハザード関数の詳細は第32章（生存時間解析）で改めて学びます。</p>
+                </section>
+
+                <!-- ===== 2. 同時分布 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-table-cells"></i> 2．同時分布・周辺分布・条件付き分布</h2>
+
+                    <h3>なぜ2変数が必要か</h3>
+                    <p>
+                        現実のデータでは複数の変数（例：身長と体重、気温と売上）が同時に観測されます。
+                        2変数の「同時のふるまい」を記述するために <strong>同時分布</strong> を導入します。
+                    </p>
+
+                    <h3>離散型：同時確率関数・周辺確率関数・条件付き確率関数</h3>
+                    <p>
+                        $X$, $Y$ が2つの離散確率変数のとき、「$X = x$ かつ $Y = y$ となる確率」を
+                        <strong>同時確率関数</strong>（joint probability function）と呼び
+                    </p>
+                    <div class="formula-block">
+                        $$p(x, y) = P(X = x,\; Y = y)$$
+                    </div>
+                    <p>と書きます。</p>
+
+                    <p>
+                        <strong>周辺確率関数</strong>（marginal probability function）は、一方の変数に関する不確かさを「消去」して得られます。
+                        $Y$ についてすべての可能な値で足し合わせることで $X$ だけの確率関数が得られます：
+                    </p>
+                    <div class="formula-block">
+                        $$p_X(x) = \sum_{y} p(x, y)$$
+                    </div>
+                    <p>
+                        <strong>イメージ：</strong>同時確率関数を表（行：$x$、列：$y$）として並べたとき、
+                        各行の合計が $p_X(x)$（行和）、各列の合計が $p_Y(y)$（列和）です。
+                        表の「周辺（欄外）」に書くことから「周辺分布」と呼ばれます。
+                    </p>
+
+                    <p>
+                        <strong>条件付き確率関数</strong>（conditional probability function）は、$X = x$ が与えられたもとでの $Y$ の分布です。
+                        条件付き確率の定義 $P(A|B) = P(A \cap B)/P(B)$ をそのまま適用します：
+                    </p>
+                    <div class="formula-block">
+                        $$p_{Y|X}(y \mid x) = \frac{p(x, y)}{p_X(x)} \quad (\text{ただし } p_X(x) > 0)$$
+                    </div>
+                    <p>
+                        <strong>覚え方：</strong>「条件付き ＝ 同時 ÷ 周辺」です。
+                    </p>
+
+                    <h3>連続型：同時確率密度関数・周辺・条件付き</h3>
+                    <p>
+                        $X$, $Y$ が連続確率変数のとき、累積分布関数 $F(x, y) = P(X \leq x, Y \leq y)$ に対して
+                        <strong>同時確率密度関数</strong>（joint probability density function）を次のように定義します：
+                    </p>
+                    <div class="formula-block">
+                        $$f(x, y) = \frac{\partial^2}{\partial x \,\partial y} F(x, y)$$
+                    </div>
+                    <p>1次元でCDFを微分すると密度関数が得られたように、2次元では偏微分を2回行います。</p>
+                    <p>
+                        $f(x,y)$ を積分すると確率が得られます：
+                        $$P(a \leq X \leq b,\; c \leq Y \leq d) = \int_a^b \int_c^d f(x, y)\,dy\,dx$$
+                    </p>
+                    <p>また、全範囲での積分は1です：$\displaystyle\iint_{-\infty}^{\infty} f(x,y)\,dx\,dy = 1$。</p>
+
+                    <p><strong>周辺確率密度関数</strong>は、もう一方の変数について積分で消去します：</p>
+                    <div class="formula-block">
+                        $$f_X(x) = \int_{-\infty}^{\infty} f(x, y)\,dy, \qquad f_Y(y) = \int_{-\infty}^{\infty} f(x, y)\,dx$$
+                    </div>
+
+                    <p><strong>条件付き確率密度関数</strong>は離散型と同じ「同時 ÷ 周辺」の形です：</p>
+                    <div class="formula-block">
+                        $$f_{Y|X}(y \mid x) = \frac{f(x, y)}{f_X(x)}$$
+                    </div>
+
+                    <h3>条件付き独立</h3>
+                    <p>
+                        $Z = z$ を与えたもとで $X$ と $Y$ が独立のとき（条件付き独立）、条件付き同時密度が積に分解されます：
+                    </p>
+                    <div class="formula-block">
+                        $$f_{X,Y|Z}(x, y \mid z) = f_{X|Z}(x \mid z) \cdot f_{Y|Z}(y \mid z)$$
+                    </div>
+                    <p>
+                        例：$Z$ = 学年を与えると、「身長 $X$」と「体重 $Y$」が条件付き独立になるかもしれません。
+                        つまり、同じ学年内では身長と体重が独立とみなせる状況です。
+                    </p>
+                </section>
+
+                <!-- ===== 3. 母関数 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-wand-magic-sparkles"></i> 3．母関数（確率母関数・モーメント母関数）</h2>
+
+                    <h3>なぜ母関数が必要か</h3>
+                    <p>
+                        期待値や分散を定義の式から直接計算するのは大変なことがあります。
+                        また、独立な確率変数の和の分布を直接求めるには「畳み込み」と呼ばれる積分が必要で面倒です。
+                        <strong>母関数（generating function）</strong>を使うとこれらの問題を「微分するだけ」に変換でき、計算が劇的に楽になります。
+                    </p>
+
+                    <h3>確率母関数（PGF：Probability Generating Function）</h3>
+                    <p>
+                        整数値（$0, 1, 2, \ldots$）をとる確率変数 $X$ の確率母関数を次で定義します：
+                    </p>
+                    <div class="formula-block">
+                        $$G(s) = E[s^X] = \sum_{x=0}^{\infty} s^x \, p(x)$$
+                    </div>
+                    <p>
+                        <strong>記号の意味：</strong>
+                        $s$ は実数で、$1$ を含む適当な範囲の値をとります。
+                        $p(x) = P(X = x)$ は確率関数です。
+                        $G(s)$ は各確率を「$s^x$ の係数」として詰め込んだ多項式（または冪級数）です。
+                    </p>
+                    <p>
+                        <strong>直感：</strong>$G(s)$ は確率分布全体の情報を1つの関数にエンコードしたものです。
+                        微分することで各モーメントが取り出せます。
+                    </p>
+
+                    <h4>PGFから期待値・分散を求める</h4>
+                    <p>$G(s) = \sum_x s^x p(x)$ を $s$ で微分します：</p>
+                    <div class="formula-block">
+                        $$G'(s) = \sum_x x \, s^{x-1} p(x) = \frac{E[s^{X-1} \cdot X]}{1}$$
+                    </div>
+                    <p>$s = 1$ を代入すると：</p>
+                    <div class="formula-block">
+                        $$G'(1) = \sum_x x \cdot p(x) = E[X]$$
+                    </div>
+                    <p>もう一度微分して $s = 1$ を代入すると：</p>
+                    <div class="formula-block">
+                        $$G''(1) = \sum_x x(x-1) \cdot p(x) = E[X(X-1)] = E[X^2] - E[X]$$
+                    </div>
+                    <p>したがって $E[X^2] = G''(1) + G'(1)$。分散は</p>
+                    <div class="formula-block">
+                        $$V[X] = E[X^2] - (E[X])^2 = G''(1) + G'(1) - (G'(1))^2$$
+                    </div>
+
+                    <h3>モーメント母関数（MGF：Moment Generating Function）</h3>
+                    <p>
+                        連続確率変数（とより一般的に）に使われる母関数が <strong>モーメント母関数</strong> です。
+                        確率母関数の $s$ を $e^\theta$ に置き換えたもの、と理解できます：
+                    </p>
+                    <div class="formula-block">
+                        $$m(\theta) = E[e^{\theta X}] = G(e^\theta)$$
+                    </div>
+                    <p>
+                        連続型では $m(\theta) = \int_{-\infty}^{\infty} e^{\theta x} f(x)\,dx$ と積分で書けます。
+                        MGF は $\theta = 0$ 付近で収束することを前提とします。
+                    </p>
+
+                    <h4>MGFから原点まわりのモーメントを求める</h4>
+                    <p>
+                        $m(\theta) = E[e^{\theta X}]$ を $\theta$ で微分します。
+                        $e^{\theta X}$ を $\theta$ で微分すると $X e^{\theta X}$ になるので：
+                    </p>
+                    <div class="formula-block">
+                        $$m'(\theta) = E[X e^{\theta X}]$$
+                    </div>
+                    <p>$\theta = 0$ を代入すると：</p>
+                    <div class="formula-block">
+                        $$m'(0) = E[X \cdot e^0] = E[X]$$
+                    </div>
+                    <p>同様に $k$ 回微分して $\theta = 0$ を代入すると：</p>
+                    <div class="formula-block">
+                        $$m^{(k)}(0) = E[X^k]$$
+                    </div>
+                    <p>
+                        つまり <strong>MGFを $\theta = 0$ で $k$ 回微分すれば $k$ 次モーメント $E[X^k]$ が得られます。</strong>
+                        これが「モーメント（積率）母関数」という名前の由来です。
+                    </p>
+
+                    <h3>特性関数（Characteristic Function）</h3>
+                    <p>
+                        MGFは常に収束するとは限りません（例：コーシー分布のMGFは存在しない）。
+                        そこで $\theta$ を純虚数 $it$（$t$ は実数、$i$ は虚数単位）に置き換えた <strong>特性関数</strong>
+                    </p>
+                    <div class="formula-block">
+                        $$\varphi(t) = E[e^{itX}] = m(it)$$
+                    </div>
+                    <p>
+                        は、$|e^{itX}| = 1$ なのでどんな分布に対しても常に存在します。
+                        モーメントが存在しない分布でも扱えるため、理論的に最も一般的な道具です。
+                    </p>
+
+                    <h3>母関数の2大重要性質</h3>
+                    <p>母関数が便利な理由は次の2つの性質に集約されます。</p>
+                    <div class="formula-block">
+                        <strong>性質1（分布との1対1対応）：</strong>異なる確率分布は異なる母関数を持つ。
+                        逆に言えば、母関数が同じなら分布は同じ。
+                    </div>
+                    <div class="formula-block">
+                        <strong>性質2（独立な和の母関数は積）：</strong>$X_1, X_2$ が独立なら
+                        $$m_{X_1+X_2}(\theta) = m_{X_1}(\theta) \cdot m_{X_2}(\theta)$$
+                    </div>
+                    <p>
+                        <strong>性質2の導出：</strong>$X_1, X_2$ が独立のとき $E[f(X_1)g(X_2)] = E[f(X_1)] \cdot E[g(X_2)]$が成り立つので（独立性の性質）
+                    </p>
+                    <div class="formula-block">
+                        $$m_{X_1+X_2}(\theta) = E[e^{\theta(X_1+X_2)}] = E[e^{\theta X_1} \cdot e^{\theta X_2}] = E[e^{\theta X_1}] \cdot E[e^{\theta X_2}] = m_{X_1}(\theta) \cdot m_{X_2}(\theta)$$
+                    </div>
+                    <p>
+                        この性質を繰り返し使うと：$X_1, \ldots, X_n$ が i.i.d. で共通のMGFを $m(\theta)$ とすれば
+                        $$m_{X_1 + \cdots + X_n}(\theta) = m(\theta)^n$$
+                    </p>
+                </section>
+
+                <!-- ===== 公式まとめ ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
+
+                    <h3>確率母関数と期待値・分散</h3>
+                    <div class="formula-block">
+                        $$G(s) = E[s^X], \quad G'(1) = E[X], \quad G''(1) = E[X(X-1)]$$
+                        $$V[X] = G''(1) + G'(1) - \bigl(G'(1)\bigr)^2$$
+                    </div>
+
+                    <h3>モーメント母関数と各次モーメント</h3>
+                    <div class="formula-block">
+                        $$m(\theta) = E[e^{\theta X}], \quad m^{(k)}(0) = E[X^k]$$
+                        $$E[X] = m'(0), \quad V[X] = m''(0) - \bigl(m'(0)\bigr)^2$$
+                    </div>
+
+                    <h3>応用例：ベルヌーイ分布から二項分布へ</h3>
+                    <p>
+                        コイン投げ1回：$P(X=1)=p,\; P(X=0)=1-p$（ベルヌーイ分布）の確率母関数は
+                    </p>
+                    <div class="formula-block">
+                        $$G_{\text{Be}}(s) = (1-p)s^0 + p \cdot s^1 = (1-p) + ps = 1 + p(s-1)$$
+                    </div>
+                    <p>
+                        独立に $n$ 回繰り返した合計 $X_1 + \cdots + X_n$（二項分布）の確率母関数は、性質2より
+                    </p>
+                    <div class="formula-block">
+                        $$G_{\text{Bin}}(s) = \bigl(1 + p(s-1)\bigr)^n$$
+                    </div>
+                    <p>これを展開すると二項定理より $P(\text{合計} = k) = \binom{n}{k}p^k(1-p)^{n-k}$ が確認できます。</p>
+                </section>
+
+                <!-- ===== 例題・演習 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <!-- 例1 -->
+                    <h3>【例題1】単位円内の周辺分布と条件付き分布</h3>
+                    <p>
+                        $xy$ 平面の単位円内部 $\{(x,y) \mid x^2 + y^2 \leq 1\}$ から点を一様に抽出する。
+                        同時確率密度関数を次のように定める：
+                    </p>
+                    <div class="formula-block">
+                        $$f(x, y) = \begin{cases} \dfrac{1}{\pi} & (x^2 + y^2 \leq 1) \\ 0 & (\text{それ以外}) \end{cases}$$
+                    </div>
+                    <p>$X$ の周辺確率密度関数 $f_X(x)$ と、$X = x$ を与えたときの $Y$ の条件付き確率密度関数 $f_{Y|X}(y \mid x)$ を求めよ。</p>
+
+                    <div class="answer-block">
+                        <p><strong>【解答】</strong></p>
+                        <p>
+                            <strong>Step 1：$y$ の積分範囲を求める。</strong><br>
+                            $-1 \leq x \leq 1$ のとき、$f(x,y) > 0$ となる $y$ の範囲は $x^2 + y^2 \leq 1$ から
+                            $y^2 \leq 1 - x^2$、すなわち $-\sqrt{1-x^2} \leq y \leq \sqrt{1-x^2}$ です。
+                        </p>
+                        <p><strong>Step 2：周辺確率密度関数を計算する。</strong></p>
+                        <div class="formula-block">
+                            $$f_X(x) = \int_{-\sqrt{1-x^2}}^{\sqrt{1-x^2}} \frac{1}{\pi}\,dy = \frac{1}{\pi} \cdot 2\sqrt{1-x^2} = \frac{2\sqrt{1-x^2}}{\pi}$$
+                        </div>
+                        <p>
+                            積分の計算：定数 $\dfrac{1}{\pi}$ を積分すると $\dfrac{1}{\pi} \times [\text{幅}]$ です。
+                            幅は $\sqrt{1-x^2} - (-\sqrt{1-x^2}) = 2\sqrt{1-x^2}$ です。
+                        </p>
+                        <p><strong>Step 3：条件付き確率密度関数を計算する。</strong></p>
+                        <div class="formula-block">
+                            $$f_{Y|X}(y \mid x) = \frac{f(x,y)}{f_X(x)} = \frac{1/\pi}{2\sqrt{1-x^2}/\pi} = \frac{1}{2\sqrt{1-x^2}}$$
+                        </div>
+                        <p>
+                            この式は $y$ に依存しない定数なので、$-\sqrt{1-x^2} \leq y \leq \sqrt{1-x^2}$ の区間上の
+                            <em>一様分布</em> になっています。
+                            区間の幅 $2\sqrt{1-x^2}$ の逆数が確率密度となっています（一様分布の密度 = 1/幅）。
+                        </p>
+                    </div>
+
+                    <!-- 問2.1 -->
+                    <h3>【問2.1】三角形状の同時密度関数</h3>
+                    <p>
+                        領域 $\{(x, y) \mid x \geq 0,\; y \geq 0,\; x + y \leq 1\}$（三角形）上の確率密度関数を
+                        $f(x, y) = c$ （定数）とおく。
+                    </p>
+                    <p>(1) 基準化定数 $c$ を求めよ。</p>
+                    <p>(2) $X$ の周辺確率密度関数 $f_X(x)$ を求めよ（$0 \leq x \leq 1$）。</p>
+                    <p>(3) $X = x$ が与えられたときの $Y$ の条件付き確率密度関数 $f_{Y|X}(y \mid x)$ を求めよ。</p>
+
+                    <div class="answer-block">
+                        <p><strong>【解答】</strong></p>
+                        <p><strong>(1) 基準化定数の計算</strong></p>
+                        <p>三角形の面積は $\dfrac{1}{2} \times 1 \times 1 = \dfrac{1}{2}$ なので、確率の合計が1になるためには</p>
+                        <div class="formula-block">
+                            $$\iint_{\text{三角形}} c\,dx\,dy = c \times \frac{1}{2} = 1 \implies \boxed{c = 2}$$
+                        </div>
+
+                        <p><strong>(2) 周辺確率密度関数の計算</strong></p>
+                        <p>$x$ が固定されたとき、$y$ の範囲は $0 \leq y \leq 1 - x$（三角形の条件 $x + y \leq 1$ より）です。</p>
+                        <div class="formula-block">
+                            $$f_X(x) = \int_0^{1-x} 2\,dy = 2(1-x) \qquad (0 \leq x \leq 1)$$
+                        </div>
+                        <p>
+                            確認：$\int_0^1 2(1-x)\,dx = 2\bigl[x - \tfrac{x^2}{2}\bigr]_0^1 = 2 \times \tfrac{1}{2} = 1$ ✓
+                        </p>
+
+                        <p><strong>(3) 条件付き確率密度関数の計算</strong></p>
+                        <div class="formula-block">
+                            $$f_{Y|X}(y \mid x) = \frac{f(x,y)}{f_X(x)} = \frac{2}{2(1-x)} = \frac{1}{1-x} \qquad (0 \leq y \leq 1-x)$$
+                        </div>
+                        <p>
+                            これは区間 $[0, 1-x]$ 上の一様分布 $\mathrm{Uniform}(0,\; 1-x)$ の確率密度になっています。
+                            直感的にも、三角形上の一様分布から $X=x$ の縦線を引いたとき、
+                            $Y$ は $[0, 1-x]$ 上で一様に分布します。
+                        </p>
+                    </div>
+
+                    <!-- 問2.2 -->
+                    <h3>【問2.2】ポアソン分布の確率母関数・期待値・分散</h3>
+                    <p>
+                        確率変数 $X$ がパラメータ $\lambda > 0$ のポアソン分布に従うとする。
+                        すなわち $x = 0, 1, 2, \ldots$ について
+                        $$p(x) = \frac{e^{-\lambda} \lambda^x}{x!}$$
+                        $X$ の確率母関数 $G(s)$ を求め、そこから期待値と分散を求めよ。
+                    </p>
+
+                    <div class="answer-block">
+                        <p><strong>【解答】</strong></p>
+                        <p><strong>Step 1：確率母関数を求める。</strong></p>
+                        <div class="formula-block">
+                            $$G(s) = E[s^X] = \sum_{x=0}^{\infty} s^x \cdot \frac{e^{-\lambda}\lambda^x}{x!}
+                            = e^{-\lambda} \sum_{x=0}^{\infty} \frac{(s\lambda)^x}{x!}$$
+                        </div>
+                        <p>$\displaystyle\sum_{x=0}^{\infty} \frac{u^x}{x!} = e^u$（指数関数のマクローリン展開）を使うと：</p>
+                        <div class="formula-block">
+                            $$G(s) = e^{-\lambda} \cdot e^{s\lambda} = e^{\lambda(s - 1)}$$
+                        </div>
+
+                        <p><strong>Step 2：期待値を求める。</strong></p>
+                        <p>$G(s) = e^{\lambda(s-1)}$ を $s$ で微分します。$G'(s) = \lambda e^{\lambda(s-1)}$。</p>
+                        <div class="formula-block">
+                            $$E[X] = G'(1) = \lambda e^{\lambda \cdot 0} = \lambda$$
+                        </div>
+
+                        <p><strong>Step 3：分散を求める。</strong></p>
+                        <p>$G'(s) = \lambda e^{\lambda(s-1)}$ をもう一度微分します：$G''(s) = \lambda^2 e^{\lambda(s-1)}$。</p>
+                        <div class="formula-block">
+                            $$G''(1) = \lambda^2$$
+                        </div>
+                        <div class="formula-block">
+                            $$V[X] = G''(1) + G'(1) - \bigl(G'(1)\bigr)^2 = \lambda^2 + \lambda - \lambda^2 = \lambda$$
+                        </div>
+                        <p>
+                            ポアソン分布では期待値と分散がともに $\lambda$ に一致するという有名な性質が確認できました。
+                        </p>
+                    </div>
+
+                    <!-- 問2.3 -->
+                    <h3>【問2.3】指数分布のモーメント母関数・期待値・分散</h3>
+                    <p>
+                        確率変数 $X$ がパラメータ $\lambda > 0$ の指数分布に従うとする。
+                        確率密度関数は $f(x) = \lambda e^{-\lambda x}$（$x \geq 0$）である。
+                        $X$ のモーメント母関数 $m(\theta)$ を求め、そこから期待値と分散を求めよ。
+                    </p>
+
+                    <div class="answer-block">
+                        <p><strong>【解答】</strong></p>
+                        <p><strong>Step 1：MGFを求める。</strong>（$\theta < \lambda$ の場合に収束します）</p>
+                        <div class="formula-block">
+                            $$m(\theta) = E[e^{\theta X}] = \int_0^{\infty} e^{\theta x} \cdot \lambda e^{-\lambda x}\,dx
+                            = \lambda \int_0^{\infty} e^{-(\lambda - \theta)x}\,dx$$
+                        </div>
+                        <p>
+                            指数関数の積分：$\displaystyle\int_0^{\infty} e^{-ax}\,dx = \frac{1}{a}$（$a > 0$ のとき）を使います。
+                            ここで $a = \lambda - \theta > 0$（$\theta < \lambda$ の仮定から保証）：
+                        </p>
+                        <div class="formula-block">
+                            $$m(\theta) = \lambda \cdot \frac{1}{\lambda - \theta} = \frac{\lambda}{\lambda - \theta}$$
+                        </div>
+
+                        <p><strong>Step 2：期待値を求める。</strong></p>
+                        <p>商の微分法則 $\left(\dfrac{u}{v}\right)' = \dfrac{u'v - uv'}{v^2}$ を使います。$u = \lambda$（定数）, $v = \lambda - \theta$：</p>
+                        <div class="formula-block">
+                            $$m'(\theta) = \frac{0 \cdot (\lambda - \theta) - \lambda \cdot (-1)}{(\lambda - \theta)^2} = \frac{\lambda}{(\lambda - \theta)^2}$$
+                        </div>
+                        <div class="formula-block">
+                            $$E[X] = m'(0) = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}$$
+                        </div>
+
+                        <p><strong>Step 3：$E[X^2]$ を求める。</strong></p>
+                        <div class="formula-block">
+                            $$m''(\theta) = \frac{2\lambda}{(\lambda - \theta)^3}$$
+                        </div>
+                        <div class="formula-block">
+                            $$E[X^2] = m''(0) = \frac{2\lambda}{\lambda^3} = \frac{2}{\lambda^2}$$
+                        </div>
+
+                        <p><strong>Step 4：分散を求める。</strong></p>
+                        <div class="formula-block">
+                            $$V[X] = E[X^2] - (E[X])^2 = \frac{2}{\lambda^2} - \left(\frac{1}{\lambda}\right)^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}$$
+                        </div>
+                        <p>指数分布の期待値は $1/\lambda$、分散は $1/\lambda^2$ です。</p>
+                    </div>
+                </section>
+
+                <!-- ===== メモ ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
+                    <ul>
+                        <li><strong>CDF の役割：</strong>$F(x) = P(X \leq x)$ は離散・連続共通の定義。連続型では $f(x) = F'(x)$、離散型では $p(x) = F(x) - F(x-)$（左極限との差）で密度・確率関数を復元できる</li>
+                        <li><strong>周辺・条件付き：</strong>「同時 → 片側を積分するだけ（周辺）」「同時 ÷ 周辺 = 条件付き」。この2式で多変数の分布解析が完結する</li>
+                        <li><strong>PGF の使い方：</strong>$G(s)$ を求め $s=1$ で微分 → 期待値・分散が機械的に求まる。整数値確率変数向け</li>
+                        <li><strong>MGF の使い方：</strong>$m(\theta)$ を求め $\theta=0$ で微分 → $k$ 次モーメントが求まる。$m^{(k)}(0) = E[X^k]$</li>
+                        <li><strong>独立な和の分布：</strong>母関数（PGF または MGF）を積にするだけ。畳み込みの積分は不要。これが母関数の最大の利点</li>
+                        <li><strong>特性関数：</strong>$\varphi(t) = E[e^{itX}]$。MGF が存在しない分布（コーシー分布など裾が重い分布）でも常に存在する。理論解析で重要</li>
+                        <li><strong>ハザード関数：</strong>生存時間解析（第32章）で再登場。「生き残っている者が直後に死ぬ率」を表す</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

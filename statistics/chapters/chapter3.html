@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="3">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <!-- ===== 概要 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>
+                        第3章では、確率分布を「数値で要約する」方法を体系的に学びます。
+                        データや確率変数の「どこに集まっているか」「どれだけばらついているか」「どんな形をしているか」を数値で表す指標を <strong>特性値</strong> と呼びます。
+                    </p>
+                    <p>この章で学ぶ主な特性値は次の通りです：</p>
+                    <ol>
+                        <li><strong>位置の指標</strong>：期待値・中央値・最頻値（どこに集中しているか）</li>
+                        <li><strong>散らばりの指標</strong>：標準偏差・四分位範囲・変動係数（どれだけばらつくか）</li>
+                        <li><strong>形状の指標</strong>：歪度・尖度（分布の形の非対称性・裾の重さ）</li>
+                        <li><strong>2変数の関係</strong>：共分散・相関係数・偏相関係数</li>
+                        <li><strong>条件付き特性値</strong>：条件付き期待値・条件付き分散</li>
+                        <li><strong>データの平均の種類</strong>：算術平均・加重平均・幾何平均・調和平均</li>
+                    </ol>
+                    <p><strong>キーワード：</strong>歪度、尖度、変動係数、相関係数、偏相関係数、分位点関数、条件付き期待値、条件付き分散</p>
+                </section>
+
+                <!-- ===== 1. 位置の指標 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-map-pin"></i> 1．位置の指標：期待値・中央値・最頻値</h2>
+
+                    <h3>期待値（平均）</h3>
+                    <p>
+                        <strong>期待値</strong> $E[X]$（または $\mu$）は確率変数の「重心」です。
+                        各値をその確率で重み付けした平均値です：
+                    </p>
+                    <div class="formula-block">
+                        $$E[X] = \begin{cases} \displaystyle\sum_x x\,p(x) & (\text{離散型}) \\ \displaystyle\int_{-\infty}^{\infty} x\,f(x)\,dx & (\text{連続型}) \end{cases}$$
+                    </div>
+                    <p>
+                        <strong>物理的イメージ：</strong>数直線上に確率の重りを乗せたとき、ちょうどバランスが取れる点が期待値です。
+                    </p>
+
+                    <h3>中央値（Median）</h3>
+                    <p>
+                        <strong>中央値</strong> $m$ は、「確率変数がこの値以下になる確率がちょうど50%」となる値です：
+                    </p>
+                    <div class="formula-block">
+                        $$P(X \leq m) = 0.5$$
+                    </div>
+                    <p>連続型では $F(m) = 0.5$、すなわち $m = F^{-1}(0.5)$ です。離散型では $P(X \leq m) \geq 0.5$ かつ $P(X \geq m) \geq 0.5$ となる $m$。</p>
+                    <p>
+                        <strong>特徴：</strong>中央値は外れ値（極端に大きいor小さい値）に期待値ほど影響されません。
+                        年収などの右裾が長い分布では中央値が実態をよく表します。
+                    </p>
+
+                    <h3>最頻値（Mode）</h3>
+                    <p>
+                        <strong>最頻値（モード）</strong> は確率密度関数（または確率関数）が最大となる値です：
+                    </p>
+                    <div class="formula-block">
+                        $$\text{最頻値} = \arg\max_x f(x)$$
+                    </div>
+                    <p>最もよく観測される値、ということです。複峰の分布では最頻値が複数存在することもあります。</p>
+
+                    <h3>3つの位置の指標の関係</h3>
+                    <p>分布の形によって3つの指標の大小関係が変わります：</p>
+                    <ul>
+                        <li><strong>左右対称かつ単峰</strong>：最頻値 ＝ 中央値 ＝ 期待値</li>
+                        <li><strong>右に裾が長い分布</strong>（所得分布など）：最頻値 ＜ 中央値 ＜ 期待値</li>
+                        <li><strong>左に裾が長い分布</strong>：期待値 ＜ 中央値 ＜ 最頻値</li>
+                    </ul>
+                    <p>
+                        <strong>直感：</strong>右に長い裾があると、右側の大きな値が期待値を右に引っ張ります。
+                        中央値は順位で決まるため引っ張られにくく、最頻値はピーク位置なので左のままです。
+                    </p>
+                </section>
+
+                <!-- ===== 2. 散らばりの指標 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-arrows-left-right"></i> 2．散らばりの指標</h2>
+
+                    <h3>標準偏差・分散</h3>
+                    <p>
+                        <strong>分散</strong> $V[X] = E[(X - E[X])^2]$ は「期待値からのずれの2乗平均」です。
+                        <strong>標準偏差</strong> $\sigma = \sqrt{V[X]}$ は分散の正の平方根で、元の単位に戻した散らばりを表します。
+                    </p>
+
+                    <h3>四分位範囲（IQR）</h3>
+                    <p>
+                        データを小さい順に並べたとき、下から25%点を <strong>第1四分位数</strong> $Q_1$、75%点を <strong>第3四分位数</strong> $Q_3$ と呼びます。
+                    </p>
+                    <div class="formula-block">
+                        $$\text{IQR} = Q_3 - Q_1 = F^{-1}(0.75) - F^{-1}(0.25)$$
+                    </div>
+                    <p>
+                        IQRは中央の50%のデータが収まる幅を表します。
+                        外れ値に影響されないため、右裾が長い分布などでの散らばりの指標として有用です。
+                    </p>
+
+                    <h3>分位点関数（Quantile Function）</h3>
+                    <p>
+                        $\alpha \in (0,1)$ に対して、CDF $F_X$ の逆関数を <strong>分位点関数</strong> と呼びます：
+                    </p>
+                    <div class="formula-block">
+                        $$F^{-1}(\alpha) = \inf\{x \mid F_X(x) \geq \alpha\}$$
+                    </div>
+                    <p>
+                        $F^{-1}(\alpha)$ を「$100\alpha$ パーセント点」と言います。
+                        $F^{-1}(0.5)$ が中央値、$F^{-1}(0.25)$ が第1四分位数です。
+                    </p>
+
+                    <h3>変動係数（CV：Coefficient of Variation）</h3>
+                    <p>異なる単位や異なるスケールのデータの散らばりを比較したいとき、標準偏差を期待値で割った無次元量を使います：</p>
+                    <div class="formula-block">
+                        $$\text{CV} = \frac{\sqrt{V[X]}}{E[X]} = \frac{\sigma}{\mu}$$
+                    </div>
+                    <p>
+                        <strong>なぜ割るか：</strong>一般に平均が大きい変数は標準偏差も大きくなりやすいです。
+                        そこで標準偏差を平均で正規化することで「期待値に対する相対的なばらつき」を比較できます。
+                        単位がないので、例えば「身長（cm）」と「体重（kg）」のばらつきを公平に比較できます。
+                    </p>
+                </section>
+
+                <!-- ===== 3. 形状の指標 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-chart-area"></i> 3．形状の指標：歪度と尖度</h2>
+
+                    <h3>歪度（Skewness）</h3>
+                    <p>
+                        <strong>歪度</strong>は分布の「左右の非対称性」を表す指標です。
+                    </p>
+                    <div class="formula-block">
+                        $$\text{歪度} = \frac{E\bigl[(X - E[X])^3\bigr]}{(V[X])^{3/2}}$$
+                    </div>
+                    <p>
+                        <strong>分母の意味：</strong>$(V[X])^{3/2} = \sigma^3$ で割ることで無次元量にし、異なる分布を比較できます。
+                    </p>
+                    <p>
+                        <strong>分子の直感：</strong>$(X - \mu)^3$ は正のずれ（右方向）のとき正の大きな値、
+                        負のずれ（左方向）のとき負の大きな値になります（3乗は符号を保つ）。
+                        右に裾が長い場合は大きな正のずれが多くなるので歪度が正、左に裾が長い場合は歪度が負になります。
+                    </p>
+                    <ul>
+                        <li>対称分布：歪度 ＝ 0</li>
+                        <li>右に裾が長い（正の歪み）：歪度 ＞ 0</li>
+                        <li>左に裾が長い（負の歪み）：歪度 ＜ 0</li>
+                    </ul>
+
+                    <h3>尖度（Kurtosis）</h3>
+                    <p>
+                        <strong>尖度</strong>は分布の「裾の重さ（ピークの鋭さ）」を表す指標です。
+                    </p>
+                    <div class="formula-block">
+                        $$\text{尖度} = \frac{E\bigl[(X - E[X])^4\bigr]}{(V[X])^2}$$
+                    </div>
+                    <p>
+                        <strong>直感：</strong>4乗は正負によらず大きな値になります（特に裾の極端な値の寄与が大きい）。
+                        裾が重い分布は大きな外れ値が生じやすく、4乗の期待値が大きくなるので尖度が高くなります。
+                    </p>
+                    <ul>
+                        <li>尖度は常に0以上</li>
+                        <li><strong>正規分布の尖度は3</strong>（基準値として使われる）</li>
+                        <li>尖度 ＞ 3：正規分布より裾が重い（厚い）分布（例：t分布）</li>
+                        <li>尖度 ＜ 3：正規分布より裾が軽い分布（例：一様分布）</li>
+                    </ul>
+                    <p>
+                        正規分布の3を基準として「尖度 − 3」を尖度と定義する流儀もあります（「超過尖度」）。
+                        正規分布では超過尖度 = 0 となります。
+                    </p>
+                </section>
+
+                <!-- ===== 4. 2変数の関係 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-link"></i> 4．2変数の関係：共分散・相関係数・偏相関係数</h2>
+
+                    <h3>共分散（Covariance）</h3>
+                    <p>
+                        $X$ と $Y$ の「一緒に動く傾向」を表す指標が <strong>共分散</strong>です：
+                    </p>
+                    <div class="formula-block">
+                        $$\text{Cov}[X, Y] = E\bigl[(X - E[X])(Y - E[Y])\bigr] = E[XY] - E[X]E[Y]$$
+                    </div>
+                    <p>
+                        <strong>右辺の等号の導出：</strong>
+                    </p>
+                    <div class="formula-block">
+                        $$E[(X-\mu_X)(Y-\mu_Y)] = E[XY - \mu_X Y - X\mu_Y + \mu_X\mu_Y]
+                        = E[XY] - \mu_X E[Y] - E[X]\mu_Y + \mu_X\mu_Y$$
+                        $$= E[XY] - \mu_X\mu_Y - \mu_X\mu_Y + \mu_X\mu_Y = E[XY] - E[X]E[Y]$$
+                    </div>
+                    <p>
+                        <strong>直感：</strong>$X$ が平均より大きく $Y$ も平均より大きい（または両方小さい）とき、積 $(X-\mu_X)(Y-\mu_Y) > 0$ です。
+                        正の相関があれば共分散は正、負の相関があれば共分散は負になります。
+                    </p>
+                    <p><strong>欠点：</strong>共分散は変数の単位に依存するため、異なる変数間の比較ができません。</p>
+
+                    <h3>相関係数（Correlation Coefficient）</h3>
+                    <p>
+                        共分散を各変数の標準偏差で割って無次元化したものが <strong>相関係数</strong>です：
+                    </p>
+                    <div class="formula-block">
+                        $$\rho[X, Y] = \frac{\text{Cov}[X, Y]}{\sqrt{V[X]}\sqrt{V[Y]}} = \frac{\text{Cov}[X, Y]}{\sigma_X \sigma_Y}$$
+                    </div>
+                    <p>
+                        相関係数の範囲：$-1 \leq \rho \leq 1$（コーシー・シュワルツの不等式より）。
+                    </p>
+                    <ul>
+                        <li>$\rho = 1$：完全な正の線形関係（$Y = aX + b$, $a > 0$）</li>
+                        <li>$\rho = -1$：完全な負の線形関係（$Y = aX + b$, $a < 0$）</li>
+                        <li>$\rho = 0$：線形の関係がない（無相関）</li>
+                        <li>$X, Y$ が独立 $\Rightarrow$ $\rho = 0$（逆は必ずしも成り立たない）</li>
+                    </ul>
+
+                    <h3>偏相関係数（Partial Correlation Coefficient）</h3>
+                    <p>
+                        2つの変数 $X, Y$ が第3の変数 $Z$ の影響を受けている場合、
+                        $X$ と $Y$ に相関があるように見えても、それは $Z$ を通じた <strong>擬似相関（見かけの相関）</strong> かもしれません。
+                    </p>
+                    <p>
+                        例：「アイスクリームの売上 $X$」と「水難事故の件数 $Y$」は相関が高いですが、
+                        両方とも「気温 $Z$」に依存しているだけです。$Z$ の影響を除けば $X$ と $Y$ の本質的な関係がわかります。
+                    </p>
+                    <p>$Z$ の影響を除いた $X$ と $Y$ の <strong>偏相関係数</strong>：</p>
+                    <div class="formula-block">
+                        $$\rho[X, Y \mid Z] = \frac{\rho[X,Y] - \rho[X,Z]\,\rho[Y,Z]}{\sqrt{(1-\rho[X,Z]^2)(1-\rho[Y,Z]^2)}}$$
+                    </div>
+                    <p>
+                        <strong>読み方：</strong>分子では「$X$-$Y$ の相関から、$Z$を介した部分（$\rho[X,Z] \cdot \rho[Y,Z]$）を引く」、
+                        分母は「それぞれの変数のうち $Z$ で説明できない部分の標準偏差の積」です。
+                    </p>
+                </section>
+
+                <!-- ===== 5. 条件付き期待値・分散 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-filter"></i> 5．条件付き期待値と条件付き分散</h2>
+
+                    <h3>条件付き期待値</h3>
+                    <p>
+                        $X = x$ が与えられたもとでの $Y$ の期待値を <strong>条件付き期待値</strong> と呼びます：
+                    </p>
+                    <div class="formula-block">
+                        $$E[Y \mid X = x] = \int_{-\infty}^{\infty} y \, f_{Y|X}(y \mid x)\,dy$$
+                    </div>
+                    <p>
+                        $x$ を固定した場合の $Y$ の「重心」です。
+                        $x$ を変えると値が変わるので、$E[Y|X]$ は $X$ の関数（確率変数）です。
+                    </p>
+
+                    <h3>条件付き分散</h3>
+                    <div class="formula-block">
+                        $$V[Y \mid X = x] = E[Y^2 \mid X = x] - (E[Y \mid X = x])^2$$
+                    </div>
+
+                    <h3>繰り返し期待値の法則（Law of Total Expectation）</h3>
+                    <div class="formula-block">
+                        $$E[E[Y \mid X]] = E[Y]$$
+                    </div>
+                    <p>
+                        <strong>直感：</strong>「$X$ の各値で条件付き期待値を求め、それを $X$ の分布で平均したら全体の期待値になる」。
+                        例えば、A組・B組・C組それぞれの平均点を組の人数で加重平均すれば全体の平均点が出るのと同じ原理です。
+                    </p>
+
+                    <h3>全分散の公式（Law of Total Variance）</h3>
+                    <div class="formula-block">
+                        $$V[Y] = E[V[Y \mid X]] + V[E[Y \mid X]]$$
+                    </div>
+                    <p>
+                        <strong>直感的解釈：</strong>「$Y$ の全分散 ＝ 各 $X$ 値内でのばらつきの平均（組内分散）＋ $X$ 値間での条件付き期待値のばらつき（組間分散）」。
+                        統計的なグループ内変動・グループ間変動の分解に対応しています。
+                    </p>
+                </section>
+
+                <!-- ===== 6. データの平均 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-calculator"></i> 6．データの平均の種類</h2>
+                    <p>「平均」にはいくつか種類があり、場面によって使い分けます。</p>
+
+                    <h3>算術平均（Arithmetic Mean）</h3>
+                    <div class="formula-block">
+                        $$\bar{x} = \frac{1}{n}(x_1 + x_2 + \cdots + x_n) = \frac{1}{n}\sum_{i=1}^n x_i$$
+                    </div>
+                    <p>最もなじみ深い「普通の平均」です。加算的な量（価格、長さ、点数など）に適します。</p>
+
+                    <h3>加重平均（Weighted Mean）</h3>
+                    <div class="formula-block">
+                        $$\bar{x}_w = \sum_{i=1}^n w_i x_i \qquad \left(w_i > 0,\; \sum_{i=1}^n w_i = 1\right)$$
+                    </div>
+                    <p>各観測値に重み $w_i$ をつけた平均。出現頻度や人数が異なる場合に使います（例：学食の定食の平均価格）。</p>
+
+                    <h3>幾何平均（Geometric Mean）</h3>
+                    <div class="formula-block">
+                        $$G = (x_1 \cdot x_2 \cdots x_n)^{1/n} = \exp\!\left(\frac{1}{n}\sum_{i=1}^n \log x_i\right)$$
+                    </div>
+                    <p>
+                        <strong>使う場面：</strong>「積が積み重なるデータ」が対象です。
+                        例えば、毎年の人口増加率・株価の伸び率・物価指数の変化率など。
+                        $n$ 個の倍率を掛け合わせた最終値 = $G^n$ となります。
+                    </p>
+                    <p>
+                        <strong>なぜ対数を使うか：</strong>幾何平均は「対数の算術平均を取ってから指数に戻す」操作と同じ。
+                        対数を取ることで「積の平均」を「和の平均」に変換できます。
+                    </p>
+
+                    <h3>調和平均（Harmonic Mean）</h3>
+                    <div class="formula-block">
+                        $$H = \frac{n}{\dfrac{1}{x_1} + \dfrac{1}{x_2} + \cdots + \dfrac{1}{x_n}} = \frac{n}{\displaystyle\sum_{i=1}^n \frac{1}{x_i}}$$
+                    </div>
+                    <p>
+                        <strong>使う場面：</strong>「速度の平均」のような「同じ量を異なる速さで処理する」場合。
+                        往復の平均時速、複数人の仕事の合計効率など。
+                    </p>
+                    <p>
+                        <strong>直感：</strong>「単位量あたりの効率（速さ、仕事率）の平均」が調和平均です。
+                        逆数の算術平均の逆数、とも言えます。
+                    </p>
+                    <p>一般に $H \leq G \leq \bar{x}$（相加・相乗・調和平均の不等式）。</p>
+                </section>
+
+                <!-- ===== 公式まとめ ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
+                    <div class="formula-block">
+                        $$E[aX + bY + c] = aE[X] + bE[Y] + c$$
+                    </div>
+                    <div class="formula-block">
+                        $$V[aX + b] = a^2 V[X]$$
+                    </div>
+                    <div class="formula-block">
+                        $$V[X \pm Y] = V[X] + V[Y] \pm 2\,\text{Cov}[X,Y]$$
+                    </div>
+                    <p>$X$ と $Y$ が独立なら $\text{Cov}[X,Y]=0$ なので $V[X \pm Y] = V[X] + V[Y]$</p>
+                    <div class="formula-block">
+                        $$E[E[Y|X]] = E[Y], \quad V[Y] = E[V[Y|X]] + V[E[Y|X]]$$
+                    </div>
+                </section>
+
+                <!-- ===== 例題・演習 ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <!-- 例1 -->
+                    <h3>【例題1】変動係数による比較</h3>
+                    <p>
+                        18歳男性における身長（期待値 168.9 cm、標準偏差 5.7 cm）と
+                        体重（期待値 63.6 kg、標準偏差 15.9 kg）について、
+                        期待値に対する散らばりが大きいのはどちらか。変動係数を計算して比較せよ。
+                    </p>
+
+                    <div class="answer-block">
+                        <p><strong>【解答】</strong></p>
+                        <p>変動係数 ＝ 標準偏差 ÷ 期待値 を計算します：</p>
+                        <div class="formula-block">
+                            $$\text{CV}_{\text{身長}} = \frac{5.7}{168.9} \approx 0.034 = 3.4\%$$
+                        </div>
+                        <div class="formula-block">
+                            $$\text{CV}_{\text{体重}} = \frac{15.9}{63.6} \approx 0.250 = 25.0\%$$
+                        </div>
+                        <p>
+                            体重の変動係数（25%）は身長（3.4%）の約7倍大きいため、<strong>体重のほうが期待値に対して散らばりが大きい</strong>といえます。
+                        </p>
+                        <p>
+                            <strong>補足：</strong>単純に標準偏差を比較すると、身長5.7cm・体重15.9kgとなり「体重がばらつく」ように見えますが、
+                            これは単位が異なるため直接比較できません。変動係数を使うことで公平な比較が可能です。
+                        </p>
+                    </div>
+
+                    <!-- 問3.1 -->
+                    <h3>【問3.1】変動係数と標準偏差の推定</h3>
+                    <p>
+                        ある種の動物50匹の体重を調べたところ、平均は 60 kg、標準偏差は 12 kg であった。
+                        この50匹を1ヶ月間、飼料を替えて飼育したところ、体重の平均は 65 kg に増えたが、
+                        変動係数に変化はなかった。
+                    </p>
+                    <p>(1) 餌を替える前の変動係数を求めよ。</p>
+                    <p>(2) 飼育後の標準偏差を求めよ。</p>
+
+                    <div class="answer-block">
+                        <p><strong>【解答】</strong></p>
+                        <p><strong>(1) 変動係数の計算</strong></p>
+                        <div class="formula-block">
+                            $$\text{CV} = \frac{\text{標準偏差}}{\text{期待値}} = \frac{12}{60} = \boxed{0.2 \;(= 20\%)}$$
+                        </div>
+
+                        <p><strong>(2) 飼育後の標準偏差の計算</strong></p>
+                        <p>
+                            変動係数が変わらないということは、飼育後も CV ＝ 0.2 のまま。
+                            飼育後の平均は 65 kg なので：
+                        </p>
+                        <div class="formula-block">
+                            $$\frac{\sigma_{\text{after}}}{65} = 0.2 \implies \sigma_{\text{after}} = 65 \times 0.2 = \boxed{13 \text{ kg}}$$
+                        </div>
+                        <p>
+                            変動係数一定というのは、「平均が大きくなるにつれて標準偏差も比例して大きくなる」ことを意味します。
+                        </p>
+                    </div>
+
+                    <!-- 問3.2 -->
+                    <h3>【問3.2】平均の使い分け</h3>
+                    <p>
+                        <strong>(1)</strong> 車で一本道を往復した。行きは時速40km、帰りは時速60kmで走ったとき、往復の平均時速を求めよ。
+                    </p>
+                    <p>
+                        <strong>(2)</strong> 3銘柄の株を購入した。A株：5,000円を100株、B株：3,000円を200株、C株：8,000円を50株。
+                        購入した株の1株あたりの平均価格を求めよ。
+                    </p>
+                    <p>
+                        <strong>(3)</strong> 投資信託の3年間の年率リターンが $+20\%$、$-10\%$、$+15\%$ であった（つまり倍率が $1.20$、$0.90$、$1.15$）。
+                        1年あたりの平均成長率（倍率）を求めよ。
+                    </p>
+
+                    <div class="answer-block">
+                        <p><strong>【解答】</strong></p>
+
+                        <p><strong>(1) 調和平均を使う（速度の平均）</strong></p>
+                        <p>
+                            往復の距離を $2d$ とすると、行きにかかる時間は $d/40$、帰りは $d/60$。
+                            合計時間は $d/40 + d/60 = d(3+2)/120 = 5d/120 = d/24$。
+                        </p>
+                        <div class="formula-block">
+                            $$\text{平均速度} = \frac{2d}{d/24} = 48 \text{ km/h}$$
+                        </div>
+                        <p>これは調和平均の式と一致します：</p>
+                        <div class="formula-block">
+                            $$H = \frac{2}{\dfrac{1}{40} + \dfrac{1}{60}} = \frac{2}{\dfrac{3+2}{120}} = \frac{2 \times 120}{5} = 48 \text{ km/h}$$
+                        </div>
+                        <p>算術平均 $(40+60)/2 = 50$ km/h とは<em>異なります</em>。算術平均は「同じ時間だけ走った場合」の平均で、今回は「同じ距離を走る」ので調和平均が正しい。</p>
+
+                        <p><strong>(2) 加重平均を使う（購入金額が異なる）</strong></p>
+                        <p>購入株数を重みとした加重平均：</p>
+                        <div class="formula-block">
+                            $$\bar{x}_w = \frac{5000 \times 100 + 3000 \times 200 + 8000 \times 50}{100 + 200 + 50}
+                            = \frac{500000 + 600000 + 400000}{350}
+                            = \frac{1500000}{350} \approx \boxed{4286 \text{ 円}}$$
+                        </div>
+
+                        <p><strong>(3) 幾何平均を使う（成長率の平均）</strong></p>
+                        <p>3年後の資産は初期値の $1.20 \times 0.90 \times 1.15 = 1.242$ 倍。1年あたりの平均倍率は：</p>
+                        <div class="formula-block">
+                            $$G = (1.20 \times 0.90 \times 1.15)^{1/3} = (1.242)^{1/3} \approx 1.075$$
+                        </div>
+                        <p>すなわち平均年率約 $7.5\%$ の成長。算術平均 $(1.20 + 0.90 + 1.15)/3 \approx 1.083$ とは異なります。</p>
+                    </div>
+
+                    <!-- 問3.3 -->
+                    <h3>【問3.3】独立な和 vs スカラー倍の分散の違い</h3>
+                    <p>
+                        工場でネジAとネジBを組み合わせた製品を作るとする。
+                        ネジAの長さを確率変数 $X$（$E[X] = 20$mm, $V[X] = 1.0$mm²）、
+                        ネジBの長さを確率変数 $Y$（$E[Y] = 20$mm, $V[Y] = 1.0$mm²）とする。
+                        $X$ と $Y$ は独立とする。次の2つの方法で作った製品全体の長さの分散を求めよ。
+                    </p>
+                    <p><strong>方法1：</strong>倉庫から無作為に選んだネジA（$X_1$）と、別の無作為なネジA（$X_2$）を連結し、さらにネジB（$Y$）を連結。長さは $Z_1 = X_1 + X_2 + Y$。</p>
+                    <p><strong>方法2：</strong>ネジA1本（$X$）を半分に切って2つにし、それをネジBで挟む。長さは $Z_2 = X + Y$（ただし $X$ は1本のネジの長さで、分散には全体の寄与が $V[X]$ のまま）。
+                    ただし、1本のネジAを2ピースに分けた場合、全体の長さ（計 $X$）への寄与の合計分散を考える。</p>
+
+                    <div class="answer-block">
+                        <p><strong>【解答】</strong></p>
+                        <p><strong>方法1（独立な3変数の和）：</strong>$Z_1 = X_1 + X_2 + Y$</p>
+                        <p>$X_1, X_2, Y$ はそれぞれ独立なので：</p>
+                        <div class="formula-block">
+                            $$V[Z_1] = V[X_1] + V[X_2] + V[Y] = 1.0 + 1.0 + 1.0 = \boxed{3.0 \text{ mm}^2}$$
+                        </div>
+
+                        <p><strong>方法2（同一変数のスカラー倍 + 独立変数）：</strong></p>
+                        <p>1本ネジAの全長 $X$ を2倍して使う場合と解釈すると：$Z_2 = 2X + Y$（$X, Y$ 独立）。</p>
+                        <div class="formula-block">
+                            $$V[2X + Y] = 2^2 V[X] + V[Y] = 4 \times 1.0 + 1.0 = \boxed{5.0 \text{ mm}^2}$$
+                        </div>
+                        <p>
+                            <strong>重要な解釈：</strong>$V[X_1 + X_2] = 2\sigma^2$（別々のネジを2本使う）に対し、
+                            $V[2X] = 4\sigma^2$（同じネジを2倍係数で使う）。
+                            同じネジを使うと製品ばらつきが大きくなります。
+                            品質管理上は「別々のネジを使う」方が安定した製品になります。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ===== メモ ===== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
+                    <ul>
+                        <li><strong>位置の指標の使い分け：</strong>左右対称な分布では3つとも同じ。右裾が長いデータ（所得・株価）では中央値が実態に近い</li>
+                        <li><strong>変動係数の利点：</strong>単位がないので異なる変数のばらつきを公平に比較できる</li>
+                        <li><strong>歪度と尖度の直感：</strong>歪度は「3乗で符号を保つ」→ 裾の方向が正負を決める。尖度は「4乗で大きい外れ値を強調」→ 裾が重いほど大きい</li>
+                        <li><strong>相関係数の限界：</strong>相関係数は線形の関係のみを捉える。$X$ と $X^2$ は強く関連するが相関係数が0になる場合もある</li>
+                        <li><strong>偏相関係数の意義：</strong>擬似相関を見破る道具。第三変数の影響を取り除いた「本来の関係」を見る</li>
+                        <li><strong>平均の使い分け：</strong>速度→調和平均、伸び率・倍率→幾何平均、重み付き→加重平均、それ以外→算術平均</li>
+                        <li><strong>全分散の公式：</strong>$V[Y] = E[V[Y|X]] + V[E[Y|X]]$ は分散分析（ANOVA）の組内・組間分解の理論的基盤</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="22">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>
+                        第22章では<strong>主成分分析</strong>（PCA: Principal Component Analysis）を学ぶ。
+                        多変量データの持つ情報をできるだけ保持しつつ、少数の主成分に縮約する手法である。
+                        標本共分散行列（または相関行列）の固有値問題を解くことで主成分を求め、
+                        寄与率・累積寄与率により次元削減の程度を判断する。
+                    </p>
+                    <p><strong>キーワード：</strong>標本共分散行列、標本相関行列、固有値・固有ベクトル、主成分、寄与率、累積寄与率、主成分得点、主成分負荷量、特異値分解、自己符号化器</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+
+                    <h3>データの標準化と行列</h3>
+                    <ul>
+                        <li><strong>標本共分散行列 $S$：</strong>変量の単位やスケールがそのまま反映される</li>
+                        <li><strong>標本相関行列 $R$：</strong>各変量を標準化してからの共分散行列。単位の影響を排除</li>
+                    </ul>
+                    <p>一般に、変量のスケールが大きく異なる場合は相関行列 $R$ を用いる。</p>
+
+                    <h3>固有値問題と主成分の導出</h3>
+                    <div class="formula-block">
+                        $$S\boldsymbol{u} = \lambda\boldsymbol{u} \quad \text{（共分散行列の場合）}$$
+                    </div>
+                    <ul>
+                        <li>$\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$：固有値</li>
+                        <li>$\boldsymbol{u}_j$：固有値 $\lambda_j$ に対応する（正規化された）固有ベクトル</li>
+                        <li>第 $j$ 主成分：$y_j = \boldsymbol{u}_j^T(\boldsymbol{x} - \bar{\boldsymbol{x}})$</li>
+                    </ul>
+
+                    <h3>寄与率と累積寄与率</h3>
+                    <div class="formula-block">
+                        $$\text{第 $j$ 主成分の寄与率} = \frac{\lambda_j}{\sum_{k=1}^{p}\lambda_k}$$
+                    </div>
+                    <p>累積寄与率が 70〜80% を超えるところまでの主成分を採用するのが一般的。</p>
+                    <p>なお $\sum_{j=1}^{p}\lambda_j = \text{tr}(S)$（全分散）。</p>
+
+                    <h3>主成分得点と主成分負荷量</h3>
+                    <ul>
+                        <li><strong>主成分得点：</strong>各個体 $i$ の第 $j$ 主成分の値 $y_{ij} = \sum_{k=1}^{p} u_{kj}(x_{ik} - \bar{x}_k)$</li>
+                        <li><strong>主成分負荷量：</strong>第 $j$ 主成分と原変量 $x_k$ の相関係数</li>
+                    </ul>
+                    <div class="formula-block">
+                        $$r(y_j, x_k) = \frac{\sqrt{\lambda_j}\cdot u_{kj}}{\sqrt{s_{kk}}}$$
+                    </div>
+                    <p>主成分負荷量の絶対値が大きい変量が、その主成分の解釈の手がかりとなる。</p>
+
+                    <h3>特異値分解（SVD）</h3>
+                    <div class="formula-block">
+                        $$X_c = \sum_{j=1}^{p} s_j\boldsymbol{v}_j\boldsymbol{u}_j^T$$
+                    </div>
+                    <ul>
+                        <li>$X_c$：中心化データ行列（$n \times p$）</li>
+                        <li>$s_j$：特異値（$\lambda_j = s_j^2/(n-1)$）</li>
+                        <li>$\boldsymbol{v}_j$：左特異ベクトル、$\boldsymbol{u}_j$：右特異ベクトル</li>
+                    </ul>
+                    <p>第 $j$ 主成分得点ベクトル $= s_j\boldsymbol{v}_j$</p>
+
+                    <h3>自己符号化器（Autoencoder）</h3>
+                    <p>ニューラルネットワークによる非線形次元削減手法。中間層が元の次元より少ないネットワークで入出力が等しくなるように学習する。線形活性化関数の場合、主成分分析と等価になる。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+
+                    <h3>主成分の分散</h3>
+                    <div class="formula-block">
+                        $$V[y_j] = \lambda_j$$
+                    </div>
+
+                    <h3>全分散の保存</h3>
+                    <div class="formula-block">
+                        $$\sum_{j=1}^{p}\lambda_j = \text{tr}(S) = \sum_{k=1}^{p} s_{kk}$$
+                    </div>
+
+                    <h3>主成分負荷量</h3>
+                    <div class="formula-block">
+                        $$r(y_j, x_k) = \frac{\sqrt{\lambda_j}\cdot u_{kj}}{\sqrt{s_{kk}}}$$
+                    </div>
+
+                    <h3>相関行列を使う場合の寄与率</h3>
+                    <div class="formula-block">
+                        $$\text{寄与率} = \frac{\lambda_j}{p} \quad （\text{tr}(R)=p）$$
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <h3>例1：小テストの共分散行列と相関行列</h3>
+                    <div class="answer-block">
+                        <p>4科目（数学・英語・物理・化学）の成績データから：</p>
+                        <p><strong>標本共分散行列 $S$：</strong></p>
+                        <div class="formula-block">
+                            $$S = \begin{pmatrix} 16 & 8 & 12 & 8 \\ 8 & 9 & 6 & 6 \\ 12 & 6 & 16 & 8 \\ 8 & 6 & 8 & 9 \end{pmatrix}$$
+                        </div>
+                        <p><strong>標本相関行列 $R$：</strong></p>
+                        <div class="formula-block">
+                            $$R = \begin{pmatrix} 1 & 0.667 & 0.75 & 0.667 \\ 0.667 & 1 & 0.500 & 0.667 \\ 0.75 & 0.500 & 1 & 0.667 \\ 0.667 & 0.667 & 0.667 & 1 \end{pmatrix}$$
+                        </div>
+                    </div>
+
+                    <h3>例2：固有値と累積寄与率</h3>
+                    <div class="answer-block">
+                        <p>$S$ の固有値：$\lambda_1 = 20.2,\ \lambda_2 = 19.4,\ \lambda_3 = 0.85,\ \lambda_4 = 0.18$</p>
+                        <p>全分散 = $20.2+19.4+0.85+0.18 = 40.63$</p>
+                        <table>
+                            <thead><tr><th>主成分</th><th>固有値</th><th>寄与率</th><th>累積寄与率</th></tr></thead>
+                            <tbody>
+                                <tr><td>PC1</td><td>20.2</td><td>49.7%</td><td>49.7%</td></tr>
+                                <tr><td>PC2</td><td>19.4</td><td>47.7%</td><td>97.5%</td></tr>
+                                <tr><td>PC3</td><td>0.85</td><td>2.1%</td><td>99.6%</td></tr>
+                                <tr><td>PC4</td><td>0.18</td><td>0.4%</td><td>100.0%</td></tr>
+                            </tbody>
+                        </table>
+                        <p>→ 第2主成分までで累積寄与率 97.5%（ほとんどの情報を2成分で説明可能）</p>
+                    </div>
+
+                    <h3>問22.1：ロンドン五輪 女子七種競技の主成分分析</h3>
+                    <div class="answer-block">
+                        <p><strong>(1) 相関行列の固有値問題からの主成分負荷量</strong></p>
+                        <p>第1主成分：$\lambda_1 = 2.37$、固有ベクトル $\boldsymbol{u}_1 = (-0.49, 0.18, -0.41, -0.24, -0.37, 0.41, -0.42)^T$</p>
+                        <p>第2主成分：$\lambda_2 = 1.79$、固有ベクトル $\boldsymbol{u}_2 = (0.07, 0.57, 0.12, 0.55, -0.42, -0.07, -0.41)^T$</p>
+                        <ul>
+                            <li>ア = 100mHの第1主成分負荷量：$\sqrt{2.37} \times (-0.49) = -0.75$</li>
+                            <li>イ = HJの第2主成分負荷量：$\sqrt{1.79} \times 0.18 \times (1/\sqrt{s_{22}})$（ただし相関行列なので $s_{22}=1$）$= \sqrt{1.79}\times 0.20 \approx 0.27$</li>
+                        </ul>
+
+                        <p><strong>(2) 主成分の解釈</strong></p>
+                        <ul>
+                            <li><strong>第1主成分：</strong>走力・跳躍力（100mH, 200m, LJ, 800mの負荷量が大きい）→ 総合走力・跳躍力</li>
+                            <li><strong>第2主成分：</strong>投てき能力（SP, JTの負荷量が大きい）→ 投てき・パワー系能力</li>
+                        </ul>
+
+                        <p><strong>(3) 主成分得点散布図の解釈</strong></p>
+                        <p>第1主成分が最大かつ第2主成分もバランスよい選手 → <strong>A が優勝者</strong>（ジェシカ・エニス）。走力・跳躍系で突出。</p>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>主成分分析は教師なし学習の代表的手法。変量の線形結合で新しい合成変量を作る</li>
+                        <li>共分散行列 vs 相関行列：変量のスケールが同程度なら $S$、大きく異なるなら $R$ を使う</li>
+                        <li>固有ベクトルの符号は任意（反転しても主成分の意味は変わらない）→ 解釈で符号を揃える</li>
+                        <li>バイプロット：主成分得点と主成分負荷量を同時にプロットする可視化手法</li>
+                        <li>特異値分解は直接データ行列から主成分を求められるため、大規模データに有用</li>
+                        <li>自己符号化器は非線形な次元削減が可能（PCAの非線形拡張とみなせる）</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="12">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>
+                        第12章では、正規分布に限定しない<strong>一般の分布に関する検定法</strong>を扱う。
+                        二項分布（母比率）やポアソン分布に関する検定、カテゴリカルデータに対する
+                        <strong>適合度検定</strong>（カイ二乗統計量）、分割表の独立性検定、そして汎用的な検定構成法である
+                        <strong>尤度比検定</strong>を学ぶ。
+                    </p>
+                    <p><strong>キーワード：</strong>二項分布に関する検定、ポアソン分布に関する検定、適合度検定、尤度比検定</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+
+                    <h3>母比率の検定</h3>
+                    <p>試行回数 $n$、成功確率 $\theta$ の二項分布。$\hat{\theta} = X/n$（最尤推定量）。</p>
+                    <p>$H_0: \theta = \theta_0$ に対し、帰無仮説のもとで</p>
+                    <div class="formula-block">
+                        $$\frac{\sqrt{n}(\hat{\theta} - \theta_0)}{\sqrt{\theta_0(1 - \theta_0)}} \xrightarrow{d} N(0,1)$$
+                    </div>
+                    <ul>
+                        <li>片側（$H_1: \theta > \theta_0$）：上式 $\geq z_\alpha$ で棄却</li>
+                        <li>両側（$H_1: \theta \neq \theta_0$）：上式の絶対値 $\geq z_{\alpha/2}$ で棄却</li>
+                    </ul>
+                    <p>信頼区間では分母の $\theta_0(1-\theta_0)$ を $\hat{\theta}(1-\hat{\theta})$ に置き換える：</p>
+                    <div class="formula-block">
+                        $$\hat{\theta} \pm z_{\alpha/2}\sqrt{\frac{\hat{\theta}(1-\hat{\theta})}{n}}$$
+                    </div>
+
+                    <h3>母比率の差の検定</h3>
+                    <p>$X_1 \sim \text{Bin}(n_1, \theta_1)$、$X_2 \sim \text{Bin}(n_2, \theta_2)$。$H_0: \theta_1 = \theta_2$</p>
+                    <p>帰無仮説のもとでの共通比率の最尤推定量：$\hat{\theta}^* = (x_1 + x_2)/(n_1 + n_2)$</p>
+                    <div class="formula-block">
+                        $$Z = \frac{\hat{\theta}_1 - \hat{\theta}_2}{\sqrt{(1/n_1 + 1/n_2)\,\hat{\theta}^*(1-\hat{\theta}^*)}}$$
+                    </div>
+                    <p>信頼区間は各群の推定量を個別に用いる：</p>
+                    <div class="formula-block">
+                        $$(\hat{\theta}_1 - \hat{\theta}_2) \pm z_{\alpha/2}\sqrt{\frac{\hat{\theta}_1(1-\hat{\theta}_1)}{n_1} + \frac{\hat{\theta}_2(1-\hat{\theta}_2)}{n_2}}$$
+                    </div>
+
+                    <h3>ポアソン分布に関する検定</h3>
+                    <p>$X \sim \text{Po}(\lambda)$。$H_0: \lambda = \lambda_0$ に対し、</p>
+                    <div class="formula-block">
+                        $$\frac{\hat{\lambda} - \lambda_0}{\sqrt{\lambda_0}} \xrightarrow{d} N(0,1)$$
+                    </div>
+                    <p>検定統計量の2乗 $(\hat{\lambda} - \lambda_0)^2 / \lambda_0$ は近似的に $\chi^2(1)$ に従う（適合度検定の特別な場合）。</p>
+
+                    <h3>適合度検定（ピアソンのカイ二乗検定）</h3>
+                    <p>カテゴリ数 $I$、観測度数 $x_i$、期待度数 $n\hat{p}_i$。</p>
+                    <div class="formula-block">
+                        $$T(\boldsymbol{x}) = \sum_{i=1}^{I} \frac{(x_i - n\hat{p}_i)^2}{n\hat{p}_i} \xrightarrow{d} \chi^2(d)$$
+                    </div>
+                    <p>自由度 $d = (I - 1) - k$。$k$ は帰無仮説のもとで自由に動けるパラメータの数。</p>
+                    <ul>
+                        <li>単純帰無仮説（$p_i$ がすべて指定）：$k=0$、$d = I-1$</li>
+                        <li>2元分割表の独立性：$p_{ij} = \alpha_i \beta_j$ → $d = (I-1)(J-1)$</li>
+                    </ul>
+
+                    <h3>イエーツの補正（Yates' correction）</h3>
+                    <p>度数が小さい場合に $(x_i - n\hat{p}_i)^2$ を $(|x_i - n\hat{p}_i| - 0.5)^2$ に置き換える補正。連続修正に対応。</p>
+
+                    <h3>尤度比検定（Likelihood Ratio Test）</h3>
+                    <p>$\boldsymbol{\theta} = (\theta_1, \theta_2)$、$H_0: \theta_1 = \theta_{10}$。尤度比：</p>
+                    <div class="formula-block">
+                        $$\lambda_n = \frac{\max_{\theta_1, \theta_2} f_n(\boldsymbol{x}_n; \theta_1, \theta_2)}{\max_{\theta_2} f_n(\boldsymbol{x}_n; \theta_{10}, \theta_2)}$$
+                    </div>
+                    <p>$H_0$ のもとで $2\log\lambda_n \xrightarrow{d} \chi^2(p)$（$p$ は $\theta_1$ の次元）。</p>
+                    <p>$2\log\lambda_n \geq \chi^2_\alpha(p)$ のとき $H_0$ を棄却。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+
+                    <h3>カイ二乗統計量</h3>
+                    <div class="formula-block">
+                        $$T = \sum_{i=1}^{I} \frac{(O_i - E_i)^2}{E_i}$$
+                    </div>
+                    <p>$O_i$：観測度数、$E_i = n\hat{p}_i$：期待度数</p>
+
+                    <h3>2元分割表の独立性検定の自由度</h3>
+                    <div class="formula-block">
+                        $$d = (IJ - 1) - (I + J - 2) = (I-1)(J-1)$$
+                    </div>
+
+                    <h3>母比率の検定と適合度検定の関係</h3>
+                    <p>母比率の両側検定統計量の2乗はカイ二乗統計量に一致する：</p>
+                    <div class="formula-block">
+                        $$\frac{n(\hat{\theta} - \theta_0)^2}{\theta_0(1-\theta_0)} = \frac{(x_1 - n\theta_0)^2}{n\theta_0} + \frac{(x_2 - n(1-\theta_0))^2}{n(1-\theta_0)}$$
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <h3>問12.1：曜日別問い合わせの一様性検定</h3>
+                    <p>小売店Sへの問い合わせ回数（1週間）：月7、火3、水5、木2、金7、土12、日13（合計49）。</p>
+                    <p>$H_0$：曜日によって問い合わせの回数が異ならない。有意水準5%。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) カイ二乗統計量：</strong></p>
+                    <p>$H_0$ のもとでの期待回数：$49/7 = 7$（回）</p>
+                    <div class="formula-block">
+                        $$T = \frac{(7-7)^2 + (3-7)^2 + (5-7)^2 + (2-7)^2 + (7-7)^2 + (12-7)^2 + (13-7)^2}{7} = \frac{106}{7} \approx \mathbf{15.14}$$
+                    </div>
+
+                    <p><strong>(2) 棄却限界値と結論：</strong></p>
+                    <p>自由度 $7 - 1 = 6$ のカイ二乗分布の上側5%点：$\chi^2_{0.05}(6) = 12.59$</p>
+                    <p>$15.14 > 12.59$ より、帰無仮説は<strong>棄却される</strong>。曜日によって問い合わせの回数が異なるといえる。</p>
+                    </div>
+
+                    <h3>問12.2：台風上陸数のポアソン分布適合度検定</h3>
+                    <p>1951–2019年（69年間）の台風上陸数。平均2.99回、標準偏差1.70回。</p>
+                    <div class="answer-block">
+                    <p><strong>(1)</strong> ポアソン分布は平均と分散が等しい。平均 $2.99$、分散 $1.70^2 = 2.89$ であり近い値 → ポアソン分布が示唆される。</p>
+
+                    <p><strong>(2)</strong> 期待度数は $69 \times p(x)$（$p(x) = e^{-2.99} \cdot 2.99^x / x!$）で各カテゴリを計算。10回以上は残差から求める。</p>
+
+                    <p><strong>(3)</strong> カイ二乗統計量 = 16.37。カテゴリ数 $I = 11$、推定パラメータ $k = 1$（$\lambda$）。</p>
+                    <p>自由度 $d = (11-1) - 1 = 9$。$\chi^2_{0.05}(9) = 16.92$</p>
+                    <p>$16.37 < 16.92$ より帰無仮説は<strong>棄却されない</strong>。ただし棄却限界値に近い。</p>
+                    <p>原因：上陸数10回以上の期待度数が $0.07$ と極めて小さいため、乖離度 $(1-0.07)^2/0.07 \approx 12.36$ が大きくなっている。</p>
+
+                    <p><strong>(4)</strong> 上陸数6回以上をまとめると期待度数 $= 5.71$、観測度数 $= 4$。カイ二乗統計量 $\approx 2.27$。自由度5の上側10%点 $9.24$ より十分小さい。まとめた方があてはまりがよい。</p>
+                    </div>
+
+                    <h3>問12.3：Instagram利用率の男女差検定</h3>
+                    <p>20代男性：利用40/114、20代女性：利用62/107。利用率に男女差があるか両側検定。</p>
+                    <div class="answer-block">
+                    <p>母比率の差の検定。共通比率 $\hat{\theta}^* = 102/221$。</p>
+                    <div class="formula-block">
+                        $$Z = \frac{40/114 - 62/107}{\sqrt{(1/114 + 1/107) \times (102/221) \times (119/221)}}$$
+                    </div>
+                    <p>$|Z| \geq z_{\alpha/2}$ ならば利用率に男女差があると結論する。</p>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>母比率の両側検定は、カテゴリ数2の適合度検定の特殊ケース（統計量の2乗が一致）</li>
+                        <li>適合度検定では期待度数が小さいカテゴリがあると統計量が不安定になる → カテゴリをまとめることで改善</li>
+                        <li>イエーツの補正は連続修正に対応し、度数が小さい場合に用いる</li>
+                        <li>尤度比検定は汎用的な検定構成法であり、$2\log\lambda_n$ がカイ二乗分布に従う（漸近的に適合度検定と等価）</li>
+                        <li>検定では $\theta_0(1-\theta_0)$（帰無仮説の値）を使い、信頼区間では $\hat{\theta}(1-\hat{\theta})$（推定量）を使う点に注意</li>
+                        <li>2元分割表の独立性の自由度は $(I-1)(J-1)$。フルモデルの自由パラメータ $IJ-1$ から帰無仮説の $I+J-2$ を引く</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

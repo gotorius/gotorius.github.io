@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="7">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>
+                        第7章では、確率変数列の収束に関する<strong>極限定理</strong>と<strong>漸近理論</strong>を扱う。
+                        確率収束・分布収束などの収束の概念、大数の弱法則、少数法則（ポアソン近似）、中心極限定理、
+                        極値分布、連続写像定理、スルツキーの補題、デルタ法、多次元の分布収束を学ぶ。
+                    </p>
+                    <p><strong>キーワード：</strong>確率収束、分布収束、大数の弱法則、少数法則、中心極限定理、連続修正、極値分布、デルタ法</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+
+                    <h3>確率変数の収束</h3>
+                    <ul>
+                        <li><strong>概収束</strong>（almost sure convergence）：$P(\lim_{n\to\infty} X_n = Y) = 1$</li>
+                        <li><strong>確率収束</strong>（convergence in probability）：任意の $\varepsilon > 0$ に対して $\lim_{n\to\infty} P(|X_n - Y| \geq \varepsilon) = 0$</li>
+                        <li><strong>平均二乗収束</strong>（convergence in mean-square）：$\lim_{n\to\infty} E[(X_n - Y)^2] = 0$</li>
+                        <li>概収束 $\Rightarrow$ 確率収束、平均二乗収束 $\Rightarrow$ 確率収束（チェビシェフの不等式による）</li>
+                        <li>$\{X_n\}$ が $Y$ に確率収束し $h$ が連続なら $\{h(X_n)\}$ は $h(Y)$ に確率収束する</li>
+                    </ul>
+
+                    <h3>分布収束（法則収束）</h3>
+                    <ul>
+                        <li>$X_n$ の分布関数 $F_n(x) = P(X_n \leq x)$ がある分布関数 $G$ のすべての連続点 $x$ で $\lim_{n\to\infty} F_n(x) = G(x)$ を満たすこと</li>
+                        <li>分布収束は確率変数そのものの収束ではなく、<strong>分布の収束</strong>を表す</li>
+                    </ul>
+
+                    <h3>極値分布</h3>
+                    <ul>
+                        <li>標本の最大値・最小値の極限分布。収束先は以下の3種類のみ：</li>
+                        <li><strong>ガンベル分布</strong>（Gumbel）：$e^{-e^{-y}}$</li>
+                        <li><strong>フレシェ分布</strong>（Fréchet）：$e^{-y^{-\alpha}}\ (y > 0)$</li>
+                        <li><strong>ワイブル分布</strong>（Weibull）：$e^{-(-y)^{\alpha}}\ (y < 0)$</li>
+                    </ul>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+
+                    <h3>大数の弱法則</h3>
+                    <p>$\{X_n\}$ が独立同一分布で $E[X_n] = \mu$、$V[X_n] = \sigma^2$ のとき、標本平均 $\bar{X}_n$ は $\mu$ に平均二乗収束する（したがって確率収束もする）。</p>
+                    <div class="formula-block">
+                        $$E[(\bar{X}_n - \mu)^2] = V[\bar{X}_n] = \frac{\sigma^2}{n} \to 0 \quad (n \to \infty)$$
+                    </div>
+
+                    <h3>少数法則（ポアソンの少数法則）</h3>
+                    <p>$X_n$ が試行回数 $n$、成功確率 $\lambda/n$ の二項分布に従うとき、$x$ を固定して $n \to \infty$ とすると</p>
+                    <div class="formula-block">
+                        $$P(X_n = x) \to e^{-\lambda} \frac{\lambda^x}{x!}$$
+                    </div>
+                    <p>つまり $X_n$ はポアソン分布に分布収束する。</p>
+
+                    <h3>中心極限定理</h3>
+                    <p>$\{X_n\}$ が平均 $\mu$、分散 $\sigma^2$ の独立同一分布に従うとき、</p>
+                    <div class="formula-block">
+                        $$\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$$
+                    </div>
+
+                    <h3>連続修正</h3>
+                    <p>離散分布を中心極限定理で正規近似するとき、区間を半整数にする（$\pm 0.5$ ずらす）と近似が良くなる。</p>
+
+                    <h3>分布収束の性質</h3>
+                    <ul>
+                        <li><strong>連続写像定理</strong>：$X_n \xrightarrow{d} X$ かつ $h$ が連続なら $h(X_n) \xrightarrow{d} h(X)$</li>
+                        <li><strong>スルツキーの補題</strong>：$X_n \xrightarrow{d} X$ かつ $Y_n \xrightarrow{p} c$（定数）なら $X_n + Y_n \xrightarrow{d} X + c$、$X_n Y_n \xrightarrow{d} cX$</li>
+                        <li><strong>モーメント母関数法</strong>：$M_n(t) \to M(t)$ が成り立つなら $X_n$ は $X$ に分布収束する</li>
+                    </ul>
+
+                    <h3>デルタ法</h3>
+                    <p>$\{X_n\}$ が平均 $\mu$、分散 $\sigma^2$ の独立同一分布に従い、$f$ が連続微分可能なら、テイラー展開により</p>
+                    <div class="formula-block">
+                        $$\sqrt{n}(f(\bar{X}_n) - f(\mu)) \xrightarrow{d} N(0, (f'(\mu))^2 \sigma^2)$$
+                    </div>
+
+                    <h3>多次元の分布収束</h3>
+                    <ul>
+                        <li>$\{(X_n, Y_n)\}$ に対しても同様に分布収束を定義できる</li>
+                        <li>注意：$X_n$ と $Y_n$ がそれぞれ分布収束しても、同時分布の収束は保証されない（周辺分布だけでは同時分布を特定できない）</li>
+                        <li>ただし $X_n$ と $Y_n$ が<strong>独立</strong>であれば、収束先も独立となる</li>
+                        <li>連続写像定理も多次元に拡張可能</li>
+                    </ul>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <h3>例1：大数の法則と連続関数</h3>
+                    <p>$X_1, \ldots, X_n$ が区間 $[0, 1]$ 上の一様分布に従う独立な確率変数のとき、$Z_n = \sqrt{(X_1 + \cdots + X_n)/n}$ はどのような値に確率収束するか。</p>
+                    <div class="answer-block">
+                    <p><strong>解：</strong>大数の法則から $(X_1 + \cdots + X_n)/n$ は $E[X_n] = 1/2$ に確率収束。連続関数の性質より $Z_n \to 1/\sqrt{2}$ に確率収束する。</p>
+                    </div>
+
+                    <h3>例3：極値分布（指数分布の最大値）</h3>
+                    <p>$\{X_n\}$ が独立に平均1の指数分布に従うとき、$M_n = \max\{X_1, \ldots, X_n\}$ の極限分布を求めよ。</p>
+                    <div class="answer-block">
+                    <p><strong>解：</strong>$P(M_n \leq x) = (1 - e^{-x})^n$。$x = y + \log n$ とおき $n \to \infty$ とすると $e^{-e^{-y}}$ に収束。よって $M_n - \log n$ は<strong>ガンベル分布</strong>に収束する。</p>
+                    </div>
+
+                    <h3>問7.1：中心極限定理と連続修正</h3>
+                    <p>普通のサイコロを30回投げたとき、3が10回以上現れる確率の近似値を求めよ（連続修正を行う）。</p>
+                    <div class="answer-block">
+                    <p><strong>解：</strong>$X_k$ を $k$ 回目に3が出たら1、そうでなければ0とする。$E[X_k] = 1/6$、$V[X_k] = 5/36$。</p>
+                    <p>求める確率は $P\!\left(\sum X_k \geq 10\right)$。連続修正により $9.5$ を用いて</p>
+                    <div class="formula-block">
+                        $$P\!\left(\bar{X}_{30} \geq \frac{9.5}{30}\right) = P\!\left(Z \geq \frac{9.5/30 - 1/6}{\sqrt{5/36 \cdot 1/30}}\right) \approx P(Z \geq 2.2) \approx \mathbf{0.014}$$
+                    </div>
+                    </div>
+
+                    <h3>問7.2：デルタ法と分布収束</h3>
+                    <p>$\{X_n\}$ は平均 $\mu$、分散 $\sigma^2$ の独立同一分布。$\bar{X}_n$ を標本平均とする。</p>
+                    <div class="answer-block">
+                    <p><strong>(1)</strong> $\sqrt{n}(\bar{X}_n - \mu)/\sigma$ は中心極限定理そのものにより $\mathbf{N(0, 1)}$ に収束。</p>
+                    <p><strong>(2)</strong> $\sqrt{n}(\bar{X}_n^3 - \mu^3)$ の収束先：$f(x) = x^3$ とおくと $f'(x) = 3x^2$ より</p>
+                    <div class="formula-block">
+                        $$\sqrt{n}(\bar{X}_n^3 - \mu^3) \xrightarrow{d} \mathbf{N(0, 9\mu^4 \sigma^2)}$$
+                    </div>
+                    <p><strong>(3)</strong> $\left(\sqrt{n}(\bar{X}_n - \mu)/\sigma\right)^2$ は $N(0,1)$ の2乗なので<strong>自由度1のカイ二乗分布</strong>に分布収束する。</p>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>確率収束は「確率1で収束」（概収束）より弱い概念だが、実用上はこちらで十分なことが多い</li>
+                        <li>中心極限定理は元の分布が何であれ（分散が有限なら）標本平均が正規分布に近づくという強力な結果</li>
+                        <li>離散分布の正規近似では連続修正を行うことで近似精度が向上する</li>
+                        <li>デルタ法は推定量 $f(\bar{X}_n)$ の漸近分布を求める標準的な手法で、推測統計で頻繁に利用される</li>
+                        <li>極値分布の収束先はガンベル・フレシェ・ワイブルの3種類のみ</li>
+                        <li>スルツキーの補題の要点：$X_n$ と $Y_n$ の同時分布を知る必要がない</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

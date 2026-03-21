@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="29">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>実際のデータ解析では、アンケートの回答拒否や測定器具の不具合などにより、データが不完全な形でしか得られないことがよくある。本章では、そのような<strong>不完全データ（incomplete data）</strong>の扱い方を学ぶ。</p>
+                    <p>データ行列 $X = \{x_{ij}\}$（$n \times p$）の各要素がすべて得られているとき<strong>完全（complete）</strong>、いくつかの要素が得られていないとき<strong>不完全（incomplete）</strong>という。不完全データを何らかの方策で擬似的に完全な形にしたものを<strong>擬似完全（pseudocomplete）データ</strong>という。</p>
+                    <p>本章では、欠測メカニズムの分類 → 削除法と補完法 → 1変量正規分布（打ち切り・トランケーション）→ 2変量正規分布（MAR）→ EMアルゴリズム の順に議論する。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+
+                    <h3>欠測メカニズム（Missing Mechanism）</h3>
+                    <ul>
+                        <li><strong>MCAR（Missing Completely At Random）</strong>：欠測は、欠測データおよび観測データの両方に依存せず、ランダムに生じる</li>
+                        <li><strong>MAR（Missing At Random）</strong>：欠測は、観測データに依存して生じるが、欠測データの値にはよらない</li>
+                        <li><strong>MNAR（Missing Not At Random）</strong>：欠測は、欠測データそのものの値に依存して生じる</li>
+                    </ul>
+                    <p>MCARでは各統計量の値は完全データの場合とほぼ同じ。MARでは平均が過小評価、標準偏差が小さくなるが、回帰パラメータはほとんど変わらない。MNARでは平均・標準偏差・回帰パラメータすべてが影響を受ける。</p>
+
+                    <h3>削除法（Deletion Method）</h3>
+                    <ul>
+                        <li><strong>CC（Complete Case）解析</strong>：1箇所でも欠測のある個体を個体ごと削除し、すべての変量が観測されている個体のみを用いる（case deletion）</li>
+                        <li><strong>AC（Available Case）解析</strong>：当該変量の使えるデータは全部使う方法。各変量の平均や相関係数の計算では、関連する変量が観測されていれば利用する</li>
+                    </ul>
+                    <p>変量数が多い場合、CC解析では解析に使えるデータがかなり少なくなる可能性がある。AC解析では変量ごとに個体数が異なるため、分散共分散行列の正定値性が崩れることもありうる。</p>
+
+                    <h3>補完法（Imputation Method）</h3>
+                    <ul>
+                        <li><strong>平均値代入</strong>：当該変量の観測データのみから求めた平均値を代入。平均の過小評価は解消されず、標準偏差がさらに過小評価になる</li>
+                        <li><strong>回帰代入</strong>：回帰式によって欠測部分を予測して代入。平均の過小評価は解消されるが、$y$ 方向のばらつきが考慮されないため標準偏差は過小評価、相関係数は過大評価</li>
+                        <li><strong>HotDeck法</strong>：欠測のある個体と類似の個体を同じデータセットから探し出し、その観測データを欠測部分に代入</li>
+                        <li><strong>多重代入法（multiple imputation）</strong>：偏りの除去のために提案された方法</li>
+                    </ul>
+
+                    <h3>打ち切り（Censoring）とトランケーション（Truncation）</h3>
+                    <ul>
+                        <li><strong>打ち切り</strong>：$n$ 個のデータを観測する計画で、$c$ 以下の $m$ 個は観測され、$c$ を超えた $n - m$ 個は値が不明だが<em>個数は既知</em></li>
+                        <li><strong>トランケーション</strong>：$c$ 以下の $m$ 個のデータは観測されたが、$c$ を超えたデータの<em>個数が不明</em></li>
+                    </ul>
+                    <p>両者の違いはパラメータ推定に想像以上に大きな影響を与える。</p>
+
+                    <h3>欠測メカニズムと対処法のまとめ</h3>
+                    <table>
+                        <thead><tr><th>メカニズム</th><th>推奨される対処</th><th>注意点</th></tr></thead>
+                        <tbody>
+                            <tr><td>MCAR</td><td>CC解析が妥当（補完は不要）</td><td>補完によりむしろ悪影響の恐れ</td></tr>
+                            <tr><td>MAR</td><td>回帰代入 or EM法</td><td>CC・平均値代入は偏り、回帰代入は標準偏差過小・相関過大</td></tr>
+                            <tr><td>MNAR</td><td>個別対応が必要</td><td>単純な補完法では偏りが生じる</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+
+                    <h3>1変量正規分布における推測</h3>
+                    <p>母集団分布 $N(\mu, \sigma^2)$ で、$c$ 以下のみ値が得られる場合の条件付き密度関数：</p>
+                    <div class="formula-block">
+                        $$f_c(x) = \begin{cases} \dfrac{1}{\Phi(a)} \cdot \dfrac{1}{\sqrt{2\pi}\sigma} \exp\!\left(-\dfrac{(x-\mu)^2}{2\sigma^2}\right) & (x \le c) \\[6pt] 0 & (x > c) \end{cases}$$
+                    </div>
+                    <p>ここで $a = (c - \mu)/\sigma$、$\Phi(\cdot)$ は標準正規分布の累積分布関数。</p>
+
+                    <p>$Z = (X - \mu)/\sigma \sim N(0,1)$ について：</p>
+                    <div class="formula-block">
+                        $$E[Z \mid Z \le a] = -\frac{\phi(a)}{\Phi(a)}, \quad V[Z \mid Z \le a] = 1 - \frac{a\,\phi(a)}{\Phi(a)} - \left(\frac{\phi(a)}{\Phi(a)}\right)^2$$
+                    </div>
+                    <p>一般の $\mu, \sigma$ では：</p>
+                    <div class="formula-block">
+                        $$E[X \mid X \le c] = \mu - \frac{\phi(a)}{\Phi(a)}\,\sigma, \quad V[X \mid X \le c] = \sigma^2\!\left(1 - \frac{a\,\phi(a)}{\Phi(a)} - \left(\frac{\phi(a)}{\Phi(a)}\right)^2\right)$$
+                    </div>
+
+                    <h3>打ち切りの場合のEMアルゴリズム（式29.2）</h3>
+                    <p>分散 $\sigma^2$ 既知、母平均 $\mu$ を推定。観測データの標本平均 $\bar{x}$、$a^{(t)} = (c - \hat{\mu}^{(t)})/\sigma$ として：</p>
+                    <div class="formula-block">
+                        $$\hat{\mu}^{(t+1)} = \frac{1}{n}\left[m\bar{x} + (n-m)\left(\hat{\mu}^{(t)} + \frac{\phi(a^{(t)})}{1 - \Phi(a^{(t)})}\,\sigma\right)\right]$$
+                    </div>
+
+                    <h3>トランケーションの場合の反復（式29.3）</h3>
+                    <p>観測データの標本平均 $\bar{x}$、$a^{(t)} = (c - \hat{\mu}^{(t)})/\sigma$ として：</p>
+                    <div class="formula-block">
+                        $$\hat{\mu}^{(t+1)} = \bar{x} + \frac{\phi(a^{(t)})}{\Phi(a^{(t)})}\,\sigma$$
+                    </div>
+
+                    <h3>2変量正規分布における推測</h3>
+                    <p>$(X, Y) \sim N_2(\mu_X, \mu_Y, \sigma_X^2, \sigma_Y^2, \sigma_{XY})$ で $X$ はすべて観測、$Y$ のみ欠測が生じる場合。</p>
+
+                    <p>$X$ の周辺パラメータの最尤推定値（$n$ 個の全データ）：</p>
+                    <div class="formula-block">
+                        $$\hat{\mu}_X = \frac{1}{n}\sum_{i=1}^{n} x_i, \quad \hat{\sigma}_X^2 = \frac{1}{n}\sum_{i=1}^{n}(x_i - \hat{\mu}_X)^2 \tag{29.5}$$
+                    </div>
+
+                    <p>両変量が観測された $m$ 組に関する統計量：</p>
+                    <div class="formula-block">
+                        $$\bar{x}' = \frac{1}{m}\sum_{i=1}^{m}x_i, \quad s_X'^2 = \frac{1}{m}\sum_{i=1}^{m}(x_i - \bar{x}')^2, \quad \bar{y} = \frac{1}{m}\sum_{i=1}^{m}y_i, \quad s_Y^2 = \frac{1}{m}\sum_{i=1}^{m}(y_i - \bar{y})^2$$
+                    </div>
+                    <div class="formula-block">
+                        $$s_{XY} = \frac{1}{m}\sum_{i=1}^{m}(x_i - \bar{x}')(y_i - \bar{y}), \quad r = \frac{s_{XY}}{s_X' \cdot s_Y} \tag{29.6}$$
+                    </div>
+
+                    <p>回帰パラメータの最尤推定値：</p>
+                    <div class="formula-block">
+                        $$\hat{a} = \bar{y} - \hat{b}\,\bar{x}', \quad \hat{b} = \frac{s_{XY}}{s_X'^2}, \quad \hat{\tau}^2 = s_Y^2 - \frac{s_{XY}^2}{s_X'^2} \tag{29.7}$$
+                    </div>
+
+                    <p>パラメータの関係式 $\mu_Y = a + b\mu_X$, $\sigma_Y^2 = \tau^2 + b^2\sigma_X^2$, $\sigma_{XY} = b\sigma_X^2$ より、MAR下の最尤推定値：</p>
+                    <div class="formula-block">
+                        $$\hat{\mu}_Y = \hat{a} + \hat{b}\,\hat{\mu}_X, \quad \hat{\sigma}_Y^2 = \hat{\tau}^2 + \hat{b}^2\,\hat{\sigma}_X^2, \quad \hat{\sigma}_{XY} = \hat{b}\,\hat{\sigma}_X^2 \tag{29.8}$$
+                    </div>
+
+                    <h3>EMアルゴリズム（一般形）</h3>
+                    <p>データが $X$（欠測）と $Y=y$（観測）に分かれ、$(X,Y)$ の同時密度を $f(x,y;\theta)$ とする。</p>
+                    <ul>
+                        <li><strong>E-step</strong>：$\theta$ の現在値 $\theta^*$ のもとで、完全データの対数尤度の条件付き期待値を計算
+                            $$Q(\theta \mid \theta^*) = \int \log f(x, y; \theta) \cdot f_{X|Y}(x; \theta^*)\,dx$$
+                            しばしば欠測値 $X$ を $\theta^*$ のもとでの条件付き期待値で補完することに対応</li>
+                        <li><strong>M-step</strong>：$Q(\theta \mid \theta^*)$ を $\theta$ について最大化（補完されたデータを完全データとみなして最尤推定）</li>
+                    </ul>
+                    <p>E-stepとM-stepを交互に繰り返すと尤度が非減少となり、収束すれば尤度関数の極大値に到達する。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <h3>例1：1変量正規分布における欠測</h3>
+                    <p>$n = 10$ 人の学生のテストの点数で、$c = 60$ 点以下の $m = 8$ 人の点数のみ記録。$\sigma = 10$ は既知。</p>
+                    <table>
+                        <thead><tr><th>ID</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr></thead>
+                        <tbody>
+                            <tr><td>すべて</td><td>35</td><td>38</td><td>42</td><td>45</td><td>49</td><td>52</td><td>53</td><td>56</td><td>63</td><td>65</td></tr>
+                            <tr><td>観測</td><td>35</td><td>38</td><td>42</td><td>45</td><td>49</td><td>52</td><td>53</td><td>56</td><td>60+</td><td>60+</td></tr>
+                        </tbody>
+                    </table>
+                    <p>「すべて」の平均 $= 49.8$。観測8人の和 $W = 370$、観測平均 $\bar{x} = 46.25$（$\mu$ の過小評価）。</p>
+                    <ul>
+                        <li><strong>打ち切り</strong>（式29.2）：初期値 $\hat{\mu}^{(0)} = 46.25$ → 3回の反復で $\hat{\mu} = 50.05$ に収束</li>
+                        <li><strong>トランケーション</strong>（式29.3）：初期値 $\hat{\mu}^{(0)} = 46.25$ → 6回の反復で $\hat{\mu} = 48.65$ に収束</li>
+                    </ul>
+                    <p>いずれも $\mu$ の過小評価を改善している。打ち切りの方が欠測の個数情報を使えるため真の値に近い。</p>
+
+                    <h3>例2：2変量正規分布における欠測（MAR）</h3>
+                    <p>表29.1の $x$ とMARの列の $y$ を2変量データとして扱い、各パラメータの最尤推定値を求める。</p>
+                    <p>$X$ の周辺パラメータ（式29.5）：$\hat{\mu}_X = 50.0$, $\hat{\sigma}_X^2 = 100.6$</p>
+                    <p>両変量観測の7組の統計量（式29.6）：</p>
+                    <p>$\bar{x}' = 45.0$, $s_X'^2 = 59.71$, $\bar{y} = 47.14$, $s_Y^2 = 62.41$, $r = 0.64$</p>
+                    <p>回帰パラメータ（式29.7）：$\hat{a} = 17.65$, $\hat{b} = 0.66$, $\hat{\tau}^2 = 36.75$</p>
+                    <p>最尤推定値（式29.8）：</p>
+                    <ul>
+                        <li>$\hat{\mu}_Y = 17.65 + 0.66 \times 50.0 = 50.65$</li>
+                        <li>$\hat{\sigma}_Y^2 = 36.75 + (0.66)^2 \times 100.6 = 80.57$</li>
+                        <li>$\hat{\sigma}_{XY} = 0.66 \times 100.6 = 65.94$</li>
+                        <li>$\hat{\rho} = 65.94 / \sqrt{100.6 \times 80.57} = 0.73$</li>
+                    </ul>
+
+                    <h3>問29.1：スキルテストと欠測メカニズム</h3>
+                    <p>65人中15人が基準 $c$ を超えて受講免除。2回のテストの点数は $\rho > 0$ の2変量正規分布に従う。$y$ の欠測メカニズムはMAR（$x$ の値に依存）。</p>
+                    <div class="qa-box">
+                        <p><strong>(1) TAのAさん</strong>：2回とも受験した50人のみで $\bar{y}_A$ と $r_A$ を計算 → <strong>答：⑤</strong></p>
+                        <p>$\rho > 0$ より、免除された学生の2回目の点数は概ね高い → $\bar{y}_A$ は $\mu_Y$ を<strong>過小評価</strong>。分布の端の観測値が失われるため、$r_A$ は $\rho$ を<strong>過小評価</strong>。</p>
+                    </div>
+                    <div class="qa-box">
+                        <p><strong>(2) TAのBさん</strong>：50人から回帰直線 $\hat{y} = a + bx$ を求め、免除15人の予測値を計算して65組のデータから $\bar{y}_B$ と $r_B$ を計算 → <strong>答：②</strong></p>
+                        <p>MARのもとで回帰直線は全員受験した場合とほぼ一致 → 予測値を含む $\bar{y}_B$ は $\mu_Y$ を<strong>偏りなく推定</strong>。ただし回帰予測値は直線まわりのばらつきを伴わないため、$r_B$ は $\rho$ を<strong>過大評価</strong>。</p>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>MCARならCC解析で十分（補完はむしろ悪影響）。MARなら回帰代入 or EM法が妥当。MNARは個別対応が必要</li>
+                        <li>打ち切りとトランケーションの違い：欠測の個数情報があるかないかで推定精度が大きく異なる</li>
+                        <li>回帰代入では平均の偏りは解消されるが、標準偏差の過小評価と相関係数の過大評価が残る → 多重代入法で改善可能</li>
+                        <li>EMアルゴリズムはE-step（欠測値を条件付き期待値で補完）とM-step（完全データとみなして最尤推定）の反復。尤度は非減少</li>
+                        <li>2変量正規MARの推定では、$X$ の周辺パラメータは全 $n$ 個から、回帰パラメータは完全な $m$ 組から推定し、式(29.8)で変換</li>
+                        <li>「失われたデータは戻ってこない」— 事後の解析より事前に欠測を防ぐ手立てを講じることが最も重要</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

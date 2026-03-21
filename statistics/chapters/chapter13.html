@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="13">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>
+                        第13章では<strong>ノンパラメトリック法</strong>を扱う。母集団分布を仮定しない検定手法として、
+                        ウィルコクソンの順位和検定、並べ替え検定、符号付き順位検定、符号検定、
+                        クラスカル・ウォリス検定、順位相関係数を学ぶ。
+                    </p>
+                    <p><strong>キーワード：</strong>ウィルコクソンの順位和検定、並べ替え検定、符号付き順位検定、符号検定、クラスカル・ウォリス検定、順位相関係数</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+
+                    <h3>パラメトリック法 vs ノンパラメトリック法</h3>
+                    <ul>
+                        <li><strong>パラメトリック法</strong>：母集団分布（多くは正規分布）を仮定し、その分布のもとで検定統計量を導出</li>
+                        <li><strong>ノンパラメトリック法</strong>：母集団分布の仮定を設けず、データの順位に基づいて検定を行う</li>
+                        <li>サンプルサイズが小さいときにノンパラメトリック法が有効なケースが多い</li>
+                    </ul>
+
+                    <h3>検定法の分類</h3>
+                    <table style="width:100%; border-collapse:collapse; margin:1em 0;">
+                        <thead>
+                            <tr style="border-bottom:2px solid var(--primary);">
+                                <th style="text-align:left; padding:0.5em;">検定内容</th>
+                                <th style="text-align:left; padding:0.5em;">検定名</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid #ddd;">
+                                <td style="padding:0.5em;">2群の差の検定</td>
+                                <td style="padding:0.5em;">ウィルコクソンの順位和検定、並べ替え検定</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #ddd;">
+                                <td style="padding:0.5em;">対応がある場合の差の検定</td>
+                                <td style="padding:0.5em;">符号付き順位検定、符号検定</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.5em;">3群以上の差の検定</td>
+                                <td style="padding:0.5em;">クラスカル・ウォリス検定</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>ウィルコクソンの順位和検定（Wilcoxon rank sum test）</h3>
+                    <ul>
+                        <li>2群を合わせて小さい値から順位を与え、順位和 $W_A$ または $W_B$ を検定統計量とする</li>
+                        <li>帰無仮説「2群の分布は同じ」のもと、順位はランダムに割り振られると考える</li>
+                        <li>タイがある場合は順位を分配（例：5番と6番がタイなら5.5ずつ）</li>
+                        <li>サンプルサイズ $m, n$ が大きいとき：平均 $= m(m+n+1)/2$、分散 $= mn(m+n+1)/12$ の正規分布近似</li>
+                    </ul>
+
+                    <h3>並べ替え検定（permutation test）</h3>
+                    <ul>
+                        <li>順位和でなく、数値の平均 $\bar{X}_A$ または $\bar{X}_B$ を検定統計量とする</li>
+                        <li>帰無仮説のもと、すべてのデータから群Aとして $m$ 個を無作為に選ぶ</li>
+                        <li>ウィルコクソンの順位和検定と結果が異なることがあるが、どちらがよいということではない</li>
+                    </ul>
+
+                    <h3>符号付き順位検定（Wilcoxon signed-rank test）</h3>
+                    <ul>
+                        <li>対応のあるデータの差 $D$ に対して、絶対値の小さい順に順位を与え、符号付き順位を割り当てる</li>
+                        <li>値が0のデータは除外し、サンプルサイズ $n$ を減らす</li>
+                        <li>正値の合計 $T_+$ を検定統計量とする</li>
+                        <li>帰無仮説「$D$ の中央値 $= 0$」、$D$ の分布が対称であることが条件</li>
+                        <li>大標本近似：平均 $= n(n+1)/4$、分散 $= n(n+1)(2n+1)/24$</li>
+                    </ul>
+
+                    <h3>符号検定（sign test）</h3>
+                    <ul>
+                        <li>差 $D$ の値が正になった個数 $T_+$ を検定統計量とする</li>
+                        <li>帰無仮説のもと $T_+ \sim \mathrm{Bin}(n, 0.5)$</li>
+                        <li>符号付き順位検定と異なり、$D$ の分布の対称性を仮定する必要はない</li>
+                    </ul>
+
+                    <h3>クラスカル・ウォリス検定（Kruskal-Wallis test）</h3>
+                    <ul>
+                        <li>3群以上の分布に差があるか検定（一元配置分散分析のノンパラメトリック版）</li>
+                        <li>帰無仮説「すべての群の分布は同じ」</li>
+                        <li>各群の分布の形が同じであるという仮定が必要</li>
+                        <li>大標本で自由度（群の数 $-1$）のカイ二乗分布近似を利用</li>
+                    </ul>
+
+                    <h3>順位相関係数</h3>
+                    <ul>
+                        <li><strong>スピアマンの順位相関係数</strong> $r_s$：ピアソンの積率相関係数を順位データに適用。$r_s = 1 - \dfrac{6\sum(x_i - y_i)^2}{n(n^2-1)}$</li>
+                        <li><strong>ケンドールの順位相関係数</strong> $\tau_k$：順位の大小の一致・不一致を数える。$\tau_k = \dfrac{P - N}{n(n-1)/2}$（$P$=一致組数、$N$=不一致組数）</li>
+                        <li>どちらも $-1$ から $1$ の値をとるが、同じ値にはならない</li>
+                    </ul>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+
+                    <h3>クラスカル・ウォリス検定統計量</h3>
+                    <p>各群のサンプルサイズ $n_A, n_B, n_C$、合計 $N = n_A + n_B + n_C$、順位の中央値 $\bar{N} = (N+1)/2$、各群の順位平均 $\bar{R}_A, \bar{R}_B, \bar{R}_C$ として：</p>
+                    <div class="formula-block">
+                        $$H = \frac{12}{N(N+1)} \sum_{g} n_g (\bar{R}_g - \bar{N})^2$$
+                    </div>
+                    <p>または：</p>
+                    <div class="formula-block">
+                        $$H = \frac{12}{N(N+1)} \left(\frac{R_A^2}{n_A} + \frac{R_B^2}{n_B} + \frac{R_C^2}{n_C}\right) - 3(N+1)$$
+                    </div>
+
+                    <h3>正規分布近似（大標本）</h3>
+                    <p><strong>順位和検定：</strong>平均 $= m(m+n+1)/2$、分散 $= mn(m+n+1)/12$</p>
+                    <p><strong>符号付き順位検定：</strong>平均 $= n(n+1)/4$、分散 $= n(n+1)(2n+1)/24$</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <h3>問13.1：高血圧治療薬の検定</h3>
+                    <p>A薬とB薬の効果比較。帰無仮説「2種類の治療薬の効果は等しい」、片側対立仮説「A薬のほうが効果が高い」。</p>
+
+                    <div class="answer-block">
+                    <p><strong>(1) ウィルコクソンの順位和検定（3人 vs 3人）：</strong></p>
+                    <p>A群：127, 131, 135 → 順位和 $W_A = 7$（B群：132, 138, 144 → 順位和 $W_B = 14$）</p>
+                    <p>$_6C_3 = 20$ 通りの組合せで $W_A \leq 7$ となるのは $(1,2,3)$ と $(1,2,4)$ の2種類</p>
+                    <p>片側P-値 $= 2/20 = \mathbf{0.1}$</p>
+
+                    <p><strong>(2) P-値 3%未満となる最低人数：</strong></p>
+                    <p>6人の場合：最小P-値 $= 1/20 = 0.05$（3%未満にならない）</p>
+                    <p>7人（A群3人、B群4人）の場合：$_7C_3 = 35$、最小P-値 $= 1/35 \approx 0.0286 < 0.03$</p>
+                    <p>最低<strong>7人</strong></p>
+
+                    <p><strong>(3) 符号付き順位検定（差：$-3, 17, 7$）：</strong></p>
+                    <p>符号付き順位：$-1, 3, 2$ → $T_+ = 3 + 2 = 5$</p>
+                    <p>$2^3 = 8$ 種類中、$T_+ \geq 5$ となるのは $(1,2,3)$ と $(-1,2,3)$ の2種類</p>
+                    <p>片側P-値 $= 2/8 = \mathbf{0.25}$</p>
+
+                    <p><strong>(4) 符号付き順位検定でP-値 5%未満となる最低人数：</strong></p>
+                    <p>3人：$1/8 > 0.05$、4人：$1/16 > 0.05$、5人：$1/32 < 0.05$</p>
+                    <p>最低<strong>5人</strong></p>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>ノンパラメトリック法は母集団分布の仮定がいらないため頑健だが、パラメトリック法より検出力が劣ることがある</li>
+                        <li>順位和検定と並べ替え検定は同じ帰無仮説でも検定統計量が異なり、P-値が異なることがある</li>
+                        <li>符号付き順位検定は $D$ の対称性が必要、符号検定は不要（より一般的だが検出力は劣る）</li>
+                        <li>クラスカル・ウォリス検定は一元配置分散分析のノンパラ版。どの群間に差があるかは特定しない</li>
+                        <li>スピアマンとケンドールの順位相関は同じデータでも値が異なる（$r_s \approx 0.86$ vs $\tau_k \approx 0.71$ など）</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

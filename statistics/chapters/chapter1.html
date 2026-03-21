@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="1">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. イントロ                                               -->
+                <!-- ======================================================== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 確率とは何か――「不確かさ」を数値で表す</h2>
+                    <p>
+                        統計学はデータから世界を理解する学問です。しかしデータには必ず「ばらつき」や「不確かさ」が伴います。
+                        その不確かさを定量的に扱うための言語が <strong>確率（probability）</strong> です。
+                    </p>
+                    <p>
+                        たとえばコインを投げたとき、表が出るか裏が出るかは事前にわかりません。
+                        でも「だいたい半々」という感覚は誰でも持っています。
+                        確率論はこの感覚を厳密に数式で表すための枠組みです。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
+                        <ol>
+                            <li>事象・確率の定義と計算（余事象・積事象・和事象）</li>
+                            <li>包除原理――「どちらか」の確率を重複なく求める方法</li>
+                            <li>条件付き確率と独立性――「情報が得られたとき」確率はどう変わるか</li>
+                            <li>ベイズの定理――「結果から原因の確率」を逆算する強力な道具</li>
+                            <li>確率変数・期待値・分散――ランダムな数値をまとめて特徴づける</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 1. 事象と確率                                             -->
+                <!-- ======================================================== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-dice"></i> ① 事象と確率――基本の定義</h2>
+
+                    <h3>全事象・事象・確率</h3>
+                    <p>
+                        実験や観測で起こりうるすべての結果の集合を <strong>全事象（sample space）$\Omega$</strong> といいます。
+                        その部分集合のことを <strong>事象（event）</strong> といい、通常 $A, B, C, \ldots$ で表します。
+                    </p>
+                    <p>
+                        事象 $A$ が起きる確率を $P(A)$ と書きます。確率は必ず $0 \leq P(A) \leq 1$ を満たし、全事象の確率は $P(\Omega) = 1$、空事象（絶対に起きない）の確率は $P(\emptyset) = 0$ です。
+                    </p>
+
+                    <h3>3種類の事象の演算</h3>
+                    <p>2つの事象 $A$ と $B$ に対して、以下の3種類の演算が重要です。</p>
+                    <div class="formula-block">
+                        <p><strong>① 余事象 $\bar{A}$（補集合）</strong>：「$A$ が起きない」という事象</p>
+                        $$P(\bar{A}) = 1 - P(A)$$
+                        <p>
+                            → 直感：コインで表 $A$ が出る確率が 0.5 なら、裏（表が出ない）$\bar{A}$ の確率も $1 - 0.5 = 0.5$。
+                            $A$ と $\bar{A}$ を合わせると必ず全体（確率1）になるので、引き算で求められます。
+                        </p>
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>② 積事象 $A \cap B$</strong>：「$A$ と $B$ の両方が起きる」という事象（AND）</p>
+                        <p>→ 直感：サイコロで「偶数かつ3以上」＝ $\{4, 6\}$</p>
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>③ 和事象 $A \cup B$</strong>：「$A$ または $B$ の少なくとも一方が起きる」という事象（OR）</p>
+                        <p>→ 直感：サイコロで「偶数または3以上」＝ $\{2, 3, 4, 5, 6\}$</p>
+                    </div>
+
+                    <h3>排反（mutually exclusive）</h3>
+                    <p>
+                        $A$ と $B$ が決して同時に起きない（$A \cap B = \emptyset$）とき、2つの事象は <strong>排反</strong> であるといいます。
+                        排反なら和事象の確率は単純に足し算できます：
+                    </p>
+                    <div class="formula-block">
+                        $$A \cap B = \emptyset \implies P(A \cup B) = P(A) + P(B)$$
+                        <p>→ 例：サイコロで「1の目」と「2の目」は同時に起きないので排反。$P(\{1\} \cup \{2\}) = \frac{1}{6} + \frac{1}{6} = \frac{1}{3}$</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 2. 包除原理                                               -->
+                <!-- ======================================================== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-circle-nodes"></i> ② 包除原理――「どちらか」の確率を重複なく求める</h2>
+
+                    <h3>問題の発生：なぜ単純に足せないのか？</h3>
+                    <p>
+                        $A$ と $B$ が排反でない場合、単純に $P(A) + P(B)$ とすると問題が起きます。
+                        「$A$ と $B$ の両方が起きる」部分 $A \cap B$ が <strong>2回カウント</strong> されてしまうからです。
+                    </p>
+                    <p>具体例で考えましょう。トランプ（52枚）から1枚引くとき：</p>
+                    <ul>
+                        <li>事象 $A$：「ハート」→ 13枚、$P(A) = \frac{13}{52} = \frac{1}{4}$</li>
+                        <li>事象 $B$：「絵札（J, Q, K）」→ 12枚、$P(B) = \frac{12}{52} = \frac{3}{13}$</li>
+                        <li>$A \cap B$：「ハートの絵札」→ 3枚、$P(A \cap B) = \frac{3}{52}$</li>
+                    </ul>
+                    <p>もし $P(A) + P(B) = \frac{13}{52} + \frac{12}{52} = \frac{25}{52}$ とすると、ハートの絵札 3枚が2回数えられています。正しくは $\frac{22}{52}$ です。</p>
+
+                    <h3>包除原理の公式</h3>
+                    <div class="formula-block">
+                        $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+                        <p>
+                            <strong>なぜ引くのか？</strong>：$P(A) + P(B)$ の計算で $A \cap B$ が2回足されてしまうので、
+                            1回分引き戻してちょうど1回にします。
+                        </p>
+                    </div>
+                    <p>先ほどのトランプの例で確認：</p>
+                    $$P(A \cup B) = \frac{13}{52} + \frac{12}{52} - \frac{3}{52} = \frac{22}{52} = \frac{11}{26} \quad \checkmark$$
+
+                    <h3>人数（度数）へも直接適用できる</h3>
+                    <p>
+                        包除原理は確率だけでなく、人数や個数にも直接使えます。「少なくとも一方」の人数を求めるとき：
+                    </p>
+                    <div class="formula-block">
+                        $$|A \cup B| = |A| + |B| - |A \cap B|$$
+                        <p>→ 例：30名のクラスでサッカー部10名、テニス部8名、両方3名のとき、どちらかに入っている人数は $10 + 8 - 3 = 15$ 名</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 3. 条件付き確率と独立性                                   -->
+                <!-- ======================================================== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-filter"></i> ③ 条件付き確率と独立性――「情報」が確率を変える</h2>
+
+                    <h3>条件付き確率とは？</h3>
+                    <p>
+                        「今日は雲が多い」という情報を得たとき、「明日雨が降る」確率は何も知らないときより高くなります。
+                        このように、<strong>ある事象 $A$ が起きた（という条件のもとで）$B$ が起きる確率</strong>を
+                        <strong>条件付き確率（conditional probability）</strong> といい、$P(B \mid A)$ と書きます（「$A$ を与えたもとでの $B$ の確率」と読む）。
+                    </p>
+                    <div class="formula-block">
+                        $$P(B \mid A) = \frac{P(A \cap B)}{P(A)} \quad (P(A) > 0)$$
+                        <p>
+                            <strong>なぜこの式か？</strong>：$A$ が起きたと知ったときは、全体 $\Omega$ ではなく $A$ の中だけを見ます。
+                            $A$ の中で $B$ も起きている部分が $A \cap B$ です。
+                            $A$ の中での割合なので、$P(A \cap B)$ を $P(A)$ で割ります。
+                        </p>
+                    </div>
+
+                    <h3>乗法定理（分母を消す変形）</h3>
+                    <p>条件付き確率の式の両辺に $P(A)$ を掛けると：</p>
+                    <div class="formula-block">
+                        $$P(A \cap B) = P(A) \cdot P(B \mid A)$$
+                        <p>これを <strong>乗法定理</strong> といいます。積事象の確率を求めるときに便利です。</p>
+                        <p>→ 例：袋に赤玉3個・白玉2個。1個取り出して戻さずもう1個取る。どちらも赤の確率は？</p>
+                        <p>$P(\text{1回目赤}) = \frac{3}{5}$、$P(\text{2回目赤} \mid \text{1回目赤}) = \frac{2}{4}$ なので：</p>
+                        $$P(\text{両方赤}) = \frac{3}{5} \times \frac{2}{4} = \frac{6}{20} = \frac{3}{10}$$
+                    </div>
+
+                    <h3>独立性（independence）</h3>
+                    <p>
+                        コインを2回投げるとき、1回目の結果は2回目の結果に何の影響も与えません。
+                        このように、<strong>一方の事象が他方の確率に全く影響しない</strong>とき、2つの事象は <strong>独立（independent）</strong> であるといいます。
+                    </p>
+                    <div class="formula-block">
+                        <p><strong>独立の定義</strong>（3つの同値な表現）：</p>
+                        $$P(A \cap B) = P(A) \cdot P(B)$$
+                        $$\Longleftrightarrow \quad P(B \mid A) = P(B) \quad \Longleftrightarrow \quad P(A \mid B) = P(A)$$
+                        <p>
+                            → 「$A$ が起きても $B$ の確率が変わらない」＝独立。
+                            知っても知らなくても関係ない、ということです。
+                        </p>
+                    </div>
+                    <p>
+                        <strong>注意</strong>：排反と独立は全く別物です。排反な事象（片方が起きると他方は起きない）は、
+                        $P(B \mid A) = 0 \neq P(B)$（$P(B) > 0$ ならば）なので、むしろ <em>強く依存</em> しています。
+                    </p>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 4. ベイズの定理                                           -->
+                <!-- ======================================================== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-rotate-left"></i> ④ ベイズの定理――「逆向き」の確率を求める</h2>
+
+                    <h3>動機：原因から結果は簡単、でも逆は？</h3>
+                    <p>
+                        「病気なら検査が陽性になる確率（感度）」はわかります。
+                        しかし実際に知りたいのは「検査が陽性だったとき、本当に病気の確率」です。
+                        これは確率の <em>向きを逆にした</em> 問いです。ベイズの定理はこれを解決します。
+                    </p>
+
+                    <h3>全確率の公式（ベイズの定理の準備）</h3>
+                    <p>
+                        まず準備として <strong>全確率の公式</strong> を確認します。
+                        全事象 $\Omega$ が排反な事象 $A$ と $\bar{A}$ に分けられるとき、
+                        任意の事象 $B$ の確率は：
+                    </p>
+                    <div class="formula-block">
+                        $$P(B) = P(B \mid A) P(A) + P(B \mid \bar{A}) P(\bar{A})$$
+                        <p>
+                            <strong>なぜ？</strong>：$B$ が起きるケースは「$A$ も起きる場合」と「$\bar{A}$ が起きる場合」の2通りしかなく、
+                            それぞれの積事象は排反なので、足し算できます。
+                        </p>
+                        $$P(B) = P(B \cap A) + P(B \cap \bar{A}) = P(B \mid A)P(A) + P(B \mid \bar{A})P(\bar{A})$$
+                    </div>
+
+                    <h3>ベイズの定理の導出</h3>
+                    <p>求めたいのは $P(A \mid B)$（結果 $B$ が観測されたもとでの原因 $A$ の確率）です。条件付き確率の定義から：</p>
+                    $$P(A \mid B) = \frac{P(A \cap B)}{P(B)}$$
+                    <p>分子は乗法定理で $P(A \cap B) = P(B \mid A) P(A)$、分母は全確率の公式を使うと：</p>
+                    <div class="formula-block">
+                        $$\boxed{P(A \mid B) = \frac{P(B \mid A)\, P(A)}{P(B \mid A)\, P(A) + P(B \mid \bar{A})\, P(\bar{A})}}$$
+                        <p>各項の意味：</p>
+                        <ul>
+                            <li>$P(A)$：データを見る前の「原因 $A$」の確率 ＝ <strong>事前確率（prior）</strong></li>
+                            <li>$P(B \mid A)$：原因 $A$ があるときの「結果 $B$」の確率 ＝ <strong>尤度（likelihood）</strong></li>
+                            <li>$P(A \mid B)$：結果 $B$ を観測した後の「原因 $A$」の確率 ＝ <strong>事後確率（posterior）</strong></li>
+                        </ul>
+                    </div>
+
+                    <h3>一般形（原因が $K$ 個ある場合）</h3>
+                    <p>原因が2つ（$A$ か $\bar{A}$）でなく $K$ 個ある場合（$A_1, A_2, \ldots, A_K$ が排反で全体を尽くす）：</p>
+                    <div class="formula-block">
+                        $$P(A_i \mid B) = \frac{P(B \mid A_i)\, P(A_i)}{\displaystyle\sum_{j=1}^{K} P(B \mid A_j)\, P(A_j)}$$
+                        <p>分母は「全確率の公式」の一般形で、$B$ が起きるすべての経路の確率を合計したものです。</p>
+                    </div>
+
+                    <h3>直感的なまとめ</h3>
+                    <div class="formula-block">
+                        <p style="font-weight:bold;">事後確率 ∝ 尤度 × 事前確率</p>
+                        <p>
+                            「事前にどれだけっぽいか」×「その原因があったとして結果がどれだけっぽいか」
+                            ＝「結果を見た後の評価」という構造です。
+                            ベイズの定理は、新しい証拠（$B$）を得て信念（確率）を更新するための公式です。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 5. 確率変数・期待値・分散                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-chart-bar"></i> ⑤ 確率変数・期待値・分散――ランダムな量を特徴づける</h2>
+
+                    <h3>確率変数とは？</h3>
+                    <p>
+                        「サイコロを振ったときの目の数」のように、結果によって変わる数値を <strong>確率変数（random variable）</strong> といいます。
+                        大文字 $X$ で表し、実際に観測された値は小文字 $x$ で表すのが慣例です。
+                    </p>
+                    <p>確率変数には2種類あります：</p>
+                    <ul>
+                        <li><strong>離散型</strong>：取りうる値が有限個または可算無限個（例：サイコロの目 $\{1,2,3,4,5,6\}$、コインの表裏の回数）</li>
+                        <li><strong>連続型</strong>：取りうる値が区間や実数全体など連続的な範囲（例：身長、気温、時間）</li>
+                    </ul>
+
+                    <h3>離散型：確率関数</h3>
+                    <p>離散型確率変数 $X$ が値 $x$ をとる確率を $p(x) = P(X = x)$ と書きます。</p>
+                    <div class="formula-block">
+                        <p>確率関数の条件：</p>
+                        <ul>
+                            <li>$p(x) \geq 0$（確率は非負）</li>
+                            <li>$\displaystyle\sum_x p(x) = 1$（全確率の和は 1）</li>
+                        </ul>
+                        <p>→ 例：公正なサイコロでは $p(1) = p(2) = \cdots = p(6) = \frac{1}{6}$</p>
+                    </div>
+
+                    <h3>連続型：確率密度関数</h3>
+                    <p>
+                        連続型では「ちょうど $x = 3.14159\ldots$」という特定の値をとる確率は 0 です。
+                        代わりに「$a \leq X \leq b$ の確率」を考えます。
+                        これを面積として表すための関数が <strong>確率密度関数（probability density function, pdf） $f(x)$</strong> です。
+                    </p>
+                    <div class="formula-block">
+                        $$P(a \leq X \leq b) = \int_a^b f(x)\, dx$$
+                        <p>確率密度関数の条件：</p>
+                        <ul>
+                            <li>$f(x) \geq 0$</li>
+                            <li>$\displaystyle\int_{-\infty}^{\infty} f(x)\, dx = 1$（全体の面積は 1）</li>
+                        </ul>
+                        <p>極限的な定義：$f(x) = \displaystyle\lim_{\varepsilon \to 0} \frac{P(x \leq X \leq x + \varepsilon)}{\varepsilon}$（微小区間の確率 ÷ 区間幅）</p>
+                    </div>
+
+                    <h3>期待値（平均）$E[X]$</h3>
+                    <p>
+                        確率変数の「平均的な値」を <strong>期待値（expected value）</strong> または <strong>平均 $\mu$</strong> といいます。
+                        「確率を重みとした加重平均」です。
+                    </p>
+                    <div class="formula-block">
+                        <p><strong>離散型：</strong></p>
+                        $$\mu = E[X] = \sum_x x\, p(x)$$
+                        <p>（各値 $x$ に、その確率 $p(x)$ を掛けてすべて足し合わせる）</p>
+                        <p><strong>連続型：</strong></p>
+                        $$\mu = E[X] = \int_{-\infty}^{\infty} x\, f(x)\, dx$$
+                        <p>（Σ が積分に変わっただけで考え方は同じ）</p>
+                    </div>
+                    <p>
+                        → 例：公正なサイコロでは $E[X] = 1 \cdot \frac{1}{6} + 2 \cdot \frac{1}{6} + 3 \cdot \frac{1}{6} + 4 \cdot \frac{1}{6} + 5 \cdot \frac{1}{6} + 6 \cdot \frac{1}{6} = \frac{21}{6} = 3.5$
+                    </p>
+
+                    <h3>分散 $V[X]$――ばらつきの大きさ</h3>
+                    <p>
+                        期待値だけでは分布の形はわかりません。「平均からどれだけ散らばっているか」を表すのが <strong>分散（variance）$\sigma^2$</strong> です。
+                    </p>
+                    <div class="formula-block">
+                        <p><strong>定義（離散型）：</strong></p>
+                        $$\sigma^2 = V[X] = E[(X - \mu)^2] = \sum_x (x - \mu)^2\, p(x)$$
+                        <p>
+                            <strong>なぜ2乗するのか？</strong>：偏差 $X - \mu$ は正にも負にもなります。
+                            単純に足すと打ち消し合ってゼロになってしまうので、2乗して符号をなくします。
+                        </p>
+                    </div>
+
+                    <h3>分散の展開公式――計算を楽にするテクニック</h3>
+                    <p>定義の式を展開すると計算しやすい形になります。</p>
+                    $$V[X] = E[(X - \mu)^2] = E[X^2 - 2\mu X + \mu^2]$$
+                    <p>期待値の線形性（$E[aX + b] = aE[X] + b$）を使うと：</p>
+                    $$= E[X^2] - 2\mu \cdot E[X] + \mu^2 = E[X^2] - 2\mu^2 + \mu^2$$
+                    <div class="formula-block">
+                        $$V[X] = E[X^2] - \mu^2 = E[X^2] - (E[X])^2$$
+                        <p>
+                            <strong>覚え方</strong>：「2乗の平均」マイナス「平均の2乗」。
+                            定義より計算が簡単なので、実際の計算ではこちらをよく使います。
+                        </p>
+                    </div>
+                    <p>
+                        また $\sigma = \sqrt{V[X]}$ を <strong>標準偏差（standard deviation）</strong> といい、
+                        データと同じ単位で「ばらつき」を表します。
+                    </p>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 6. 公式まとめ                                             -->
+                <!-- ======================================================== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> ⑥ 公式まとめ</h2>
+                    <div class="formula-block">
+                        <p><strong>余事象・和事象</strong></p>
+                        $$P(\bar{A}) = 1 - P(A)$$
+                        $$P(A \cup B) = P(A) + P(B) - P(A \cap B) \quad \text{（包除原理）}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>条件付き確率と乗法定理</strong></p>
+                        $$P(B \mid A) = \frac{P(A \cap B)}{P(A)}, \qquad P(A \cap B) = P(A)\,P(B \mid A)$$
+                        <p>独立：$P(A \cap B) = P(A)\,P(B) \iff P(B \mid A) = P(B)$</p>
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>ベイズの定理</strong></p>
+                        $$P(A \mid B) = \frac{P(B \mid A)\,P(A)}{P(B \mid A)\,P(A) + P(B \mid \bar{A})\,P(\bar{A})}$$
+                        $$P(A_i \mid B) = \frac{P(B \mid A_i)\,P(A_i)}{\displaystyle\sum_{j=1}^{K} P(B \mid A_j)\,P(A_j)} \quad \text{（一般形）}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>期待値と分散</strong></p>
+                        $$E[X] = \sum_x x\,p(x), \qquad V[X] = E[(X-\mu)^2] = E[X^2] - (E[X])^2$$
+                        $$E[X] = \int_{-\infty}^\infty x\,f(x)\,dx \quad \text{（連続型）}$$
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 7. 例題・演習                                             -->
+                <!-- ======================================================== -->
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <p style="color:#555; font-style:italic;">以下の問題はすべて自作問題です。教科書の内容を参考にしながら、オリジナルの数値で構成しています。問題文をよく読んでから解答を確認してください。</p>
+
+                    <!-- 問1 -->
+                    <div class="example-block">
+                        <p><strong>問1（包除原理）</strong></p>
+                        <p>
+                            60名のクラスで、映画 A を見た生徒は 35 名、映画 B を見た生徒は 28 名、
+                            両方を見た生徒は 12 名であった。次の問いに答えよ。
+                        </p>
+                        <ol>
+                            <li>少なくとも一方の映画を見た生徒の人数を求めよ。</li>
+                            <li>どちらも見ていない生徒の人数を求めよ。</li>
+                            <li>クラス全体の中から1人ランダムに選んだとき、その人が映画 A だけを見ている（映画 B は見ていない）確率を求めよ。</li>
+                        </ol>
+                    </div>
+                    <div class="answer-block">
+                        <p><strong>【解答】問1</strong></p>
+
+                        <p><strong>(1) 少なくとも一方を見た人数</strong></p>
+                        <p>包除原理を人数に適用する。</p>
+                        $$|A \cup B| = |A| + |B| - |A \cap B| = 35 + 28 - 12 = 51 \text{（名）}$$
+
+                        <p><strong>(2) どちらも見ていない人数</strong></p>
+                        <p>全体から「少なくとも一方を見た人」を引けばよい。</p>
+                        $$60 - 51 = 9 \text{（名）}$$
+
+                        <p><strong>(3) 映画 A だけを見ている確率</strong></p>
+                        <p>「映画 A だけ」＝「映画 A を見た」かつ「映画 B を見ていない」＝ $A \cap \bar{B}$ の人数を求める。</p>
+                        <p>映画 A を見た 35 名のうち、12 名は映画 B も見ている。したがって映画 A だけの人数は：</p>
+                        $$|A \cap \bar{B}| = |A| - |A \cap B| = 35 - 12 = 23 \text{（名）}$$
+                        <p>確率は：</p>
+                        $$P(A \cap \bar{B}) = \frac{23}{60}$$
+                        <div class="formula-block">
+                            ✅ <strong>まとめ</strong>：(1) 51名、(2) 9名、(3) $\dfrac{23}{60} \approx 0.383$
+                        </div>
+                    </div>
+
+                    <!-- 問2 -->
+                    <div class="example-block">
+                        <p><strong>問2（条件付き確率とベイズの定理）</strong></p>
+                        <p>
+                            ある工場では機械 X が全製品の 60%、機械 Y が残り 40% を製造している。
+                            機械 X の不良品率は 3%、機械 Y の不良品率は 5% である。
+                            製造された製品を1つランダムに選ぶとき、次の問いに答えよ。
+                        </p>
+                        <ol>
+                            <li>全体の不良品率（製品が不良品である確率）を求めよ。</li>
+                            <li>選んだ製品が不良品だったとき、それが機械 X で作られた確率を求めよ。</li>
+                        </ol>
+                    </div>
+                    <div class="answer-block">
+                        <p><strong>【解答】問2</strong></p>
+
+                        <p>まず記号を整理する。</p>
+                        <ul>
+                            <li>$X$：機械 X で製造された事象、$P(X) = 0.60$</li>
+                            <li>$Y$：機械 Y で製造された事象、$P(Y) = 0.40$</li>
+                            <li>$D$：不良品である事象</li>
+                            <li>$P(D \mid X) = 0.03$、$P(D \mid Y) = 0.05$</li>
+                        </ul>
+
+                        <p><strong>(1) 全体の不良品率（全確率の公式）</strong></p>
+                        <p>製品が機械 X か機械 Y のどちらかで作られるので、全確率の公式を使う。</p>
+                        $$P(D) = P(D \mid X)\,P(X) + P(D \mid Y)\,P(Y)$$
+                        $$= 0.03 \times 0.60 + 0.05 \times 0.40$$
+                        $$= 0.018 + 0.020 = 0.038$$
+                        <p>全体の不良品率は <strong>3.8%</strong> である。</p>
+
+                        <p><strong>(2) 不良品だったとき、機械 X 製である確率（ベイズの定理）</strong></p>
+                        <p>求めるのは $P(X \mid D)$。ベイズの定理を適用する。</p>
+                        $$P(X \mid D) = \frac{P(D \mid X)\,P(X)}{P(D)}$$
+                        <p>分子と分母に数値を代入する。</p>
+                        $$= \frac{0.03 \times 0.60}{0.038} = \frac{0.018}{0.038}$$
+                        <p>分数を整理する。分子・分母を 0.002 で割ると：</p>
+                        $$= \frac{9}{19} \approx 0.474$$
+                        <div class="formula-block">
+                            ✅ <strong>まとめ</strong>：不良品率 3.8%、$P(X \mid D) = \dfrac{9}{19} \approx 47.4\%$<br>
+                            <strong>解釈</strong>：機械 X は製品の 60% を作っているが、不良品だったとき X 製の確率は 47% 程度に下がる。
+                            機械 X の不良品率（3%）が Y（5%）より低いため、「不良品」という情報は X の可能性を下方修正することを意味する。
+                        </div>
+                    </div>
+
+                    <!-- 問3 -->
+                    <div class="example-block">
+                        <p><strong>問3（期待値・分散の計算）</strong></p>
+                        <p>
+                            あるゲームでは、1枚のコインを投げて表が出れば +200 円、裏が出れば −100 円の得点が与えられる。
+                            ただし、このコインは少し偏りがあり、表が出る確率は $\frac{2}{3}$、裏が出る確率は $\frac{1}{3}$ である。
+                            得点を確率変数 $X$ とするとき、次の問いに答えよ。
+                        </p>
+                        <ol>
+                            <li>$X$ の期待値 $E[X]$（1回あたりの平均的な得点）を求めよ。</li>
+                            <li>$X$ の分散 $V[X]$ を求めよ。</li>
+                            <li>このゲームを10回繰り返したときの合計得点の期待値を求めよ。</li>
+                        </ol>
+                    </div>
+                    <div class="answer-block">
+                        <p><strong>【解答】問3</strong></p>
+
+                        <p>まず確率分布を整理する。</p>
+                        <table style="border-collapse:collapse; margin:1em auto; text-align:center;">
+                            <thead>
+                                <tr style="background:#e8f0fe;">
+                                    <th style="border:1px solid #ccc; padding:8px 18px;">$x$</th>
+                                    <th style="border:1px solid #ccc; padding:8px 18px;">$+200$</th>
+                                    <th style="border:1px solid #ccc; padding:8px 18px;">$-100$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:6px 18px;">$p(x)$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 18px;">$\dfrac{2}{3}$</td>
+                                    <td style="border:1px solid #ccc; padding:6px 18px;">$\dfrac{1}{3}$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p><strong>(1) 期待値の計算</strong></p>
+                        <p>期待値の定義 $E[X] = \sum_x x\,p(x)$ に代入する。</p>
+                        $$E[X] = 200 \times \frac{2}{3} + (-100) \times \frac{1}{3}$$
+                        $$= \frac{400}{3} - \frac{100}{3} = \frac{300}{3} = 100 \text{（円）}$$
+                        <p>1回あたり平均 <strong>100 円</strong> 得られる（得をするゲーム）。</p>
+
+                        <p><strong>(2) 分散の計算</strong></p>
+                        <p>展開公式 $V[X] = E[X^2] - (E[X])^2$ を使う。まず $E[X^2]$ を求める：</p>
+                        $$E[X^2] = 200^2 \times \frac{2}{3} + (-100)^2 \times \frac{1}{3}$$
+                        $$= 40000 \times \frac{2}{3} + 10000 \times \frac{1}{3}$$
+                        $$= \frac{80000}{3} + \frac{10000}{3} = \frac{90000}{3} = 30000$$
+                        <p>次に $(E[X])^2 = 100^2 = 10000$ なので：</p>
+                        $$V[X] = E[X^2] - (E[X])^2 = 30000 - 10000 = 20000$$
+                        <p>分散は <strong>20000 円²</strong>、標準偏差は $\sigma = \sqrt{20000} = 100\sqrt{2} \approx 141.4$ 円。</p>
+
+                        <p><strong>(3) 10回の合計得点の期待値</strong></p>
+                        <p>
+                            10回のゲームの得点をそれぞれ $X_1, X_2, \ldots, X_{10}$（独立・同分布）とすると、
+                            合計 $S_{10} = X_1 + X_2 + \cdots + X_{10}$ の期待値は、期待値の線形性より：
+                        </p>
+                        $$E[S_{10}] = E[X_1] + E[X_2] + \cdots + E[X_{10}] = 10 \times 100 = 1000 \text{（円）}$$
+                        <div class="formula-block">
+                            ✅ <strong>まとめ</strong>：$E[X] = 100$ 円、$V[X] = 20000$ 円²、10回の合計期待値 $= 1000$ 円<br>
+                            <strong>ポイント</strong>：期待値の線形性 $E[X_1 + \cdots + X_n] = n \cdot E[X]$ は独立でなくても成立する。
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>ベイズの定理は「原因→結果」の確率から「結果→原因」の確率を求める逆推論のツール。医療診断・スパムフィルタ・機械学習など幅広い応用がある</li>
+                        <li>事前確率が低い場合（例：有病率1%）、検査1回の陽性的中率は意外と低くなる。ベイズの定理で確かめると「感度 99% の検査でも、陽性の人が本当に病気の確率は 1/3 程度」になることがある</li>
+                        <li>分散の計算は $V[X] = E[X^2] - (E[X])^2$ の展開公式が速い。まず $E[X]$ を求め、次に $E[X^2]$ を計算して引く</li>
+                        <li>排反と独立は全く別概念。「排反」は同時に起きない（強い依存）、「独立」は互いに影響しない（無依存）</li>
+                        <li>期待値の線形性 $E[aX + bY] = aE[X] + bE[Y]$ は独立でも依存していても常に成立する（分散の加法性は独立のとき限り成立）</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

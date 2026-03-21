@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="8">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>
+                        第8章では<strong>統計的推定の基礎</strong>を扱う。
+                        統計量・順序統計量の概念から始まり、最尤法・モーメント法・最小二乗法などの点推定法、
+                        不偏性・十分性・有効性などの推定量の評価基準、クラーメル・ラオの不等式、
+                        フィッシャー情報量、最尤推定量の漸近正規性、ジャックナイフ法を学ぶ。
+                    </p>
+                    <p><strong>キーワード：</strong>統計量、順序統計量、点推定、最尤法、モーメント法、線形モデル、最小二乗法、不偏性、十分性、有効性、クラーメル・ラオの不等式、フィッシャー情報量、最尤推定量の漸近正規性、ジャックナイフ法</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+
+                    <h3>統計量とパラメータ</h3>
+                    <ul>
+                        <li><strong>統計量</strong>（statistic）：未知の $\theta$ に依存しない、標本 $X_1, \ldots, X_n$ のみの関数</li>
+                        <li><strong>順序統計量</strong>（order statistic）：標本を昇順に並べた $X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}$</li>
+                        <li><strong>推定量</strong>（estimator）：$\hat\theta = h(X_1, \ldots, X_n)$。観測値を代入した $h(x_1, \ldots, x_n)$ を<strong>推定値</strong>（estimate）という</li>
+                    </ul>
+
+                    <h3>各種推定法</h3>
+                    <ul>
+                        <li><strong>最尤法</strong>（maximum likelihood）：尤度関数 $L(\theta) = \prod_{i=1}^n f(x_i; \theta)$ を最大化する $\hat\theta$。対数尤度 $\ell(\theta) = \log L(\theta)$ で計算すると楽</li>
+                        <li><strong>モーメント法</strong>：モーメントの理論値と標本モーメントを等しいとおき $\theta$ を解く</li>
+                        <li><strong>最小二乗法</strong>：残差二乗和 $\sum(y_i - \beta x_i)^2$ を最小化する回帰パラメータを求める</li>
+                    </ul>
+
+                    <h3>推定量の評価基準</h3>
+                    <ul>
+                        <li><strong>不偏性</strong>：$E_\theta[\hat\theta] = \theta$（バイアス $b_\theta(\hat\theta) = E_\theta[\hat\theta] - \theta = 0$）</li>
+                        <li><strong>平均二乗誤差</strong>（MSE）：$\mathrm{MSE}_\theta(\hat\theta) = E_\theta[(\hat\theta - \theta)^2]$</li>
+                        <li><strong>バイアス・バリアンス分解</strong>：$$\mathrm{MSE}_\theta(\hat\theta) = (b_\theta(\hat\theta))^2 + V_\theta[\hat\theta]$$</li>
+                        <li><strong>一様最小分散不偏推定量</strong>（UMVUE）：不偏推定量のなかで分散を最小化</li>
+                        <li><strong>相対効率</strong>：$e(\hat\theta_1, \hat\theta_2) = \mathrm{MSE}(\hat\theta_2) / \mathrm{MSE}(\hat\theta_1)$</li>
+                    </ul>
+
+                    <h3>十分統計量</h3>
+                    <ul>
+                        <li>$T(X)$ で条件付けた $X$ の分布がパラメータに依存しないとき、$T(X)$ を<strong>十分統計量</strong>という</li>
+                        <li><strong>フィッシャー・ネイマンの分解定理</strong>：$f(x; \theta) = h(x)\, g(T(x), \theta)$ と分解できることが十分統計量の必要十分条件</li>
+                        <li>最尤推定量は十分統計量のみの関数となる</li>
+                    </ul>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+
+                    <h3>クラーメル・ラオの不等式</h3>
+                    <p>フィッシャー情報量 $J_n(\theta) > 0$ のとき、任意の不偏推定量 $\hat\theta$ に対して</p>
+                    <div class="formula-block">
+                        $$V[\hat\theta] \geq J_n(\theta)^{-1}$$
+                    </div>
+                    <p><strong>フィッシャー情報量</strong>の定義：</p>
+                    <div class="formula-block">
+                        $$J_n(\theta) = E_\theta\!\left[\left(\frac{\partial}{\partial\theta}\log f(X_1, \ldots, X_n; \theta)\right)^2\right] = -E_\theta\!\left[\frac{\partial^2}{\partial\theta^2}\log f(X_1, \ldots, X_n; \theta)\right]$$
+                    </div>
+                    <p>標本が独立同一のとき $J_n(\theta) = n\, J_1(\theta)$（標本サイズに比例）</p>
+                    <p>等号を満たす不偏推定量を<strong>有効推定量</strong>という。有効推定量は UMVUE である。</p>
+
+                    <h3>ガウス・マルコフの定理</h3>
+                    <p>線形単回帰モデル $y_i = \beta x_i + \varepsilon_i$ で、$E[\varepsilon_i] = 0$、$V[\varepsilon_i] < \infty$、$E[\varepsilon_i \varepsilon_j] = 0\ (i \neq j)$ のとき、最小二乗推定量 $\hat\beta$ は不偏な線形推定量のなかで分散最小（<strong>BLUE</strong>：Best Linear Unbiased Estimator）</p>
+
+                    <h3>最尤推定量の漸近正規性</h3>
+                    <div class="formula-block">
+                        $$\sqrt{n}(\hat\theta - \theta) \xrightarrow{d} N(0, J_1(\theta)^{-1})$$
+                    </div>
+                    <p>適当な正則条件のもとで、最尤推定量は<strong>一致性</strong>と<strong>漸近有効性</strong>を持つ。</p>
+
+                    <h3>ジャックナイフ法</h3>
+                    <p>$i$ 番目の標本を除いた推定量を $\hat\theta_{(i)}$、その平均を $\hat\theta_{(\cdot)}$ とすると</p>
+                    <div class="formula-block">
+                        $$\hat\theta_{\mathrm{jack}} = n\hat\theta - (n-1)\hat\theta_{(\cdot)}$$
+                    </div>
+                    <p>バイアスが $O(1/n)$ の推定量に対して有効なバイアス補正法。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <h3>問8.1：統計量・十分統計量の判定</h3>
+                    <p>$N(\mu, \sigma^2)$ からの標本 $X_1, \ldots, X_n$ に対し、正しい記述を選ぶ。</p>
+                    <div class="answer-block">
+                    <p><strong>正しいもの：①②④</strong></p>
+                    <ul>
+                        <li>① $\sum(X_i - \mu)^2$ は未知パラメータ $\mu$ を含むので統計量ではない</li>
+                        <li>② 順序統計量 $(X_{(1)}, \ldots, X_{(n)})$ は $(\mu, \sigma^2)$ の十分統計量</li>
+                        <li>③ 標本分散 $\frac{1}{n}\sum(X_i - \bar{X})^2$ は $\sigma^2$ の不偏推定量<strong>ではない</strong>（不偏分散は $n-1$ で割る）</li>
+                        <li>④ 標本分散の平方根は標準偏差の最尤推定量</li>
+                        <li>⑤ 標本分散は $\sigma^2$ の一致推定量であり、漸近有効推定量<strong>でもある</strong></li>
+                    </ul>
+                    </div>
+
+                    <h3>問8.2：ポアソン分布の推定</h3>
+                    <p>平均 $\lambda$ のポアソン分布からの標本 $X_1, \ldots, X_n$。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) 最尤推定量：</strong>$\hat\lambda = \bar{X}$（標本平均）</p>
+                    <p><strong>(2) フィッシャー情報量：</strong>$J_n(\lambda) = n/\lambda$</p>
+                    <p><strong>(3) 有効推定量であることの証明：</strong>$V[\bar{X}] = \lambda/n = J_n(\lambda)^{-1}$ よりクラーメル・ラオの下限を達成</p>
+                    <p><strong>(4) 漸近正規性：</strong>中心極限定理より $\sqrt{n}(\bar{X} - \lambda) \xrightarrow{d} N(0, \lambda)$ であり、漸近分散 $\lambda$ は $J_1(\lambda)^{-1} = \lambda$ と一致するので漸近有効性も成立</p>
+                    </div>
+
+                    <h3>問8.3：コインの面積のバイアス補正</h3>
+                    <p>5つのコインの半径データ：$8.4, 9.0, 8.2, 10.4, 9.2$ (mm)。面積 $\pi\mu^2$ の推定。</p>
+                    <div class="answer-block">
+                    <p><strong>(1) バイアス：</strong>$T_1 = \pi\bar{X}^2$ のバイアスは $\pi\sigma^2/n$、$T_2 = \pi\overline{X^2}$ のバイアスは $\pi\sigma^2$</p>
+                    <p><strong>(3) バイアス補正推定値：</strong>$\bar{X} = 9.04$、$U = 0.748$ より</p>
+                    <div class="formula-block">
+                        $$\pi(\bar{X}^2 - U/n) = 3.14 \times (9.04^2 - 0.748/5) \approx \mathbf{256}$$
+                    </div>
+                    <p><strong>(4) ジャックナイフ推定値：</strong>同じく <strong>256</strong></p>
+                    <p><strong>(5) デルタ法：</strong>$g(x) = x^2$ に対し漸近分散は $(2\mu)^2\sigma^2 = 4\mu^2\sigma^2$</p>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>最尤推定量は大標本で最良（一致性＋漸近有効性）だが、有限標本では不偏とは限らない</li>
+                        <li>クラーメル・ラオの下限を使えば、ある推定量が UMVUE かどうか判定できる</li>
+                        <li>フィッシャー・ネイマンの分解定理は十分統計量を見つける実用的なツール</li>
+                        <li>ジャックナイフ法は推定量が $\bar{X}^2$ のような場合でもバイアス補正可能で汎用性が高い</li>
+                        <li>ガウス・マルコフの定理は「不偏な線形推定量」の範囲内での最良性を保証する</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="31">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>本章では、パラメータ $\theta$ を確率的に変動するものと考え、事前情報を確率分布（事前分布）で表現し、データの情報と組み合わせて事後分布を導く<strong>ベイズ法</strong>を学ぶ。</p>
+                    <p>事前分布 $\pi(\theta)$ とパラメトリックモデル $f(x|\theta)$ の組を<strong>ベイズモデル</strong>という。ベイズの定理により事前分布から事後分布への更新を行い、事後分布に基づく推測（点推定、区間推定、予測）を行う。</p>
+                    <p>事後分布が解析的に求められない場合には、MCMC法（MHアルゴリズム、ギブス・サンプリング）によりサンプリングを行う。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+
+                    <h3>ベイズモデルと事後分布</h3>
+                    <ul>
+                        <li><strong>事前分布（prior distribution）</strong>：データ観測以前の $\theta$ に関する情報を表す確率分布 $\pi(\theta)$</li>
+                        <li><strong>事後分布（posterior distribution）</strong>：データ $x$ を観測した後の $\theta$ の条件付き分布 $\pi(\theta|x)$</li>
+                        <li><strong>周辺尤度（marginal likelihood）</strong>：$f(x) = \int f(x|\theta)\pi(\theta)\,d\theta$（事後分布の規格化定数）</li>
+                    </ul>
+                    <p>ベイズ法は、データの情報と事前情報をバランスさせた形で事後分布へと更新する手続き。</p>
+
+                    <h3>点推定量</h3>
+                    <ul>
+                        <li><strong>ベイズ推定量（Bayes estimator）</strong>：事後分布の期待値 $\hat{\theta}_B = \int \theta\,\pi(\theta|x)\,d\theta$。二乗損失 $(d-\theta)^2$ のベイズリスクを最小にする</li>
+                        <li><strong>MAP推定量</strong>：事後分布のモード $\hat{\theta}_{\mathrm{MAP}} = \arg\max \pi(\theta|x)$。周辺尤度を計算しなくても $f(x|\theta)\cdot\pi(\theta)$ だけから求められる。対数尤度 $+$ 正則化項 $\log\pi(\theta)$ の最大化と解釈できる</li>
+                    </ul>
+
+                    <h3>HPD信用区間</h3>
+                    <p><strong>最大事後密度（HPD）区間</strong>：$I_{\mathrm{HPD}} = \{\theta \mid \pi(\theta|x) \ge c(\alpha)\}$ かつ $\int_{I_{\mathrm{HPD}}} \pi(\theta|x)\,d\theta = 1 - \alpha$ を満たす区間。HPD区間内の $\theta$ より確からしい $\theta$ が区間外に存在しない。</p>
+
+                    <h3>共役事前分布（Conjugate Prior）</h3>
+                    <p>事前分布と事後分布が同じ確率分布族になるような事前分布。更新が分布のパラメータの更新になるため簡便。</p>
+                    <table>
+                        <thead><tr><th>モデル</th><th>共役事前分布</th><th>事後分布</th></tr></thead>
+                        <tbody>
+                            <tr><td>二項分布 $\mathrm{Bin}(n, p)$</td><td>ベータ分布 $\mathrm{Be}(a, b)$</td><td>$\mathrm{Be}(a + x, b + n - x)$</td></tr>
+                            <tr><td>ポアソン分布 $\mathrm{Po}(\lambda)$</td><td>ガンマ分布 $\mathrm{Ga}(a, 1/\beta)$</td><td>$\mathrm{Ga}(a + \sum x_i, 1/(\beta + n))$</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>ベイズ予測分布</h3>
+                    <p>将来のデータ $x_{n+1}$ の予測分布：$g(x_{n+1}|x) = \int f(x_{n+1}|\theta)\,\pi(\theta|x)\,d\theta$</p>
+
+                    <h3>MHアルゴリズム（Metropolis-Hastings）</h3>
+                    <p>事後分布を不変分布にもつマルコフ連鎖に従う乱数を発生させるMCMC法。</p>
+                    <ol>
+                        <li><strong>Step 0</strong>：初期値 $\theta^{(0)}$ を設定</li>
+                        <li><strong>Step 1</strong>：提案分布 $q(\theta^{(t+1)}|\theta^{(t)})$ から候補 $y$ を発生</li>
+                        <li><strong>Step 2</strong>：$u \sim U(0,1)$ を発生。$u \le \alpha(\theta^{(t)}, y)$ なら $\theta^{(t+1)} = y$、そうでなければ $\theta^{(t+1)} = \theta^{(t)}$</li>
+                    </ol>
+                    <p>採択確率：$\alpha(\theta^{(t)}, \theta^{(t+1)}) = \min\!\left(1,\; \dfrac{\pi(\theta^{(t+1)}|x)\,q(\theta^{(t)}|\theta^{(t+1)})}{\pi(\theta^{(t)}|x)\,q(\theta^{(t+1)}|\theta^{(t)})}\right)$</p>
+                    <p>事後分布は比の形でのみ依存するため、周辺尤度の計算が不要。初期値の影響を除くため最初の $m$ 個は除去（<strong>burn-in期間</strong>）。</p>
+                    <p><strong>酔歩連鎖</strong>：$y = \theta^{(t)} + \varepsilon$（$\varepsilon$ が原点対称）のとき、採択確率は $\alpha = \min(1, \pi(\theta^{(t+1)}|x)/\pi(\theta^{(t)}|x))$ に簡約。$|\varepsilon|$ が小さいと採択率は高いが変化量が小さく、大きすぎると採択率が低下して同じ値に留まり続ける。</p>
+
+                    <h3>ギブス・サンプリング（Gibbs Sampling）</h3>
+                    <p>$\theta = (\theta_1, \ldots, \theta_K)^T$ の各成分を、<strong>完全条件付き分布</strong> $\pi(\theta_i | \theta_{-i}, x)$ から順次サンプリング。提案分布の設定が不要で実装が容易。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+
+                    <h3>ベイズの定理（事後分布）</h3>
+                    <div class="formula-block">
+                        $$\pi(\theta|x) = \frac{f(x|\theta)\,\pi(\theta)}{\int f(x|\theta)\,\pi(\theta)\,d\theta} \propto f(x|\theta)\,\pi(\theta) \tag{31.1}$$
+                    </div>
+
+                    <h3>ベータ分布 $\mathrm{Be}(a, b)$</h3>
+                    <div class="formula-block">
+                        $$f(p) = \frac{p^{a-1}(1-p)^{b-1}}{B(a,b)}, \quad E[p] = \frac{a}{a+b}, \quad \text{mode} = \frac{a-1}{a+b-2}$$
+                    </div>
+
+                    <h3>ガンマ分布 $\mathrm{Ga}(a, 1/\beta)$</h3>
+                    <div class="formula-block">
+                        $$f(\lambda) = \frac{\beta^a}{\Gamma(a)}\lambda^{a-1}e^{-\beta\lambda}, \quad E[\lambda] = \frac{a}{\beta}, \quad \text{mode} = \frac{a-1}{\beta}$$
+                    </div>
+
+                    <h3>ベータ二項モデル</h3>
+                    <p>$X \sim \mathrm{Bin}(n, p)$, $p \sim \mathrm{Be}(a, b)$ のとき：</p>
+                    <div class="formula-block">
+                        $$\pi(p|x) \propto p^{x+a-1}(1-p)^{n-x+b-1} \implies p|x \sim \mathrm{Be}(a+x,\; b+n-x)$$
+                    </div>
+
+                    <h3>ガンマ・ポアソンモデル</h3>
+                    <p>$x_i \sim \mathrm{Po}(\lambda)$ iid, $\lambda \sim \mathrm{Ga}(a, 1/\beta)$ のとき：</p>
+                    <div class="formula-block">
+                        $$\pi(\lambda|x) \propto \lambda^{a+\sum x_i - 1}e^{-(\beta+n)\lambda} \implies \lambda|x \sim \mathrm{Ga}\!\left(a + \sum x_i,\; \frac{1}{\beta+n}\right)$$
+                    </div>
+
+                    <h3>HPD信用区間</h3>
+                    <div class="formula-block">
+                        $$I_{\mathrm{HPD}} = \{\theta \mid \pi(\theta|x) \ge c(\alpha)\}, \quad \int_{I_{\mathrm{HPD}}} \pi(\theta|x)\,d\theta = 1 - \alpha \tag{31.2}$$
+                    </div>
+
+                    <h3>MH採択確率（酔歩連鎖）</h3>
+                    <div class="formula-block">
+                        $$\alpha(\theta^{(t)}, y) = \min\!\left(1,\; \frac{\pi(y|x)}{\pi(\theta^{(t)}|x)}\right) = \min\!\left(1,\; \frac{f(x|y)\,\pi(y)}{f(x|\theta^{(t)})\,\pi(\theta^{(t)})}\right)$$
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <h3>例1：ロボット掃除機の普及率</h3>
+                    <p>20世帯中 $x$ 世帯が保有。事前分布 $p \sim \mathrm{Be}(2, 20)$（2年前の保有率5%を反映、期待値 $1/11$、モード $1/20$）。</p>
+                    <div class="qa-box">
+                        <p>事後分布：$\pi(p|x) \propto p^{x+1}(1-p)^{38-x}$ → $p|x \sim \mathrm{Be}(x+2, 40-x)$</p>
+                        <p>$x = 0$ のとき事後分布 $\mathrm{Be}(2, 40)$（原点方向にシフト）、$x = 5$ のとき $\mathrm{Be}(7, 35)$（右方向にシフト）</p>
+                    </div>
+
+                    <h3>例2：ベイズ推定量とMAP推定量（例1の続き）</h3>
+                    <div class="qa-box">
+                        <p>(1) ベイズ推定量：$\hat{p}_B = (x+2)/42$（$\mathrm{Be}(x+2, 40-x)$ の期待値）</p>
+                        <p>(2) $\hat{p}_B = \frac{20}{42}\cdot\frac{x}{20} + \frac{22}{42}\cdot\frac{1}{11}$（最尤推定量と事前分布の期待値の加重平均）</p>
+                        <p>(3) MAP推定量：$\hat{p}_{\mathrm{MAP}} = (x+1)/40$（$\mathrm{Be}(x+2, 40-x)$ のモード）</p>
+                    </div>
+
+                    <h3>例3：オフィスアワーの質問数（ガンマ・ポアソンモデル）</h3>
+                    <p>$x = (3, 7, 1, 4, 5)$、$n = 5$、$\sum x_i = 20$。事前分布 $\lambda \sim \mathrm{Ga}(2, 1)$。</p>
+                    <div class="qa-box">
+                        <p>(1) 事後分布：$\mathrm{Ga}(22, 1/6)$</p>
+                        <p>(2) ベイズ推定量：$\hat{\lambda}_B = 22/6 = 11/3$</p>
+                        <p>(3) MAP推定量：$\hat{\lambda}_{\mathrm{MAP}} = 21/6 = 7/2$</p>
+                    </div>
+
+                    <h3>問31.1：コンビニくじのベイズ推定</h3>
+                    <p>$n = 10$ 回中 $x = 3$ 回当たり。A君は $\mathrm{Be}(1, 1) = U(0,1)$、Bさんは $\mathrm{Be}(1, 4)$ を事前分布に使用。</p>
+                    <div class="qa-box">
+                        <p>(1) A君：事後分布 $\mathrm{Be}(4, 8)$、ベイズ推定量 $= 4/12 = 1/3$</p>
+                        <p>(2) Bさん：事後分布 $\mathrm{Be}(4, 11)$、MAP推定量 $= 3/13$</p>
+                    </div>
+
+                    <h3>問31.2：交通事故数のベイズ推定</h3>
+                    <p>$x = (5, 3, 4, 1, 2)$、$\sum x_i = 15$、$n = 5$。事前分布 $\mathrm{Ga}(2, 1/3)$。</p>
+                    <div class="qa-box">
+                        <p>(1) 事後分布：$\mathrm{Ga}(17, 1/8)$、密度関数 $\pi(\lambda|x) = \frac{8^{17}}{\Gamma(17)}\lambda^{16}e^{-8\lambda}$</p>
+                        <p>(2) 予測分布：$g(x_6|x) = \frac{\Gamma(17+x_6)}{x_6!\cdot\Gamma(17)}\cdot\left(\frac{8}{9}\right)^{17}\cdot\left(\frac{1}{9}\right)^{x_6}$（負の二項分布）</p>
+                    </div>
+
+                    <h3>問31.3：混合正規分布のMHアルゴリズム</h3>
+                    <p>目標分布：$\frac{1}{8}N(-5,1) + \frac{3}{4}N(0,1) + \frac{1}{8}N(5,1)$。酔歩連鎖 $y = x^{(t)} + \varepsilon$, $\varepsilon \sim U(-a, a)$。</p>
+                    <div class="qa-box">
+                        <p>(1) 採択確率：$\alpha(x^{(t)}, y) = \min\!\left(1,\; \dfrac{\frac{1}{8}\phi(y+5) + \frac{3}{4}\phi(y) + \frac{1}{8}\phi(y-5)}{\frac{1}{8}\phi(x^{(t)}+5) + \frac{3}{4}\phi(x^{(t)}) + \frac{1}{8}\phi(x^{(t)}-5)}\right)$</p>
+                        <p>(2) (ア) $a = 1$、(イ) $a = 10$、(ウ) $a = 100$、(エ) $a = 0.1$</p>
+                        <p>$a$ が小さすぎると別の山に遷移しにくく、大きすぎると採択率が低下して同じ値に留まる。$a = 100$ はヒストグラムは良いが時系列で同じ値に留まることが多い</p>
+                        <p>(3) 繰り返し回数が少ない段階では初期値の影響を受けるため（burn-in期間）</p>
+                    </div>
+
+                    <h3>問31.4：2変量正規のギブス・サンプリング</h3>
+                    <p>$\mu = (0, 2)^T$, $\Sigma = \begin{pmatrix}1 & 0.5\sqrt{3} \\ 0.5\sqrt{3} & 3\end{pmatrix}$</p>
+                    <div class="qa-box">
+                        <p>(A) $x$ の完全条件付き分布：$x | y^{(t)} \sim N(\mu_{x|y}, \sigma_{x|y}^2)$</p>
+                        <p>(B) $y$ の完全条件付き分布：$y | x^{(t+1)} \sim N(\mu_{y|x}, \sigma_{y|x}^2)$</p>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>ベイズ法の核心：$\pi(\theta|x) \propto f(x|\theta)\pi(\theta)$（事前分布 × 尤度 → 事後分布）</li>
+                        <li>ベイズ推定量 = 事後期待値（二乗損失を最小化）、MAP推定量 = 事後モード（周辺尤度不要で計算が容易）</li>
+                        <li>ベイズ推定量は多くの場合、最尤推定量と事前分布の期待値の加重平均で表される</li>
+                        <li>共役事前分布を使うと事後分布が同族の分布になり計算が簡便：ベータ二項、ガンマ・ポアソン</li>
+                        <li>MHアルゴリズム：採択確率に事後分布が比の形でのみ現れるため周辺尤度の計算が不要。提案分布の選択がサンプリング精度に影響</li>
+                        <li>ギブス・サンプリング：完全条件付き分布から順次サンプリング。提案分布の設定不要で実装容易</li>
+                        <li>信用区間（credible interval）は $\theta$ 自身の分布から構成される点が古典的な信頼区間との根本的な違い</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

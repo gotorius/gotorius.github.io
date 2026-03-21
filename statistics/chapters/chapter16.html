@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="16">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <!-- ① イントロ -->
+                <section class="content-section">
+                    <h2><i class="fas fa-lightbulb"></i> なぜ重回帰分析が必要か</h2>
+                    <p>
+                        単回帰は「1つの説明変数で1つの応答変数を予測する」手法でした。しかし現実のデータは複数の要因が絡み合っています。
+                        たとえばアパートの賃料を予測するとき、「面積」だけでなく「築年数」「最寄り駅からの距離」「階数」など多くの変数が影響します。
+                        <strong>重回帰分析（multiple regression analysis）</strong>は、$d$ 個の説明変数を同時に使ってモデルを立てる手法です。
+                    </p>
+                    <p>
+                        単回帰 $y = \beta_0 + \beta_1 x + \varepsilon$ を自然に拡張すると：
+                    </p>
+                    <div class="formula-block">
+                        $$y_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots + \beta_d x_{id} + \varepsilon_i$$
+                    </div>
+                    <p>$n$ 人分をまとめると行列・ベクトルで簡潔に書けます。これが<strong>ガウス・マルコフモデル</strong>の出発点です。</p>
+                </section>
+
+                <!-- ② ガウス・マルコフモデル -->
+                <section class="content-section">
+                    <h2><i class="fas fa-table"></i> ガウス・マルコフモデル</h2>
+                    <p>観測数 $n$、説明変数の個数 $d$ とする。モデルを行列形式で書くと：</p>
+                    <div class="formula-block">
+                        $$Y = X\beta + \varepsilon, \quad \varepsilon \sim N_n(\mathbf{0},\, \sigma^2 I_n)$$
+                    </div>
+                    <p>各記号の定義：</p>
+                    <ul>
+                        <li>$Y = (y_1, \ldots, y_n)^T$：$n \times 1$ の応答変数ベクトル</li>
+                        <li>$X$：$n \times (d+1)$ の<strong>計画行列（design matrix）</strong>。第1列はすべて $1$（切片用），第 $k+1$ 列が $x_{1k}, \ldots, x_{nk}$ の値</li>
+                        <li>$\beta = (\beta_0, \beta_1, \ldots, \beta_d)^T$：$(d+1) \times 1$ の回帰係数ベクトル（未知）</li>
+                        <li>$\varepsilon = (\varepsilon_1, \ldots, \varepsilon_n)^T$：誤差ベクトル。各 $\varepsilon_i$ は独立に $N(0,\sigma^2)$ に従う</li>
+                        <li>$\sigma^2$：誤差分散（未知）</li>
+                    </ul>
+                    <div class="formula-block">
+                        $$X = \begin{pmatrix} 1 & x_{11} & x_{12} & \cdots & x_{1d} \\ 1 & x_{21} & x_{22} & \cdots & x_{2d} \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & x_{n1} & x_{n2} & \cdots & x_{nd} \end{pmatrix}$$
+                    </div>
+                    <p><strong>仮定まとめ：</strong> $E[\varepsilon] = \mathbf{0}$，$\mathrm{Cov}[\varepsilon] = \sigma^2 I_n$（等分散・無相関），$X$ はフルランク（$\mathrm{rank}(X) = d+1$）。</p>
+                </section>
+
+                <!-- ③ 最小二乗法 -->
+                <section class="content-section">
+                    <h2><i class="fas fa-bullseye"></i> 最小二乗法（OLS）</h2>
+                    <p>
+                        <strong>最小二乗法（Ordinary Least Squares, OLS）</strong>は、残差平方和
+                        $$S(\beta) = \|Y - X\beta\|^2 = \sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_{i1} - \cdots - \beta_d x_{id})^2$$
+                        を最小にする $\hat\beta$ を推定量として使う方法です。
+                    </p>
+                    <h3>正規方程式の導出</h3>
+                    <p>$S(\beta)$ を $\beta$ で微分してゼロとおきます：</p>
+                    <div class="formula-block">
+                        $$\frac{\partial S}{\partial \beta} = -2X^T(Y - X\beta) = \mathbf{0} \implies X^TX\hat\beta = X^TY$$
+                    </div>
+                    <p>これを<strong>正規方程式（normal equation）</strong>と呼びます。$X^TX$ が正則（フルランク）なら一意解が得られます：</p>
+                    <div class="formula-block">
+                        $$\boxed{\hat\beta = (X^TX)^{-1}X^TY}$$
+                    </div>
+
+                    <h3>射影行列と当てはめ値</h3>
+                    <p>$\hat\beta$ を使って予測値（当てはめ値）$\hat Y$ を計算すると：</p>
+                    <div class="formula-block">
+                        $$\hat Y = X\hat\beta = X(X^TX)^{-1}X^TY =: P_X Y$$
+                    </div>
+                    <p>
+                        $P_X = X(X^TX)^{-1}X^T$ を<strong>射影行列（projection matrix / hat matrix）</strong>といいます。
+                        $P_X$ は $X$ の列空間への直交射影を表し、次の性質を持ちます：
+                    </p>
+                    <ul>
+                        <li><strong>冪等性</strong>：$P_X^2 = P_X$（何度射影しても変わらない）</li>
+                        <li><strong>対称性</strong>：$P_X^T = P_X$</li>
+                    </ul>
+                    <p>残差ベクトルは $e = Y - \hat Y = (I - P_X)Y$ で、正規方程式から $X^Te = \mathbf{0}$（残差は各説明変数と直交）が成り立ちます。また、切片を含むモデルでは $\bar{\hat y} = \bar y$ も成立します。</p>
+
+                    <h3>幾何的イメージ</h3>
+                    <p>
+                        $Y$ を $n$ 次元空間のベクトルと見ると、$\hat Y = P_X Y$ は $X$ の列ベクトルが張る「部分空間」への垂線の足です。
+                        残差 $e = Y - \hat Y$ はその部分空間に垂直（直交）になります。これが最小二乗法の幾何的意味です。
+                    </p>
+                </section>
+
+                <!-- ④ 変動の分解と決定係数 -->
+                <section class="content-section">
+                    <h2><i class="fas fa-chart-bar"></i> 変動の分解と決定係数</h2>
+                    <h3>変動の分解（ANOVA分解）</h3>
+                    <p>応答変数の全変動を「回帰で説明できる部分」と「残差」に分解できます：</p>
+                    <div class="formula-block">
+                        $$\underbrace{\|Y - \bar y\mathbf{1}\|^2}_{\text{全変動 (SST)}} = \underbrace{\|\hat Y - \bar y\mathbf{1}\|^2}_{\text{回帰変動 (SSR)}} + \underbrace{\|e\|^2}_{\text{残差変動 (SSE)}}$$
+                    </div>
+                    <p>
+                        <strong>証明のポイント</strong>：$Y - \bar y\mathbf{1} = (\hat Y - \bar y\mathbf{1}) + e$ と分解し、
+                        $\hat Y - \bar y\mathbf{1}$ と $e$ が直交すること（$(\hat Y - \bar y\mathbf{1})^Te = \hat Y^Te - \bar y \mathbf{1}^Te = 0$）を使えば内積の交叉項が消えます。
+                    </p>
+
+                    <h3>決定係数 $R^2$</h3>
+                    <p>回帰モデルがどれだけデータの変動を説明しているかを $0$ から $1$ で表す指標：</p>
+                    <div class="formula-block">
+                        $$R^2 = \frac{\text{SSR}}{\text{SST}} = 1 - \frac{\|e\|^2}{\|Y - \bar y\mathbf{1}\|^2}$$
+                    </div>
+                    <p>$R^2$ の問題点：説明変数を増やすほど必ず増加する（過学習を見落とす）。</p>
+
+                    <h3>自由度調整済み決定係数 $R^{*2}$</h3>
+                    <p>説明変数の数 $d$ に対するペナルティを加えた指標：</p>
+                    <div class="formula-block">
+                        $$R^{*2} = 1 - \frac{\|e\|^2 / (n-d-1)}{\|Y - \bar y\mathbf{1}\|^2 / (n-1)}$$
+                    </div>
+                    <p>
+                        $\|e\|^2/(n-d-1)$ は残差の「1自由度あたりの変動」、$\|Y-\bar y\mathbf{1}\|^2/(n-1)$ は全変動の「1自由度あたり」です。
+                        役に立たない説明変数を加えると $\|e\|^2/(n-d-1)$ が増えるため $R^{*2}$ は下がります。モデル比較には $R^{*2}$ を使いましょう。
+                    </p>
+                </section>
+
+                <!-- ⑤ OLS推定量の性質 -->
+                <section class="content-section">
+                    <h2><i class="fas fa-check-circle"></i> OLS推定量の性質</h2>
+
+                    <h3>不偏性</h3>
+                    <p>$\hat\beta = (X^TX)^{-1}X^TY$ に $Y = X\beta^* + \varepsilon$ を代入すると：</p>
+                    <div class="formula-block">
+                        $$\hat\beta = (X^TX)^{-1}X^T(X\beta^* + \varepsilon) = \beta^* + (X^TX)^{-1}X^T\varepsilon$$
+                    </div>
+                    <p>$E[\varepsilon] = \mathbf{0}$ より $E[\hat\beta] = \beta^*$。したがって $\hat\beta$ は<strong>不偏推定量</strong>です。</p>
+
+                    <h3>共分散行列</h3>
+                    <div class="formula-block">
+                        $$\mathrm{Cov}[\hat\beta] = \sigma^2 (X^TX)^{-1}$$
+                    </div>
+                    <p>
+                        証明：$\hat\beta - \beta^* = (X^TX)^{-1}X^T\varepsilon$ なので
+                        $\mathrm{Cov}[\hat\beta] = (X^TX)^{-1}X^T \cdot \sigma^2 I \cdot X(X^TX)^{-1} = \sigma^2(X^TX)^{-1}$。
+                    </p>
+
+                    <h3>ガウス・マルコフの定理（最良線形不偏推定量 BLUE）</h3>
+                    <p>
+                        $\beta$ の任意の線形不偏推定量 $\tilde\beta = CY$（$E[\tilde\beta]=\beta^*$）の中で、
+                        OLS推定量 $\hat\beta$ が<strong>最小分散</strong>を持ちます（各成分の分散が最小）。
+                        これを<strong>ガウス・マルコフの定理</strong>といい、OLS が BLUE（Best Linear Unbiased Estimator）であることを意味します。
+                    </p>
+
+                    <h3>$\sigma^2$ の不偏推定量</h3>
+                    <div class="formula-block">
+                        $$\hat\sigma^2 = \frac{\|e\|^2}{n - d - 1}$$
+                    </div>
+                    <p>
+                        なぜ $n-d-1$ で割るのか：$e = (I - P_X)Y$ の自由度は $n - \mathrm{rank}(P_X) = n - (d+1) = n-d-1$ だからです。
+                        実際に $E[\|e\|^2] = (n-d-1)\sigma^2$ が示せ、$\hat\sigma^2$ は $\sigma^2$ の不偏推定量になります。
+                    </p>
+                </section>
+
+                <!-- ⑥ 仮説検定 -->
+                <section class="content-section">
+                    <h2><i class="fas fa-vials"></i> 仮説検定（F検定・t検定）</h2>
+
+                    <h3>一般的な枠組み</h3>
+                    <p>線形制約 $H_0: A\beta = \mathbf{0}$（$A$ は $q \times (d+1)$ 行列）を検定したい場合、F統計量：</p>
+                    <div class="formula-block">
+                        $$T = \frac{(R_0 - R_1)/q}{\hat\sigma^2} \sim F(q,\, n-d-1) \quad \text{（$H_0$ の下で）}$$
+                    </div>
+                    <p>ここで $R_0$ は帰無仮説のもとでの残差平方和、$R_1$ は対立仮説（制約なし）のものです。</p>
+
+                    <h3>個別係数の検定（$H_0: \beta_k = 0$）</h3>
+                    <p>$(X^TX)^{-1}$ の $(k,k)$ 成分を $S_{kk}$ とすると、$\hat\beta_k$ の分散は $\sigma^2 S_{kk}$。よって：</p>
+                    <div class="formula-block">
+                        $$t_k = \frac{\hat\beta_k}{\sqrt{\hat\sigma^2 S_{kk}}} \sim t(n-d-1), \qquad F_k = t_k^2 \sim F(1,\, n-d-1)$$
+                    </div>
+                    <p>$|t_k|$ が棄却域を超えれば変数 $k$ は有意。$p$値が有意水準 $\alpha$ 未満なら $H_0$ を棄却します。</p>
+
+                    <h3>全体の有意性検定（$H_0: \beta_1 = \cdots = \beta_d = 0$）</h3>
+                    <p>説明変数が1つも役に立たないか、というF検定：</p>
+                    <div class="formula-block">
+                        $$T = \frac{\|\hat Y - \bar y\mathbf{1}\|^2 / d}{\hat\sigma^2} \sim F(d,\, n-d-1)$$
+                    </div>
+                    <p>$R^2$ と F統計量には $T = \dfrac{R^2/d}{(1-R^2)/(n-d-1)}$ という関係があります。</p>
+                </section>
+
+                <!-- ⑦ 正則化 -->
+                <section class="content-section">
+                    <h2><i class="fas fa-sliders-h"></i> 正則化（Regularization）</h2>
+                    <p>
+                        説明変数の数 $d$ が大きい（特に $d \geq n$ の場合）、$(X^TX)^{-1}$ が不安定になり、OLS推定量の分散が爆発します。
+                        <strong>正則化</strong>は損失関数にペナルティ項を加えて推定量を「縮小」し、バイアス・分散のトレードオフを賢くコントロールします。
+                    </p>
+
+                    <h3>Ridge 回帰（L2 正則化）</h3>
+                    <div class="formula-block">
+                        $$\hat\beta_{\mathrm{Ridge}} = \arg\min_\beta \left\{ \|Y - X\beta\|^2 + \lambda\|\beta\|_2^2 \right\} = (X^TX + \lambda I)^{-1}X^TY$$
+                    </div>
+                    <p>
+                        $\lambda \geq 0$ は正則化パラメータ。係数が全体的に小さくなり（縮小）、多重共線性に強くなります。
+                        ただし係数を完全にゼロにはしません（変数選択はできない）。
+                    </p>
+
+                    <h3>Lasso（L1 正則化）</h3>
+                    <div class="formula-block">
+                        $$\hat\beta_{\mathrm{Lasso}} = \arg\min_\beta \left\{ \|Y - X\beta\|^2 + \lambda\|\beta\|_1 \right\}$$
+                    </div>
+                    <p>
+                        L1 ペナルティにより多くの係数が<strong>正確にゼロ</strong>になります（スパース解）。これは自動的な変数選択に相当します。
+                        ただし閉形式の解はなく、座標降下法などで数値的に解きます。
+                    </p>
+
+                    <h3>Elastic-Net（L1 + L2 混合）</h3>
+                    <div class="formula-block">
+                        $$\hat\beta_{\mathrm{EN}} = \arg\min_\beta \left\{ \|Y - X\beta\|^2 + \lambda\left(\alpha\|\beta\|_1 + \frac{1-\alpha}{2}\|\beta\|_2^2\right) \right\}$$
+                    </div>
+                    <p>
+                        $\alpha \in [0,1]$ で Lasso と Ridge を連続的に補間します。$\alpha = 1$ で Lasso、$\alpha = 0$ で Ridge（係数 $\lambda/2$ 相当）。
+                        Lasso の「グループ変数の同時選択の弱さ」を Ridge で補えます。
+                    </p>
+
+                    <h3>Fused Lasso</h3>
+                    <div class="formula-block">
+                        $$\hat\beta_{\mathrm{FL}} = \arg\min_\beta \left\{ \|Y - X\beta\|^2 + \lambda\sum_{k=1}^{d-1}|\beta_k - \beta_{k+1}| \right\}$$
+                    </div>
+                    <p>
+                        隣接する係数の差に L1 ペナルティをかけます。時系列データや空間的に連続した変数の滑らかなパターンを推定するのに有効です。
+                    </p>
+
+                    <h3>モデル選択：マロウズの $C_p$</h3>
+                    <p>Ridge 回帰の正則化パラメータ $\lambda$ を選ぶ基準として次の<strong>Mallows' $C_p$</strong>が使われます：</p>
+                    <div class="formula-block">
+                        $$C_p(\lambda) = \|Y - X\hat\beta_{\mathrm{Ridge}}\|^2 + 2\sigma^2 M(\lambda)$$
+                    </div>
+                    <p>ここで $M(\lambda) = \mathrm{tr}\left[X(X^TX + \lambda I)^{-1}X^T\right]$ は「<strong>統計的自由度</strong>」と呼ばれ、モデルの複雑さを測ります。$\lambda = 0$（OLS）のとき $M(0) = d+1$。$\lambda$ が大きいほど $M(\lambda)$ は小さくなります。</p>
+                    <p>$C_p$ を最小化する $\lambda$ を選ぶことで、予測精度と複雑さのバランスをとります（AIC の類似物）。</p>
+
+                    <h3>比較まとめ</h3>
+                    <div class="formula-block" style="overflow-x:auto;">
+                        <table style="width:100%; border-collapse:collapse; text-align:center; min-width:500px;">
+                            <thead>
+                                <tr style="background:#dbeafe;">
+                                    <th style="padding:8px; border:1px solid #93c5fd;">手法</th>
+                                    <th style="padding:8px; border:1px solid #93c5fd;">ペナルティ</th>
+                                    <th style="padding:8px; border:1px solid #93c5fd;">スパース性</th>
+                                    <th style="padding:8px; border:1px solid #93c5fd;">変数選択</th>
+                                    <th style="padding:8px; border:1px solid #93c5fd;">閉形式解</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">Ridge</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">$\lambda\|\beta\|_2^2$</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">なし</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">×</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">○</td>
+                                </tr>
+                                <tr style="background:#f8fafc;">
+                                    <td style="padding:8px; border:1px solid #93c5fd;">Lasso</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">$\lambda\|\beta\|_1$</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">あり（強）</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">○</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">×</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">Elastic-Net</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">L1 + L2 混合</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">あり（中）</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">○</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">×</td>
+                                </tr>
+                                <tr style="background:#f8fafc;">
+                                    <td style="padding:8px; border:1px solid #93c5fd;">Fused Lasso</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">隣接差の L1</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">あり（隣接）</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">△</td>
+                                    <td style="padding:8px; border:1px solid #93c5fd;">×</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ⑧ 公式まとめ -->
+                <section class="content-section">
+                    <h2><i class="fas fa-bookmark"></i> 公式まとめ</h2>
+                    <div class="formula-block">
+                        <p><strong>モデル</strong>：$Y = X\beta + \varepsilon,\quad \varepsilon \sim N_n(\mathbf{0}, \sigma^2 I_n)$</p>
+                        <p><strong>OLS 推定量</strong>：$\hat\beta = (X^TX)^{-1}X^TY$</p>
+                        <p><strong>射影行列</strong>：$P_X = X(X^TX)^{-1}X^T$，$\hat Y = P_X Y$，$e = (I-P_X)Y$</p>
+                        <p><strong>変動分解</strong>：$\|Y-\bar y\mathbf{1}\|^2 = \|\hat Y-\bar y\mathbf{1}\|^2 + \|e\|^2$</p>
+                        <p><strong>決定係数</strong>：$R^2 = 1 - \|e\|^2/\|Y-\bar y\mathbf{1}\|^2$</p>
+                        <p><strong>自由度調整済み</strong>：$R^{*2} = 1 - \dfrac{\|e\|^2/(n-d-1)}{\|Y-\bar y\mathbf{1}\|^2/(n-1)}$</p>
+                        <p><strong>共分散</strong>：$\mathrm{Cov}[\hat\beta] = \sigma^2(X^TX)^{-1}$，$\hat\sigma^2 = \|e\|^2/(n-d-1)$</p>
+                        <p><strong>個別 t 検定</strong>：$t_k = \hat\beta_k / \sqrt{\hat\sigma^2 S_{kk}} \sim t(n-d-1)$</p>
+                        <p><strong>全体 F 検定</strong>：$T = \|\hat Y-\bar y\mathbf{1}\|^2/d \div \hat\sigma^2 \sim F(d, n-d-1)$</p>
+                        <p><strong>Ridge 解</strong>：$(X^TX + \lambda I)^{-1}X^TY$</p>
+                        <p><strong>Mallows' $C_p$</strong>：$\|Y-X\hat\beta_R\|^2 + 2\sigma^2 \mathrm{tr}[X(X^TX+\lambda I)^{-1}X^T]$</p>
+                    </div>
+                </section>
+
+                <!-- ⑨ 例題 -->
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil-alt"></i> 例題・演習</h2>
+
+                    <div class="example-block">
+                        <p><strong>問1（OLS 推定量の不偏性と分散）</strong></p>
+                        <p>
+                            次の単純な設定を考える。$n = 4$ 個のデータで、切片なし 1 変数モデル
+                            $y_i = \beta x_i + \varepsilon_i$（$\varepsilon_i \overset{i.i.d.}{\sim} N(0, \sigma^2)$）を考える。
+                            説明変数の値は $x_1 = 1,\, x_2 = 2,\, x_3 = 3,\, x_4 = 4$ とする。
+                        </p>
+                        <p>（1）OLS 推定量 $\hat\beta$ を求めよ。</p>
+                        <p>（2）$\hat\beta$ が不偏推定量であることを示し、その分散 $\mathrm{Var}[\hat\beta]$ を求めよ。</p>
+                        <p>（3）$\hat\sigma^2 = \|e\|^2/(n-1)$ の自由度の分母が $n-1$ であることを説明せよ（切片なしモデルの場合）。</p>
+                    </div>
+
+                    <div class="answer-block">
+                        <p><strong>解答（問1）</strong></p>
+                        <p>
+                            切片なし1変数なので $X = (x_1, x_2, x_3, x_4)^T = (1,2,3,4)^T$，$\beta$ はスカラー。
+                        </p>
+                        <p><strong>（1）</strong> $X^TX = \sum x_i^2 = 1+4+9+16 = 30$，$X^TY = \sum x_i y_i$ なので：</p>
+                        $$\hat\beta = \frac{\sum x_i y_i}{\sum x_i^2} = \frac{x_1 y_1 + x_2 y_2 + x_3 y_3 + x_4 y_4}{30}$$
+                        <p><strong>（2）</strong> $y_i = \beta^* x_i + \varepsilon_i$ を代入：</p>
+                        $$\hat\beta = \frac{\sum x_i(\beta^* x_i + \varepsilon_i)}{\sum x_i^2} = \beta^* + \frac{\sum x_i \varepsilon_i}{\sum x_i^2}$$
+                        <p>$E[\varepsilon_i] = 0$ より $E[\hat\beta] = \beta^*$（不偏）。分散は：</p>
+                        $$\mathrm{Var}[\hat\beta] = \frac{\sum x_i^2 \cdot \sigma^2}{(\sum x_i^2)^2} = \frac{\sigma^2}{\sum x_i^2} = \frac{\sigma^2}{30}$$
+                        <p><strong>（3）</strong> 切片なし1変数モデルでは $\mathrm{rank}(X) = 1$。
+                        推定するパラメータが $1$ 個なので残差の自由度は $n - 1 = 3$。一般に切片を含む $d$ 変数モデルでは自由度 $n - d - 1$。</p>
+                    </div>
+
+                    <div class="example-block">
+                        <p><strong>問2（決定係数と自由度調整済み決定係数の比較）</strong></p>
+                        <p>
+                            $n = 20$ のデータで 2 つのモデルを比較する。
+                        </p>
+                        <ul>
+                            <li>モデル A（説明変数 $d=2$）：$\|e_A\|^2 = 480$，全変動 $\|Y - \bar y\mathbf{1}\|^2 = 1200$</li>
+                            <li>モデル B（説明変数 $d=5$）：$\|e_B\|^2 = 360$，全変動は同じ $1200$</li>
+                        </ul>
+                        <p>（1）各モデルの $R^2$ を計算せよ。</p>
+                        <p>（2）各モデルの $R^{*2}$ を計算せよ。</p>
+                        <p>（3）$R^2$ と $R^{*2}$ で選ばれるモデルはどちらか。また、どちらの基準を使うべきか理由を述べよ。</p>
+                    </div>
+
+                    <div class="answer-block">
+                        <p><strong>解答（問2）</strong></p>
+                        <p><strong>（1）決定係数</strong></p>
+                        $$R^2_A = 1 - \frac{480}{1200} = 1 - 0.4 = 0.600$$
+                        $$R^2_B = 1 - \frac{360}{1200} = 1 - 0.3 = 0.700$$
+                        <p>$R^2$ ではモデル B が大きい。</p>
+                        <p><strong>（2）自由度調整済み決定係数</strong>（$n=20$）</p>
+                        $$R^{*2}_A = 1 - \frac{480/(20-2-1)}{1200/(20-1)} = 1 - \frac{480/17}{1200/19} = 1 - \frac{28.235}{63.158} \approx 1 - 0.447 = 0.553$$
+                        $$R^{*2}_B = 1 - \frac{360/(20-5-1)}{1200/(20-1)} = 1 - \frac{360/14}{1200/19} = 1 - \frac{25.714}{63.158} \approx 1 - 0.407 = 0.593$$
+                        <p><strong>（3）</strong> $R^2$ ではモデル B、$R^{*2}$ でもモデル B が選ばれる（今回はどちらも同じ）。
+                        一般に $R^2$ は変数を増やすだけで必ず上がるため、モデル選択には<strong>$R^{*2}$ を使うべき</strong>です。
+                        変数を増やすコスト（自由度減少）を加味した $R^{*2}$ がよりフェアな比較を与えます。</p>
+                    </div>
+
+                    <div class="example-block">
+                        <p><strong>問3（Ridge 回帰と正則化パラメータの効果）</strong></p>
+                        <p>
+                            $n = 3$，$d = 2$ の設定で切片なしモデルを考える。 
+                        </p>
+                        $$X = \begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{pmatrix}, \quad Y = \begin{pmatrix} 2 \\ 3 \\ 6 \end{pmatrix}$$
+                        <p>（1）OLS 推定量 $\hat\beta$ を求めよ。</p>
+                        <p>（2）Ridge 推定量 $\hat\beta_R(\lambda) = (X^TX + \lambda I)^{-1}X^TY$ を $\lambda > 0$ の関数として求めよ。</p>
+                        <p>（3）$\lambda \to \infty$ のとき $\hat\beta_R(\lambda)$ はどのような値に近づくか。直観的に説明せよ。</p>
+                    </div>
+
+                    <div class="answer-block">
+                        <p><strong>解答（問3）</strong></p>
+                        <p><strong>（1）</strong> まず各行列を計算：</p>
+                        $$X^TX = \begin{pmatrix} 1 & 0 & 1 \\ 0 & 1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$$
+                        $$X^TY = \begin{pmatrix} 1\cdot2 + 0\cdot3 + 1\cdot6 \\ 0\cdot2 + 1\cdot3 + 1\cdot6 \end{pmatrix} = \begin{pmatrix} 8 \\ 9 \end{pmatrix}$$
+                        $$\det(X^TX) = 4-1 = 3, \quad (X^TX)^{-1} = \frac{1}{3}\begin{pmatrix} 2 & -1 \\ -1 & 2 \end{pmatrix}$$
+                        $$\hat\beta = \frac{1}{3}\begin{pmatrix} 2 & -1 \\ -1 & 2 \end{pmatrix}\begin{pmatrix} 8 \\ 9 \end{pmatrix} = \frac{1}{3}\begin{pmatrix} 7 \\ 10 \end{pmatrix} = \begin{pmatrix} 7/3 \\ 10/3 \end{pmatrix}$$
+                        <p><strong>（2）</strong> $X^TX + \lambda I = \begin{pmatrix} 2+\lambda & 1 \\ 1 & 2+\lambda \end{pmatrix}$，行列式 $(2+\lambda)^2 - 1$：</p>
+                        $$(X^TX + \lambda I)^{-1} = \frac{1}{(2+\lambda)^2 - 1}\begin{pmatrix} 2+\lambda & -1 \\ -1 & 2+\lambda \end{pmatrix}$$
+                        $$\hat\beta_R(\lambda) = \frac{1}{(2+\lambda)^2-1}\begin{pmatrix} (2+\lambda)\cdot8 - 9 \\ -8 + (2+\lambda)\cdot 9 \end{pmatrix} = \frac{1}{(2+\lambda)^2-1}\begin{pmatrix} 16+8\lambda-9 \\ -8+18+9\lambda \end{pmatrix} = \frac{1}{(2+\lambda)^2-1}\begin{pmatrix} 7+8\lambda \\ 10+9\lambda \end{pmatrix}$$
+                        <p><strong>（3）</strong> 分子 $\sim \lambda$ のオーダー，分母 $\sim \lambda^2$ のオーダーなので $\lambda \to \infty$ で $\hat\beta_R(\lambda) \to \mathbf{0}$。
+                        正則化を強くするほど係数はゼロに引き寄せられます。これは「複雑さを抑えるペナルティが支配的になる」直観と一致します。</p>
+                    </div>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>

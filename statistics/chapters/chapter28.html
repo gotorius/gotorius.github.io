@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body data-chapter="28">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-content">
+
+                <section class="content-section">
+                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                    <p>分割表（contingency table）は、複数の質的変量に関するデータの頻度を集計した表である。本章では、2×2分割表から一般の I×J 分割表、さらに3元分割表へと拡張しながら、オッズ比、適合度カイ二乗検定、尤度比検定、フィッシャー正確検定を学ぶ。</p>
+                    <p>さらに、対数線形モデル・階層モデル・グラフィカルモデルを用いた分割表の体系的なモデリング手法を扱う。グラフィカルモデルでは、無向グラフのクリーク構造から変数間の条件付き独立性を視覚的に読み取ることができる。</p>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                    <div class="concept-list">
+                        <h3>2群比較と2×2分割表</h3>
+                        <ul>
+                            <li><strong>独立二項分布モデル</strong>：$X_i \sim \text{Bin}(n_i, \theta_i)$, $i=1,2$, $X_1$ と $X_2$ は独立</li>
+                            <li><strong>オッズ比</strong>（odds ratio）：$\psi = \frac{\theta_1/(1-\theta_1)}{\theta_2/(1-\theta_2)}$</li>
+                            <li><strong>相対リスク</strong>（relative risk）：$\theta_1/\theta_2$。希少事象では $\psi \approx \theta_1/\theta_2$</li>
+                            <li><strong>前向き研究</strong>（prospective study）と<strong>後向き研究</strong>（retrospective study）：オッズ比は両方で一致</li>
+                        </ul>
+                        <h3>検定手法</h3>
+                        <ul>
+                            <li><strong>適合度カイ二乗検定</strong>：$\chi^2 = \sum \frac{(x_{ij} - m_{ij})^2}{m_{ij}}$（漸近的に $\chi^2$ 分布）</li>
+                            <li><strong>尤度比検定</strong>（逸脱度）：$G^2 = 2\sum x_{ij}\log\frac{x_{ij}}{m_{ij}}$</li>
+                            <li><strong>フィッシャー正確検定</strong>：超幾何分布に基づく条件付き検定（漸近論を使わない）</li>
+                        </ul>
+                        <h3>対数線形モデルと3元分割表</h3>
+                        <ul>
+                            <li><strong>対数線形モデル</strong>：$\log\theta_{ij} = \mu + \alpha_i + \beta_j + \gamma_{ij}$</li>
+                            <li><strong>完全独立</strong> $A \perp B \perp C$：$\theta_{ijk} = \theta_{i..}\theta_{.j.}\theta_{..k}$</li>
+                            <li><strong>周辺独立</strong> $A \perp (B,C)$：$\theta_{ijk} = \theta_{i..}\theta_{.jk}$</li>
+                            <li><strong>条件付き独立</strong> $A \perp B | C$：$\theta_{ijk} = \theta_{i.k}\theta_{.jk}/\theta_{..k}$</li>
+                            <li><strong>階層モデル</strong>：交互作用を含むなら低次の項もすべて含む</li>
+                            <li><strong>生成集合</strong>：極大な交互作用の項で階層モデルを表記（例：AC/BC）</li>
+                        </ul>
+                        <h3>グラフィカルモデル</h3>
+                        <ul>
+                            <li><strong>クリーク</strong>（clique）：極大な完全部分グラフ</li>
+                            <li>クリークの集合が生成集合となる階層モデル</li>
+                            <li><strong>性質1</strong>：非連結 → 独立</li>
+                            <li><strong>性質2</strong>：辺なし → 他の全因子で条件付けて条件付き独立</li>
+                            <li><strong>性質3</strong>：$S$ で分離 → $S$ で条件付けて条件付き独立</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                    <div class="formula-block">
+                        <p><strong>当てはめ値（一様性・独立性の帰無仮説）</strong></p>
+                        $$m_{ij} = \frac{x_{i.} \cdot x_{.j}}{x_{..}}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>適合度カイ二乗統計量（2×2分割表）</strong></p>
+                        $$\chi^2 = \frac{x_{..}(x_{11}x_{22} - x_{12}x_{21})^2}{x_{1.}x_{2.}x_{.1}x_{.2}}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>逸脱度（尤度比検定統計量）</strong></p>
+                        $$G^2 = 2\sum_{i}\sum_{j} x_{ij}\log\frac{x_{ij}}{m_{ij}}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>標本オッズ比と対数オッズ比の標準誤差</strong></p>
+                        $$\widehat{OR} = \frac{x_{11}x_{22}}{x_{12}x_{21}}, \quad \widehat{\text{se}}(\log\widehat{OR}) \approx \sqrt{\frac{1}{x_{11}}+\frac{1}{x_{12}}+\frac{1}{x_{21}}+\frac{1}{x_{22}}}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>フィッシャー正確検定（超幾何分布）</strong></p>
+                        $$P(X_{11} = x_{11}) = \frac{\binom{x_{.1}}{x_{11}}\binom{x_{.2}}{x_{1.}-x_{11}}}{\binom{x_{..}}{x_{1.}}}$$
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                    <div class="example-block">
+                        <p><strong>問28.1</strong> 後向き研究（低出生体重児12名 vs コントロール36名）のオッズ比解釈</p>
+                        <div class="answer-block">
+                            <p><strong>③が正解</strong>。後向き研究では各行の比（罹患率）を直接推定できないが、オッズ比は前向き研究のものと一致する。希少事象では相対リスクの推定値としても使える。</p>
+                            <p>①②は誤り：標本サイズ比1:3は研究デザインで定めたもので、罹患率の推定には使えない。</p>
+                        </div>
+                    </div>
+                    <div class="example-block">
+                        <p><strong>問28.2</strong> 同データに対する検定とオッズ比の信頼区間</p>
+                        <div class="answer-block">
+                            <p>当てはめ値：$m_{11}=2.5$, $m_{12}=7.5$, $m_{21}=9.5$, $m_{22}=28.5$</p>
+                            <ul>
+                                <li>$\chi^2 = 1.516$、$G^2 = 1.403$（いずれも $\chi^2_{0.05}(1)=3.84$ より小 → <strong>有意でない</strong>）</li>
+                                <li>$\widehat{OR} = (4 \times 30)/(6 \times 8) = 2.5$</li>
+                                <li>$\widehat{\text{se}}(\log\widehat{OR}) = \sqrt{1/4+1/6+1/8+1/30} = 0.758$</li>
+                                <li>$\log(2.5) \pm 1.96 \times 0.758 = (-0.570, 2.402)$</li>
+                                <li>オッズ比の95%信頼区間：$(e^{-0.570}, e^{2.402}) = (0.566, 11.04)$（1を含む → 有意でない）</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="example-block">
+                        <p><strong>問28.3</strong> 4頂点 {A,B,C,D} の無向独立グラフ（辺：A-B, B-C, B-D, C-D）</p>
+                        <div class="answer-block">
+                            <p>[1] 全頂点が連結 → <strong>独立な因子は存在しない</strong>（性質1）</p>
+                            <p>[2] A-C間に辺なし → $A \perp C | \{B,D\}$（性質2）。さらに $\{B\}$ で分離 → $A \perp C | B$（性質3）</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                    <ul>
+                        <li>オッズ比の重要な性質：前向き研究と後向き研究で一致。希少事象では相対リスクの近似値</li>
+                        <li>多項分布・独立ポアソン分布・行ごとの多項分布のいずれでも、当てはめ値 $m_{ij} = x_{i.}x_{.j}/x_{..}$ は同じ</li>
+                        <li>自由度は $(I-1)(J-1)$ でモデルの設定によらず一致</li>
+                        <li>階層モデルの中でグラフィカルモデルに絞ることで、因子数が多い場合のモデル選択が容易になる</li>
+                        <li>多変量正規分布のグラフィカルモデルは25章参照</li>
+                    </ul>
+                </section>
+
+                <nav class="chapter-pager">
+                    <a href="#" class="pager-link" id="prev-link">
+                        <i class="fas fa-arrow-left"></i> 前の章
+                    </a>
+                    <a href="../index.html" class="pager-home">
+                        <i class="fas fa-th-large"></i> 目次
+                    </a>
+                    <a href="#" class="pager-link" id="next-link">
+                        次の章 <i class="fas fa-arrow-right"></i>
+                    </a>
+                </nav>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+        onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
+</body>
+</html>
