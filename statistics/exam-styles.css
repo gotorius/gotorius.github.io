@@ -464,3 +464,54 @@
     .nav-dot { width: 28px; height: 28px; font-size: .65rem; }
     .cat-row { grid-template-columns: 1fr 45px 60px 35px; font-size: .78rem; }
 }
+
+/* ------------------------------------------------------------------ */
+/* 図・表つき問題用スタイル                                              */
+/* ------------------------------------------------------------------ */
+.exam-svg {
+    width: 100%;
+    max-width: 340px;
+    height: auto;
+    display: block;
+    margin: 10px auto 14px;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.exam-table-wrap {
+    overflow-x: auto;
+    margin: 10px 0 14px;
+}
+
+.exam-table {
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    margin: 0 auto;
+}
+
+.exam-table th,
+.exam-table td {
+    border: 1px solid #ced4da;
+    padding: 5px 16px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.exam-table th {
+    background: var(--primary-bg);
+    font-weight: 600;
+    color: var(--primary-dark, #1e40af);
+}
+
+.exam-table td.row-header {
+    font-weight: 600;
+    background: #f1f5ff;
+}
+
+.exam-figure-note {
+    font-size: 0.82rem;
+    color: var(--gray-500);
+    text-align: center;
+    margin-top: -8px;
+    margin-bottom: 10px;
+}

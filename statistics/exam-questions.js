@@ -5778,4 +5778,589 @@ const EXAM_QUESTIONS = [
   explanation: "傾向スコア $P(T=1|X)$ でマッチングし、共変量のバランスを近似的に達成。観察研究で交絡を調整する。"
 },
 
+// ============================================================
+// 図・表から読み取る実践問題（Q501–Q515）
+// ============================================================
+
+// Q501: 散布図 → 相関係数の読み取り
+{
+  id: 501,
+  category: "データ読み取り・分析",
+  question: `次の散布図を見て、相関係数として最も適切な値を選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 220' class='exam-svg'>
+  <rect width='300' height='220' fill='#f8faff' rx='4'/>
+  <line x1='45' y1='15' x2='45' y2='185' stroke='#888' stroke-width='1.5'/>
+  <line x1='45' y1='185' x2='285' y2='185' stroke='#888' stroke-width='1.5'/>
+  <text x='165' y='208' text-anchor='middle' font-size='11' fill='#555'>X</text>
+  <text x='22' y='100' text-anchor='middle' font-size='11' fill='#555' transform='rotate(-90,22,100)'>Y</text>
+  <circle cx='65' cy='162' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='80' cy='150' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='96' cy='142' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='112' cy='131' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='124' cy='120' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='138' cy='112' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='150' cy='102' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='164' cy='92' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='178' cy='82' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='192' cy='71' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='206' cy='62' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='222' cy='52' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='238' cy='42' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='254' cy='32' r='4' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='265' cy='24' r='4' fill='#3b82f6' opacity='0.8'/>
+  <line x1='62' y1='167' x2='267' y2='20' stroke='#ef4444' stroke-width='1.5' stroke-dasharray='5,3'/>
+</svg>`,
+  choices: ["$r = -0.9$", "$r = 0.3$", "$r = 0.9$", "$r = 0.0$"],
+  answer: 2,
+  explanation: "点群が左下から右上へ強く集中しており、強い正の線形相関を示している。回帰直線（赤破線）への密着度の高さから $r \\approx 0.9$ が最適。$r=-0.9$ は負の相関、$r=0.3$ は弱い正の相関、$r=0.0$ は無相関を示す。"
+},
+
+// Q502: 右歪みヒストグラム → 平均・中央値・最頻値の大小
+{
+  id: 502,
+  category: "分布の特性値",
+  question: `次のヒストグラムについて最もよく当てはまる記述を選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 220' class='exam-svg'>
+  <rect width='300' height='220' fill='#f8faff' rx='4'/>
+  <line x1='40' y1='185' x2='278' y2='185' stroke='#888' stroke-width='1.5'/>
+  <line x1='40' y1='20' x2='40' y2='185' stroke='#888' stroke-width='1.5'/>
+  <text x='159' y='208' text-anchor='middle' font-size='11' fill='#555'>値</text>
+  <text x='18' y='103' text-anchor='middle' font-size='11' fill='#555' transform='rotate(-90,18,103)'>頻度</text>
+  <rect x='44' y='65' width='26' height='120' fill='#3b82f6' opacity='0.75' stroke='#1d4ed8' stroke-width='0.5'/>
+  <rect x='72' y='88' width='26' height='97' fill='#3b82f6' opacity='0.75' stroke='#1d4ed8' stroke-width='0.5'/>
+  <rect x='100' y='115' width='26' height='70' fill='#3b82f6' opacity='0.75' stroke='#1d4ed8' stroke-width='0.5'/>
+  <rect x='128' y='140' width='26' height='45' fill='#3b82f6' opacity='0.75' stroke='#1d4ed8' stroke-width='0.5'/>
+  <rect x='156' y='158' width='26' height='27' fill='#3b82f6' opacity='0.75' stroke='#1d4ed8' stroke-width='0.5'/>
+  <rect x='184' y='170' width='26' height='15' fill='#3b82f6' opacity='0.75' stroke='#1d4ed8' stroke-width='0.5'/>
+  <rect x='212' y='178' width='26' height='7' fill='#3b82f6' opacity='0.75' stroke='#1d4ed8' stroke-width='0.5'/>
+  <rect x='240' y='181' width='26' height='4' fill='#3b82f6' opacity='0.75' stroke='#1d4ed8' stroke-width='0.5'/>
+  <line x1='57' y1='63' x2='57' y2='22' stroke='#ef4444' stroke-width='1' stroke-dasharray='3,2'/>
+  <text x='57' y='19' text-anchor='middle' font-size='9' fill='#ef4444'>最頻値</text>
+</svg>`,
+  choices: [
+    "平均 > 中央値 > 最頻値となる可能性が高い",
+    "平均 < 中央値 < 最頻値となる可能性が高い",
+    "平均・中央値・最頻値はほぼ等しい",
+    "分布は左歪み（負の歪み）である"
+  ],
+  answer: 0,
+  explanation: "ヒストグラムは左（低値）側に最頻値があり、右裾が長い右歪み（正の歪み）分布である。右歪みでは一般に 最頻値 < 中央値 < 平均 の順、すなわち平均 > 中央値 > 最頻値となる。これは右側外れ値・長裾が平均を右に引き上げるため。"
+},
+
+// Q503: 2群の箱ひげ図比較
+{
+  id: 503,
+  category: "データ読み取り・分析",
+  question: `次の2群（群A・群B）の箱ひげ図について、正しい記述を選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 230' class='exam-svg'>
+  <rect width='300' height='230' fill='#f8faff' rx='4'/>
+  <line x1='40' y1='20' x2='40' y2='195' stroke='#888' stroke-width='1.5'/>
+  <line x1='40' y1='195' x2='280' y2='195' stroke='#888' stroke-width='1.5'/>
+  <text x='18' y='108' text-anchor='middle' font-size='11' fill='#555' transform='rotate(-90,18,108)'>値</text>
+  <text x='110' y='216' text-anchor='middle' font-size='11' fill='#3b82f6' font-weight='600'>群A</text>
+  <text x='210' y='216' text-anchor='middle' font-size='11' fill='#f97316' font-weight='600'>群B</text>
+  <!-- y-axis ticks: 20=170, 40=116, 60=62, 80=8 (scale: 160/60 ≈ 2.67px/unit, bottom at y=170 for val=20) -->
+  <!-- Group A: min=25 Q1=35 med=45 Q3=55 max=65 -->
+  <!-- y = 195 - (val-20)*2.67 -->
+  <!-- min=25: 195-13=182, Q1=35: 195-40=155, med=45: 195-67=128, Q3=55: 195-93=102, max=65: 195-120=75 -->
+  <line x1='110' y1='182' x2='110' y2='155' stroke='#3b82f6' stroke-width='1.5'/>
+  <line x1='96' y1='182' x2='124' y2='182' stroke='#3b82f6' stroke-width='1.5'/>
+  <rect x='85' y='102' width='50' height='53' fill='#bfdbfe' stroke='#3b82f6' stroke-width='2'/>
+  <line x1='85' y1='128' x2='135' y2='128' stroke='#3b82f6' stroke-width='2.5'/>
+  <line x1='110' y1='102' x2='110' y2='75' stroke='#3b82f6' stroke-width='1.5'/>
+  <line x1='96' y1='75' x2='124' y2='75' stroke='#3b82f6' stroke-width='1.5'/>
+  <!-- Group B: min=35 Q1=48 med=60 Q3=70 max=80 -->
+  <!-- min=35: 195-40=155, Q1=48: 195-75=120, med=60: 195-107=88, Q3=70: 195-133=62, max=80: 195-160=35 -->
+  <line x1='210' y1='155' x2='210' y2='120' stroke='#f97316' stroke-width='1.5'/>
+  <line x1='196' y1='155' x2='224' y2='155' stroke='#f97316' stroke-width='1.5'/>
+  <rect x='185' y='62' width='50' height='58' fill='#fed7aa' stroke='#f97316' stroke-width='2'/>
+  <line x1='185' y1='88' x2='235' y2='88' stroke='#f97316' stroke-width='2.5'/>
+  <line x1='210' y1='62' x2='210' y2='35' stroke='#f97316' stroke-width='1.5'/>
+  <line x1='196' y1='35' x2='224' y2='35' stroke='#f97316' stroke-width='1.5'/>
+  <!-- y axis labels -->
+  <text x='35' y='183' text-anchor='end' font-size='9' fill='#666'>20</text>
+  <text x='35' y='130' text-anchor='end' font-size='9' fill='#666'>40</text>
+  <text x='35' y='76' text-anchor='end' font-size='9' fill='#666'>60</text>
+  <line x1='38' y1='195' x2='42' y2='195' stroke='#888'/>
+  <line x1='38' y1='128' x2='42' y2='128' stroke='#888'/>
+  <line x1='38' y1='62' x2='42' y2='62' stroke='#888'/>
+</svg>`,
+  choices: [
+    "群Aの四分位範囲（IQR）は群Bより大きい",
+    "群Bの中央値は群Aの中央値より大きい",
+    "群Aと群Bの最大値は等しい",
+    "群Bの分布は群Aより左に偏っている"
+  ],
+  answer: 1,
+  explanation: "群Aの中央値＝45、群Bの中央値＝60 なので群Bの中央値が群Aより大きい。IQRは群A=55−35=20、群B=70−48=22 で群Bが大きい。最大値は群A=65、群B=80 で異なる。群Bは全体的に群Aより高い位置にある（右に偏ってはいない）。"
+},
+
+// Q504: Q-Qプロットから分布形状の読み取り（右裾重い）
+{
+  id: 504,
+  category: "分布の特性値",
+  question: `次のQ-Qプロット（横軸：標準正規分布の理論分位数、縦軸：標本分位数）から判断できることとして最も適切なものを選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 220' class='exam-svg'>
+  <rect width='300' height='220' fill='#f8faff' rx='4'/>
+  <line x1='45' y1='15' x2='45' y2='190' stroke='#888' stroke-width='1.5'/>
+  <line x1='45' y1='190' x2='275' y2='190' stroke='#888' stroke-width='1.5'/>
+  <text x='160' y='210' text-anchor='middle' font-size='11' fill='#555'>理論分位数</text>
+  <text x='20' y='103' text-anchor='middle' font-size='10' fill='#555' transform='rotate(-90,20,103)'>標本分位数</text>
+  <!-- reference line (normal) from (55,178) to (258,28) -->
+  <line x1='55' y1='178' x2='258' y2='28' stroke='#94a3b8' stroke-width='1.5' stroke-dasharray='5,3'/>
+  <!-- Q-Q points: follow line until upper right, then curve above (heavy right tail) -->
+  <circle cx='58' cy='176' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='80' cy='158' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='104' cy='139' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='128' cy='120' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='152' cy='101' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='172' cy='79' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='192' cy='57' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='212' cy='36' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='232' cy='18' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='252' cy='8' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <!-- annotation arrow pointing to upper-right deviation -->
+  <path d='M 242 32 Q 250 22 252 10' fill='none' stroke='#ef4444' stroke-width='1.2'/>
+  <text x='225' y='35' font-size='9' fill='#ef4444'>基準線より上</text>
+</svg>`,
+  choices: [
+    "左裾が重い分布（負の歪み）を示している",
+    "データは正規分布に非常に近い",
+    "全体に外れ値が多数含まれる",
+    "右裾が重い分布（正の歪み）を示している"
+  ],
+  answer: 3,
+  explanation: "Q-Qプロットで上端（右上）の点が参照直線より上方に大きくはずれている場合、サンプルの上側分位数が正規分布の理論値より大きい、すなわち右裾が厚い（重い右裾）ことを示す。対数正規分布や指数分布などがこのパターンを示す。"
+},
+
+// Q505: 残差プロット → 不均一分散の検出
+{
+  id: 505,
+  category: "回帰分析",
+  question: `次の残差プロット（横軸：あてはめ値、縦軸：残差）が示す問題点として最も適切なものを選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 220' class='exam-svg'>
+  <rect width='300' height='220' fill='#f8faff' rx='4'/>
+  <line x1='45' y1='20' x2='45' y2='195' stroke='#888' stroke-width='1.5'/>
+  <line x1='45' y1='195' x2='280' y2='195' stroke='#888' stroke-width='1.5'/>
+  <text x='163' y='213' text-anchor='middle' font-size='11' fill='#555'>あてはめ値</text>
+  <text x='18' y='108' text-anchor='middle' font-size='10' fill='#555' transform='rotate(-90,18,108)'>残差</text>
+  <!-- zero residual line -->
+  <line x1='45' y1='108' x2='280' y2='108' stroke='#94a3b8' stroke-width='1' stroke-dasharray='4,3'/>
+  <!-- Points: fan shape (heteroscedasticity) - spread increases with x -->
+  <!-- Low x: tight around y=108 -->
+  <circle cx='65' cy='105' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='72' cy='111' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='80' cy='104' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='88' cy='112' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='78' cy='107' r='3' fill='#3b82f6' opacity='0.8'/>
+  <!-- Mid x: moderate spread -->
+  <circle cx='130' cy='88' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='138' cy='126' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='148' cy='90' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='155' cy='124' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='142' cy='82' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='150' cy='132' r='3' fill='#3b82f6' opacity='0.8'/>
+  <!-- High x: wide spread -->
+  <circle cx='200' cy='62' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='210' cy='152' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='220' cy='52' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='228' cy='158' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='217' cy='70' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='238' cy='45' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='244' cy='165' r='3' fill='#3b82f6' opacity='0.8'/>
+  <circle cx='252' cy='58' r='3' fill='#3b82f6' opacity='0.8'/>
+  <!-- fan shape guide lines -->
+  <line x1='60' y1='100' x2='255' y2='40' stroke='#ef4444' stroke-width='1' stroke-dasharray='3,3' opacity='0.5'/>
+  <line x1='60' y1='116' x2='255' y2='178' stroke='#ef4444' stroke-width='1' stroke-dasharray='3,3' opacity='0.5'/>
+</svg>`,
+  choices: [
+    "残差の分散が非一定（不均一分散）であることを示す",
+    "残差は正規分布に完全に従っている",
+    "回帰モデルは問題なく適合している",
+    "残差に系統的な自己相関が見られる"
+  ],
+  answer: 0,
+  explanation: "残差の散らばり幅があてはめ値の増加とともにラッパ（ファン）状に広がっている。これは分散均一性（homoscedasticity）の仮定に違反する不均一分散（heteroscedasticity）を示す。対策として対数変換、重み付き最小二乗法（WLS）などを検討する。"
+},
+
+// Q506: ROC曲線の解釈
+{
+  id: 506,
+  category: "仮説検定",
+  question: `次のROC曲線（実線）と対角参照線（破線）について、正しい記述を選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 280 240' class='exam-svg'>
+  <rect width='280' height='240' fill='#f8faff' rx='4'/>
+  <line x1='45' y1='20' x2='45' y2='200' stroke='#888' stroke-width='1.5'/>
+  <line x1='45' y1='200' x2='235' y2='200' stroke='#888' stroke-width='1.5'/>
+  <text x='140' y='220' text-anchor='middle' font-size='11' fill='#555'>偽陽性率（FPR）</text>
+  <text x='18' y='110' text-anchor='middle' font-size='10' fill='#555' transform='rotate(-90,18,110)'>感度（TPR）</text>
+  <!-- axis labels -->
+  <text x='45' y='213' text-anchor='middle' font-size='9' fill='#888'>0</text>
+  <text x='235' y='213' text-anchor='middle' font-size='9' fill='#888'>1</text>
+  <text x='38' y='203' text-anchor='end' font-size='9' fill='#888'>0</text>
+  <text x='38' y='23' text-anchor='end' font-size='9' fill='#888'>1</text>
+  <!-- reference diagonal (random) -->
+  <line x1='45' y1='200' x2='235' y2='20' stroke='#94a3b8' stroke-width='1.5' stroke-dasharray='5,3'/>
+  <!-- ROC curve (AUC ≈ 0.82, bulging toward upper-left) -->
+  <polyline points='45,200 63,152 82,114 102,88 124,69 148,55 170,44 192,36 212,30 232,22' fill='none' stroke='#3b82f6' stroke-width='2.5'/>
+  <!-- shaded AUC area -->
+  <polygon points='45,200 63,152 82,114 102,88 124,69 148,55 170,44 192,36 212,30 232,22 235,20 235,200' fill='#3b82f6' opacity='0.08'/>
+  <text x='160' y='130' font-size='10' fill='#3b82f6' font-weight='600'>AUC ≈ 0.82</text>
+</svg>`,
+  choices: [
+    "AUCが0に近いほど分類性能が高い",
+    "この曲線はランダム分類器より優れた性能を示している",
+    "AUCは0.5を大きく下回っている",
+    "感度と特異度はともに0に近い"
+  ],
+  answer: 1,
+  explanation: "ROC曲線が対角線（ランダム分類器、AUC=0.5）よりも左上に膨らんでいる場合、ランダムより優れた識別性能を示す（AUC>0.5）。AUCは1に近いほど良く、0に近いほど悪い。図ではAUC≈0.82と記されており、良好な分類器を示している。"
+},
+
+// Q507: 時系列グラフ → 季節変動の読み取り
+{
+  id: 507,
+  category: "確率過程",
+  question: `次の時系列グラフについて正しい記述を選べ。横軸は時間（月）、縦軸は観測値を示す。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 220' class='exam-svg'>
+  <rect width='320' height='220' fill='#f8faff' rx='4'/>
+  <line x1='45' y1='20' x2='45' y2='188' stroke='#888' stroke-width='1.5'/>
+  <line x1='45' y1='188' x2='300' y2='188' stroke='#888' stroke-width='1.5'/>
+  <text x='172' y='208' text-anchor='middle' font-size='11' fill='#555'>時間（月）</text>
+  <text x='18' y='104' text-anchor='middle' font-size='10' fill='#555' transform='rotate(-90,18,104)'>観測値</text>
+  <!-- 24 monthly data points with seasonal pattern (period≈6) -->
+  <!-- x: t=1..24, spacing = 255/23 ≈ 11px, x_t = 45 + (t-1)*11 -->
+  <!-- y values (seasonal): 85,30,25,40,80,90, 82,28,22,38,78,88, 80,26,20,36,76,86, 78,24,18,34,74,84 -->
+  <!-- y_px = 188 - val*1.5 -->
+  <polyline fill='none' stroke='#3b82f6' stroke-width='2'
+    points='45,60 56,143 67,150 78,128 89,68 100,53
+            111,65 122,146 133,155 144,131 155,71 166,56
+            177,68 188,149 199,158 210,134 221,74 232,59
+            243,71 254,152 265,161 276,137 287,77 298,62'/>
+  <!-- dots -->
+  <circle cx='45' cy='60' r='3' fill='#3b82f6'/>
+  <circle cx='100' cy='53' r='3' fill='#3b82f6'/>
+  <circle cx='155' cy='71' r='3' fill='#3b82f6'/>
+  <circle cx='210' cy='134' r='3' fill='#3b82f6'/>
+  <circle cx='265' cy='161' r='3' fill='#3b82f6'/>
+  <!-- period indicator -->
+  <line x1='45' y1='180' x2='100' y2='180' stroke='#f97316' stroke-width='1.5' marker-end='url(#arr)'/>
+  <line x1='100' y1='180' x2='155' y2='180' stroke='#f97316' stroke-width='1.5'/>
+  <text x='100' y='196' text-anchor='middle' font-size='9' fill='#f97316'>周期 ≈ 6ヶ月</text>
+  <!-- x-axis ticks -->
+  <text x='45' y='200' text-anchor='middle' font-size='9' fill='#888'>1</text>
+  <text x='155' y='200' text-anchor='middle' font-size='9' fill='#888'>11</text>
+  <text x='265' y='200' text-anchor='middle' font-size='9' fill='#888'>21</text>
+</svg>`,
+  choices: [
+    "この時系列はランダムなホワイトノイズである",
+    "この時系列は単調増加トレンドのみを示す",
+    "この時系列には周期的な季節変動が見られる",
+    "この時系列は単調減少トレンドを示す"
+  ],
+  answer: 2,
+  explanation: "グラフに約6ヶ月周期の規則的な上下変動（山と谷）が繰り返されており、これは季節変動（seasonality）を示す。ホワイトノイズは無規則、単調増加・減少トレンドも見られないため他の選択肢はすべて誤り。"
+},
+
+// Q508: 2×2分割表 → オッズ比の計算
+{
+  id: 508,
+  category: "仮説検定",
+  question: `次の2×2分割表からオッズ比（odds ratio）を求めよ。<br>
+<div class='exam-table-wrap'>
+<table class='exam-table'>
+  <tr><th></th><th>疾患あり</th><th>疾患なし</th><th>計</th></tr>
+  <tr><td class='row-header'>曝露あり</td><td>50</td><td>50</td><td>100</td></tr>
+  <tr><td class='row-header'>曝露なし</td><td>25</td><td>75</td><td>100</td></tr>
+  <tr><td class='row-header'>計</td><td>75</td><td>125</td><td>200</td></tr>
+</table>
+</div>`,
+  choices: ["$1.0$", "$1.5$", "$2.0$", "$3.0$"],
+  answer: 3,
+  explanation: "オッズ比 $= \\dfrac{a \\times d}{b \\times c} = \\dfrac{50 \\times 75}{50 \\times 25} = \\dfrac{3750}{1250} = 3.0$。曝露群の疾患オッズは非曝露群の3倍であることを示す。"
+},
+
+// Q509: 相関行列 → 最も高い相関ペアの読み取り
+{
+  id: 509,
+  category: "多変量解析",
+  question: `次の相関行列から読み取れる内容として正しいものを選べ。<br>
+<div class='exam-table-wrap'>
+<table class='exam-table'>
+  <tr><th></th><th>$X_1$</th><th>$X_2$</th><th>$X_3$</th><th>$X_4$</th></tr>
+  <tr><td class='row-header'>$X_1$</td><td>1.00</td><td>0.45</td><td>0.82</td><td>0.31</td></tr>
+  <tr><td class='row-header'>$X_2$</td><td>0.45</td><td>1.00</td><td>0.38</td><td>0.67</td></tr>
+  <tr><td class='row-header'>$X_3$</td><td>0.82</td><td>0.38</td><td>1.00</td><td>0.25</td></tr>
+  <tr><td class='row-header'>$X_4$</td><td>0.31</td><td>0.67</td><td>0.25</td><td>1.00</td></tr>
+</table>
+</div>`,
+  choices: [
+    "$X_1$ と $X_3$ の相関が最も高い",
+    "$X_2$ と $X_4$ の相関が最も高い",
+    "$X_1$ と $X_2$ の相関が最も高い",
+    "すべての変数間に強い正の相関がある"
+  ],
+  answer: 0,
+  explanation: "対角外の相関係数を比較すると：$r_{13}=0.82$, $r_{24}=0.67$, $r_{12}=0.45$, $r_{14}=0.31$, $r_{23}=0.38$, $r_{34}=0.25$。最大は $r_{13}=0.82$ であり、$X_1$ と $X_3$ の相関が最も高い。$r_{34}=0.25$ など弱い相関もあるので「すべて強い」は誤り。"
+},
+
+// Q510: 2つの正規分布曲線 → 平均・分散の比較
+{
+  id: 510,
+  category: "連続型確率分布",
+  question: `次のグラフに描かれた2つの正規分布曲線（青：曲線A、赤：曲線B）について、正しい記述を選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 220' class='exam-svg'>
+  <rect width='300' height='220' fill='#f8faff' rx='4'/>
+  <line x1='40' y1='190' x2='270' y2='190' stroke='#888' stroke-width='1.5'/>
+  <line x1='155' y1='20' x2='155' y2='192' stroke='#ccc' stroke-width='1' stroke-dasharray='4,3'/>
+  <text x='155' y='210' text-anchor='middle' font-size='10' fill='#888'>μ</text>
+  <!-- Curve A: narrow (σ=1), blue -->
+  <polyline fill='none' stroke='#3b82f6' stroke-width='2.2'
+    points='65,189 80,184 95,172 110,144 125,100 140,55 155,34 170,55 185,100 200,144 215,172 230,184 245,189'/>
+  <!-- Curve B: wide (σ=2), red -->
+  <polyline fill='none' stroke='#ef4444' stroke-width='2.2'
+    points='40,182 65,172 90,154 115,128 140,106 155,97 170,106 195,128 220,154 245,172 270,182'/>
+  <!-- legend -->
+  <line x1='55' y1='28' x2='78' y2='28' stroke='#3b82f6' stroke-width='2'/>
+  <text x='82' y='32' font-size='10' fill='#3b82f6'>曲線A (σ 小)</text>
+  <line x1='55' y1='45' x2='78' y2='45' stroke='#ef4444' stroke-width='2'/>
+  <text x='82' y='49' font-size='10' fill='#ef4444'>曲線B (σ 大)</text>
+</svg>`,
+  choices: [
+    "2つの曲線は平均（位置）が異なる",
+    "2つの曲線は平均が等しく、分散が異なる",
+    "曲線Aの方が標準偏差が大きい",
+    "2つの曲線が囲む面積（確率）の合計は2になる"
+  ],
+  answer: 1,
+  explanation: "両曲線とも $x=\\mu$（中心の破線）を頂点とし、同じ位置でピークを迎えている（平均が等しい）。しかし曲線Aは高くて細く（分散小・$\\sigma$ 小）、曲線Bは低くて広い（分散大・$\\sigma$ 大）。どちらも全確率=1なので面積は各1。"
+},
+
+// Q511: スクリープロット → 主成分数の選択
+{
+  id: 511,
+  category: "多変量解析",
+  question: `次の主成分分析のスクリープロット（固有値プロット）から、採用すべき主成分数として最も適切なものを選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 220' class='exam-svg'>
+  <rect width='300' height='220' fill='#f8faff' rx='4'/>
+  <line x1='50' y1='20' x2='50' y2='188' stroke='#888' stroke-width='1.5'/>
+  <line x1='50' y1='188' x2='275' y2='188' stroke='#888' stroke-width='1.5'/>
+  <text x='163' y='208' text-anchor='middle' font-size='11' fill='#555'>主成分番号</text>
+  <text x='20' y='104' text-anchor='middle' font-size='10' fill='#555' transform='rotate(-90,20,104)'>固有値</text>
+  <!-- eigenvalue=1 horizontal guide -->
+  <line x1='50' y1='143' x2='275' y2='143' stroke='#f97316' stroke-width='1' stroke-dasharray='4,3'/>
+  <text x='278' y='146' font-size='9' fill='#f97316'>固有値=1</text>
+  <!-- data points: PC1=3.2, PC2=2.1, PC3=1.5, PC4=0.4, PC5=0.2, PC6=0.1 -->
+  <!-- scale: 0→188, 3.5→33; 155px / 3.5 = 44.3px/unit -->
+  <!-- y = 188 - val*44.3 -->
+  <!-- PC1: 188-3.2*44.3=188-141.8=46.2 ≈ 46 -->
+  <!-- PC2: 188-2.1*44.3=188-93=95 -->
+  <!-- PC3: 188-1.5*44.3=188-66.5=121.5 ≈ 122 -->
+  <!-- PC4: 188-0.4*44.3=188-17.7=170.3 ≈ 170 -->
+  <!-- PC5: 188-0.2*44.3=188-8.9=179.1 ≈ 179 -->
+  <!-- PC6: 188-0.1*44.3=188-4.4=183.6 ≈ 184 -->
+  <!-- x positions: 1→80, 2→116, 3→152, 4→188, 5→224, 6→260 -->
+  <polyline fill='none' stroke='#3b82f6' stroke-width='2'
+    points='80,46 116,95 152,122 188,170 224,179 260,184'/>
+  <circle cx='80' cy='46' r='5' fill='#3b82f6'/>
+  <circle cx='116' cy='95' r='5' fill='#3b82f6'/>
+  <circle cx='152' cy='122' r='5' fill='#3b82f6'/>
+  <circle cx='188' cy='170' r='5' fill='#3b82f6'/>
+  <circle cx='224' cy='179' r='5' fill='#3b82f6'/>
+  <circle cx='260' cy='184' r='5' fill='#3b82f6'/>
+  <!-- x axis labels -->
+  <text x='80' y='200' text-anchor='middle' font-size='10' fill='#555'>1</text>
+  <text x='116' y='200' text-anchor='middle' font-size='10' fill='#555'>2</text>
+  <text x='152' y='200' text-anchor='middle' font-size='10' fill='#555'>3</text>
+  <text x='188' y='200' text-anchor='middle' font-size='10' fill='#555'>4</text>
+  <text x='224' y='200' text-anchor='middle' font-size='10' fill='#555'>5</text>
+  <text x='260' y='200' text-anchor='middle' font-size='10' fill='#555'>6</text>
+  <!-- y axis values -->
+  <text x='46' y='49' text-anchor='end' font-size='9' fill='#888'>3.2</text>
+  <text x='46' y='98' text-anchor='end' font-size='9' fill='#888'>2.1</text>
+  <text x='46' y='125' text-anchor='end' font-size='9' fill='#888'>1.5</text>
+  <!-- elbow annotation -->
+  <path d='M 166 110 Q 175 100 186 110' fill='none' stroke='#ef4444' stroke-width='1.2'/>
+  <text x='168' y='98' font-size='9' fill='#ef4444'>肘点</text>
+</svg>`,
+  choices: [
+    "主成分1つ（第1主成分のみ）",
+    "主成分2つ",
+    "主成分3つ",
+    "主成分6つすべて"
+  ],
+  answer: 2,
+  explanation: "スクリープロットの「肘点（elbow）」は第3成分と第4成分の間（固有値が1.5→0.4と急落）にある。またカイザー基準（固有値>1）でも第1〜3成分（固有値 3.2, 2.1, 1.5）が基準を超え、第4成分（0.4）は下回る。よって主成分3つが適切。"
+},
+
+// Q512: カプランマイヤー曲線の比較
+{
+  id: 512,
+  category: "不完全データ",
+  question: `次のカプランマイヤー生存曲線（青：処置群A、橙：対照群B）について正しい記述を選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 230' class='exam-svg'>
+  <rect width='300' height='230' fill='#f8faff' rx='4'/>
+  <line x1='50' y1='20' x2='50' y2='195' stroke='#888' stroke-width='1.5'/>
+  <line x1='50' y1='195' x2='275' y2='195' stroke='#888' stroke-width='1.5'/>
+  <text x='163' y='215' text-anchor='middle' font-size='11' fill='#555'>経過時間（月）</text>
+  <text x='20' y='108' text-anchor='middle' font-size='10' fill='#555' transform='rotate(-90,20,108)'>生存率</text>
+  <!-- y axis: 0=195, 1=25; scale=170 -->
+  <!-- x axis: 0=50, 12=260; scale 210/12=17.5px/month -->
+  <!-- y-axis labels -->
+  <text x='46' y='28' text-anchor='end' font-size='9' fill='#888'>1.0</text>
+  <text x='46' y='112' text-anchor='end' font-size='9' fill='#888'>0.5</text>
+  <text x='46' y='196' text-anchor='end' font-size='9' fill='#888'>0.0</text>
+  <line x1='48' y1='108' x2='52' y2='108' stroke='#888'/>
+  <!-- x-axis labels -->
+  <text x='50' y='207' text-anchor='middle' font-size='9' fill='#888'>0</text>
+  <text x='155' y='207' text-anchor='middle' font-size='9' fill='#888'>6</text>
+  <text x='260' y='207' text-anchor='middle' font-size='9' fill='#888'>12</text>
+  <!-- Curve A (treatment, blue): S = 1.0, 0.92, 0.85, 0.78, 0.70, 0.63, 0.58 at t=0,2,4,6,8,10,12 -->
+  <!-- y_px = 195 - S*170 -->
+  <!-- t=0:25, t=2:39, t=4:51, t=6:62, t=8:76, t=10:88, t=12:96 -->
+  <!-- x_px: t=0:50, t=2:85, t=4:120, t=6:155, t=8:190, t=10:225, t=12:260 -->
+  <polyline fill='none' stroke='#3b82f6' stroke-width='2.2'
+    points='50,25 85,25 85,39 120,39 120,51 155,51 155,62 190,62 190,76 225,76 225,88 260,88 260,96'/>
+  <!-- Curve B (control, orange): S = 1.0, 0.80, 0.65, 0.52, 0.40, 0.30, 0.22 -->
+  <!-- y_px: t=0:25, t=2:59, t=4:85, t=6:107, t=8:127, t=10:144, t=12:157 -->
+  <polyline fill='none' stroke='#f97316' stroke-width='2.2'
+    points='50,25 85,25 85,59 120,59 120,85 155,85 155,107 190,107 190,127 225,127 225,144 260,144 260,157'/>
+  <!-- legend -->
+  <line x1='58' y1='115' x2='80' y2='115' stroke='#3b82f6' stroke-width='2'/>
+  <text x='84' y='119' font-size='10' fill='#3b82f6'>処置群A</text>
+  <line x1='58' y1='132' x2='80' y2='132' stroke='#f97316' stroke-width='2'/>
+  <text x='84' y='136' font-size='10' fill='#f97316'>対照群B</text>
+</svg>`,
+  choices: [
+    "12か月時点で処置群Aの生存率は対照群Bより高い",
+    "対照群Bの12か月生存率は60%を超える",
+    "両曲線は重なっており群間差は見られない",
+    "処置群Aの生存率は時間とともに上昇している"
+  ],
+  answer: 0,
+  explanation: "12か月時点で処置群A（青）の生存率≈0.58、対照群B（橙）≈0.22であり、処置群Aの方が明らかに高い。対照群Bの12か月生存率は22%で60%を大きく下回る。生存率は単調非増加であり、増加することはない。"
+},
+
+// Q513: 樹形図からP(A∩B)を求める
+{
+  id: 513,
+  category: "確率・事象",
+  question: `次の樹形図において $P(A) = 0.5$、$P(B|A) = 0.7$、$P(B|A^c) = 0.2$ のとき、$P(A \\cap B)$ の値はいくらか。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 310 210' class='exam-svg'>
+  <rect width='310' height='210' fill='#f8faff' rx='4'/>
+  <!-- root -->
+  <circle cx='50' cy='105' r='6' fill='#94a3b8'/>
+  <!-- A branch -->
+  <line x1='56' y1='105' x2='135' y2='55' stroke='#3b82f6' stroke-width='1.8'/>
+  <circle cx='140' cy='52' r='6' fill='#3b82f6'/>
+  <text x='88' y='68' font-size='10' fill='#3b82f6' font-weight='600'>A  (0.5)</text>
+  <!-- A' branch -->
+  <line x1='56' y1='105' x2='135' y2='155' stroke='#f97316' stroke-width='1.8'/>
+  <circle cx='140' cy='158' r='6' fill='#f97316'/>
+  <text x='84' y='148' font-size='10' fill='#f97316' font-weight='600'>A&#x1d9c;(0.5)</text>
+  <!-- B|A branch -->
+  <line x1='146' y1='52' x2='225' y2='28' stroke='#3b82f6' stroke-width='1.5'/>
+  <text x='253' y='32' font-size='10' fill='#3b82f6'>B (0.7)</text>
+  <text x='175' y='24' font-size='9' fill='#3b82f6'>0.7</text>
+  <!-- B'|A branch -->
+  <line x1='146' y1='52' x2='225' y2='72' stroke='#3b82f6' stroke-width='1.5'/>
+  <text x='253' y='76' font-size='10' fill='#3b82f6'>B&#x1d9c;(0.3)</text>
+  <text x='178' y='70' font-size='9' fill='#3b82f6'>0.3</text>
+  <!-- B|A' branch -->
+  <line x1='146' y1='158' x2='225' y2='135' stroke='#f97316' stroke-width='1.5'/>
+  <text x='253' y='139' font-size='10' fill='#f97316'>B (0.2)</text>
+  <text x='175' y='132' font-size='9' fill='#f97316'>0.2</text>
+  <!-- B'|A' branch -->
+  <line x1='146' y1='158' x2='225' y2='182' stroke='#f97316' stroke-width='1.5'/>
+  <text x='253' y='186' font-size='10' fill='#f97316'>B&#x1d9c;(0.8)</text>
+  <text x='175' y='183' font-size='9' fill='#f97316'>0.8</text>
+  <!-- P(A∩B) highlight box -->
+  <rect x='248' y='20' width='50' height='19' fill='#fef9c3' stroke='#eab308' stroke-width='1' rx='3'/>
+  <text x='252' y='33' font-size='9' fill='#854d0e' font-weight='600'> ← 求める</text>
+</svg>`,
+  choices: ["$0.10$", "$0.20$", "$0.14$", "$0.35$"],
+  answer: 3,
+  explanation: "$P(A \\cap B) = P(A) \\times P(B|A) = 0.5 \\times 0.7 = 0.35$。乗法定理により、Aが起こりさらにBが起こる確率は、A の確率に A が起きたときの B の条件付き確率を掛けたもの。"
+},
+
+// Q514: 残差のQ-Qプロット → 正規性の確認
+{
+  id: 514,
+  category: "回帰分析",
+  question: `次の残差のQ-Qプロット（横軸：理論分位数、縦軸：標準化残差）について最も適切な記述を選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 220' class='exam-svg'>
+  <rect width='300' height='220' fill='#f8faff' rx='4'/>
+  <line x1='45' y1='15' x2='45' y2='190' stroke='#888' stroke-width='1.5'/>
+  <line x1='45' y1='190' x2='275' y2='190' stroke='#888' stroke-width='1.5'/>
+  <text x='160' y='210' text-anchor='middle' font-size='11' fill='#555'>理論分位数</text>
+  <text x='20' y='103' text-anchor='middle' font-size='10' fill='#555' transform='rotate(-90,20,103)'>標準化残差</text>
+  <!-- 45-degree reference line -->
+  <line x1='55' y1='178' x2='258' y2='27' stroke='#94a3b8' stroke-width='1.5' stroke-dasharray='5,3'/>
+  <!-- Points closely follow the reference line (normality satisfied) -->
+  <circle cx='58' cy='176' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='82' cy='155' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='107' cy='136' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='131' cy='117' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='155' cy='100' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='178' cy='82' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='202' cy='63' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='228' cy='43' r='3.5' fill='#3b82f6' opacity='0.85'/>
+  <circle cx='252' cy='28' r='3.5' fill='#3b82f6' opacity='0.85'/>
+</svg>`,
+  choices: [
+    "残差は一様分布に従っている",
+    "残差の正規性が満たされている可能性が高い",
+    "残差に大きな外れ値が多数存在する",
+    "残差は右裾が重い非正規分布に従う"
+  ],
+  answer: 1,
+  explanation: "Q-Qプロットで全点が参照直線（45度線）上にほぼ乗っている場合、標本分位数が理論的な正規分位数と一致しており、残差の正規性が支持される。点が直線からの大きなずれを示さないため、正規性の仮定は妥当と判断できる。"
+},
+
+// Q515: 正規分布の両側検定 → 棄却域に対応する確率
+{
+  id: 515,
+  category: "仮説検定",
+  question: `次のグラフは標準正規分布を示している。灰色で塗られた両端の棄却域（$|Z| > 1.96$）の面積（確率）として最も近い値を選べ。<br>
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 210' class='exam-svg'>
+  <rect width='320' height='210' fill='#f8faff' rx='4'/>
+  <line x1='40' y1='185' x2='290' y2='185' stroke='#888' stroke-width='1.5'/>
+  <text x='165' y='205' text-anchor='middle' font-size='11' fill='#555'>z</text>
+  <!-- normal curve: center=165, scale=30px/unit, height scale: peak at y=24, bottom at y=185; 161px/0.399=403px per f -->
+  <!-- polyline from z=-4 to z=4 -->
+  <!-- x = 165 + z*30 -->
+  <!-- y = 185 - phi(z)*403 -->
+  <!-- phi(z) = (1/sqrt(2pi)) * exp(-z^2/2) -->
+  <!-- z=-4: x=45, phi≈0, y≈185 -->
+  <!-- z=-3: x=75, phi=0.0044, y=185-1.8=183 -->
+  <!-- z=-2: x=105, phi=0.054, y=185-21.8=163 -->
+  <!-- z=-1: x=135, phi=0.242, y=185-97.5=87.5≈88 -->
+  <!-- z=0: x=165, phi=0.399, y=185-160.8=24 -->
+  <!-- z=1: x=195, phi=0.242, y=88 -->
+  <!-- z=2: x=225, phi=0.054, y=163 -->
+  <!-- z=3: x=255, phi=0.0044, y=183 -->
+  <!-- z=4: x=285, phi≈0, y≈185 -->
+  <!-- left tail shaded: z < -1.96 = x < 106.2 ≈ 106 -->
+  <!-- right tail shaded: z > 1.96 = x > 223.8 ≈ 224 -->
+  <!-- Left tail polygon: along curve from x=45 to x=106, then down to x-axis -->
+  <polygon points='45,185 75,183 95,174 106,164 106,185' fill='#94a3b8' opacity='0.5'/>
+  <!-- Right tail polygon -->
+  <polygon points='224,164 235,174 255,183 285,185 285,185 224,185' fill='#94a3b8' opacity='0.5'/>
+  <!-- Normal curve (on top of shading) -->
+  <polyline fill='none' stroke='#3b82f6' stroke-width='2.2'
+    points='45,185 75,183 95,174 105,163 120,130 135,88 150,54 165,24 180,54 195,88 210,130 225,163 235,174 255,183 285,185'/>
+  <!-- critical value markers -->
+  <line x1='106' y1='163' x2='106' y2='185' stroke='#ef4444' stroke-width='1' stroke-dasharray='3,2'/>
+  <line x1='224' y1='163' x2='224' y2='185' stroke='#ef4444' stroke-width='1' stroke-dasharray='3,2'/>
+  <text x='103' y='198' text-anchor='middle' font-size='9' fill='#ef4444'>-1.96</text>
+  <text x='227' y='198' text-anchor='middle' font-size='9' fill='#ef4444'>1.96</text>
+  <!-- annotations -->
+  <text x='68' y='172' text-anchor='middle' font-size='9' fill='#555'>α/2</text>
+  <text x='250' y='172' text-anchor='middle' font-size='9' fill='#555'>α/2</text>
+</svg>`,
+  choices: ["約 50%", "約 10%", "約 5%", "約 1%"],
+  answer: 2,
+  explanation: "標準正規分布で $P(|Z| > 1.96) = 2 \\times P(Z > 1.96) = 2 \\times 0.025 = 0.05$（約5%）。この値は両側5%検定（有意水準$\\alpha=0.05$）の棄却域に対応し、$z_{0.025} = 1.96$ は統計的仮説検定で頻繁に用いられる基準値。"
+},
+
 ];
