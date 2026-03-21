@@ -1,212 +1,414 @@
-/* リセットと基本スタイル */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* ===================================
+   ボードゲーム コレクション - スタイル
+   =================================== */
+
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-light: #3b82f6;
+    --primary-bg: #eff6ff;
+    --secondary: #0891b2;
+    --accent: #06b6d4;
+    --gray-50: #f8fafc;
+    --gray-100: #f1f5f9;
+    --gray-200: #e2e8f0;
+    --gray-300: #cbd5e1;
+    --gray-400: #94a3b8;
+    --gray-500: #64748b;
+    --gray-600: #475569;
+    --gray-700: #334155;
+    --gray-800: #1e293b;
+    --gray-900: #0f172a;
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --radius: 12px;
+    --radius-sm: 8px;
+    --transition: 0.3s ease;
 }
 
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-    min-height: 100vh;
-    color: #fff;
+    font-family: 'Noto Sans JP', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 16px;
+    line-height: 1.8;
+    color: var(--gray-800);
+    background: var(--gray-50);
+    -webkit-font-smoothing: antialiased;
 }
+
+a { color: inherit; text-decoration: none; }
+ul { list-style: none; }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 20px;
+    padding: 0 24px;
 }
 
-/* ヘッダー */
-.header {
+/* ===================================
+   Navigation (共通ナビバー)
+   =================================== */
+
+.navbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--gray-200);
+    z-index: 100;
+    transition: box-shadow var(--transition);
+}
+
+.navbar.scrolled {
+    box-shadow: var(--shadow-md);
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+    padding: 0 24px;
+}
+
+.nav-logo {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--primary);
+    letter-spacing: -0.3px;
+    flex-shrink: 0;
+}
+
+.nav-logo:hover { opacity: 0.8; }
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    list-style: none;
+}
+
+.nav-menu > li > a {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--gray-600);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 0;
+    position: relative;
+    transition: color 0.2s;
+}
+
+.nav-menu > li > a::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 0; height: 2px;
+    background: var(--primary);
+    transition: width 0.2s;
+}
+
+.nav-menu > li > a:hover,
+.nav-menu > li > a.active {
+    color: var(--primary);
+}
+
+.nav-menu > li > a:hover::after,
+.nav-menu > li > a.active::after {
+    width: 100%;
+}
+
+/* ドロップダウン */
+.nav-dropdown { position: relative; }
+
+.nav-dropdown-toggle .fa-chevron-down {
+    font-size: 0.58rem;
+    transition: transform 0.2s;
+}
+
+.nav-dropdown:hover .nav-dropdown-toggle .fa-chevron-down {
+    transform: rotate(180deg);
+}
+
+.nav-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 14px);
+    left: 50%;
+    transform: translateX(-50%) translateY(-6px);
+    min-width: 200px;
+    background: #ffffff;
+    border: 1px solid var(--gray-200);
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    padding: 6px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s;
+    z-index: 500;
+    list-style: none;
+}
+
+.nav-dropdown:hover .nav-dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateX(-50%) translateY(0);
+}
+
+.nav-dropdown-menu li a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    font-size: 0.87rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    border-radius: 8px;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.nav-dropdown-menu li a::after { display: none !important; }
+
+.nav-dropdown-menu li a:hover {
+    background: var(--gray-50);
+    color: var(--primary);
+}
+
+.nav-dropdown-menu li a.active {
+    color: var(--primary);
+    background: #eff6ff;
+    font-weight: 600;
+}
+
+/* ハンバーガー */
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+}
+
+.nav-toggle span {
+    width: 22px;
+    height: 2px;
+    background: var(--gray-700);
+    transition: all 0.3s;
+}
+
+/* ===================================
+   Hero
+   =================================== */
+
+.bg-hero {
+    padding: 110px 0 56px;
     text-align: center;
-    margin-bottom: 50px;
+    background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 50%, #f0f9ff 100%);
+    border-bottom: 1px solid var(--gray-200);
 }
 
-.header h1 {
-    font-size: 3rem;
-    margin-bottom: 15px;
-    background: linear-gradient(135deg, #ffd700 0%, #ff6b6b 50%, #4ecdc4 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    text-shadow: none;
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--primary);
+    color: white;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 18px;
+    border-radius: 20px;
+    margin-bottom: 20px;
 }
 
-.subtitle {
-    font-size: 1.2rem;
-    color: #aaa;
+.bg-hero h1 {
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 700;
+    color: var(--gray-900);
+    line-height: 1.4;
+    margin-bottom: 12px;
 }
 
-/* ゲームグリッド */
+.hero-sub {
+    font-size: 15px;
+    color: var(--gray-500);
+}
+
+/* ===================================
+   Game Grid
+   =================================== */
+
+.bg-main {
+    padding: 48px 0 80px;
+}
+
 .games-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 25px;
-    margin-bottom: 50px;
+    gap: 20px;
 }
 
-/* ゲームカード */
+/* ===================================
+   Game Card
+   =================================== */
+
 .game-card {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    border-radius: 20px;
-    padding: 25px;
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 24px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    gap: 16px;
+    transition: all var(--transition);
     text-decoration: none;
     color: inherit;
-}
-
-.game-card.available {
     cursor: pointer;
 }
 
-.game-card.available:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 215, 0, 0.5);
+.game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--primary);
 }
 
-.game-card.coming-soon {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-/* ゲームアイコン */
 .game-icon {
-    font-size: 4rem;
-    text-align: center;
-    padding: 20px 0;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
 }
 
-/* ゲーム情報 */
-.game-info {
-    flex: 1;
+.game-icon svg {
+    width: 100%;
+    height: 100%;
 }
 
 .game-info h2 {
-    font-size: 1.5rem;
-    margin-bottom: 8px;
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 4px;
 }
 
 .game-info p {
-    color: #aaa;
-    font-size: 0.95rem;
-    margin-bottom: 15px;
+    color: var(--gray-500);
+    font-size: 0.9rem;
+    margin-bottom: 12px;
 }
 
-/* 機能タグ */
 .game-features {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: 6px;
 }
 
 .feature {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 5px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    color: #ccc;
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--gray-100);
+    border: 1px solid var(--gray-200);
+    border-radius: 20px;
+    font-size: 0.78rem;
+    color: var(--gray-600);
 }
 
-/* プレイボタン */
 .play-btn {
-    background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%);
-    color: #1a1a2e;
-    padding: 12px 25px;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: bold;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-}
-
-.game-card.available:hover .play-btn {
-    background: linear-gradient(135deg, #ffaa00 0%, #ff8c00 100%);
-    transform: scale(1.05);
-}
-
-/* Coming Soon ラベル */
-.coming-soon-label {
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    color: #fff;
-    padding: 12px 25px;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: var(--primary);
+    color: white;
+    padding: 10px 20px;
+    border-radius: var(--radius-sm);
     font-size: 0.9rem;
+    font-weight: 600;
+    transition: all var(--transition);
 }
 
-/* フッター */
-.footer {
+.game-card:hover .play-btn {
+    background: var(--primary-dark);
+}
+
+/* ===================================
+   Footer
+   =================================== */
+
+.bg-footer {
     text-align: center;
-    padding-top: 30px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-    color: #666;
+    padding: 28px 0;
+    border-top: 1px solid var(--gray-200);
+    font-size: 13px;
+    color: var(--gray-400);
 }
 
-.footer a {
-    color: #4ecdc4;
-    text-decoration: none;
-    margin: 0 10px;
-}
+/* ===================================
+   Responsive
+   =================================== */
 
-.footer a:hover {
-    text-decoration: underline;
-}
-
-/* レスポンシブ */
 @media (max-width: 768px) {
-    .header h1 {
-        font-size: 2rem;
+    .nav-toggle { display: flex; }
+
+    .nav-menu {
+        position: fixed;
+        top: 60px; left: 0; right: 0;
+        background: white;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s;
+        border-bottom: 1px solid var(--gray-200);
+        box-shadow: var(--shadow-lg);
     }
-    
-    .subtitle {
-        font-size: 1rem;
+
+    .nav-menu.active {
+        max-height: 500px;
+        padding: 12px 0;
     }
-    
+
+    .nav-menu > li { width: 100%; text-align: center; }
+    .nav-menu > li > a { justify-content: center; padding: 12px 24px; width: 100%; }
+
+    .nav-dropdown-menu {
+        position: static;
+        opacity: 1; visibility: visible;
+        transform: none;
+        box-shadow: none; border: none;
+        border-top: 1px solid var(--gray-100);
+        border-radius: 0;
+        background: var(--gray-50);
+        padding: 4px 0;
+        min-width: unset;
+    }
+
+    .nav-dropdown:hover .nav-dropdown-menu { transform: none; }
+    .nav-dropdown-menu li a { justify-content: center; }
+
+    .nav-toggle.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .nav-toggle.active span:nth-child(2) { opacity: 0; }
+    .nav-toggle.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
+    .bg-hero {
+        padding: 90px 0 40px;
+    }
+
+    .bg-hero h1 {
+        font-size: 1.5rem;
+    }
+
     .games-grid {
         grid-template-columns: 1fr;
     }
-    
-    .game-icon {
-        font-size: 3rem;
-    }
-}
-
-/* アニメーション */
-@keyframes float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-.game-card.available .game-icon {
-    animation: float 3s ease-in-out infinite;
-}
-
-/* 背景エフェクト */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 20% 80%, rgba(78, 205, 196, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 107, 107, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
-    pointer-events: none;
-    z-index: -1;
 }
