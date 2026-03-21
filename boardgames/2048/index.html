@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2048 - ボードゲーム コレクション</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="game-container">
+        <!-- ヘッダー -->
+        <header class="game-header">
+            <h1>🎯 2048</h1>
+            <div class="game-controls">
+                <a href="../index.html" class="btn btn-secondary">ホーム</a>
+                <button id="new-game-btn" class="btn btn-primary">新しいゲーム</button>
+                <button id="bg-change-btn" class="btn btn-secondary">背景</button>
+                <button id="ranking-btn" class="btn btn-gold">🏆 ランキング</button>
+            </div>
+        </header>
+
+        <!-- ゲーム情報パネル -->
+        <div class="game-info-panel">
+            <div class="info-item">
+                <span class="info-label">📊 スコア</span>
+                <span id="score" class="info-value">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">🏆 ベスト</span>
+                <span id="best-score" class="info-value">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">🎯 最大タイル</span>
+                <span id="max-tile" class="info-value">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">⏱️ タイム</span>
+                <span id="timer" class="info-value">00:00</span>
+            </div>
+        </div>
+
+        <!-- ゲームステータス -->
+        <div id="game-status" class="game-status hidden">
+            <span id="status-text"></span>
+        </div>
+
+        <!-- ゲームボード -->
+        <div class="board-wrapper">
+            <div id="board" class="board">
+                <!-- 背景グリッド -->
+                <div class="grid-background">
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                    <div class="grid-cell"></div>
+                </div>
+                <!-- タイルコンテナ -->
+                <div id="tile-container" class="tile-container"></div>
+            </div>
+        </div>
+
+        <!-- 操作説明 -->
+        <div class="controls-help">
+            <span>矢印キー / WASD: タイルを移動</span>
+            <span>同じ数字同士をくっつけて2048を目指そう！</span>
+        </div>
+
+        <!-- タッチ操作説明（モバイル用） -->
+        <div class="mobile-controls-help">
+            <span>スワイプでタイルを移動</span>
+        </div>
+    </div>
+
+    <!-- 結果モーダル -->
+    <div id="result-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="result-title">ゲームオーバー</h2>
+            <div class="result-info">
+                <div class="result-item">
+                    <span class="result-label">スコア</span>
+                    <span id="result-score" class="result-value">0</span>
+                </div>
+                <div class="result-item">
+                    <span class="result-label">最大タイル</span>
+                    <span id="result-max-tile" class="result-value">0</span>
+                </div>
+            </div>
+            <div class="ranking-input" id="ranking-input-section">
+                <label for="ranking-name">ランキングに登録</label>
+                <input type="text" id="ranking-name" maxlength="10" placeholder="名前を入力">
+                <button id="register-ranking-btn" class="btn btn-gold">登録</button>
+            </div>
+            <div class="modal-buttons">
+                <button id="retry-btn" class="btn btn-primary btn-large">もう一度</button>
+                <button id="close-result-btn" class="btn btn-secondary">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ランキングモーダル -->
+    <div id="ranking-modal" class="modal hidden">
+        <div class="modal-content ranking-content">
+            <h2>🏆 ランキング</h2>
+            <div class="ranking-list" id="ranking-list">
+                <!-- ランキングデータが動的に挿入される -->
+            </div>
+            <button id="close-ranking-btn" class="btn btn-secondary">閉じる</button>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

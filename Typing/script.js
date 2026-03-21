@@ -41,7 +41,7 @@ function initTheme() {
 }
 
 function toggleTheme() {
-  const current = document.documentElement.getAttribute("data-theme") || "dark";
+  const current = document.documentElement.getAttribute("data-theme") || "light";
   const next = current === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-theme", next);
   localStorage.setItem("typing-theme", next);
@@ -49,7 +49,7 @@ function toggleTheme() {
 }
 
 function updateThemeIcon() {
-  const theme = document.documentElement.getAttribute("data-theme") || "dark";
+  const theme = document.documentElement.getAttribute("data-theme") || "light";
   const btn = document.getElementById("theme-toggle");
   if (!btn) return;
   btn.innerHTML = theme === "dark"

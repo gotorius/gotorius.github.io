@@ -1,0 +1,904 @@
+/* 将棋 - スタイルシート（オセロ・フリーセルと統一） */
+
+/* リセットと基本スタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #fff;
+    user-select: none;
+}
+
+/* ゲームコンテナ */
+.game-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ヘッダー */
+.game-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 100;
+}
+
+.game-header h1 {
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ホームリンク */
+.home-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.home-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ボタン */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%);
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* モード選択ドロップダウン */
+.mode-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.mode-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 220px;
+    background: rgba(30, 30, 50, 0.98);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    margin-top: 8px;
+    padding: 8px 0;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mode-dropdown-content.show {
+    display: block;
+}
+
+.dropdown-section {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-section:last-child {
+    border-bottom: none;
+}
+
+.dropdown-title {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 0.95rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item.active {
+    background: rgba(74, 144, 217, 0.3);
+    color: #4a90d9;
+}
+
+.dropdown-item.disabled {
+    color: rgba(255, 255, 255, 0.3);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.dropdown-item.disabled:hover {
+    background: none;
+}
+
+.dropdown-coming-soon {
+    padding: 8px 16px;
+    color: #ffd700;
+    font-size: 0.85rem;
+    text-align: center;
+    font-style: italic;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    margin-top: 5px;
+}
+
+/* ゲーム情報パネル */
+.game-info-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.player-info.active {
+    background: rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.player-icon {
+    font-size: 2rem;
+}
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.player-name {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.player-rank {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.turn-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.player-info.active .turn-indicator {
+    background: #ffd700;
+    box-shadow: 0 0 10px #ffd700;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+.game-status {
+    text-align: center;
+    flex: 1;
+}
+
+.current-turn {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.game-mode {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.move-count {
+    font-size: 0.85rem;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
+/* ゲームボードラッパー */
+.game-board-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 10px 0;
+}
+
+/* 持ち駒エリア */
+.captured-pieces {
+    width: 80px;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    min-height: 300px;
+    backdrop-filter: blur(10px);
+}
+
+.captured-label {
+    font-size: 0.9rem;
+    text-align: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.captured-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.captured-piece {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.captured-piece:hover {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.captured-piece.selected {
+    background: rgba(255, 215, 0, 0.4);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.captured-piece .piece-char {
+    font-size: 1.2rem;
+}
+
+.captured-piece .piece-count {
+    font-size: 0.8rem;
+    color: #ffd700;
+}
+
+/* 将棋盤コンテナ */
+.board-container {
+    position: relative;
+}
+
+.board-frame {
+    padding: 10px;
+    background: linear-gradient(145deg, #deb887 0%, #c4a35a 50%, #b8956e 100%);
+    border-radius: 8px;
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 筋・段の表示 */
+.board-labels {
+    display: flex;
+    color: #3d2920;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.board-labels.cols {
+    justify-content: space-around;
+    padding: 0 5px 5px 5px;
+}
+
+.board-labels.cols span {
+    width: 50px;
+    text-align: center;
+}
+
+.board-with-rows {
+    display: flex;
+}
+
+.board-labels.rows {
+    flex-direction: column;
+    justify-content: space-around;
+    padding-right: 5px;
+}
+
+.board-labels.rows span {
+    height: 50px;
+    display: flex;
+    align-items: center;
+}
+
+/* 将棋盤 */
+.board {
+    display: grid;
+    grid-template-columns: repeat(9, 50px);
+    grid-template-rows: repeat(9, 50px);
+    background: linear-gradient(145deg, #deb887 0%, #d4a85c 100%);
+    border: 3px solid #5c3d2e;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* マス */
+.cell {
+    width: 50px;
+    height: 50px;
+    border: 1px solid #8b7355;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s ease;
+}
+
+.cell:hover {
+    background: rgba(255, 215, 0, 0.2);
+}
+
+.cell.selected {
+    background: rgba(255, 215, 0, 0.4);
+    box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.cell.movable {
+    background: rgba(100, 200, 100, 0.3);
+}
+
+.cell.movable::after {
+    content: '';
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background: rgba(100, 200, 100, 0.6);
+    border-radius: 50%;
+}
+
+.cell.can-capture {
+    background: rgba(255, 100, 100, 0.3);
+}
+
+.cell.can-capture::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: 3px solid rgba(255, 100, 100, 0.6);
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.cell.last-move {
+    background: rgba(255, 200, 100, 0.4);
+}
+
+.cell.check {
+    background: rgba(255, 0, 0, 0.4);
+    animation: checkPulse 1s infinite;
+}
+
+@keyframes checkPulse {
+    0%, 100% { background: rgba(255, 0, 0, 0.4); }
+    50% { background: rgba(255, 0, 0, 0.6); }
+}
+
+/* 駒 */
+.piece {
+    width: 44px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #1a0f0a;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+    /* 駒の形を五角形風に */
+    background: linear-gradient(180deg, #f5deb3 0%, #deb887 50%, #c4a35a 100%);
+    clip-path: polygon(50% 0%, 100% 25%, 100% 100%, 0% 100%, 0% 25%);
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    /* 自分の駒は青い枠 */
+    border: 2px solid #3498db;
+}
+
+.piece.opponent {
+    /* 相手の駒は回転させない（読みやすくする） */
+    transform: none;
+    /* 相手の駒は赤い枠 */
+    border: 2px solid #e74c3c;
+}
+
+.piece.promoted {
+    color: #c41e3a;
+}
+
+.piece:hover {
+    transform: scale(1.05);
+}
+
+.piece.opponent:hover {
+    transform: scale(1.05);
+}
+
+/* モーダル */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #2a2a4a 0%, #1a1a2e 100%);
+    padding: 40px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: modal-appear 0.3s ease;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@keyframes modal-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-content h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+/* モード選択 */
+.mode-options {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.mode-section {
+    text-align: left;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.mode-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.difficulty-options,
+.tsume-options {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pvp-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mode-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 25px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.mode-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffd700;
+    transform: translateY(-5px);
+}
+
+.mode-btn.shogi-btn {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.mode-btn.wide {
+    min-width: 250px;
+}
+
+.mode-icon {
+    font-size: 2rem;
+}
+
+.mode-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.mode-desc {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* 成り確認モーダル */
+.promote-content {
+    min-width: 300px;
+}
+
+.promote-options {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.promote-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 20px 30px;
+}
+
+.promote-piece {
+    font-size: 2rem;
+}
+
+/* 結果モーダル */
+.result-content {
+    min-width: 350px;
+}
+
+#result-title {
+    font-size: 2.5rem;
+}
+
+#result-title.win {
+    color: #ffd700;
+}
+
+#result-title.lose {
+    color: #ff6b6b;
+}
+
+#result-title.draw {
+    color: #4ecdc4;
+}
+
+.result-details {
+    margin: 20px 0;
+}
+
+.result-moves {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    opacity: 0.8;
+}
+
+/* 思考中インジケーター */
+.thinking-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 30px 40px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 12px;
+}
+
+.thinking-indicator.hidden {
+    display: none;
+}
+
+.thinking-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #4a90d9;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.thinking-text {
+    font-size: 1rem;
+}
+
+/* ヒント表示 */
+.cell.hint {
+    background: rgba(0, 200, 255, 0.3);
+    animation: hintPulse 0.8s infinite;
+}
+
+@keyframes hintPulse {
+    0%, 100% { background: rgba(0, 200, 255, 0.3); }
+    50% { background: rgba(0, 200, 255, 0.5); }
+}
+
+/* オンラインロビー */
+.online-screen {
+    text-align: center;
+}
+
+.online-screen.hidden {
+    display: none;
+}
+
+.online-description {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    opacity: 0.8;
+}
+
+.name-input-section {
+    margin-bottom: 20px;
+}
+
+.name-input-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.name-input-section input {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    text-align: center;
+}
+
+.name-input-section input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.name-input-section input:focus {
+    outline: none;
+    border-color: #4a90d9;
+    box-shadow: 0 0 10px rgba(74, 144, 217, 0.3);
+}
+
+.btn-large {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+}
+
+.matching-animation {
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.matching-animation p {
+    margin: 15px 0;
+}
+
+.waiting-info {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 900px) {
+    .game-board-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .captured-pieces {
+        width: 100%;
+        min-height: auto;
+        max-width: 450px;
+    }
+    
+    .captured-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .game-container {
+        padding: 10px;
+    }
+    
+    .game-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 12px;
+    }
+    
+    .game-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .game-info-panel {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .player-info {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .board {
+        grid-template-columns: repeat(9, 38px);
+        grid-template-rows: repeat(9, 38px);
+    }
+    
+    .cell {
+        width: 38px;
+        height: 38px;
+    }
+    
+    .piece {
+        width: 32px;
+        height: 36px;
+        font-size: 1rem;
+    }
+    
+    .board-labels.cols span {
+        width: 38px;
+    }
+    
+    .board-labels.rows span {
+        height: 38px;
+    }
+    
+    .btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .modal-content {
+        padding: 25px 20px;
+    }
+    
+    .mode-btn {
+        min-width: 100px;
+        padding: 15px 20px;
+    }
+}

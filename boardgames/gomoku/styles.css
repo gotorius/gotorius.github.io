@@ -1,0 +1,802 @@
+/* 五目並べ - スタイルシート */
+
+/* リセットと基本スタイル */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 100vh;
+    color: #fff;
+    user-select: none;
+}
+
+/* ゲームコンテナ */
+.game-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ヘッダー */
+.game-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 100;
+}
+
+.game-header h1 {
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.game-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+/* ホームリンク */
+.home-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.home-link:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ボタン */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #4a90d9 0%, #357abd 100%);
+    color: white;
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.btn-large {
+    padding: 15px 40px;
+    font-size: 1.1rem;
+}
+
+/* モード選択ドロップダウン */
+.mode-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.mode-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    min-width: 200px;
+    background: rgba(30, 30, 50, 0.98);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    margin-top: 8px;
+    padding: 8px 0;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mode-dropdown-content.show {
+    display: block;
+}
+
+.dropdown-section {
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-section:last-child {
+    border-bottom: none;
+}
+
+.dropdown-title {
+    padding: 8px 16px;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+}
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 10px 16px;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 0.95rem;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-item.active {
+    background: rgba(74, 144, 217, 0.3);
+    color: #4a90d9;
+}
+
+/* ゲーム情報パネル */
+.game-info-panel {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    margin-bottom: 20px;
+    backdrop-filter: blur(10px);
+}
+
+.player-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 15px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.player-info.active {
+    background: rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.player-icon {
+    font-size: 2rem;
+}
+
+.player-details {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.player-name {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.player-rank {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+.turn-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: transparent;
+    transition: all 0.3s ease;
+}
+
+.player-info.active .turn-indicator {
+    background: #ffd700;
+    box-shadow: 0 0 10px #ffd700;
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.7; }
+}
+
+.game-status {
+    text-align: center;
+    flex: 1;
+}
+
+.current-turn {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.game-mode {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+/* ボードラッパー */
+.board-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px 0;
+}
+
+.board-container {
+    position: relative;
+}
+
+/* ゲームボード */
+.board {
+    display: grid;
+    background: linear-gradient(145deg, #deb887 0%, #c4a35a 50%, #b8956e 100%);
+    border: 4px solid #8b7355;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 
+        0 10px 40px rgba(0, 0, 0, 0.5),
+        inset 0 2px 4px rgba(255, 255, 255, 0.2),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 交点（セル） */
+.cell {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.15s ease;
+}
+
+.cell::before {
+    content: '';
+    position: absolute;
+    background: #5c3d2e;
+}
+
+/* 横線 */
+.cell::before {
+    width: 100%;
+    height: 2px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+/* 縦線 */
+.cell::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #5c3d2e;
+}
+
+/* 端のセル処理 */
+.cell.top::after { height: 50%; top: 50%; }
+.cell.bottom::after { height: 50%; bottom: 50%; top: auto; }
+.cell.left::before { width: 50%; left: 50%; }
+.cell.right::before { width: 50%; right: 50%; left: auto; }
+
+/* 星（天元・星） */
+.cell.star::before {
+    z-index: 1;
+}
+
+.cell.star .star-point {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: #5c3d2e;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+/* ホバー効果 */
+.cell:hover:not(.occupied) .hover-stone {
+    opacity: 0.4;
+}
+
+.hover-stone {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 10;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+    pointer-events: none;
+}
+
+.hover-stone.black {
+    background: radial-gradient(circle at 30% 30%, #555, #000);
+}
+
+.hover-stone.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+}
+
+/* 石 */
+.stone {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 10;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4);
+    animation: placeStone 0.2s ease;
+}
+
+@keyframes placeStone {
+    from {
+        transform: scale(0);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.stone.black {
+    background: radial-gradient(circle at 30% 30%, #555, #000);
+}
+
+.stone.white {
+    background: radial-gradient(circle at 30% 30%, #fff, #ccc);
+    border: 1px solid #999;
+}
+
+/* 最後の手のマーカー */
+.stone.last-move::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.stone.black.last-move::after {
+    background: #ff6b6b;
+}
+
+.stone.white.last-move::after {
+    background: #ff6b6b;
+}
+
+/* 勝利ライン */
+.stone.winning {
+    animation: winPulse 0.5s ease infinite alternate;
+}
+
+@keyframes winPulse {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+
+/* モーダル */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background: linear-gradient(145deg, #2a2a4a 0%, #1a1a2e 100%);
+    padding: 40px 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    animation: modal-appear 0.3s ease;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+@keyframes modal-appear {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.modal-content h2 {
+    font-size: 2rem;
+    margin-bottom: 25px;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 25px;
+    flex-wrap: wrap;
+}
+
+/* モード選択 */
+.mode-options {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.mode-section {
+    text-align: left;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.mode-section h3 {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    opacity: 0.8;
+    text-align: center;
+}
+
+.difficulty-options {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.pvp-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mode-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 25px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    color: #fff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+}
+
+.mode-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: #ffd700;
+    transform: translateY(-5px);
+}
+
+.mode-btn.wide {
+    min-width: 250px;
+}
+
+.mode-icon {
+    font-size: 2rem;
+}
+
+.mode-name {
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.mode-desc {
+    font-size: 0.8rem;
+    opacity: 0.7;
+}
+
+/* オンラインロビー */
+.online-screen {
+    text-align: center;
+}
+
+.online-screen.hidden {
+    display: none;
+}
+
+.online-description {
+    margin-bottom: 20px;
+    line-height: 1.6;
+    opacity: 0.8;
+}
+
+.name-input-section {
+    margin: 20px 0;
+}
+
+.name-input-section label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.name-input-section input {
+    width: 100%;
+    max-width: 300px;
+    padding: 12px 15px;
+    font-size: 1rem;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    text-align: center;
+}
+
+.name-input-section input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.name-input-section input:focus {
+    outline: none;
+    border-color: #4a90d9;
+    box-shadow: 0 0 10px rgba(74, 144, 217, 0.3);
+}
+
+/* マッチングアニメーション */
+.matching-animation {
+    padding: 30px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.matching-animation p {
+    margin: 15px 0;
+}
+
+.waiting-info {
+    font-size: 0.9rem;
+    opacity: 0.7;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #4a90d9;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* 結果モーダル */
+.result-content {
+    min-width: 350px;
+}
+
+#result-title {
+    font-size: 2.5rem;
+}
+
+#result-title.win {
+    color: #ffd700;
+}
+
+#result-title.lose {
+    color: #ff6b6b;
+}
+
+#result-title.draw {
+    color: #4ecdc4;
+}
+
+.result-details {
+    margin: 20px 0;
+    font-size: 1.2rem;
+}
+
+/* 思考中インジケーター */
+.thinking-indicator {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    padding: 30px 40px;
+    background: rgba(0, 0, 0, 0.9);
+    border-radius: 12px;
+}
+
+.thinking-indicator.hidden {
+    display: none;
+}
+
+.thinking-spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.2);
+    border-top-color: #4a90d9;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+.thinking-text {
+    font-size: 1rem;
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 10px;
+    }
+    
+    .game-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 12px;
+    }
+    
+    .game-header h1 {
+        font-size: 1.5rem;
+    }
+    
+    .game-info-panel {
+        flex-direction: column;
+        gap: 10px;
+        padding: 10px;
+    }
+    
+    .player-info {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .cell {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .stone {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .hover-stone {
+        width: 18px;
+        height: 18px;
+    }
+    
+    .cell.star .star-point {
+        width: 6px;
+        height: 6px;
+    }
+    
+    .board {
+        padding: 10px;
+    }
+    
+    .btn {
+        padding: 8px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .modal-content {
+        padding: 25px 20px;
+    }
+    
+    .mode-btn {
+        min-width: 100px;
+        padding: 15px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .cell {
+        width: 20px;
+        height: 20px;
+    }
+    
+    .stone {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .hover-stone {
+        width: 14px;
+        height: 14px;
+    }
+    
+    .cell.star .star-point {
+        width: 5px;
+        height: 5px;
+    }
+    
+    .stone.last-move::after {
+        width: 5px;
+        height: 5px;
+    }
+    
+    .difficulty-options {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .mode-btn {
+        width: 100%;
+        max-width: 200px;
+    }
+}

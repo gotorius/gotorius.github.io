@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>マインスイーパー - ボードゲーム コレクション</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="game-container">
+        <!-- ヘッダー -->
+        <header class="game-header">
+            <h1>💣 マインスイーパー</h1>
+            <div class="game-controls">
+                <a href="../index.html" class="btn btn-secondary">ホーム</a>
+                <button id="new-game-btn" class="btn btn-primary">新しいゲーム</button>
+                <div class="mode-dropdown">
+                    <button id="mode-btn" class="btn btn-secondary">難易度選択 ▼</button>
+                    <div class="mode-dropdown-content" id="mode-dropdown-content">
+                        <div class="dropdown-section">
+                            <div class="dropdown-title">🎮 ひとりで遊ぶ</div>
+                            <button class="dropdown-item" data-mode="solo" data-difficulty="easy">かんたん</button>
+                            <button class="dropdown-item" data-mode="solo" data-difficulty="normal">ふつう</button>
+                            <button class="dropdown-item" data-mode="solo" data-difficulty="hard">むずかしい</button>
+                            <button class="dropdown-item" data-mode="solo" data-difficulty="extreme">鬼畜</button>
+                        </div>
+                    </div>
+                </div>
+                <button id="online-btn" class="btn btn-danger">オンライン対戦</button>
+                <button id="ranking-btn" class="btn btn-gold">🏆 ランキング</button>
+            </div>
+        </header>
+
+        <!-- ゲーム情報パネル -->
+        <div class="game-info-panel">
+            <div class="info-item">
+                <span class="info-label">💣 地雷</span>
+                <span id="mine-count" class="info-value">10</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">🚩 フラグ</span>
+                <span id="flag-count" class="info-value">0</span>
+            </div>
+            <div class="info-item timer-display">
+                <span class="info-label">⏱️ タイム</span>
+                <span id="timer" class="info-value">00:00</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">📊 難易度</span>
+                <span id="difficulty-display" class="info-value">ふつう</span>
+            </div>
+        </div>
+
+        <!-- ゲームステータス -->
+        <div id="game-status" class="game-status hidden">
+            <span id="status-text"></span>
+        </div>
+
+        <!-- オンライン対戦情報 -->
+        <div id="online-info" class="online-info hidden">
+            <div class="online-players">
+                <div class="online-player self">
+                    <span class="player-name" id="self-name">あなた</span>
+                    <span class="player-time" id="self-time">--:--</span>
+                    <span class="player-status" id="self-status">プレイ中</span>
+                </div>
+                <div class="vs-label">VS</div>
+                <div class="online-player opponent">
+                    <span class="player-name" id="opponent-name">対戦相手</span>
+                    <span class="player-time" id="opponent-time">--:--</span>
+                    <span class="player-status" id="opponent-status">プレイ中</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ゲームボード -->
+        <div class="board-wrapper">
+            <div id="board" class="board"></div>
+        </div>
+
+        <!-- 操作説明 -->
+        <div class="controls-help">
+            <span>左クリック: マスを開く</span>
+            <span>右クリック: フラグを立てる/外す</span>
+            <span>中クリック/両クリック: 周囲を一括オープン</span>
+        </div>
+    </div>
+
+    <!-- オンラインロビーモーダル -->
+    <div id="online-lobby-modal" class="modal hidden">
+        <div class="modal-content">
+            <div id="lobby-screen" class="online-screen">
+                <h2>🌐 オンライン対戦</h2>
+                <p class="online-description">名前を入力して対戦相手を探しましょう</p>
+                <div class="name-input-section">
+                    <label for="player-name">プレイヤー名</label>
+                    <input type="text" id="player-name" maxlength="10" placeholder="名前を入力">
+                </div>
+                <button id="start-matching-btn" class="btn btn-primary btn-large">対戦相手を探す</button>
+                <button id="cancel-lobby-btn" class="btn btn-secondary">戻る</button>
+            </div>
+            <div id="matching-screen" class="online-screen hidden">
+                <h2>🔍 マッチング中...</h2>
+                <div class="matching-animation">
+                    <div class="spinner"></div>
+                    <p>対戦相手を探しています</p>
+                    <p class="waiting-info">しばらくお待ちください</p>
+                </div>
+                <button id="cancel-matching-btn" class="btn btn-danger">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 結果モーダル -->
+    <div id="result-modal" class="modal hidden">
+        <div class="modal-content result-content">
+            <h2 id="result-title">ゲームクリア！</h2>
+            <div class="result-details">
+                <p id="result-time">クリアタイム: 00:00</p>
+                <p id="result-rank" class="hidden">ランキング: -位</p>
+            </div>
+            <div id="result-stats" class="result-stats hidden">
+                <p id="result-stat-message">ゲームオーバー</p>
+            </div>
+            <div id="name-input-section" class="name-input-section hidden">
+                <label for="ranking-name">ランキング登録名</label>
+                <input type="text" id="ranking-name" maxlength="10" placeholder="名前を入力">
+                <button id="register-ranking-btn" class="btn btn-success">登録</button>
+            </div>
+            <div class="result-board-toggle">
+                <button id="toggle-board-btn" class="btn btn-secondary">🔍 盤面を見る</button>
+            </div>
+            <div class="modal-buttons">
+                <button id="retry-btn" class="btn btn-primary">もう一度</button>
+                <button id="new-game-result-btn" class="btn btn-secondary">難易度を変える</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ランキングモーダル -->
+    <div id="ranking-modal" class="modal hidden">
+        <div class="modal-content ranking-content">
+            <h2>🏆 ランキング</h2>
+            <div class="ranking-tabs">
+                <button class="ranking-tab active" data-difficulty="easy">かんたん</button>
+                <button class="ranking-tab" data-difficulty="normal">ふつう</button>
+                <button class="ranking-tab" data-difficulty="hard">むずかしい</button>
+                <button class="ranking-tab" data-difficulty="extreme">鬼畜</button>
+            </div>
+            <div id="ranking-list" class="ranking-list">
+                <div class="loading">読み込み中...</div>
+            </div>
+            <button id="close-ranking-btn" class="btn btn-secondary">閉じる</button>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

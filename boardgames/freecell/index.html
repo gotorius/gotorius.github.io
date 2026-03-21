@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フリーセル</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <a href="../index.html" class="home-link">← ホーム</a>
+            <h1>🃏 フリーセル</h1>
+            <div class="game-info">
+                <div class="moves-counter">
+                    <span class="label">手数:</span>
+                    <span id="moves-count">0</span>
+                </div>
+                <div class="timer">
+                    <span class="label">時間:</span>
+                    <span id="timer">00:00</span>
+                </div>
+            </div>
+            <div class="game-controls">
+                <button id="new-game-btn" class="btn btn-primary">新しいゲーム</button>
+                <button id="undo-btn" class="btn btn-secondary">元に戻す</button>
+                <button id="hint-btn" class="btn btn-secondary">ヒント</button>
+                <button id="bg-change-btn" class="btn btn-secondary">背景</button>
+                <button id="ranking-btn" class="btn btn-gold">🏆 ランキング</button>
+                <button id="battle-btn" class="btn btn-danger">オンライン対戦</button>
+            </div>
+        </header>
+
+        <main class="game-board">
+            <!-- 上段: フリーセルとホームセル -->
+            <div class="top-area">
+                <div class="free-cells">
+                    <div class="cell free-cell" data-cell="0"></div>
+                    <div class="cell free-cell" data-cell="1"></div>
+                    <div class="cell free-cell" data-cell="2"></div>
+                    <div class="cell free-cell" data-cell="3"></div>
+                </div>
+                
+                <!-- 自動完成ボタン（条件を満たした時のみ表示） -->
+                <div id="auto-complete-container" class="auto-complete-container hidden">
+                    <button id="auto-complete-btn" class="btn btn-auto-complete">自動完成</button>
+                </div>
+                
+                <div class="home-cells">
+                    <div class="cell home-cell" data-suit="hearts">♥</div>
+                    <div class="cell home-cell" data-suit="diamonds">♦</div>
+                    <div class="cell home-cell" data-suit="clubs">♣</div>
+                    <div class="cell home-cell" data-suit="spades">♠</div>
+                </div>
+            </div>
+
+            <!-- 下段: 8列のカード列 -->
+            <div class="tableau">
+                <div class="column" data-column="0"></div>
+                <div class="column" data-column="1"></div>
+                <div class="column" data-column="2"></div>
+                <div class="column" data-column="3"></div>
+                <div class="column" data-column="4"></div>
+                <div class="column" data-column="5"></div>
+                <div class="column" data-column="6"></div>
+                <div class="column" data-column="7"></div>
+            </div>
+        </main>
+
+        <!-- 勝利モーダル -->
+        <div id="win-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>🎉 おめでとうございます！</h2>
+                <p>クリアしました！</p>
+                <div class="win-stats">
+                    <p>手数: <span id="final-moves">0</span></p>
+                    <p>時間: <span id="final-time">00:00</span></p>
+                </div>
+                <div class="name-input-section">
+                    <label for="player-name">ランキングに登録する名前:</label>
+                    <input type="text" id="player-name" placeholder="名前を入力" maxlength="20">
+                </div>
+                <div class="modal-buttons">
+                    <button id="save-score-btn" class="btn btn-success">スコアを登録</button>
+                    <button id="play-again-btn" class="btn btn-primary">もう一度プレイ</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ランキングモーダル -->
+        <div id="ranking-modal" class="modal hidden">
+            <div class="modal-content ranking-content">
+                <h2>🏆 ランキング</h2>
+                <div class="ranking-type-tabs">
+                    <button class="type-tab-btn active" data-type="all">総合</button>
+                    <button class="type-tab-btn" data-type="daily">デイリー</button>
+                </div>
+                <div class="ranking-tabs">
+                    <button class="tab-btn active" data-tab="performance">パフォーマンス</button>
+                    <button class="tab-btn" data-tab="time">タイム順</button>
+                    <button class="tab-btn" data-tab="moves">手数順</button>
+                </div>
+                <div id="ranking-list" class="ranking-list">
+                    <!-- ランキングがここに表示される -->
+                </div>
+                <div class="modal-buttons">
+                    <button id="close-ranking-btn" class="btn btn-primary">閉じる</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 対戦ロビーモーダル -->
+        <div id="battle-lobby-modal" class="modal hidden">
+            <div class="modal-content battle-content">
+                <h2>⚔️ オンライン対戦</h2>
+                <div id="lobby-screen" class="battle-screen">
+                    <p class="battle-description">
+                        同じカード配置で対戦！<br>
+                        先にクリアした方の勝利です
+                    </p>
+                    <div class="name-input-section">
+                        <label for="battle-name">対戦名:</label>
+                        <input type="text" id="battle-name" placeholder="名前を入力" maxlength="20">
+                    </div>
+                    <div class="battle-mode-selection">
+                        <label>勝負方法:</label>
+                        <div class="mode-options">
+                            <label class="mode-option">
+                                <input type="radio" name="battle-mode" value="performance" checked>
+                                <span>パフォーマンス</span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="battle-mode" value="time">
+                                <span>タイム</span>
+                            </label>
+                            <label class="mode-option">
+                                <input type="radio" name="battle-mode" value="moves">
+                                <span>手数</span>
+                            </label>
+                        </div>
+                    </div>
+                    <button id="start-matching-btn" class="btn btn-danger btn-large">対戦相手を探す</button>
+                </div>
+                <div id="matching-screen" class="battle-screen hidden">
+                    <div class="matching-animation">
+                        <div class="spinner"></div>
+                        <p>対戦相手を探しています...</p>
+                        <p id="waiting-count" class="waiting-info"></p>
+                    </div>
+                    <button id="cancel-matching-btn" class="btn btn-secondary">キャンセル</button>
+                </div>
+                <div class="modal-buttons">
+                    <button id="close-battle-btn" class="btn btn-secondary">閉じる</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 対戦中表示 -->
+        <div id="battle-status" class="battle-status hidden">
+            <div class="battle-info">
+                <div class="player-status">
+                    <span class="player-label">あなた</span>
+                    <span id="my-battle-time" class="status-value">00:00</span>
+                    <span id="my-battle-moves" class="status-value">0手</span>
+                </div>
+                <div class="vs-label">VS</div>
+                <div class="opponent-status">
+                    <span class="opponent-label" id="opponent-name">相手</span>
+                    <span id="opponent-time" class="status-value">00:00</span>
+                    <span id="opponent-moves" class="status-value">0手</span>
+                </div>
+            </div>
+            <button id="leave-battle-btn" class="btn btn-secondary btn-small">対戦を離脱</button>
+        </div>
+
+        <!-- 対戦結果モーダル -->
+        <div id="battle-result-modal" class="modal hidden">
+            <div class="modal-content result-content">
+                <h2 id="result-title">🎉 勝利！</h2>
+                <p id="battle-mode-display" class="battle-mode-info"></p>
+                <div class="result-details">
+                    <div class="result-row">
+                        <div class="result-player winner">
+                            <span class="result-label">勝者</span>
+                            <span id="winner-name" class="result-name">-</span>
+                            <span id="winner-time" class="result-time">00:00</span>
+                            <span id="winner-moves" class="result-moves">0手</span>
+                        </div>
+                    </div>
+                    <div class="result-row">
+                        <div class="result-player loser">
+                            <span class="result-label">敗者</span>
+                            <span id="loser-name" class="result-name">-</span>
+                            <span id="loser-time" class="result-time">-</span>
+                            <span id="loser-moves" class="result-moves">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-buttons">
+                    <button id="close-result-btn" class="btn btn-primary">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Firebase 設定 -->
+    <script src="firebase-config.js"></script>
+    
+    <script src="game.js"></script>
+</body>
+</html>

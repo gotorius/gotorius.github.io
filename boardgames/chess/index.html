@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チェス - ボードゲーム コレクション</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+</head>
+<body>
+    <div class="game-container">
+        <!-- ヘッダー -->
+        <header class="game-header">
+            <h1>♔ チェス</h1>
+            <div class="game-controls">
+                <a href="../index.html" class="btn btn-secondary">ホーム</a>
+                <button id="new-game-btn" class="btn btn-primary">新しいゲーム</button>
+                <div class="mode-dropdown">
+                    <button id="mode-btn" class="btn btn-secondary">モード選択 ▼</button>
+                    <div class="mode-dropdown-content" id="mode-dropdown-content">
+                        <div class="dropdown-section">
+                            <div class="dropdown-title">🤖 CPU対戦</div>
+                            <button class="dropdown-item" data-mode="cpu" data-difficulty="easy">よわい</button>
+                            <button class="dropdown-item" data-mode="cpu" data-difficulty="normal">ふつう</button>
+                            <button class="dropdown-item" data-mode="cpu" data-difficulty="hard">つよい</button>
+                        </div>
+                        <div class="dropdown-section">
+                            <div class="dropdown-title">👥 対人戦</div>
+                            <button class="dropdown-item" data-mode="local">ローカル対戦</button>
+                        </div>
+                    </div>
+                </div>
+                <button id="online-btn" class="btn btn-danger">オンライン対戦</button>
+            </div>
+        </header>
+
+        <!-- ゲーム情報パネル -->
+        <div class="game-info-panel">
+            <div class="player-info" id="player-white">
+                <div class="player-icon">♔</div>
+                <div class="player-details">
+                    <span class="player-name" id="white-name">白</span>
+                    <span class="player-rank" id="white-rank">先手</span>
+                </div>
+                <div class="captured-pieces" id="white-captured"></div>
+                <div class="turn-indicator"></div>
+            </div>
+            <div class="game-status">
+                <div class="current-turn" id="current-turn">白の番</div>
+                <div class="game-mode" id="game-mode">CPU対戦（ふつう）</div>
+                <div class="check-status" id="check-status"></div>
+            </div>
+            <div class="player-info" id="player-black">
+                <div class="turn-indicator"></div>
+                <div class="captured-pieces" id="black-captured"></div>
+                <div class="player-details">
+                    <span class="player-name" id="black-name">黒</span>
+                    <span class="player-rank" id="black-rank">後手</span>
+                </div>
+                <div class="player-icon">♚</div>
+            </div>
+        </div>
+
+        <!-- ゲームボード -->
+        <div class="board-wrapper">
+            <div class="board-container">
+                <div class="board-labels files-top">
+                    <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+                </div>
+                <div class="board-with-ranks">
+                    <div class="board-labels ranks-left">
+                        <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                    </div>
+                    <div id="board" class="board"></div>
+                    <div class="board-labels ranks-right">
+                        <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                    </div>
+                </div>
+                <div class="board-labels files-bottom">
+                    <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- オンラインロビーモーダル -->
+    <div id="online-lobby-modal" class="modal hidden">
+        <div class="modal-content">
+            <div id="lobby-screen" class="online-screen">
+                <h2>🌐 オンライン対戦</h2>
+                <p class="online-description">名前を入力して対戦相手を探しましょう</p>
+                <div class="name-input-section">
+                    <label for="player-name-input">プレイヤー名</label>
+                    <input type="text" id="player-name-input" maxlength="10" placeholder="名前を入力">
+                </div>
+                <button id="start-matching-btn" class="btn btn-primary btn-large">対戦相手を探す</button>
+                <button id="cancel-lobby-btn" class="btn btn-secondary">戻る</button>
+            </div>
+            <div id="matching-screen" class="online-screen hidden">
+                <h2>🔍 マッチング中...</h2>
+                <div class="matching-animation">
+                    <div class="spinner"></div>
+                    <p>対戦相手を探しています</p>
+                    <p class="waiting-info">しばらくお待ちください</p>
+                </div>
+                <button id="cancel-matching-btn" class="btn btn-danger">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- プロモーション選択モーダル -->
+    <div id="promotion-modal" class="modal hidden">
+        <div class="modal-content promotion-content">
+            <h2>♕ プロモーション</h2>
+            <p>どの駒に昇格しますか？</p>
+            <div class="promotion-options">
+                <button class="promotion-btn" data-piece="queen">
+                    <span class="promotion-piece">♕</span>
+                    <span class="promotion-name">クイーン</span>
+                </button>
+                <button class="promotion-btn" data-piece="rook">
+                    <span class="promotion-piece">♖</span>
+                    <span class="promotion-name">ルーク</span>
+                </button>
+                <button class="promotion-btn" data-piece="bishop">
+                    <span class="promotion-piece">♗</span>
+                    <span class="promotion-name">ビショップ</span>
+                </button>
+                <button class="promotion-btn" data-piece="knight">
+                    <span class="promotion-piece">♘</span>
+                    <span class="promotion-name">ナイト</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 結果モーダル -->
+    <div id="result-modal" class="modal hidden">
+        <div class="modal-content result-content">
+            <h2 id="result-title">ゲーム終了</h2>
+            <div class="result-details">
+                <p id="result-message"></p>
+            </div>
+            <div class="modal-buttons">
+                <button id="retry-btn" class="btn btn-primary">もう一度</button>
+                <button id="new-game-result-btn" class="btn btn-secondary">モード選択</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="firebase-config.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>将棋</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+</head>
+<body>
+    <div class="game-container">
+        <header class="game-header">
+            <a href="../index.html" class="btn btn-secondary">← ホーム</a>
+            <h1>将棋</h1>
+            <div class="game-controls">
+                <button id="new-game-btn" class="btn btn-primary">新しい対局</button>
+                <button id="undo-btn" class="btn btn-secondary" disabled>待った</button>
+                <button id="hint-btn" class="btn btn-secondary">ヒント</button>
+                <div class="mode-dropdown">
+                    <button id="mode-btn" class="btn btn-secondary">モード選択 ▼</button>
+                    <div class="mode-dropdown-content" id="mode-dropdown-content">
+                        <div class="dropdown-section">
+                            <div class="dropdown-title">🤖 CPU対戦</div>
+                            <button class="dropdown-item" data-mode="cpu" data-difficulty="ume">初級</button>
+                            <button class="dropdown-item" data-mode="cpu" data-difficulty="take">中級</button>
+                            <button class="dropdown-item" data-mode="cpu" data-difficulty="matsu">上級</button>
+                        </div>
+                        <div class="dropdown-section">
+                            <div class="dropdown-title">📝 詰将棋</div>
+                            <button class="dropdown-item disabled" data-mode="tsume" data-level="1" disabled>① 一手詰</button>
+                            <button class="dropdown-item disabled" data-mode="tsume" data-level="3" disabled>③ 三手詰</button>
+                            <button class="dropdown-item disabled" data-mode="tsume" data-level="5" disabled>⑤ 五手詰</button>
+                            <div class="dropdown-coming-soon">🚧 Coming Soon...</div>
+                        </div>
+                        <div class="dropdown-section">
+                            <div class="dropdown-title">👥 対人戦</div>
+                            <button class="dropdown-item" data-mode="pvp">ローカル対戦</button>
+                        </div>
+                    </div>
+                </div>
+                <button id="online-btn" class="btn btn-danger">オンライン対戦</button>
+            </div>
+        </header>
+
+        <!-- ゲーム情報パネル -->
+        <div class="game-info-panel">
+            <div class="player-info opponent-player">
+                <div class="player-icon">☖</div>
+                <div class="player-details">
+                    <span class="player-name" id="opponent-name">後手（CPU）</span>
+                    <span class="player-rank" id="opponent-rank"></span>
+                </div>
+                <div class="turn-indicator" id="opponent-turn"></div>
+            </div>
+            
+            <div class="game-status">
+                <div class="current-turn" id="current-turn">先手の番です</div>
+                <div class="game-mode" id="game-mode">VS CPU（竹）</div>
+                <div class="move-count">手数: <span id="move-count">0</span></div>
+            </div>
+            
+            <div class="player-info my-player">
+                <div class="turn-indicator" id="my-turn"></div>
+                <div class="player-details">
+                    <span class="player-name" id="my-name">先手（あなた）</span>
+                    <span class="player-rank" id="my-rank"></span>
+                </div>
+                <div class="player-icon">☗</div>
+            </div>
+        </div>
+
+        <main class="game-board-wrapper">
+            <!-- 相手の持ち駒 -->
+            <div class="captured-pieces opponent-captured" id="opponent-captured">
+                <div class="captured-label">☖ 持ち駒</div>
+                <div class="captured-list" id="opponent-captured-list"></div>
+            </div>
+
+            <!-- 将棋盤 -->
+            <div class="board-container">
+                <!-- 思考中インジケーター -->
+                <div id="thinking-indicator" class="thinking-indicator hidden">
+                    <div class="thinking-spinner"></div>
+                    <span class="thinking-text">思考中...</span>
+                </div>
+                <div class="board-frame">
+                    <!-- 筋（列）の表示 -->
+                    <div class="board-labels cols">
+                        <span>9</span><span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+                    </div>
+                    <div class="board-with-rows">
+                        <!-- 段（行）の表示 -->
+                        <div class="board-labels rows">
+                            <span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span><span>七</span><span>八</span><span>九</span>
+                        </div>
+                        <div class="board" id="board">
+                            <!-- 9x9のマスがJavaScriptで生成される -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 自分の持ち駒 -->
+            <div class="captured-pieces my-captured" id="my-captured">
+                <div class="captured-label">☗ 持ち駒</div>
+                <div class="captured-list" id="my-captured-list"></div>
+            </div>
+        </main>
+
+        <!-- オンライン対戦ロビーモーダル -->
+        <div id="online-lobby-modal" class="modal hidden">
+            <div class="modal-content">
+                <h2>🌐 オンライン対戦</h2>
+                <div id="lobby-screen" class="online-screen">
+                    <p class="online-description">
+                        世界中のプレイヤーとリアルタイム対戦！<br>
+                        先手・後手はランダムに決まります
+                    </p>
+                    <div class="name-input-section">
+                        <label for="online-name">プレイヤー名:</label>
+                        <input type="text" id="online-name" placeholder="名前を入力" maxlength="20">
+                    </div>
+                    <button id="start-matching-btn" class="btn btn-primary btn-large" onclick="startMatching()">対戦相手を探す</button>
+                </div>
+                <div id="matching-screen" class="online-screen hidden">
+                    <div class="matching-animation">
+                        <div class="thinking-spinner"></div>
+                        <p>対戦相手を探しています...</p>
+                        <p id="waiting-count" class="waiting-info"></p>
+                    </div>
+                    <button class="btn btn-secondary" onclick="cancelMatching()">キャンセル</button>
+                </div>
+                <div class="modal-buttons">
+                    <button class="btn btn-secondary" onclick="closeLobby()">閉じる</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 成り確認モーダル -->
+        <div id="promote-modal" class="modal hidden">
+            <div class="modal-content promote-content">
+                <h2>成りますか？</h2>
+                <div class="promote-options">
+                    <button id="promote-yes" class="btn btn-primary promote-btn">
+                        <span class="promote-piece" id="promoted-piece"></span>
+                        <span>成る</span>
+                    </button>
+                    <button id="promote-no" class="btn btn-secondary promote-btn">
+                        <span class="promote-piece" id="unpromoted-piece"></span>
+                        <span>成らない</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 勝敗モーダル -->
+        <div id="result-modal" class="modal hidden">
+            <div class="modal-content result-content">
+                <h2 id="result-title">🎉 勝利！</h2>
+                <div class="result-details">
+                    <p id="result-message"></p>
+                    <p class="result-moves">手数: <span id="result-move-count">0</span>手</p>
+                </div>
+                <div class="modal-buttons">
+                    <button id="play-again-btn" class="btn btn-primary">もう一度対局</button>
+                    <button id="change-mode-btn" class="btn btn-secondary">モード変更</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 詰将棋クリアモーダル -->
+        <div id="tsume-clear-modal" class="modal hidden">
+            <div class="modal-content result-content">
+                <h2 id="tsume-result-title">🎉 正解！</h2>
+                <div class="result-details">
+                    <p id="tsume-message">見事、詰みました！</p>
+                </div>
+                <div class="modal-buttons">
+                    <button id="next-tsume-btn" class="btn btn-primary">次の問題</button>
+                    <button id="tsume-menu-btn" class="btn btn-secondary">問題選択</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
