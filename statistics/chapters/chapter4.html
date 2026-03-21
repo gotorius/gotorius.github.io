@@ -52,28 +52,66 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <!-- ===== 概要 ===== -->
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#univariate">1変数の変数変換</a></li>
+                            <li><a href="#bivariate">2変数の変換とヤコビアン</a></li>
+                            <li><a href="#linear">線形結合の分布</a></li>
+                            <li><a href="#datatransform">データの変換</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ===== はじめに ===== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> 確率変数を「変身」させる――変換しても確率は逃げない</h2>
                     <p>
-                        第4章では「確率変数を変換したら、確率密度関数はどう変わるか？」を学びます。
-                        例えば、正規分布に従う $X$ から $Y = e^X$ を作ると（対数正規分布）、$Y$ の確率密度関数は何か？
-                        どうやって計算するか？ こうした問いに答えるのが <strong>変数変換</strong>の手法です。
+                        ここまでの章では、与えられた確率変数 $X$ の分布をそのまま扱ってきました。
+                        しかし実際の場面では、$X$ をそのまま使うより<strong>変換した値</strong>のほうが扱いやすいことがよくあります。
+                        たとえば株価は毎日数百〜数千円の幅で変動しますが、<em>対数収益率</em>（前日比の対数）に変換すると
+                        ほぼ正規分布に近づき、統計的な分析がしやすくなります。
                     </p>
-                    <p>この章で学ぶ内容：</p>
-                    <ol>
-                        <li><strong>1変数の変数変換</strong>：$Y = g(X)$ のとき $f_Y(y)$ を求める方法</li>
-                        <li><strong>2変数の変数変換（ヤコビアン）</strong>：$(Z, W) = (u(X,Y), v(X,Y))$ への変換</li>
-                        <li><strong>独立な確率変数の線形結合の分布</strong>：母関数法と変数変換法</li>
-                        <li><strong>データの変換</strong>：対数変換・Box-Cox変換・ロジット変換など実際の適用</li>
-                    </ol>
-                    <p><strong>キーワード：</strong>変数変換、ヤコビアン、確率変数の線形結合の分布、対数変換、ベキ乗変換、Box-Cox変換、ロジット変換、プロビット変換</p>
+                    <p>
+                        この章のテーマは「$X$ の分布がわかっているとき、$Y = g(X)$ の分布はどうなるか」という問いです。
+                        核心となるアイデアはシンプルです――<strong>確率は変換しても保存される</strong>。
+                        $X$ がある微小区間に入る確率と、変換後の $Y$ が対応する区間に入る確率は同じはずです。
+                        この「確率の保存」を数式に落とし込むと、$Y$ の確率密度関数は
+                        $f_X(g^{-1}(y)) \cdot |\frac{d}{dy}g^{-1}(y)|$ という形になります。
+                    </p>
+                    <p>
+                        2変数に拡張すると、面積のスケール変化を表す<strong>ヤコビアン</strong>が登場します。
+                        1変数の場合の「微分の絶対値」が、多変数では行列式（行列式 ＝ 面積の拡大率）に一般化されるのです。
+                        この仕組みを使えば、2つの独立な確率変数の和 $X + Y$ の分布も系統的に導けます。
+                    </p>
+                    <p>
+                        さらに変数変換は<strong>データ分析の実務</strong>でも欠かせません。
+                        右裾が長いデータへの対数変換、0〜1 の確率値を実数全体に広げるロジット変換、
+                        正規性を誘導する Box-Cox 変換など、「変換してから分析する」というアプローチは統計モデリングの至るところで登場します。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
+                        <ol>
+                            <li>1変数の変数変換――確率の保存という核心アイデア</li>
+                            <li>2変数の変数変換とヤコビアン――多次元への拡張</li>
+                            <li>独立な確率変数の線形結合の分布――母関数法と変数変換法の使い分け</li>
+                            <li>データの変換――対数変換・Box-Cox変換・ロジット変換・プロビット変換</li>
+                        </ol>
+                    </div>
                 </section>
 
                 <!-- ===== 1. 1変数の変数変換 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="univariate">
                     <h2><i class="fas fa-right-left"></i> 1．1変数の変数変換</h2>
 
                     <h3>基本アイデア：確率の保存</h3>
@@ -91,10 +129,10 @@
                         $$f_Y(y)|dy| = f(x)|dx| \implies f_Y(y) = f(x) \left|\frac{dx}{dy}\right|$$
                     </div>
                     <p>
-                        逆関数 $x = g^{-1}(y)$ を使って $x$ を $y$ で表すと최종的に：
+                        逆関数 $x = g^{-1}(y)$ を使って $x$ を $y$ で表すと最終的に：
                     </p>
                     <div class="formula-block">
-                        $$\boxed{f_Y(y) = f\!\bigl(g^{-1}(y)\bigr) \cdot \left|\frac{d}{dy}g^{-1}(y)\right|}$$
+                        $${f_Y(y) = f\!\bigl(g^{-1}(y)\bigr) \cdot \left|\frac{d}{dy}g^{-1}(y)\right|}$$
                     </div>
                     <p>
                         別の書き方：$f(x)/|g'(x)|$ の $x$ を逆関数で $y$ に置き換えたもの、とも言えます。
@@ -120,7 +158,7 @@
                 </section>
 
                 <!-- ===== 2. 2変数のヤコビアン ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="bivariate">
                     <h2><i class="fas fa-border-all"></i> 2．2変数の変数変換とヤコビアン</h2>
 
                     <h3>ヤコビアンとは何か</h3>
@@ -167,7 +205,7 @@
                 </section>
 
                 <!-- ===== 3. 線形結合の分布 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="linear">
                     <h2><i class="fas fa-plus-minus"></i> 3．独立な確率変数の線形結合の分布</h2>
 
                     <h3>2つの方法</h3>
@@ -216,7 +254,7 @@
                 </section>
 
                 <!-- ===== 4. データの変換 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="datatransform">
                     <h2><i class="fas fa-arrow-trend-up"></i> 4．データの変換</h2>
 
                     <h3>なぜデータを変換するか</h3>
@@ -306,7 +344,7 @@
                 </section>
 
                 <!-- ===== 公式まとめ ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="formulas">
                     <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
                     <div class="formula-block">
                         <strong>1変数変換：</strong>$Y = g(X)$（$g$ は1対1）のとき
@@ -323,7 +361,7 @@
                 </section>
 
                 <!-- ===== 例題・演習 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
 
                     <!-- 例1 -->
@@ -479,7 +517,7 @@
                 </section>
 
                 <!-- ===== メモ ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="notes">
                     <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
                     <ul>
                         <li><strong>1変数変換の原理：</strong>「確率は保存される」→ $f(x)|dx| = f_Y(y)|dy|$ → ヤコビアン（$|dx/dy|$）で補正</li>
@@ -505,7 +543,8 @@
                     </a>
                 </nav>
 
-            </div>
+                </div><!-- /.chapter-content -->
+            </div><!-- /.chapter-layout -->
         </div>
     </main>
 

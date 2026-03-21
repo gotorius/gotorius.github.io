@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>統計学学習ノート</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-styles.css">
+</head>
+<body data-chapter="34">
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span id="breadcrumb-chapter"></span>
+            </div>
+            <span class="chapter-label" id="chapter-label"></span>
+            <h1 id="chapter-title">読み込み中...</h1>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+
+            <!-- ===== スタート画面 ===== -->
+            <div id="exam-start">
+                <div class="exam-start-inner">
+                    <h2><i class="fas fa-file-pen"></i>統計検定 準1級 模擬試験</h2>
+                    <p>問題バンクからランダムに30問を出題します。<br>制限時間は60分です。</p>
+
+                    <div class="exam-info-card">
+                        <h3><i class="fas fa-circle-info"></i> 試験概要</h3>
+                        <ul class="exam-info-list">
+                            <li><i class="fas fa-list-ol"></i> 出題数：30問（500問からランダム選出）</li>
+                            <li><i class="fas fa-clock"></i> 制限時間：60分</li>
+                            <li><i class="fas fa-check-circle"></i> 形式：4〜5択の選択式</li>
+                            <li><i class="fas fa-chart-pie"></i> 合格目安：約67%（20問以上正解）</li>
+                            <li><i class="fas fa-tags"></i> 範囲：確率分布・推定・検定・回帰・多変量解析 他</li>
+                        </ul>
+                    </div>
+
+                    <div class="exam-note">
+                        <i class="fas fa-lightbulb"></i>
+                        各問題の解答後に前の問題に戻ることも可能です。試験終了後に全問の正誤と解説が表示されます。
+                    </div>
+
+                    <button id="btn-start"><i class="fas fa-play"></i>試験を開始する</button>
+                </div>
+            </div>
+
+            <!-- ===== 試験画面 ===== -->
+            <div id="exam-main" class="hidden">
+                <div class="exam-header">
+                    <div class="timer" id="timer"><i class="fas fa-clock"></i> 60:00</div>
+                    <div class="progress-wrap">
+                        <span id="progress-text">0 / 30 回答済み</span>
+                        <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
+                    </div>
+                </div>
+
+                <div class="question-card">
+                    <div class="q-meta">
+                        <span class="q-category" id="q-category"></span>
+                        <span class="q-number" id="q-number"></span>
+                    </div>
+                    <div class="q-text" id="q-text"></div>
+                    <div class="choices" id="choices"></div>
+                </div>
+
+                <div class="q-controls">
+                    <button id="btn-prev"><i class="fas fa-chevron-left"></i> 前の問題</button>
+                    <button id="btn-finish"><i class="fas fa-flag-checkered"></i> 試験を終了</button>
+                    <button id="btn-next">次の問題 <i class="fas fa-chevron-right"></i></button>
+                </div>
+
+                <div class="q-nav" id="q-nav"></div>
+            </div>
+
+            <!-- ===== 結果画面 ===== -->
+            <div id="exam-result" class="hidden">
+                <div class="result-summary">
+                    <h2><i class="fas fa-square-poll-vertical"></i> 試験結果</h2>
+                    <div id="result-badge" class="result-badge"></div>
+                    <div class="result-stats">
+                        <div class="stat-box">
+                            <div class="stat-label">正答数</div>
+                            <div class="stat-value" id="result-score">--</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">正答率</div>
+                            <div class="stat-value" id="result-rate">--%</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">所要時間</div>
+                            <div class="stat-value" id="result-time">--:--</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-section">
+                    <h3><i class="fas fa-chart-bar"></i> カテゴリ別正答率</h3>
+                    <div id="category-breakdown"></div>
+                </div>
+
+                <div class="result-details-section">
+                    <h3><i class="fas fa-list-check"></i> 各問題の正誤と解説</h3>
+                    <div id="result-details"></div>
+                </div>
+
+                <div style="text-align:center; margin-top:2rem;">
+                    <button id="btn-retry"><i class="fas fa-rotate"></i> もう一度挑戦する</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="../data.js"></script>
+    <script src="../script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});</script>
+    <script src="../exam-questions.js"></script>
+    <script src="../exam.js"></script>
+</body>
+</html>

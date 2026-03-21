@@ -52,12 +52,32 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#events">事象と確率</a></li>
+                            <li><a href="#inclusion">包除原理</a></li>
+                            <li><a href="#conditional">条件付き確率と独立性</a></li>
+                            <li><a href="#bayes">ベイズの定理</a></li>
+                            <li><a href="#rv">確率変数・期待値・分散</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">メモ</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
 
                 <!-- ======================================================== -->
                 <!-- 0. イントロ                                               -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="intro">
                     <h2><i class="fas fa-book-open"></i> 確率とは何か――「不確かさ」を数値で表す</h2>
                     <p>
                         統計学はデータから世界を理解する学問です。しかしデータには必ず「ばらつき」や「不確かさ」が伴います。
@@ -83,7 +103,7 @@
                 <!-- ======================================================== -->
                 <!-- 1. 事象と確率                                             -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="events">
                     <h2><i class="fas fa-dice"></i> ① 事象と確率――基本の定義</h2>
 
                     <h3>全事象・事象・確率</h3>
@@ -128,7 +148,7 @@
                 <!-- ======================================================== -->
                 <!-- 2. 包除原理                                               -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="inclusion">
                     <h2><i class="fas fa-circle-nodes"></i> ② 包除原理――「どちらか」の確率を重複なく求める</h2>
 
                     <h3>問題の発生：なぜ単純に足せないのか？</h3>
@@ -168,7 +188,7 @@
                 <!-- ======================================================== -->
                 <!-- 3. 条件付き確率と独立性                                   -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="conditional">
                     <h2><i class="fas fa-filter"></i> ③ 条件付き確率と独立性――「情報」が確率を変える</h2>
 
                     <h3>条件付き確率とは？</h3>
@@ -219,7 +239,7 @@
                 <!-- ======================================================== -->
                 <!-- 4. ベイズの定理                                           -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="bayes">
                     <h2><i class="fas fa-rotate-left"></i> ④ ベイズの定理――「逆向き」の確率を求める</h2>
 
                     <h3>動機：原因から結果は簡単、でも逆は？</h3>
@@ -279,7 +299,7 @@
                 <!-- ======================================================== -->
                 <!-- 5. 確率変数・期待値・分散                                 -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="rv">
                     <h2><i class="fas fa-chart-bar"></i> ⑤ 確率変数・期待値・分散――ランダムな量を特徴づける</h2>
 
                     <h3>確率変数とは？</h3>
@@ -371,7 +391,7 @@
                 <!-- ======================================================== -->
                 <!-- 6. 公式まとめ                                             -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="formulas">
                     <h2><i class="fas fa-square-root-variable"></i> ⑥ 公式まとめ</h2>
                     <div class="formula-block">
                         <p><strong>余事象・和事象</strong></p>
@@ -398,7 +418,7 @@
                 <!-- ======================================================== -->
                 <!-- 7. 例題・演習                                             -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
 
                     <p style="color:#555; font-style:italic;">以下の問題はすべて自作問題です。教科書の内容を参考にしながら、オリジナルの数値で構成しています。問題文をよく読んでから解答を確認してください。</p>
@@ -546,7 +566,7 @@
                     </div>
                 </section>
 
-                <section class="content-section">
+                <section class="content-section section-anchor" id="notes">
                     <h2><i class="fas fa-sticky-note"></i> メモ</h2>
                     <ul>
                         <li>ベイズの定理は「原因→結果」の確率から「結果→原因」の確率を求める逆推論のツール。医療診断・スパムフィルタ・機械学習など幅広い応用がある</li>
@@ -569,7 +589,8 @@
                     </a>
                 </nav>
 
-            </div>
+                </div><!-- /.chapter-content -->
+            </div><!-- /.chapter-layout -->
         </div>
     </main>
 

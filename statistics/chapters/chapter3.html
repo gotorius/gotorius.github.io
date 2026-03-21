@@ -52,29 +52,69 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <!-- ===== 概要 ===== -->
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#location">位置の指標</a></li>
+                            <li><a href="#spread">散らばりの指標</a></li>
+                            <li><a href="#shape">形状の指標</a></li>
+                            <li><a href="#correlation">2変数の関係</a></li>
+                            <li><a href="#conditional">条件付き期待値と分散</a></li>
+                            <li><a href="#means">データの平均の種類</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ===== はじめに ===== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> 分布の「顔」を読む――数値で個性をとらえる</h2>
                     <p>
-                        第3章では、確率分布を「数値で要約する」方法を体系的に学びます。
-                        データや確率変数の「どこに集まっているか」「どれだけばらついているか」「どんな形をしているか」を数値で表す指標を <strong>特性値</strong> と呼びます。
+                        2章では確率分布を記述するための道具（CDF・母関数など）を身につけました。
+                        では、手元にある分布を「一言で」表すにはどうすればよいでしょうか？
+                        確率密度関数のグラフをそのまま眺めても、2つの分布の違いは直感的には伝わりにくいものです。
                     </p>
-                    <p>この章で学ぶ主な特性値は次の通りです：</p>
-                    <ol>
-                        <li><strong>位置の指標</strong>：期待値・中央値・最頻値（どこに集中しているか）</li>
-                        <li><strong>散らばりの指標</strong>：標準偏差・四分位範囲・変動係数（どれだけばらつくか）</li>
-                        <li><strong>形状の指標</strong>：歪度・尖度（分布の形の非対称性・裾の重さ）</li>
-                        <li><strong>2変数の関係</strong>：共分散・相関係数・偏相関係数</li>
-                        <li><strong>条件付き特性値</strong>：条件付き期待値・条件付き分散</li>
-                        <li><strong>データの平均の種類</strong>：算術平均・加重平均・幾何平均・調和平均</li>
-                    </ol>
-                    <p><strong>キーワード：</strong>歪度、尖度、変動係数、相関係数、偏相関係数、分位点関数、条件付き期待値、条件付き分散</p>
+                    <p>
+                        そこで登場するのが<strong>特性値（characteristic values）</strong>という考え方です。
+                        確率分布のグラフにはいくつかの「個性」があります――
+                        どこを中心に集まっているか（<strong>位置</strong>）、どれだけ広がっているか（<strong>散らばり</strong>）、
+                        左右に偏っているか（<strong>歪み</strong>）、裾がどれだけ重いか（<strong>尖り</strong>）。
+                        これらをひとつの数値に圧縮したものが特性値です。
+                    </p>
+                    <p>
+                        位置の指標として最も基本的なのは<strong>期待値</strong>ですが、分布が「右裾長」（高所得データのように一部の値が飛び抜けて大きい分布）だと
+                        期待値は実感からずれた大きな値になりがちです。そういうときは<strong>中央値</strong>のほうが「典型的な値」をよく表します。
+                        散らばりも同様で、裾が長い分布では<strong>標準偏差</strong>より<strong>四分位範囲</strong>のほうがロバストです。
+                    </p>
+                    <p>
+                        2変数に目を向けると、2つの確率変数の「連動」を表す指標として<strong>相関係数</strong>が登場します。
+                        ただし相関係数が高くても、第3の変数が裏で両方を動かしている"擬似相関"の場合もあります。
+                        そこで第3の変数の影響を除いた<strong>偏相関係数</strong>が重要になります。
+                        こうした「見かけの相関と本当の相関を区別する眼」は、統計的推論の土台となります。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
+                        <ol>
+                            <li>位置の指標――期待値・中央値・最頻値、それぞれいつ使うべきか</li>
+                            <li>散らばりの指標――標準偏差・四分位範囲・変動係数</li>
+                            <li>形状の指標――歪度（左右の偏り）と尖度（裾の重さ）</li>
+                            <li>2変数の関係――共分散・相関係数・偏相関係数と擬似相関の罠</li>
+                            <li>条件付き期待値・条件付き分散――「情報が与えられたとき」の分布の特性</li>
+                        </ol>
+                    </div>
                 </section>
 
                 <!-- ===== 1. 位置の指標 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="location">
                     <h2><i class="fas fa-map-pin"></i> 1．位置の指標：期待値・中央値・最頻値</h2>
 
                     <h3>期待値（平均）</h3>
@@ -125,7 +165,7 @@
                 </section>
 
                 <!-- ===== 2. 散らばりの指標 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="spread">
                     <h2><i class="fas fa-arrows-left-right"></i> 2．散らばりの指標</h2>
 
                     <h3>標準偏差・分散</h3>
@@ -171,7 +211,7 @@
                 </section>
 
                 <!-- ===== 3. 形状の指標 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="shape">
                     <h2><i class="fas fa-chart-area"></i> 3．形状の指標：歪度と尖度</h2>
 
                     <h3>歪度（Skewness）</h3>
@@ -219,7 +259,7 @@
                 </section>
 
                 <!-- ===== 4. 2変数の関係 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="correlation">
                     <h2><i class="fas fa-link"></i> 4．2変数の関係：共分散・相関係数・偏相関係数</h2>
 
                     <h3>共分散（Covariance）</h3>
@@ -280,7 +320,7 @@
                 </section>
 
                 <!-- ===== 5. 条件付き期待値・分散 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="conditional">
                     <h2><i class="fas fa-filter"></i> 5．条件付き期待値と条件付き分散</h2>
 
                     <h3>条件付き期待値</h3>
@@ -320,7 +360,7 @@
                 </section>
 
                 <!-- ===== 6. データの平均 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="means">
                     <h2><i class="fas fa-calculator"></i> 6．データの平均の種類</h2>
                     <p>「平均」にはいくつか種類があり、場面によって使い分けます。</p>
 
@@ -366,7 +406,7 @@
                 </section>
 
                 <!-- ===== 公式まとめ ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="formulas">
                     <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
                     <div class="formula-block">
                         $$E[aX + bY + c] = aE[X] + bE[Y] + c$$
@@ -384,7 +424,7 @@
                 </section>
 
                 <!-- ===== 例題・演習 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
 
                     <!-- 例1 -->
@@ -525,7 +565,7 @@
                 </section>
 
                 <!-- ===== メモ ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="notes">
                     <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
                     <ul>
                         <li><strong>位置の指標の使い分け：</strong>左右対称な分布では3つとも同じ。右裾が長いデータ（所得・株価）では中央値が実態に近い</li>
@@ -550,7 +590,8 @@
                     </a>
                 </nav>
 
-            </div>
+                </div><!-- /.chapter-content -->
+            </div><!-- /.chapter-layout -->
         </div>
     </main>
 

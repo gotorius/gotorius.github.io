@@ -52,30 +52,66 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <!-- ===== 概要 ===== -->
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#cdf">累積分布関数</a></li>
+                            <li><a href="#joint">同時・周辺・条件付き分布</a></li>
+                            <li><a href="#pgf">母関数</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ===== はじめに ===== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> 確率分布を「道具」で操る――関数が分布の全体像を映す</h2>
                     <p>
-                        第2章では、確率変数の分布を「道具」を使って体系的に分析する方法を学びます。
-                        具体的には次の4つのテーマを扱います。
+                        1章では確率変数の基礎として期待値や分散を学びました。
+                        しかし「ある値以下になる確率はいくらか」「2つの変数が同時にどんな値をとるか」となると、
+                        確率関数・確率密度関数だけでは全体像をつかみにくくなります。
                     </p>
-                    <ol>
-                        <li><strong>累積分布関数（CDF）・生存関数・ハザード関数</strong>：確率変数がある値以下になる確率を関数として捉える</li>
-                        <li><strong>同時分布・周辺分布・条件付き分布</strong>：2つ以上の確率変数の「関係」を記述する</li>
-                        <li><strong>確率母関数（PGF）・モーメント母関数（MGF）</strong>：確率分布を1つの関数として要約し、期待値・分散を機械的に求める</li>
-                        <li><strong>母関数の応用</strong>：独立な確率変数の和の分布を効率よく求める</li>
-                    </ol>
                     <p>
-                        <strong>この章のキモ：</strong>母関数を使うと、複雑な計算を「微分するだけ」に変換できます。
-                        また「独立な変数の和 → 母関数の積」という性質により、和の分布を直接計算せずに特定できます。
+                        そこでこの章では、確率分布を丸ごと1本の関数に「要約」するための<strong>道具一式</strong>を整えます。
+                        まず<strong>累積分布関数（CDF）</strong>は「X が x 以下になる確率」をそのまま関数にしたものです。
+                        離散でも連続でも同じ形で書け、分布の全体像をひとつながりの曲線として見渡せます。
+                        寿命データの文脈では CDF の裏返しが<strong>生存関数</strong>、その瞬間の「死亡率」が<strong>ハザード関数</strong>として登場します。
                     </p>
-                    <p><strong>キーワード：</strong>累積分布関数、生存関数、ハザード関数、同時確率密度関数、周辺確率密度関数、条件付き確率密度関数、モーメント母関数（積率母関数）、確率母関数</p>
+                    <p>
+                        次に、2つ以上の確率変数を扱うための<strong>同時分布・周辺分布・条件付き分布</strong>を導入します。
+                        「X と Y が同時にとる値の広がり」を記述し、一方の変数だけに注目すれば周辺分布、
+                        一方の値を固定したときの分布が条件付き分布です。
+                    </p>
+                    <p>
+                        そしてこの章の核心が<strong>母関数</strong>です。
+                        確率母関数（PGF）やモーメント母関数（MGF）は、確率分布を1本の関数に「コンパクトに詰め込む」仕掛けです。
+                        微分するだけでどんな次数のモーメント（期待値・分散など）でも読み出せますし、
+                        「独立な変数の和の母関数 ＝ 各変数の母関数の積」という性質のおかげで、
+                        和の分布を積分計算なしに特定できます。
+                        この「掛け算で和の分布がわかる」という感覚は、5章・6章の具体的な分布の計算でも繰り返し使います。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
+                        <ol>
+                            <li>累積分布関数（CDF）・生存関数・ハザード関数――「以下の確率」を関数として捉える</li>
+                            <li>同時分布・周辺分布・条件付き分布――複数の確率変数の「関係」を記述する</li>
+                            <li>確率母関数（PGF）・モーメント母関数（MGF）――分布を1本の関数に要約し、モーメントを微分で取り出す</li>
+                            <li>母関数の応用――独立な変数の和の分布を「母関数の積」で求める</li>
+                        </ol>
+                    </div>
                 </section>
 
                 <!-- ===== 1. 累積分布関数と生存関数 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="cdf">
                     <h2><i class="fas fa-chart-line"></i> 1．累積分布関数・生存関数・ハザード関数</h2>
 
                     <h3>累積分布関数（CDF）とは</h3>
@@ -149,7 +185,7 @@
                 </section>
 
                 <!-- ===== 2. 同時分布 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="joint">
                     <h2><i class="fas fa-table-cells"></i> 2．同時分布・周辺分布・条件付き分布</h2>
 
                     <h3>なぜ2変数が必要か</h3>
@@ -231,7 +267,7 @@
                 </section>
 
                 <!-- ===== 3. 母関数 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="pgf">
                     <h2><i class="fas fa-wand-magic-sparkles"></i> 3．母関数（確率母関数・モーメント母関数）</h2>
 
                     <h3>なぜ母関数が必要か</h3>
@@ -347,7 +383,7 @@
                 </section>
 
                 <!-- ===== 公式まとめ ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="formulas">
                     <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
 
                     <h3>確率母関数と期待値・分散</h3>
@@ -379,7 +415,7 @@
                 </section>
 
                 <!-- ===== 例題・演習 ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
 
                     <!-- 例1 -->
@@ -546,7 +582,7 @@
                 </section>
 
                 <!-- ===== メモ ===== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="notes">
                     <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
                     <ul>
                         <li><strong>CDF の役割：</strong>$F(x) = P(X \leq x)$ は離散・連続共通の定義。連続型では $f(x) = F'(x)$、離散型では $p(x) = F(x) - F(x-)$（左極限との差）で密度・確率関数を復元できる</li>
@@ -571,7 +607,8 @@
                     </a>
                 </nav>
 
-            </div>
+                </div><!-- /.chapter-content -->
+            </div><!-- /.chapter-layout -->
         </div>
     </main>
 
