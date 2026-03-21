@@ -401,13 +401,136 @@ ul { list-style: none; }
 
 /* Mode options (radio buttons) */
 .mode-option {
+    background: var(--gray-100);
+    border: 2px solid var(--gray-200);
     color: var(--gray-700);
+}
+
+.mode-option:hover {
+    background: var(--primary-bg);
+    border-color: var(--primary);
+}
+
+.mode-option:has(input[type="radio"]:checked) {
+    background: var(--primary-bg);
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
 .battle-description,
 .online-description {
     color: var(--gray-600);
 }
+
+/* ===================================
+   Freecell card slots - Light Theme
+   =================================== */
+
+.free-cell,
+.home-cell {
+    background: rgba(0, 0, 0, 0.06);
+    border: 2px dashed var(--gray-300);
+}
+
+.free-cell:hover,
+.home-cell:hover {
+    border-color: var(--primary);
+    background: rgba(37, 99, 235, 0.05);
+}
+
+.free-cell.highlight,
+.home-cell.highlight {
+    border-color: #f59e0b;
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}
+
+.home-cell[data-suit="hearts"],
+.home-cell[data-suit="diamonds"] {
+    color: rgba(220, 38, 38, 0.35);
+}
+
+.home-cell[data-suit="clubs"],
+.home-cell[data-suit="spades"] {
+    color: rgba(15, 23, 42, 0.2);
+}
+
+/* ===================================
+   Ranking interior - Light Theme
+   =================================== */
+
+.ranking-item {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    color: var(--gray-800);
+}
+
+.ranking-item:hover {
+    background: var(--gray-100);
+}
+
+.ranking-item.gold {
+    background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(245,158,11,0.05) 100%);
+    border: 2px solid rgba(245, 158, 11, 0.4);
+    box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+}
+
+.ranking-item.silver {
+    background: linear-gradient(135deg, rgba(148,163,184,0.15) 0%, rgba(148,163,184,0.07) 100%);
+    border: 2px solid rgba(148, 163, 184, 0.4);
+    box-shadow: 0 2px 8px rgba(148, 163, 184, 0.1);
+}
+
+.ranking-item.bronze {
+    background: linear-gradient(135deg, rgba(180,100,45,0.1) 0%, rgba(180,100,45,0.05) 100%);
+    border: 2px solid rgba(180, 100, 45, 0.4);
+    box-shadow: 0 2px 8px rgba(180, 100, 45, 0.1);
+}
+
+.ranking-name { color: var(--gray-700); }
+.ranking-score { color: var(--primary); font-weight: 600; }
+.ranking-max-tile { color: var(--gray-500); }
+.ranking-date { color: var(--gray-400); }
+
+.ranking-rank.gold { color: #d97706; text-shadow: none; }
+.ranking-rank.silver { color: var(--gray-500); text-shadow: none; }
+.ranking-rank.bronze { color: #92400e; text-shadow: none; }
+
+.no-ranking { color: var(--gray-400); }
+.loading { color: var(--gray-500); }
+
+/* ===================================
+   Ranking input section - Light Theme
+   =================================== */
+
+.ranking-input {
+    background: var(--gray-50);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--gray-200);
+}
+
+.ranking-input label { color: var(--gray-600); }
+
+.ranking-input input[type="text"],
+.ranking-input input:not([type]) {
+    background: white;
+    color: var(--gray-800);
+    border: 1px solid var(--gray-300);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    width: 100%;
+}
+
+.ranking-input input::placeholder { color: var(--gray-400); }
+
+.ranking-input input:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* result-value (2048 result score) */
+.result-value { color: var(--gray-800); }
+.result-label { color: var(--gray-500); }
 
 /* ===================================
    Navigation (共通ナビバー)
