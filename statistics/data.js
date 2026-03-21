@@ -36,5 +36,6 @@ const CHAPTERS = [
   { num: 30, title: "モデル選択" },
   { num: 31, title: "ベイズ法" },
   { num: 32, title: "シミュレーション" },
-  { num: 33, title: "第33章" },
+  { num: 33, title: "総括――32章の全体像" },
+  { num: 34, title: "模擬試験（CBT形式）" },
 ];

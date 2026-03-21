@@ -515,22 +515,19 @@ ul { list-style: none; }
 
 /* Problem / Question block */
 .example-block {
-    background: #fffbeb;
-    border: 1.5px solid #f59e0b;
-    border-left: 5px solid #f59e0b;
-    border-radius: var(--radius-sm);
-    padding: 16px 20px;
+    border-left: 4px solid var(--gray-500);
+    padding: 14px 18px;
     margin: 16px 0;
+    background: var(--gray-50);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 /* Answer / Solution block */
 .answer-block {
-    background: #f0fdf4;
-    border: 1.5px solid #86efac;
-    border-left: 5px solid #22c55e;
-    border-radius: var(--radius-sm);
-    padding: 16px 20px;
+    border-left: 4px dashed var(--gray-300);
+    padding: 14px 18px;
     margin: 16px 0;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 
 /* KaTeX formula blocks */
@@ -544,57 +541,7 @@ ul { list-style: none; }
     text-align: left;
 }
 
-/* formula-block inside problem block → amber tint */
-.example-block .formula-block {
-    background: #fef3c7;
-    border-color: #fcd34d;
-}
 
-/* formula-block inside answer block → green tint */
-.answer-block .formula-block {
-    background: #e6f6eb;
-    border-color: #86efac;
-}
-
-/* Tables inside problem block */
-.example-block table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 10px 0;
-}
-.example-block table th {
-    background: #faedb9;
-    color: #78350f;
-    border: 1px solid #fcd34d;
-    padding: 7px 10px;
-    text-align: center;
-}
-.example-block table td {
-    background: #fefbee;
-    border: 1px solid #fcd34d;
-    padding: 6px 10px;
-    text-align: center;
-}
-
-/* Tables inside answer block */
-.answer-block table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 10px 0;
-}
-.answer-block table th {
-    background: #bbf7d0;
-    color: #14532d;
-    border: 1px solid #86efac;
-    padding: 7px 10px;
-    text-align: center;
-}
-.answer-block table td {
-    background: #f0fdf4;
-    border: 1px solid #86efac;
-    padding: 6px 10px;
-    text-align: center;
-}
 
 /* ===================================
    Chapter Page - Pager Navigation
@@ -771,23 +718,18 @@ ul { list-style: none; }
 
 /* Section anchor offset for fixed nav */
 .section-anchor {
-    padding-top: 72px;
-    margin-top: -72px;
+    scroll-margin-top: 76px;
 }
 
 /* Concept box */
 .concept-box {
-    background: #f0f9ff;
-    border: 1.5px solid #7dd3fc;
-    border-left: 5px solid #0ea5e9;
-    border-radius: var(--radius-sm);
-    padding: 16px 20px;
     margin: 14px 0;
 }
 
 .concept-box .box-title {
+    font-size: 15px;
     font-weight: 700;
-    color: #0369a1;
+    color: var(--gray-700);
     margin-bottom: 6px;
     display: flex;
     align-items: center;
@@ -796,33 +738,25 @@ ul { list-style: none; }
 
 /* Memo box */
 .memo-box {
-    background: #fdf4ff;
-    border: 1.5px solid #d8b4fe;
-    border-left: 5px solid #a855f7;
-    border-radius: var(--radius-sm);
-    padding: 14px 18px;
     margin: 12px 0;
 }
 
 .memo-box .box-title {
+    font-size: 15px;
     font-weight: 700;
-    color: #7e22ce;
+    color: var(--gray-700);
     margin-bottom: 6px;
 }
 
 /* Warn box */
 .warn-box {
-    background: #fff7ed;
-    border: 1.5px solid #fdba74;
-    border-left: 5px solid #f97316;
-    border-radius: var(--radius-sm);
-    padding: 14px 18px;
     margin: 12px 0;
 }
 
 .warn-box .box-title {
+    font-size: 15px;
     font-weight: 700;
-    color: #c2410c;
+    color: var(--gray-700);
     margin-bottom: 6px;
 }
 
@@ -896,8 +830,19 @@ ul { list-style: none; }
     margin-left: 6px;
 }
 
-.badge-q { background: #fef3c7; color: #92400e; }
-.badge-a { background: #d1fae5; color: #065f46; }
+.badge-q {
+    background: var(--gray-700);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 4px;
+}
+.badge-a {
+    background: white;
+    color: var(--gray-600);
+    border: 1.5px solid var(--gray-300);
+    padding: 2px 10px;
+    border-radius: 4px;
+}
 
 @media (max-width: 900px) {
     .chapter-layout {
