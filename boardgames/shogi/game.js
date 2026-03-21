@@ -1304,7 +1304,8 @@ function updateDisplay() {
     
     // ボタン状態
     document.getElementById('undo-btn').disabled = gameState.moveHistory.length === 0 || gameState.isGameOver;
-    document.getElementById('hint-btn').disabled = !gameState.isPlayerTurn || gameState.isGameOver;
+    const hintBtn = document.getElementById('hint-btn');
+    if (hintBtn) hintBtn.disabled = !gameState.isPlayerTurn || gameState.isGameOver;
 }
 
 // 待った機能
@@ -1518,7 +1519,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // ヘッダーボタンのイベントリスナー
     document.getElementById('new-game-btn').addEventListener('click', newGame);
     document.getElementById('undo-btn').addEventListener('click', undoMove);
-    document.getElementById('hint-btn').addEventListener('click', showHint);
+    const hintBtnEl = document.getElementById('hint-btn');
+    if (hintBtnEl) hintBtnEl.addEventListener('click', showHint);
     
     // 成りモーダルのイベントリスナー
     document.getElementById('promote-yes').addEventListener('click', confirmPromote);

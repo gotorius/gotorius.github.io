@@ -76,10 +76,7 @@ class OthelloGame {
             this.undo();
         });
         
-        // ヒントボタン
-        document.getElementById('hint-btn').addEventListener('click', () => {
-            this.showHint();
-        });
+
         
         // オンライン対戦ボタン
         document.getElementById('online-btn').addEventListener('click', () => {
@@ -1185,7 +1182,8 @@ class OthelloGame {
         const isMyTurn = this.currentPlayer === this.myColor;
         
         // ヒント・元に戻すボタンの制御
-        document.getElementById('hint-btn').disabled = !isMyTurn || this.isGameOver;
+        const hintBtn = document.getElementById('hint-btn');
+        if (hintBtn) hintBtn.disabled = !isMyTurn || this.isGameOver;
         document.getElementById('undo-btn').disabled = true; // オンラインでは常に無効
     }
     

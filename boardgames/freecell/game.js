@@ -76,9 +76,7 @@ class FreeCellGame {
         // ボタンイベント
         document.getElementById('new-game-btn').addEventListener('click', () => this.newGame());
         document.getElementById('undo-btn').addEventListener('click', () => this.undo());
-        document.getElementById('hint-btn').addEventListener('click', () => this.showHint());
         document.getElementById('auto-complete-btn').addEventListener('click', () => this.autoComplete());
-        document.getElementById('bg-change-btn').addEventListener('click', () => this.changeBackground());
         document.getElementById('play-again-btn').addEventListener('click', () => {
             this.winModal.classList.add('hidden');
             this.newGame();

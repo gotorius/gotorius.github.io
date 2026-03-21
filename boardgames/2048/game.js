@@ -71,8 +71,9 @@ function setupEventListeners() {
     // 新しいゲームボタン
     document.getElementById('new-game-btn').addEventListener('click', startNewGame);
 
-    // 背景変更ボタン
-    document.getElementById('bg-change-btn').addEventListener('click', changeBackground);
+    // 背景変更ボタン（削除済みの場合はスキップ）
+    const bgBtn = document.getElementById('bg-change-btn');
+    if (bgBtn) bgBtn.addEventListener('click', changeBackground);
 
     // ランキングボタン
     document.getElementById('ranking-btn').addEventListener('click', showRanking);
