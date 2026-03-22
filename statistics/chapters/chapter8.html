@@ -52,131 +52,477 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#statistics">統計量と推定量</a></li>
+                            <li><a href="#estimation-methods">推定の方法</a></li>
+                            <li><a href="#evaluation">推定量の評価基準</a></li>
+                            <li><a href="#sufficiency">十分統計量</a></li>
+                            <li><a href="#cramer-rao">クラーメル・ラオの不等式</a></li>
+                            <li><a href="#asymptotic-mle">最尤推定量の漸近理論</a></li>
+                            <li><a href="#jackknife">ジャックナイフ法</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. はじめに                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> 統計的推定の基礎――「データから未知のパラメータを推測する」</h2>
                     <p>
-                        第8章では<strong>統計的推定の基礎</strong>を扱う。
-                        統計量・順序統計量の概念から始まり、最尤法・モーメント法・最小二乗法などの点推定法、
-                        不偏性・十分性・有効性などの推定量の評価基準、クラーメル・ラオの不等式、
-                        フィッシャー情報量、最尤推定量の漸近正規性、ジャックナイフ法を学ぶ。
+                        7章まででは「確率的な仕組み」を学びました。
+                        しかし実際の問題では「仕組みのパラメータ（例：コインの表が出る確率 $p$）は未知」であり、
+                        観測データから推測する作業が必要です。これが<strong>統計的推定（statistical estimation）</strong>です。
                     </p>
-                    <p><strong>キーワード：</strong>統計量、順序統計量、点推定、最尤法、モーメント法、線形モデル、最小二乗法、不偏性、十分性、有効性、クラーメル・ラオの不等式、フィッシャー情報量、最尤推定量の漸近正規性、ジャックナイフ法</p>
+                    <p>
+                        「どの推定量を使うべきか？」「この推定量はどれくらい信頼できるか？」を評価するためには、
+                        推定量の性質を理論的に評価する枠組みが必要です。本章ではその枠組みを学びます。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
+                        <ol>
+                            <li>統計量・推定量――データのどんな関数が「よい推定量」か</li>
+                            <li>最尤法・モーメント法・最小二乗法――3つの主要な推定方法</li>
+                            <li>推定量の評価基準――不偏性・MSE・バリアンス・バイアス分解</li>
+                            <li>十分統計量――「データ圧縮」でも情報を失わない統計量</li>
+                            <li>クラーメル・ラオの不等式――「推定量の分散に下限がある」という根本的な結果</li>
+                            <li>最尤推定量の漸近正規性――大標本では MLE が最良になる</li>
+                            <li>ジャックナイフ法――計算によるバイアス補正の方法</li>
+                        </ol>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <!-- ======================================================== -->
+                <!-- 1. 統計量と推定量                                          -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="statistics">
+                    <h2><i class="fas fa-database"></i> 1. 統計量と推定量――データの要約と推測</h2>
 
-                    <h3>統計量とパラメータ</h3>
-                    <ul>
-                        <li><strong>統計量</strong>（statistic）：未知の $\theta$ に依存しない、標本 $X_1, \ldots, X_n$ のみの関数</li>
-                        <li><strong>順序統計量</strong>（order statistic）：標本を昇順に並べた $X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}$</li>
-                        <li><strong>推定量</strong>（estimator）：$\hat\theta = h(X_1, \ldots, X_n)$。観測値を代入した $h(x_1, \ldots, x_n)$ を<strong>推定値</strong>（estimate）という</li>
-                    </ul>
+                    <h3>統計量（statistic）とは？</h3>
+                    <p>
+                        データ $X_1, \ldots, X_n$ の関数のうち、<strong>未知パラメータ $\theta$ を含まない</strong>関数を<strong>統計量</strong>といいます。
+                        「計算に $\theta$ が必要ない」つまりデータだけから計算できるのが統計量の条件です。
+                    </p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 統計量の例</div>
+                        <ul>
+                            <li>標本平均 $\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i$ — 統計量 ⭕</li>
+                            <li>不偏分散 $S^2 = \frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2$ — 統計量 ⭕</li>
+                            <li>$\sum_{i=1}^n (X_i - \mu)^2$（$\mu$ が未知のとき）— 統計量 ❌（$\mu$ を含む）</li>
+                        </ul>
+                    </div>
 
-                    <h3>各種推定法</h3>
-                    <ul>
-                        <li><strong>最尤法</strong>（maximum likelihood）：尤度関数 $L(\theta) = \prod_{i=1}^n f(x_i; \theta)$ を最大化する $\hat\theta$。対数尤度 $\ell(\theta) = \log L(\theta)$ で計算すると楽</li>
-                        <li><strong>モーメント法</strong>：モーメントの理論値と標本モーメントを等しいとおき $\theta$ を解く</li>
-                        <li><strong>最小二乗法</strong>：残差二乗和 $\sum(y_i - \beta x_i)^2$ を最小化する回帰パラメータを求める</li>
-                    </ul>
+                    <h3>順序統計量（order statistics）</h3>
+                    <p>
+                        データを昇順に並べた $X_{(1)} \leq X_{(2)} \leq \cdots \leq X_{(n)}$ を<strong>順序統計量</strong>といいます。
+                        最小値 $X_{(1)}$、最大値 $X_{(n)}$、中央値などはすべて順序統計量から定義されます。
+                    </p>
 
-                    <h3>推定量の評価基準</h3>
-                    <ul>
-                        <li><strong>不偏性</strong>：$E_\theta[\hat\theta] = \theta$（バイアス $b_\theta(\hat\theta) = E_\theta[\hat\theta] - \theta = 0$）</li>
-                        <li><strong>平均二乗誤差</strong>（MSE）：$\mathrm{MSE}_\theta(\hat\theta) = E_\theta[(\hat\theta - \theta)^2]$</li>
-                        <li><strong>バイアス・バリアンス分解</strong>：$$\mathrm{MSE}_\theta(\hat\theta) = (b_\theta(\hat\theta))^2 + V_\theta[\hat\theta]$$</li>
-                        <li><strong>一様最小分散不偏推定量</strong>（UMVUE）：不偏推定量のなかで分散を最小化</li>
-                        <li><strong>相対効率</strong>：$e(\hat\theta_1, \hat\theta_2) = \mathrm{MSE}(\hat\theta_2) / \mathrm{MSE}(\hat\theta_1)$</li>
-                    </ul>
-
-                    <h3>十分統計量</h3>
-                    <ul>
-                        <li>$T(X)$ で条件付けた $X$ の分布がパラメータに依存しないとき、$T(X)$ を<strong>十分統計量</strong>という</li>
-                        <li><strong>フィッシャー・ネイマンの分解定理</strong>：$f(x; \theta) = h(x)\, g(T(x), \theta)$ と分解できることが十分統計量の必要十分条件</li>
-                        <li>最尤推定量は十分統計量のみの関数となる</li>
-                    </ul>
+                    <h3>推定量（estimator）と推定値（estimate）</h3>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 推定量と推定値の区別</div>
+                        <p>
+                            $\hat\theta = h(X_1, \ldots, X_n)$ という確率変数を<strong>推定量</strong>といいます（大文字 $X$ のまま）。
+                            実際にデータ $x_1, \ldots, x_n$ を観測した後の具体的な値 $h(x_1, \ldots, x_n)$ を<strong>推定値</strong>といいます。
+                        </p>
+                        <p>
+                            <strong>区別のポイント</strong>：推定量は「次の標本でまた変わりうる確率変数」であり、推定値は「今回の標本から得た1つの数値」です。
+                            推定量の性質（不偏性・分散など）を評価するには、確率変数として扱う必要があります。
+                        </p>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                <!-- ======================================================== -->
+                <!-- 2. 推定の方法                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="estimation-methods">
+                    <h2><i class="fas fa-magnifying-glass-chart"></i> 2. 推定の方法――最尤法・モーメント法・最小二乗法</h2>
 
-                    <h3>クラーメル・ラオの不等式</h3>
-                    <p>フィッシャー情報量 $J_n(\theta) > 0$ のとき、任意の不偏推定量 $\hat\theta$ に対して</p>
-                    <div class="formula-block">
-                        $$V[\hat\theta] \geq J_n(\theta)^{-1}$$
-                    </div>
-                    <p><strong>フィッシャー情報量</strong>の定義：</p>
-                    <div class="formula-block">
-                        $$J_n(\theta) = E_\theta\!\left[\left(\frac{\partial}{\partial\theta}\log f(X_1, \ldots, X_n; \theta)\right)^2\right] = -E_\theta\!\left[\frac{\partial^2}{\partial\theta^2}\log f(X_1, \ldots, X_n; \theta)\right]$$
-                    </div>
-                    <p>標本が独立同一のとき $J_n(\theta) = n\, J_1(\theta)$（標本サイズに比例）</p>
-                    <p>等号を満たす不偏推定量を<strong>有効推定量</strong>という。有効推定量は UMVUE である。</p>
+                    <h3>最尤法（Maximum Likelihood Method）</h3>
+                    <p>
+                        「今観測されたデータが出やすいようなパラメータを選ぶ」という考え方が最尤法です。
+                        <strong>尤度関数</strong> $L(\theta) = \prod_{i=1}^n f(x_i; \theta)$（全データが同時に観測される確率（密度）の積）を最大にする $\hat\theta$ を<strong>最尤推定量（MLE）</strong>といいます。
+                    </p>
 
-                    <h3>ガウス・マルコフの定理</h3>
-                    <p>線形単回帰モデル $y_i = \beta x_i + \varepsilon_i$ で、$E[\varepsilon_i] = 0$、$V[\varepsilon_i] < \infty$、$E[\varepsilon_i \varepsilon_j] = 0\ (i \neq j)$ のとき、最小二乗推定量 $\hat\beta$ は不偏な線形推定量のなかで分散最小（<strong>BLUE</strong>：Best Linear Unbiased Estimator）</p>
-
-                    <h3>最尤推定量の漸近正規性</h3>
-                    <div class="formula-block">
-                        $$\sqrt{n}(\hat\theta - \theta) \xrightarrow{d} N(0, J_1(\theta)^{-1})$$
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-calculator"></i> 最尤法の手順</div>
+                        <ol class="step-list">
+                            <li>尤度関数を書く：$L(\theta) = \prod_{i=1}^n f(x_i;\theta)$</li>
+                            <li>対数尤度関数を書く：$\ell(\theta) = \log L(\theta) = \sum_{i=1}^n \log f(x_i;\theta)$（積が和になって扱いやすい）</li>
+                            <li>$\dfrac{\partial \ell(\theta)}{\partial \theta} = 0$ を解く（尤度方程式）</li>
+                            <li>解が最大点かどうか確認（2次微分が負など）</li>
+                        </ol>
+                        <p>なぜ対数をとるのか：積の微分より和の微分の方が簡単。また $\log$ は単調増加なので最大化点は変わりません。</p>
                     </div>
-                    <p>適当な正則条件のもとで、最尤推定量は<strong>一致性</strong>と<strong>漸近有効性</strong>を持つ。</p>
 
-                    <h3>ジャックナイフ法</h3>
-                    <p>$i$ 番目の標本を除いた推定量を $\hat\theta_{(i)}$、その平均を $\hat\theta_{(\cdot)}$ とすると</p>
                     <div class="formula-block">
-                        $$\hat\theta_{\mathrm{jack}} = n\hat\theta - (n-1)\hat\theta_{(\cdot)}$$
+                        <p><strong>例：正規分布 $N(\mu, \sigma^2)$ のMLE</strong>（両パラメータ未知）</p>
+                        <p>$\ell(\mu, \sigma^2) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum(x_i - \mu)^2$ を偏微分してゼロとおくと：</p>
+                        $$\hat\mu = \bar{x} = \frac{1}{n}\sum x_i, \quad \hat\sigma^2 = \frac{1}{n}\sum(x_i - \bar{x})^2$$
                     </div>
-                    <p>バイアスが $O(1/n)$ の推定量に対して有効なバイアス補正法。</p>
+
+                    <h3>モーメント法（Method of Moments）</h3>
+                    <p>
+                        「理論的なモーメント（$E[X^k]$）と標本モーメント（$\frac{1}{n}\sum x_i^k$）を等しいとおいて $\theta$ を解く」方法です。
+                        最尤法より簡単な計算で済むことが多いですが、最尤推定量より統計的効率が低いことがあります。
+                    </p>
+                    <div class="formula-block">
+                        <p><strong>例：ガンマ分布 $\mathrm{Ga}(a, b)$ のモーメント法</strong></p>
+                        <p>$E[X] = ab$、$E[X^2] = (a+a^2)b^2 = ab^2(1+a)$。標本モーメントと等置して $\hat{a}, \hat{b}$ を解く。</p>
+                    </div>
+
+                    <h3>最小二乗法（Least Squares Method）</h3>
+                    <p>
+                        線形モデル $y_i = \beta x_i + \varepsilon_i$ において、残差二乗和 $\sum_{i=1}^n (y_i - \beta x_i)^2$ を最小化する $\hat\beta$ を求める方法です。
+                    </p>
+                    <div class="formula-block">
+                        $$\hat\beta = \frac{\sum x_i y_i}{\sum x_i^2} \quad \text{（通常のOLS推定量）}$$
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> ガウス・マルコフの定理（最小二乗法の根拠）</div>
+                        <p>線形モデルで $E[\varepsilon_i] = 0$、$V[\varepsilon_i] = \sigma^2 &lt; \infty$、$\mathrm{Cov}(\varepsilon_i, \varepsilon_j) = 0$（$i \neq j$）のとき、</p>
+                        <p>最小二乗推定量 $\hat\beta$ は不偏な線形推定量のなかで<strong>最小分散（BLUE: Best Linear Unbiased Estimator）</strong>です。</p>
+                        <p>「最小二乗法は単なるカーブフィットではなく、統計的に根拠のある最良推定法」ということを保証します。</p>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                <!-- ======================================================== -->
+                <!-- 3. 推定量の評価基準                                        -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="evaluation">
+                    <h2><i class="fas fa-star-half-stroke"></i> 3. 推定量の評価基準――バイアス・MSE・効率性</h2>
 
-                    <h3>問8.1：統計量・十分統計量の判定</h3>
-                    <p>$N(\mu, \sigma^2)$ からの標本 $X_1, \ldots, X_n$ に対し、正しい記述を選ぶ。</p>
+                    <h3>不偏性（unbiasedness）</h3>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 不偏性の定義</div>
+                        <p>どんな $\theta$ でも $E_\theta[\hat\theta] = \theta$ が成り立つとき、$\hat\theta$ を<strong>不偏推定量</strong>といいます。</p>
+                        <p><strong>バイアス（偏り）</strong>：$b_\theta(\hat\theta) = E_\theta[\hat\theta] - \theta$</p>
+                        <p>不偏推定量では $b_\theta(\hat\theta) = 0$（バイアスなし）。</p>
+                    </div>
+                    <div class="formula-block">
+                        <p>例：$X_1, \ldots, X_n \overset{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$ のとき</p>
+                        $$E[\bar{X}] = \mu \quad \text{（不偏）}, \quad E\!\left[\frac{1}{n-1}\sum(X_i-\bar{X})^2\right] = \sigma^2 \quad \text{（不偏）}$$
+                        $$E\!\left[\frac{1}{n}\sum(X_i-\bar{X})^2\right] = \frac{n-1}{n}\sigma^2 \neq \sigma^2 \quad \text{（バイアスあり）}$$
+                    </div>
+                    <p>
+                        「なぜ不偏分散は $n-1$ で割るのか」：$n$ 個の偏差 $X_i - \bar{X}$ は $\sum(X_i - \bar{X}) = 0$ という制約で1自由度失われているため。
+                    </p>
+
+                    <h3>平均二乗誤差（MSE: Mean Squared Error）</h3>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> バイアス・バリアンス分解</div>
+                        <div class="formula-block">
+                            $$\mathrm{MSE}_\theta(\hat\theta) = E_\theta[(\hat\theta - \theta)^2] = (b_\theta(\hat\theta))^2 + V_\theta[\hat\theta]$$
+                        </div>
+                        <p>
+                            MSE は「真の値からの2乗誤差の平均」で、推定の精度を総合評価します。
+                        </p>
+                        <p>
+                            <strong>バイアス・バリアンスのトレードオフ</strong>：バイアスを減らすと分散が増えることがあります。
+                            不偏推定量（バイアス0）が常に最良とは限りません。
+                            少しバイアスを許してでも分散を大幅に減らせるなら、MSE は小さくなります。
+                        </p>
+                    </div>
+
+                    <h3>一様最小分散不偏推定量（UMVUE）</h3>
+                    <p>
+                        不偏推定量のなかで「すべての $\theta$ で分散が最小になる」推定量を<strong>UMVUE（Uniformly Minimum Variance Unbiased Estimator）</strong>といいます。
+                        UMVUE が「不偏推定量の中での最良」です。
+                        クラーメル・ラオの下限を達成する不偏推定量があれば、それが UMVUE です。
+                    </p>
+
+                    <h3>相対効率</h3>
+                    <div class="formula-block">
+                        $$e(\hat\theta_1, \hat\theta_2) = \frac{\mathrm{MSE}(\hat\theta_2)}{\mathrm{MSE}(\hat\theta_1)}$$
+                    </div>
+                    <p>
+                        $e > 1$ なら $\hat\theta_1$ が $\hat\theta_2$ より効率的。不偏推定量同士なら分散の比として計算できます。
+                    </p>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 4. 十分統計量                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="sufficiency">
+                    <h2><i class="fas fa-compress-arrows-alt"></i> 4. 十分統計量――「情報を失わないデータ圧縮」</h2>
+
+                    <h3>直感：何が「十分」なのか？</h3>
+                    <p>
+                        $n$ 個のデータすべてを保存せずとも、1つの統計量 $T(X)$ に「パラメータについての情報が全部詰まっている」なら、
+                        $T$ だけ見ればよいはずです。
+                        これが<strong>十分統計量（sufficient statistic）</strong>の概念です。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 十分統計量の定義</div>
+                        <p>$T(X)$ で条件付けた $X$ の条件付き分布がパラメータ $\theta$ に依存しないとき、$T(X)$ を $\theta$ の<strong>十分統計量</strong>といいます。</p>
+                        <div class="formula-block">
+                            $$P(X = x \mid T(X) = t;\; \theta) \text{ が $\theta$ に依存しない}$$
+                        </div>
+                        <p>
+                            直感：「$T$ を知ったとき、$\theta$ についての追加情報は $X$ のどこにもない」。
+                            言い換えると「$T$ がすべての情報を持っている」ということです。
+                        </p>
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> フィッシャー・ネイマンの分解定理（実用的な判定法）</div>
+                        <p>$T(X)$ が $\theta$ の十分統計量 $\iff$ 尤度関数が次の形に分解できる</p>
+                        <div class="formula-block">
+                            $$L(\theta; x) = \prod_{i=1}^n f(x_i;\theta) = h(x) \cdot g(T(x),\; \theta)$$
+                        </div>
+                        <p>つまり「$\theta$ が関係する部分はすべて $T(x)$ を通してのみ現れる」という条件です。</p>
+                        <p><strong>応用例</strong>：正規分布 $N(\mu, \sigma^2)$（$\sigma^2$ 既知）では $\bar{X}$ が $\mu$ の十分統計量です。</p>
+                        <div class="formula-block">
+                            $$L(\mu; x) \propto \exp\!\left(-\frac{n(\bar{x}-\mu)^2}{2\sigma^2}\right) \cdot \exp\!\left(-\frac{\sum(x_i-\bar{x})^2}{2\sigma^2}\right)$$
+                        </div>
+                        <p>ここで最初の因子が $T(x) = \bar{x}$ と $\mu$ に依存し、2番目は $\mu$ に依存しない（$h(x)$ の役割）。</p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 十分統計量の重要性</div>
+                        <p>
+                            最尤推定量は常に十分統計量の関数になります（フィッシャー・ネイマンの定理の系）。
+                            また、Rao-Blackwell の定理により「不偏推定量を十分統計量で条件付き期待値をとるとMSEが改善する」という結果があります。
+                            十分統計量は UMVUE を構成するための基礎でもあります。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 5. クラーメル・ラオの不等式                               -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="cramer-rao">
+                    <h2><i class="fas fa-greater-than-equal"></i> 5. クラーメル・ラオの不等式――「推定量の分散には下限がある」</h2>
+
+                    <h3>動機：どこまで精度を上げられるか？</h3>
+                    <p>
+                        推定量の分散は小さければ小さいほどよいですが、情報量に限界がある以上「どれだけ頑張っても超えられない下限」があります。
+                        それを与えるのが<strong>クラーメル・ラオの不等式</strong>です。
+                    </p>
+
+                    <h3>フィッシャー情報量（Fisher information）</h3>
+                    <p>
+                        「データが $\theta$ についてどれだけ情報を持っているか」を定量化したものがフィッシャー情報量です。
+                    </p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> フィッシャー情報量の定義（同値な2つの表現）</div>
+                        <div class="formula-block">
+                            $$J_1(\theta) = E_\theta\!\left[\left(\frac{\partial}{\partial\theta}\log f(X;\theta)\right)^2\right] = -E_\theta\!\left[\frac{\partial^2}{\partial\theta^2}\log f(X;\theta)\right]$$
+                        </div>
+                        <p>
+                            第1式：スコア関数の2乗の期待値（スコア = 対数尤度の微分）。<br>
+                            第2式：対数尤度の2階微分の負の期待値（曲率）。<br>
+                            等号は正則条件のもとで成り立ちます。
+                        </p>
+                        <p>
+                            <strong>直感</strong>：$J_1(\theta)$ が大きいほど、尤度曲線の「山」が急峻で $\theta$ を精度よく推定できます。
+                            $n$ 個の独立同一標本では $J_n(\theta) = n J_1(\theta)$（情報量はサンプルサイズに比例）。
+                        </p>
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> クラーメル・ラオの不等式</div>
+                        <p>正則条件のもとで、任意の不偏推定量 $\hat\theta$ に対して</p>
+                        <div class="formula-block">
+                            $$V_\theta[\hat\theta] \geq \frac{1}{J_n(\theta)} = \frac{1}{n J_1(\theta)}$$
+                        </div>
+                        <p>
+                            右辺を<strong>クラーメル・ラオの下限（CRB）</strong>といいます。
+                        </p>
+                        <p>
+                            等号が成り立つ不偏推定量を<strong>有効推定量（efficient estimator）</strong>といい、これが UMVUE です。
+                        </p>
+                        <p><strong>応用</strong>：CRB を達成できない推定量は「まだ改善の余地がある」ので、CRB はベンチマークとして機能します。</p>
+                    </div>
+
+                    <h3>具体例：ポアソン分布</h3>
+                    <p>$X \sim \mathrm{Po}(\lambda)$ のとき $f(x;\lambda) = e^{-\lambda}\lambda^x/x!$ なので</p>
+                    <div class="formula-block">
+                        $$\log f = -\lambda + x\log\lambda - \log x!, \quad \frac{\partial}{\partial\lambda}\log f = -1 + \frac{x}{\lambda}$$
+                        $$\frac{\partial^2}{\partial\lambda^2}\log f = -\frac{x}{\lambda^2}, \quad J_1(\lambda) = E\!\left[\frac{X}{\lambda^2}\right] = \frac{1}{\lambda}$$
+                    </div>
+                    <div class="formula-block">
+                        $$\text{CRB} = \frac{1}{nJ_1(\lambda)} = \frac{\lambda}{n}$$
+                    </div>
+                    <p>$V[\bar{X}] = \lambda/n$ でこの下限を達成 $\Rightarrow$ $\bar{X}$ は有効推定量（かつ UMVUE）。</p>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 6. 最尤推定量の漸近理論                                   -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="asymptotic-mle">
+                    <h2><i class="fas fa-infinity"></i> 6. 最尤推定量の漸近理論――大標本での最良性</h2>
+
+                    <h3>有限標本での MLE の問題点</h3>
+                    <p>
+                        MLE は有限標本では必ずしも不偏とは限りません（例：正規分布の分散の MLE $\hat\sigma^2 = S_n^2 = \frac{1}{n}\sum(X_i-\bar{X})^2$ はバイアスあり）。
+                        しかし「標本サイズが大きくなるにつれて」MLE は非常に良い性質を持ちます。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> MLE の漸近正規性</div>
+                        <p>適当な正則条件のもとで、最尤推定量 $\hat\theta_n$ は</p>
+                        <div class="formula-block">
+                            $$\sqrt{n}\,(\hat\theta_n - \theta) \xrightarrow{d} N\!\left(0,\; J_1(\theta)^{-1}\right)$$
+                        </div>
+                        <p>この結果から：</p>
+                        <ul>
+                            <li><strong>一致性</strong>：$\hat\theta_n \xrightarrow{p} \theta$（$n \to \infty$ で真の値に収束）</li>
+                            <li><strong>漸近不偏性</strong>：大標本では偏りが消える</li>
+                            <li><strong>漸近有効性</strong>：漸近分散 $J_1(\theta)^{-1}/n$ がクラーメル・ラオの下限（CRB）と一致 ← 大標本での意味での UMVUE!</li>
+                        </ul>
+                        <p>「MLE は大標本で最良」というのはこの漸近有効性を指しています。</p>
+                    </div>
+
+                    <h3>漸近正規性を使った信頼区間の構成</h3>
+                    <p>
+                        漸近正規性から、近似的な $100(1-\alpha)\%$ 信頼区間が構成できます。
+                    </p>
+                    <div class="formula-block">
+                        $$\hat\theta_n \pm z_{\alpha/2} \cdot \frac{1}{\sqrt{n\, J_1(\hat\theta_n)}}$$
+                    </div>
+                    <p>ここで $z_{\alpha/2}$ は $N(0,1)$ の上側 $\alpha/2$ 点です。$J_1(\theta)$ の代わりに $J_1(\hat\theta_n)$（推定値）を使う点がポイントです。</p>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 7. ジャックナイフ法                                       -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="jackknife">
+                    <h2><i class="fas fa-scissors"></i> 7. ジャックナイフ法――「1つずつ抜いて」バイアスを補正する</h2>
+
+                    <h3>動機：非線形推定量のバイアス補正</h3>
+                    <p>
+                        $\bar{X}^2$ や $\log\bar{X}$ のような非線形推定量には一般にバイアスがあります。
+                        ジャックナイフ法は、「$i$ 番目のデータを除いた推定量を利用してバイアスを補正する」汎用的な手法です。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> ジャックナイフ推定量の構成</div>
+                        <p>
+                            $i$ 番目のデータを除いた推定量 $\hat\theta_{(i)}$（$i = 1, \ldots, n$）を求め、
+                            その平均 $\hat\theta_{(\cdot)} = \frac{1}{n}\sum_{i=1}^n \hat\theta_{(i)}$ とする。
+                        </p>
+                        <div class="formula-block">
+                            $$\hat\theta_{\mathrm{jack}} = n\hat\theta - (n-1)\hat\theta_{(\cdot)}$$
+                        </div>
+                        <p>
+                            <strong>なぜこれでバイアスが消えるか？</strong><br>
+                            元の推定量が $E[\hat\theta] = \theta + b/n + O(n^{-2})$（bias $= O(1/n)$）のとき、<br>
+                            $E[\hat\theta_{(i)}] = \theta + b/(n-1) + O(n^{-2})$ より<br>
+                            $E[\hat\theta_{\mathrm{jack}}] = n(\theta + b/n) - (n-1)(\theta + b/(n-1)) + O(n^{-2}) = \theta + O(n^{-2})$<br>
+                            となり、バイアスが $O(1/n)$ から $O(1/n^2)$ に改善されます。
+                        </p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 ジャックナイフ法の特徴と限界</div>
+                        <p>
+                            利点：分布の仮定なし、解析的な計算なしにバイアス補正できる汎用性の高い手法です。<br>
+                            限界：分位点や中央値のような「非滑らか」な推定量には有効でない場合があります（その場合はブートストラップ法などを使う）。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 8. 例題・演習                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 8. 例題・演習</h2>
+
+                    <h3>問8.1：統計量に関する正誤判定</h3>
+                    <p>$N(\mu, \sigma^2)$ からの標本 $X_1, \ldots, X_n$ に対し、以下の各記述の正誤を答えよ。</p>
                     <div class="answer-block">
-                    <p><strong>正しいもの：①②④</strong></p>
                     <ul>
-                        <li>① $\sum(X_i - \mu)^2$ は未知パラメータ $\mu$ を含むので統計量ではない</li>
-                        <li>② 順序統計量 $(X_{(1)}, \ldots, X_{(n)})$ は $(\mu, \sigma^2)$ の十分統計量</li>
-                        <li>③ 標本分散 $\frac{1}{n}\sum(X_i - \bar{X})^2$ は $\sigma^2$ の不偏推定量<strong>ではない</strong>（不偏分散は $n-1$ で割る）</li>
-                        <li>④ 標本分散の平方根は標準偏差の最尤推定量</li>
-                        <li>⑤ 標本分散は $\sigma^2$ の一致推定量であり、漸近有効推定量<strong>でもある</strong></li>
+                        <li><strong>① $\sum(X_i - \mu)^2$ は統計量である</strong>：<span style="color:red"><strong>誤り</strong></span>。未知パラメータ $\mu$ を含むので統計量ではない。</li>
+                        <li><strong>② 順序統計量 $(X_{(1)}, \ldots, X_{(n)})$ は $(\mu, \sigma^2)$ の十分統計量である</strong>：<span style="color:green"><strong>正しい</strong></span>。順序統計量は常に十分統計量（情報を失わずにデータをソートしただけ）。</li>
+                        <li><strong>③ $\frac{1}{n}\sum(X_i - \bar{X})^2$ は $\sigma^2$ の不偏推定量である</strong>：<span style="color:red"><strong>誤り</strong></span>。その期待値は $\frac{n-1}{n}\sigma^2 \neq \sigma^2$（$n-1$ で割ったものが不偏）。</li>
+                        <li><strong>④ $\sqrt{\frac{1}{n}\sum(X_i - \bar{X})^2}$ は $\sigma$ の最尤推定量である</strong>：<span style="color:green"><strong>正しい</strong></span>。MLEの不変性（$g(\hat\theta)$ は $g(\theta)$ のMLE）より。</li>
+                        <li><strong>⑤ 標本分散 $S^2$ は $\sigma^2$ の漸近有効推定量ではない</strong>：<span style="color:red"><strong>誤り</strong></span>。$S^2$ も $\hat\sigma^2$ も大標本では漸近有効。</li>
                     </ul>
                     </div>
 
                     <h3>問8.2：ポアソン分布の推定</h3>
                     <p>平均 $\lambda$ のポアソン分布からの標本 $X_1, \ldots, X_n$。</p>
                     <div class="answer-block">
-                    <p><strong>(1) 最尤推定量：</strong>$\hat\lambda = \bar{X}$（標本平均）</p>
-                    <p><strong>(2) フィッシャー情報量：</strong>$J_n(\lambda) = n/\lambda$</p>
-                    <p><strong>(3) 有効推定量であることの証明：</strong>$V[\bar{X}] = \lambda/n = J_n(\lambda)^{-1}$ よりクラーメル・ラオの下限を達成</p>
-                    <p><strong>(4) 漸近正規性：</strong>中心極限定理より $\sqrt{n}(\bar{X} - \lambda) \xrightarrow{d} N(0, \lambda)$ であり、漸近分散 $\lambda$ は $J_1(\lambda)^{-1} = \lambda$ と一致するので漸近有効性も成立</p>
+                    <p><strong>(1) 最尤推定量：</strong></p>
+                    <p>$\ell(\lambda) = -n\lambda + \sum x_i \log\lambda - \sum\log x_i!$。$\ell'(\lambda) = -n + (\sum x_i)/\lambda = 0$ を解くと：$\hat\lambda = \bar{X}$。</p>
+
+                    <p><strong>(2) フィッシャー情報量：</strong></p>
+                    <div class="formula-block">
+                        $$J_1(\lambda) = -E\!\left[\frac{\partial^2}{\partial\lambda^2}\log f(X;\lambda)\right] = -E\!\left[-\frac{X}{\lambda^2}\right] = \frac{E[X]}{\lambda^2} = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}$$
+        		    </div>
+                    <p>よって $\mathrm{CRB} = \lambda/n$。</p>
+
+                    <p><strong>(3) $\bar{X}$ が有効推定量であることの確認：</strong></p>
+                    <div class="formula-block">
+                        $$V[\bar{X}] = \frac{\lambda}{n} = \mathrm{CRB} \quad \Rightarrow \text{ クラーメル・ラオの下限を達成} \Rightarrow \text{ 有効推定量}$$
+                    </div>
+
+                    <p><strong>(4) 漸近正規性：</strong></p>
+                    <div class="formula-block">
+                        $$\sqrt{n}(\bar{X} - \lambda) \xrightarrow{d} N(0, \lambda) = N\!\left(0, J_1(\lambda)^{-1}\right)$$
+                    </div>
+                    <p>漸近分散 $\lambda = J_1(\lambda)^{-1}$ から漸近有効性も成立。</p>
                     </div>
 
                     <h3>問8.3：コインの面積のバイアス補正</h3>
-                    <p>5つのコインの半径データ：$8.4, 9.0, 8.2, 10.4, 9.2$ (mm)。面積 $\pi\mu^2$ の推定。</p>
+                    <p>5枚のコインの半径測定値（mm）：$8.4, 9.0, 8.2, 10.4, 9.2$。面積 $\pi\mu^2$ を推定する（半径の真の平均を $\mu$ とする）。</p>
                     <div class="answer-block">
-                    <p><strong>(1) バイアス：</strong>$T_1 = \pi\bar{X}^2$ のバイアスは $\pi\sigma^2/n$、$T_2 = \pi\overline{X^2}$ のバイアスは $\pi\sigma^2$</p>
-                    <p><strong>(3) バイアス補正推定値：</strong>$\bar{X} = 9.04$、$U = 0.748$ より</p>
+                    <p><strong>基本量の計算：</strong></p>
                     <div class="formula-block">
-                        $$\pi(\bar{X}^2 - U/n) = 3.14 \times (9.04^2 - 0.748/5) \approx \mathbf{256}$$
+                        $$\bar{X} = \frac{8.4 + 9.0 + 8.2 + 10.4 + 9.2}{5} = \frac{45.2}{5} = 9.04$$
+                        $$U = S^2 = \frac{1}{4}\sum(X_i - \bar{X})^2 = \frac{1}{4}\bigl[(0.64)^2 + (0.04)^2 + \cdots\bigr] \approx 0.748$$
                     </div>
-                    <p><strong>(4) ジャックナイフ推定値：</strong>同じく <strong>256</strong></p>
-                    <p><strong>(5) デルタ法：</strong>$g(x) = x^2$ に対し漸近分散は $(2\mu)^2\sigma^2 = 4\mu^2\sigma^2$</p>
+
+                    <p><strong>(1) $T_1 = \pi\bar{X}^2$ のバイアス：</strong></p>
+                    <div class="formula-block">
+                        $$E[T_1] = \pi E[\bar{X}^2] = \pi(V[\bar{X}] + (E[\bar{X}])^2) = \pi\!\left(\frac{\sigma^2}{n} + \mu^2\right) = \pi\mu^2 + \frac{\pi\sigma^2}{n}$$
+                        $$\text{バイアス} = \frac{\pi\sigma^2}{n}$$
+                    </div>
+
+                    <p><strong>(3) バイアス補正推定値（$\sigma^2$ を $U$ で推定）：</strong></p>
+                    <div class="formula-block">
+                        $$\pi\!\left(\bar{X}^2 - \frac{U}{n}\right) = \pi\!\left(9.04^2 - \frac{0.748}{5}\right) = \pi(81.72 - 0.150) = \pi \times 81.57 \approx \mathbf{256\text{ mm}^2}$$
+                    </div>
+
+                    <p><strong>(4) ジャックナイフ法による推定：</strong></p>
+                    <p>5つの $\hat\theta_{(i)} = \pi\bar{X}_{(i)}^2$（$i$ 番目を除いた平均の2乗 $\times \pi$）を計算し、$\hat\theta_{\mathrm{jack}} = 5\pi\bar{X}^2 - 4\bar{\hat\theta}_{(\cdot)}$ とします。
+                    計算結果はバイアス補正と同様に $\approx \mathbf{256}$ になります。</p>
+
+                    <p><strong>(5) デルタ法による漸近分散：</strong></p>
+                    <p>$g(x) = \pi x^2$、$g'(\mu) = 2\pi\mu$ より、$g(\bar{X})$ の漸近分散：</p>
+                    <div class="formula-block">
+                        $$[g'(\mu)]^2 \frac{\sigma^2}{n} = (2\pi\mu)^2 \frac{\sigma^2}{n} = \frac{4\pi^2\mu^2\sigma^2}{n}$$
+                    </div>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <!-- ======================================================== -->
+                <!-- 9. まとめ・ポイント                                        -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> 9. まとめ・ポイント</h2>
                     <ul>
-                        <li>最尤推定量は大標本で最良（一致性＋漸近有効性）だが、有限標本では不偏とは限らない</li>
-                        <li>クラーメル・ラオの下限を使えば、ある推定量が UMVUE かどうか判定できる</li>
-                        <li>フィッシャー・ネイマンの分解定理は十分統計量を見つける実用的なツール</li>
-                        <li>ジャックナイフ法は推定量が $\bar{X}^2$ のような場合でもバイアス補正可能で汎用性が高い</li>
-                        <li>ガウス・マルコフの定理は「不偏な線形推定量」の範囲内での最良性を保証する</li>
+                        <li><strong>統計量と推定量の区別</strong>：$\theta$ を含まない関数が統計量。実際に観測値を代入した値が推定値。「推定量は確率変数」という視点が重要。</li>
+                        <li><strong>最尤法は推定の基本</strong>：対数尤度の最大化。MLE は有限標本で不偏とは限らないが、大標本では漸近有効性を持つ最良推定量になる。</li>
+                        <li><strong>クラーメル・ラオの下限は「達成可能な最小分散」の基準</strong>：不偏推定量の分散はこの下限以上。下限を達成する推定量が UMVUE。</li>
+                        <li><strong>フィッシャー情報量はサンプルサイズに比例</strong>：$J_n(\theta) = nJ_1(\theta)$。データを増やせばより精度よく推定できるという定量的な表現。</li>
+                        <li><strong>フィッシャー・ネイマンの分解定理は実用的ツール</strong>：尤度が $h(x) \cdot g(T(x), \theta)$ に分解できれば $T$ が十分統計量。MLE は十分統計量の関数。</li>
+                        <li><strong>ガウス・マルコフの定理は「線形推定量の範囲での最良性」</strong>：不偏な線形推定量のなかでは最小二乗推定量（OLS）が BLUE。しかし非線形推定量や不偏性を外した推定量が MLE に勝る場合もある。</li>
+                        <li><strong>ジャックナイフ法は汎用バイアス補正法</strong>：$O(1/n)$ のバイアスを $O(1/n^2)$ に改善。分布の仮定不要で使いやすい。</li>
                     </ul>
                 </section>
 

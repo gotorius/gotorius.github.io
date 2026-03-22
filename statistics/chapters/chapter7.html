@@ -52,138 +52,500 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#convergence">確率変数の収束</a></li>
+                            <li><a href="#lln">大数の法則</a></li>
+                            <li><a href="#poisson-approx">少数法則・ポアソン近似</a></li>
+                            <li><a href="#clt">中心極限定理</a></li>
+                            <li><a href="#dist-properties">分布収束の性質</a></li>
+                            <li><a href="#delta-method">デルタ法</a></li>
+                            <li><a href="#extreme-value">極値分布</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. はじめに                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> 極限定理と漸近理論――「$n$ が大きくなるとどう振る舞うか」</h2>
                     <p>
-                        第7章では、確率変数列の収束に関する<strong>極限定理</strong>と<strong>漸近理論</strong>を扱う。
-                        確率収束・分布収束などの収束の概念、大数の弱法則、少数法則（ポアソン近似）、中心極限定理、
-                        極値分布、連続写像定理、スルツキーの補題、デルタ法、多次元の分布収束を学ぶ。
+                        6章まででは、1つの確率変数の分布（正規分布・指数分布など）を学びました。
+                        では「同じ分布からデータを $n$ 個集めたとき、$n$ を増やしていくと何が起きるか？」を問うのが本章のテーマです。
                     </p>
-                    <p><strong>キーワード：</strong>確率収束、分布収束、大数の弱法則、少数法則、中心極限定理、連続修正、極値分布、デルタ法</p>
+                    <p>
+                        統計学では「大標本の性質」が非常に重要です。なぜなら現実の推測統計では：
+                    </p>
+                    <ul>
+                        <li>標本平均 $\bar{X}_n$ は「真の平均 $\mu$ に近づく」はず（大数の法則）</li>
+                        <li>標本平均を標準化した量は「正規分布に近づく」はず（中心極限定理）</li>
+                        <li>推定量 $f(\bar{X}_n)$ の漸近分布は何か（デルタ法）</li>
+                    </ul>
+                    <p>
+                        これらを厳密に言いまわすために「収束」の概念を整理し、大数の法則・中心極限定理・デルタ法・極値分布という4つの重要な結果を学びます。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
+                        <ol>
+                            <li>確率変数の収束の種類――概収束・確率収束・平均二乗収束・分布収束</li>
+                            <li>大数の法則――標本平均が真の平均に収束する</li>
+                            <li>少数法則（ポアソン近似）――まれな事象の二項分布はポアソン分布に近づく</li>
+                            <li>中心極限定理――標準化した標本平均が正規分布に収束する</li>
+                            <li>連続写像定理・スルツキーの補題――分布収束を「操作する」道具</li>
+                            <li>デルタ法――$f(\bar{X}_n)$ の漸近分布を求める</li>
+                            <li>極値分布――最大値・最小値はガンベル・フレシェ・ワイブル分布に収束する</li>
+                        </ol>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <!-- ======================================================== -->
+                <!-- 1. 確率変数の収束                                          -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="convergence">
+                    <h2><i class="fas fa-arrows-to-circle"></i> 1. 確率変数の収束――「近づく」にも種類がある</h2>
 
-                    <h3>確率変数の収束</h3>
-                    <ul>
-                        <li><strong>概収束</strong>（almost sure convergence）：$P(\lim_{n\to\infty} X_n = Y) = 1$</li>
-                        <li><strong>確率収束</strong>（convergence in probability）：任意の $\varepsilon > 0$ に対して $\lim_{n\to\infty} P(|X_n - Y| \geq \varepsilon) = 0$</li>
-                        <li><strong>平均二乗収束</strong>（convergence in mean-square）：$\lim_{n\to\infty} E[(X_n - Y)^2] = 0$</li>
-                        <li>概収束 $\Rightarrow$ 確率収束、平均二乗収束 $\Rightarrow$ 確率収束（チェビシェフの不等式による）</li>
-                        <li>$\{X_n\}$ が $Y$ に確率収束し $h$ が連続なら $\{h(X_n)\}$ は $h(Y)$ に確率収束する</li>
-                    </ul>
+                    <h3>なぜ収束の定義が複数あるのか？</h3>
+                    <p>
+                        通常の数列の収束は「$|a_n - a| \to 0$」という一通りの定義しかありません。
+                        しかし確率変数列 $\{X_n\}$ は「確率的なもの」であり、収束の強さ・意味によって複数の定義が生まれます。
+                        強い収束から弱い収束まで段階があり、「どの収束を使えば何が言えるか」を区別することが重要です。
+                    </p>
 
-                    <h3>分布収束（法則収束）</h3>
-                    <ul>
-                        <li>$X_n$ の分布関数 $F_n(x) = P(X_n \leq x)$ がある分布関数 $G$ のすべての連続点 $x$ で $\lim_{n\to\infty} F_n(x) = G(x)$ を満たすこと</li>
-                        <li>分布収束は確率変数そのものの収束ではなく、<strong>分布の収束</strong>を表す</li>
-                    </ul>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 概収束（almost sure convergence）</div>
+                        <div class="formula-block">
+                            $$P\!\left(\lim_{n\to\infty} X_n = Y\right) = 1 \quad \text{（$X_n \to Y$ a.s.）}$$
+                        </div>
+                        <p>
+                            直感：「確率1の集合の上では必ず収束する」。最も強い収束です。
+                            「ほぼ確実に（almost surely）」略して a.s. とも書きます。
+                        </p>
+                    </div>
 
-                    <h3>極値分布</h3>
-                    <ul>
-                        <li>標本の最大値・最小値の極限分布。収束先は以下の3種類のみ：</li>
-                        <li><strong>ガンベル分布</strong>（Gumbel）：$e^{-e^{-y}}$</li>
-                        <li><strong>フレシェ分布</strong>（Fréchet）：$e^{-y^{-\alpha}}\ (y > 0)$</li>
-                        <li><strong>ワイブル分布</strong>（Weibull）：$e^{-(-y)^{\alpha}}\ (y < 0)$</li>
-                    </ul>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 確率収束（convergence in probability）</div>
+                        <div class="formula-block">
+                            $$\forall \varepsilon > 0,\; \lim_{n\to\infty} P(|X_n - Y| \geq \varepsilon) = 0 \quad \text{（$X_n \xrightarrow{p} Y$）}$$
+                        </div>
+                        <p>
+                            直感：「$X_n$ と $Y$ のずれが $\varepsilon$ 以上になる確率がゼロに近づく」。
+                            つまり「多くの場合で $Y$ に近い」という意味です。概収束より弱い収束です。
+                        </p>
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 平均二乗収束（convergence in mean-square）</div>
+                        <div class="formula-block">
+                            $$\lim_{n\to\infty} E\!\left[(X_n - Y)^2\right] = 0 \quad \text{（$X_n \xrightarrow{\text{m.s.}} Y$）}$$
+                        </div>
+                        <p>
+                            直感：「平均的な2乗誤差がゼロに近づく」。チェビシェフの不等式：
+                            $P(|X_n - Y| \geq \varepsilon) \leq E[(X_n - Y)^2] / \varepsilon^2$ から、
+                            平均二乗収束 $\Rightarrow$ 確率収束が分かります。
+                        </p>
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 分布収束（法則収束、convergence in distribution）</div>
+                        <div class="formula-block">
+                            $$F_n(x) = P(X_n \leq x) \to G(x) \quad \text{（$G$ のすべての連続点 $x$ で）} \quad \text{（$X_n \xrightarrow{d} X$）}$$
+                        </div>
+                        <p>
+                            直感：確率変数そのものが収束するのではなく、<strong>分布（確率のパターン）</strong>が収束する。最も弱い収束です。
+                        </p>
+                        <p>
+                            重要な注意：分布収束は「$X_n$ と $Y$ が同じ確率空間で定義されている」必要すらありません。
+                            「見た目の分布が近い」というだけです。
+                        </p>
+                    </div>
+
+                    <h3>収束の強さの関係</h3>
+                    <div class="formula-block">
+                        $$\text{概収束} \;\Rightarrow\; \text{確率収束} \;\Leftarrow\; \text{平均二乗収束}$$
+                        $$\text{確率収束} \;\Rightarrow\; \text{分布収束}$$
+                    </div>
+                    <p>
+                        矢印の逆は一般に成り立ちません。分布収束は最も弱いですが、統計的検定・推定で最もよく使う収束です。
+                    </p>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 確率収束と連続関数</div>
+                        <p>
+                            $X_n \xrightarrow{p} Y$ かつ $h$ が連続関数なら、$h(X_n) \xrightarrow{p} h(Y)$ が成り立ちます。
+                            たとえば $\bar{X}_n \xrightarrow{p} \mu$ なら $\sqrt{\bar{X}_n} \xrightarrow{p} \sqrt{\mu}$（$\mu > 0$ のとき）。
+                            これが「大数の法則の応用」の基本パターンです。
+                        </p>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                <!-- ======================================================== -->
+                <!-- 2. 大数の法則                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="lln">
+                    <h2><i class="fas fa-balance-scale"></i> 2. 大数の法則――「平均はやがて真の平均に近づく」</h2>
 
-                    <h3>大数の弱法則</h3>
-                    <p>$\{X_n\}$ が独立同一分布で $E[X_n] = \mu$、$V[X_n] = \sigma^2$ のとき、標本平均 $\bar{X}_n$ は $\mu$ に平均二乗収束する（したがって確率収束もする）。</p>
-                    <div class="formula-block">
-                        $$E[(\bar{X}_n - \mu)^2] = V[\bar{X}_n] = \frac{\sigma^2}{n} \to 0 \quad (n \to \infty)$$
+                    <h3>直感的な理解</h3>
+                    <p>
+                        コインを何度も投げると、表の出る割合はだんだん $1/2$ に近づきます。
+                        これが大数の法則（Law of Large Numbers）の直感です。
+                        データが多いほど標本平均は「真の平均」に近くなります。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 大数の弱法則（チェビシェフによる証明）</div>
+                        <p>$\{X_n\}$ が独立同一分布（i.i.d.）で $E[X_n] = \mu$、$V[X_n] = \sigma^2 &lt; \infty$ のとき、標本平均 $\bar{X}_n = \frac{1}{n}\sum_{i=1}^n X_i$ は $\mu$ に<strong>平均二乗収束</strong>する。</p>
+                        <div class="formula-block">
+                            $$E\!\left[(\bar{X}_n - \mu)^2\right] = V[\bar{X}_n] = \frac{\sigma^2}{n} \to 0 \quad (n \to \infty)$$
+                        </div>
+                        <p><strong>証明の仕組み：</strong></p>
+                        <ol class="step-list">
+                            <li>独立なら $V[\bar{X}_n] = \frac{1}{n^2}\sum_{i=1}^n V[X_i] = \frac{n\sigma^2}{n^2} = \frac{\sigma^2}{n}$</li>
+                            <li>$\sigma^2$ が有限なら $\frac{\sigma^2}{n} \to 0$</li>
+                            <li>平均二乗収束 $\Rightarrow$ 確率収束なので、$\bar{X}_n \xrightarrow{p} \mu$</li>
+                        </ol>
                     </div>
 
-                    <h3>少数法則（ポアソンの少数法則）</h3>
-                    <p>$X_n$ が試行回数 $n$、成功確率 $\lambda/n$ の二項分布に従うとき、$x$ を固定して $n \to \infty$ とすると</p>
+                    <h3>大数の法則の応用</h3>
+                    <p>
+                        連続関数 $h$ に対して、$h(\bar{X}_n) \xrightarrow{p} h(\mu)$ も成り立ちます。
+                        これにより「複雑な推定量の一致性」を証明できます。
+                    </p>
                     <div class="formula-block">
-                        $$P(X_n = x) \to e^{-\lambda} \frac{\lambda^x}{x!}$$
+                        <p>例：$X_1, \ldots, X_n \overset{\text{i.i.d.}}{\sim} U(0,1)$ のとき $E[X] = 1/2$。大数の法則より $\bar{X}_n \xrightarrow{p} 1/2$。
+                        連続性から $\sqrt{\bar{X}_n} \xrightarrow{p} 1/\sqrt{2}$。</p>
                     </div>
-                    <p>つまり $X_n$ はポアソン分布に分布収束する。</p>
+                </section>
 
-                    <h3>中心極限定理</h3>
-                    <p>$\{X_n\}$ が平均 $\mu$、分散 $\sigma^2$ の独立同一分布に従うとき、</p>
+                <!-- ======================================================== -->
+                <!-- 3. 少数法則                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="poisson-approx">
+                    <h2><i class="fas fa-dot-circle"></i> 3. 少数法則（ポアソン近似）――まれな事象のモデル</h2>
+
+                    <h3>設定と動機</h3>
+                    <p>
+                        成功確率が非常に小さいが、試行回数は非常に多い状況を考えます。
+                        たとえば「100万人に1人が持つ希少遺伝子を1000人調べる」という状況です。
+                        二項分布で計算しようとすると数値的に大変ですが、ポアソン分布で近似できます。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> ポアソンの少数法則</div>
+                        <p>$X_n \sim \mathrm{Bin}(n, \lambda/n)$（期待値 $= \lambda$ を保ちながら $n \to \infty$）のとき、$x$ を固定して</p>
+                        <div class="formula-block">
+                            $$P(X_n = x) \to e^{-\lambda} \frac{\lambda^x}{x!} \quad (n \to \infty)$$
+                        </div>
+                        <p>つまり $X_n$ はポアソン分布 $\mathrm{Po}(\lambda)$ に分布収束します。</p>
+                        <p><strong>証明の概略：</strong></p>
+                        <div class="formula-block">
+                            $$P(X_n = x) = \binom{n}{x}\left(\frac{\lambda}{n}\right)^x\left(1 - \frac{\lambda}{n}\right)^{n-x}$$
+                        </div>
+                        <div class="formula-block">
+                            $$\approx \frac{n^x}{x!} \cdot \frac{\lambda^x}{n^x} \cdot e^{-\lambda} = \frac{\lambda^x}{x!} e^{-\lambda}$$
+                        </div>
+                        <p>ここで $\binom{n}{x} \approx n^x/x!$（$n \gg x$）および $(1 - \lambda/n)^n \to e^{-\lambda}$ を使いました。</p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 いつポアソン近似を使うか</div>
+                        <p>
+                            二項分布 $\mathrm{Bin}(n, p)$ において、$n$ が大きく $p$ が小さく（$p \leq 0.1$）、$\lambda = np$ が有限の場合にポアソン近似 $\mathrm{Po}(\lambda)$ が使えます。
+                            たとえば $n = 1000,\; p = 0.002$ なら $\lambda = 2$ として $\mathrm{Po}(2)$ で近似します。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 4. 中心極限定理                                            -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="clt">
+                    <h2><i class="fas fa-chart-bell"></i> 4. 中心極限定理――「どんな分布でも、大標本では正規分布に」</h2>
+
+                    <h3>なぜこれが「中心」的なのか？</h3>
+                    <p>
+                        統計学の「核心（中心）」に位置する定理だから「中心極限定理」と呼ばれます。
+                        元の分布が何であれ（一様分布でも指数分布でも二項分布でも）、
+                        サンプルサイズが大きくなると標本平均は正規分布として振る舞います。
+                        これが「正規分布が至るところに現れる理由」です。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 中心極限定理（Lindeberg-Lévy 版）</div>
+                        <p>$\{X_n\}$ が i.i.d. で $E[X_n] = \mu$、$0 &lt; V[X_n] = \sigma^2 &lt; \infty$ のとき</p>
+                        <div class="formula-block">
+                            $$\sqrt{n}\,(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$$
+                        </div>
+                        <p>同値な表現：</p>
+                        <div class="formula-block">
+                            $$\frac{\sqrt{n}\,(\bar{X}_n - \mu)}{\sigma} = \frac{\bar{X}_n - \mu}{\sigma/\sqrt{n}} \xrightarrow{d} N(0, 1)$$
+                        </div>
+                    </div>
+
+                    <h3>証明の方針（モーメント母関数法）</h3>
+                    <p>
+                        $Y_i = (X_i - \mu)/\sigma$ とすると $E[Y_i] = 0$、$V[Y_i] = 1$。
+                        $\sqrt{n}\,\bar{Y}_n$ のモーメント母関数を計算します。
+                    </p>
                     <div class="formula-block">
-                        $$\sqrt{n}(\bar{X}_n - \mu) \xrightarrow{d} N(0, \sigma^2)$$
+                        $$M_{\sqrt{n}\bar{Y}_n}(t) = \left[M_{Y_1}\!\left(\frac{t}{\sqrt{n}}\right)\right]^n$$
                     </div>
-
-                    <h3>連続修正</h3>
-                    <p>離散分布を中心極限定理で正規近似するとき、区間を半整数にする（$\pm 0.5$ ずらす）と近似が良くなる。</p>
-
-                    <h3>分布収束の性質</h3>
-                    <ul>
-                        <li><strong>連続写像定理</strong>：$X_n \xrightarrow{d} X$ かつ $h$ が連続なら $h(X_n) \xrightarrow{d} h(X)$</li>
-                        <li><strong>スルツキーの補題</strong>：$X_n \xrightarrow{d} X$ かつ $Y_n \xrightarrow{p} c$（定数）なら $X_n + Y_n \xrightarrow{d} X + c$、$X_n Y_n \xrightarrow{d} cX$</li>
-                        <li><strong>モーメント母関数法</strong>：$M_n(t) \to M(t)$ が成り立つなら $X_n$ は $X$ に分布収束する</li>
-                    </ul>
-
-                    <h3>デルタ法</h3>
-                    <p>$\{X_n\}$ が平均 $\mu$、分散 $\sigma^2$ の独立同一分布に従い、$f$ が連続微分可能なら、テイラー展開により</p>
+                    <p>$M_{Y_1}(s) = 1 + 0 \cdot s + \frac{1}{2}s^2 + O(s^3)$（$Y_1$ の平均0・分散1から）を代入し、$s = t/\sqrt{n}$ として</p>
                     <div class="formula-block">
-                        $$\sqrt{n}(f(\bar{X}_n) - f(\mu)) \xrightarrow{d} N(0, (f'(\mu))^2 \sigma^2)$$
+                        $$\left[1 + \frac{t^2}{2n} + O\!\left(n^{-3/2}\right)\right]^n \to e^{t^2/2}$$
                     </div>
+                    <p>$e^{t^2/2}$ はまさに $N(0,1)$ のモーメント母関数です。</p>
+
+                    <h3>連続修正――離散分布への正規近似を精度よく行う</h3>
+                    <p>
+                        整数値をとる離散分布（二項分布など）を正規分布で近似するとき、
+                        区間の境界を $\pm 0.5$ ずらすと近似精度が上がります。
+                        これを<strong>連続修正（continuity correction）</strong>といいます。
+                    </p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-calculator"></i> 連続修正の使い方</div>
+                        <p>$X \sim \mathrm{Bin}(n, p)$ を正規近似で計算するとき：</p>
+                        <div class="formula-block">
+                            $$P(X \geq k) \approx P\!\left(Z \geq \frac{k - 0.5 - np}{\sqrt{np(1-p)}}\right)$$
+                        </div>
+                        <p>
+                            なぜ $-0.5$？：離散の $P(X \geq k)$ は「$k - 0.5$ より右の面積」に対応するためです。
+                            整数 $k$ に対して「$k$ という幅のある棒グラフ」をイメージすると、
+                            その棒の左端 $k - 0.5$ から積分するのが自然です。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 5. 分布収束の性質                                          -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="dist-properties">
+                    <h2><i class="fas fa-tools"></i> 5. 分布収束の性質――収束を「操作する」道具</h2>
+
+                    <h3>連続写像定理（Continuous Mapping Theorem）</h3>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 連続写像定理（CMT）</div>
+                        <p>$X_n \xrightarrow{d} X$ かつ $h$ が（$X$ の分布の意味で）連続関数なら</p>
+                        <div class="formula-block">
+                            $$h(X_n) \xrightarrow{d} h(X)$$
+                        </div>
+                        <p>
+                            例：$Z_n \xrightarrow{d} N(0,1)$ なら $Z_n^2 \xrightarrow{d} \chi^2(1)$（$h(z) = z^2$ は連続）。
+                            これは7章・8章の漸近理論で繰り返し使います。
+                        </p>
+                    </div>
+
+                    <h3>スルツキーの補題（Slutsky's Theorem）</h3>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> スルツキーの補題</div>
+                        <p>$X_n \xrightarrow{d} X$ かつ $Y_n \xrightarrow{p} c$（定数）のとき</p>
+                        <div class="formula-block">
+                            $$X_n + Y_n \xrightarrow{d} X + c, \quad X_n Y_n \xrightarrow{d} cX, \quad X_n / Y_n \xrightarrow{d} X/c \quad (c \neq 0)$$
+                        </div>
+                        <p>
+                            <strong>重要なポイント</strong>：$X_n$ と $Y_n$ の同時分布を知らなくてよい。
+                            $Y_n \xrightarrow{p} c$ だけ言えれば十分です。
+                        </p>
+                        <p>
+                            例：中心極限定理による $\sqrt{n}(\bar{X}_n - \mu)/\sigma \xrightarrow{d} N(0,1)$ において、
+                            $\sigma$ の代わりに一致推定量 $S_n \xrightarrow{p} \sigma$ を使っても、
+                            スルツキーの補題から $\sqrt{n}(\bar{X}_n - \mu)/S_n \xrightarrow{d} N(0,1)$ が言えます。
+                        </p>
+                    </div>
+
+                    <h3>モーメント母関数法</h3>
+                    <p>
+                        実用的な収束の証明手段として、モーメント母関数法があります。
+                    </p>
+                    <div class="formula-block">
+                        $$M_{X_n}(t) \to M(t) \quad \text{（ある近傍で全 $t$ について）} \implies X_n \xrightarrow{d} X$$
+                    </div>
+                    <p>ただし $M$ がある分布 $X$ のMGFである場合。中心極限定理の証明にも使いました。</p>
 
                     <h3>多次元の分布収束</h3>
-                    <ul>
-                        <li>$\{(X_n, Y_n)\}$ に対しても同様に分布収束を定義できる</li>
-                        <li>注意：$X_n$ と $Y_n$ がそれぞれ分布収束しても、同時分布の収束は保証されない（周辺分布だけでは同時分布を特定できない）</li>
-                        <li>ただし $X_n$ と $Y_n$ が<strong>独立</strong>であれば、収束先も独立となる</li>
-                        <li>連続写像定理も多次元に拡張可能</li>
-                    </ul>
+                    <p>
+                        ベクトル値確率変数 $(X_n, Y_n)$ についても分布収束が定義できます。
+                        ただし「$X_n$ と $Y_n$ がそれぞれ分布収束する」だけでは同時分布の収束は保証されません。
+                        ただし $X_n$ と $Y_n$ が<strong>独立</strong>なら、収束先も独立となります（独立性は収束で保たれる）。
+                    </p>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                <!-- ======================================================== -->
+                <!-- 6. デルタ法                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="delta-method">
+                    <h2><i class="fas fa-function"></i> 6. デルタ法――$f(\bar{X}_n)$ の漸近分布を求める</h2>
 
-                    <h3>例1：大数の法則と連続関数</h3>
-                    <p>$X_1, \ldots, X_n$ が区間 $[0, 1]$ 上の一様分布に従う独立な確率変数のとき、$Z_n = \sqrt{(X_1 + \cdots + X_n)/n}$ はどのような値に確率収束するか。</p>
-                    <div class="answer-block">
-                    <p><strong>解：</strong>大数の法則から $(X_1 + \cdots + X_n)/n$ は $E[X_n] = 1/2$ に確率収束。連続関数の性質より $Z_n \to 1/\sqrt{2}$ に確率収束する。</p>
+                    <h3>動機：なぜデルタ法が必要か？</h3>
+                    <p>
+                        中心極限定理は「標本平均の漸近分布」を教えてくれます。
+                        しかし実際には「標本分散の平方根」「標本比率の対数オッズ」など、
+                        標本平均の<em>関数</em>が推定量になることが多いです。
+                        デルタ法はこのような「関数の推定量」の漸近分布を求めるための道具です。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> デルタ法の定理</div>
+                        <p>$\{X_n\}$ が i.i.d. で $E[X_n] = \mu$、$V[X_n] = \sigma^2 &lt; \infty$。$f$ が $\mu$ の近傍で微分可能（$f'(\mu) \neq 0$）なら</p>
+                        <div class="formula-block">
+                            $$\sqrt{n}\,\bigl(f(\bar{X}_n) - f(\mu)\bigr) \xrightarrow{d} N\!\left(0,\; [f'(\mu)]^2 \sigma^2\right)$$
+                        </div>
                     </div>
 
-                    <h3>例3：極値分布（指数分布の最大値）</h3>
-                    <p>$\{X_n\}$ が独立に平均1の指数分布に従うとき、$M_n = \max\{X_1, \ldots, X_n\}$ の極限分布を求めよ。</p>
-                    <div class="answer-block">
-                    <p><strong>解：</strong>$P(M_n \leq x) = (1 - e^{-x})^n$。$x = y + \log n$ とおき $n \to \infty$ とすると $e^{-e^{-y}}$ に収束。よって $M_n - \log n$ は<strong>ガンベル分布</strong>に収束する。</p>
+                    <h3>証明（テイラー展開による）</h3>
+                    <p>$\bar{X}_n$ の $\mu$ の周りでのテイラー展開：</p>
+                    <div class="formula-block">
+                        $$f(\bar{X}_n) \approx f(\mu) + f'(\mu)(\bar{X}_n - \mu)$$
                     </div>
+                    <div class="formula-block">
+                        $$\sqrt{n}\,\bigl(f(\bar{X}_n) - f(\mu)\bigr) \approx f'(\mu) \cdot \sqrt{n}\,(\bar{X}_n - \mu) \xrightarrow{d} f'(\mu) \cdot N(0, \sigma^2) = N(0, [f'(\mu)]^2\sigma^2)$$
+                    </div>
+
+                    <h3>具体例</h3>
+                    <div class="formula-block">
+                        <p><strong>例1：$f(x) = x^3$ （3乗の推定量）</strong></p>
+                        <p>$f'(x) = 3x^2$ より $f'(\mu) = 3\mu^2$</p>
+                        $$\sqrt{n}(\bar{X}_n^3 - \mu^3) \xrightarrow{d} N(0,\; 9\mu^4\sigma^2)$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>例2：$f(x) = \log x$ （対数変換）</strong></p>
+                        <p>$f'(x) = 1/x$ より $f'(\mu) = 1/\mu$</p>
+                        $$\sqrt{n}(\log\bar{X}_n - \log\mu) \xrightarrow{d} N\!\left(0,\; \frac{\sigma^2}{\mu^2}\right)$$
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 デルタ法の実用的意義</div>
+                        <p>
+                            デルタ法は最尤推定量の信頼区間を構成するときにも使います。
+                            最尤推定量 $\hat\theta$ の漸近分散が $v(\theta)$ のとき、
+                            $g(\hat\theta)$ の漸近分散は $[g'(\theta)]^2 v(\theta)$ です（8章で詳述）。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 7. 極値分布                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="extreme-value">
+                    <h2><i class="fas fa-mountain"></i> 7. 極値分布――「最大値・最小値の極限分布」</h2>
+
+                    <h3>問題の設定</h3>
+                    <p>
+                        $n$ 個の独立同一分布の標本の最大値 $M_n = \max\{X_1, \ldots, X_n\}$ は、
+                        $n \to \infty$ でどんな分布に収束するでしょうか？
+                        「適切な正規化」をすれば3種類の分布のどれかに収束することが知られています。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 3種類の極値分布</div>
+                        <ul>
+                            <li>
+                                <strong>ガンベル分布</strong>（Gumbel）：正規分布・指数分布のような「裾の軽い」分布から生まれる
+                                <div class="formula-block">$$G(y) = e^{-e^{-y}}, \quad -\infty &lt; y &lt; \infty$$</div>
+                            </li>
+                            <li>
+                                <strong>フレシェ分布</strong>（Fréchet）：べき乗則的な「重い裾」の分布（コーシー・パレート分布など）から生まれる
+                                <div class="formula-block">$$G(y) = e^{-y^{-\alpha}}, \quad y > 0 \quad (\alpha > 0)$$</div>
+                            </li>
+                            <li>
+                                <strong>ワイブル分布</strong>（Weibull）：有限な上端点をもつ分布から生まれる
+                                <div class="formula-block">$$G(y) = e^{-(-y)^{\alpha}}, \quad y &lt; 0 \quad (\alpha > 0)$$</div>
+                            </li>
+                        </ul>
+                        <p>
+                            これら3つは、適当なパラメータ化によって<strong>一般化極値分布（GEV）</strong>として1つの族にまとめられます。
+                        </p>
+                    </div>
+
+                    <h3>具体例：指数分布の最大値</h3>
+                    <p>$\{X_n\}$ が独立に平均1の指数分布 $\mathrm{Exp}(1)$ に従う場合：</p>
+                    <div class="formula-block">
+                        $$P(M_n \leq x) = (1 - e^{-x})^n$$
+                    </div>
+                    <p>$x = y + \log n$（正規化）とおくと：</p>
+                    <div class="formula-block">
+                        $$P(M_n - \log n \leq y) = \left(1 - e^{-(y + \log n)}\right)^n = \left(1 - \frac{e^{-y}}{n}\right)^n \to e^{-e^{-y}}$$
+                    </div>
+                    <p>よって $M_n - \log n$ は<strong>ガンベル分布</strong>に収束します。</p>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 8. 例題・演習                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 8. 例題・演習</h2>
 
                     <h3>問7.1：中心極限定理と連続修正</h3>
-                    <p>普通のサイコロを30回投げたとき、3が10回以上現れる確率の近似値を求めよ（連続修正を行う）。</p>
+                    <p>普通のサイコロを30回投げたとき、3が10回以上現れる確率の近似値を求めよ（連続修正あり）。</p>
                     <div class="answer-block">
-                    <p><strong>解：</strong>$X_k$ を $k$ 回目に3が出たら1、そうでなければ0とする。$E[X_k] = 1/6$、$V[X_k] = 5/36$。</p>
-                    <p>求める確率は $P\!\left(\sum X_k \geq 10\right)$。連続修正により $9.5$ を用いて</p>
+                    <p>$X_k$：$k$ 回目に3が出たら1、そうでなければ0とすると、$X_k \sim \mathrm{Bin}(1, 1/6)$。
+                    $E[X_k] = 1/6$、$V[X_k] = (1/6)(5/6) = 5/36$。$S_{30} = \sum_{k=1}^{30} X_k$。</p>
+
+                    <p>連続修正により $P(S_{30} \geq 10) \approx P\!\left(S_{30} \geq 9.5\right)$。</p>
                     <div class="formula-block">
-                        $$P\!\left(\bar{X}_{30} \geq \frac{9.5}{30}\right) = P\!\left(Z \geq \frac{9.5/30 - 1/6}{\sqrt{5/36 \cdot 1/30}}\right) \approx P(Z \geq 2.2) \approx \mathbf{0.014}$$
+                        $$P(S_{30} \geq 9.5) = P\!\left(Z \geq \frac{9.5 - 30 \times \frac{1}{6}}{\sqrt{30 \times \frac{5}{36}}}\right) = P\!\left(Z \geq \frac{9.5 - 5}{\sqrt{25/6}}\right) = P\!\left(Z \geq \frac{4.5}{2.041}\right)$$
+    		    </div>
+                    <div class="formula-block">
+                        $$\approx P(Z \geq 2.20) \approx 1 - \Phi(2.20) \approx 1 - 0.9861 \approx \mathbf{0.014}$$
+                    </div>
+                    </div>
+
+                    <h3>例：大数の法則と連続関数の組み合わせ</h3>
+                    <p>$X_1, \ldots, X_n$ が区間 $[0, 1]$ 上の一様分布に従う独立な確率変数のとき、$Z_n = \sqrt{\bar{X}_n}$ はどのような値に確率収束するか。</p>
+                    <div class="answer-block">
+                    <p>大数の法則：$\bar{X}_n \xrightarrow{p} E[X] = 1/2$。</p>
+                    <p>$h(x) = \sqrt{x}$ は $[0,1]$ 上連続なので，連続関数の確率収束の性質より：</p>
+                    <div class="formula-block">
+                        $$Z_n = \sqrt{\bar{X}_n} \xrightarrow{p} \sqrt{1/2} = \frac{1}{\sqrt{2}} \approx 0.707$$
                     </div>
                     </div>
 
                     <h3>問7.2：デルタ法と分布収束</h3>
-                    <p>$\{X_n\}$ は平均 $\mu$、分散 $\sigma^2$ の独立同一分布。$\bar{X}_n$ を標本平均とする。</p>
+                    <p>$\{X_n\}$ は平均 $\mu$、分散 $\sigma^2$ の i.i.d.。$\bar{X}_n$ を標本平均とする。各問に答えよ。</p>
                     <div class="answer-block">
-                    <p><strong>(1)</strong> $\sqrt{n}(\bar{X}_n - \mu)/\sigma$ は中心極限定理そのものにより $\mathbf{N(0, 1)}$ に収束。</p>
-                    <p><strong>(2)</strong> $\sqrt{n}(\bar{X}_n^3 - \mu^3)$ の収束先：$f(x) = x^3$ とおくと $f'(x) = 3x^2$ より</p>
+                    <p><strong>(1) $\dfrac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma}$ の漸近分布は？</strong></p>
+                    <p>中心極限定理そのものにより $\mathbf{N(0, 1)}$ に収束。</p>
+
+                    <p><strong>(2) $\sqrt{n}(\bar{X}_n^3 - \mu^3)$ の漸近分布は？</strong></p>
+                    <p>$f(x) = x^3$ とおくと $f'(\mu) = 3\mu^2$。デルタ法より：</p>
                     <div class="formula-block">
-                        $$\sqrt{n}(\bar{X}_n^3 - \mu^3) \xrightarrow{d} \mathbf{N(0, 9\mu^4 \sigma^2)}$$
+                        $$\sqrt{n}(\bar{X}_n^3 - \mu^3) \xrightarrow{d} N(0,\; 9\mu^4\sigma^2)$$
                     </div>
-                    <p><strong>(3)</strong> $\left(\sqrt{n}(\bar{X}_n - \mu)/\sigma\right)^2$ は $N(0,1)$ の2乗なので<strong>自由度1のカイ二乗分布</strong>に分布収束する。</p>
+
+                    <p><strong>(3) $\left(\dfrac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma}\right)^2$ の漸近分布は？</strong></p>
+                    <p>$(1)$ より $N(0,1)$ に収束する量を2乗しているので、CMT（連続写像定理）から <strong>$\chi^2(1)$（自由度1のカイ二乗分布）</strong>。</p>
+                    </div>
+
+                    <h3>例：極値分布（指数分布の最大値）</h3>
+                    <p>$\{X_n\}$ が独立に平均1の指数分布に従うとき、$M_n = \max\{X_1, \ldots, X_n\}$ の極限分布を求めよ。</p>
+                    <div class="answer-block">
+                    <p>$P(M_n - \log n \leq y) \to e^{-e^{-y}}$（本文の導出より）。よって $M_n - \log n$ は<strong>ガンベル分布</strong>に収束します。</p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <!-- ======================================================== -->
+                <!-- 9. まとめ・ポイント                                        -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> 9. まとめ・ポイント</h2>
                     <ul>
-                        <li>確率収束は「確率1で収束」（概収束）より弱い概念だが、実用上はこちらで十分なことが多い</li>
-                        <li>中心極限定理は元の分布が何であれ（分散が有限なら）標本平均が正規分布に近づくという強力な結果</li>
-                        <li>離散分布の正規近似では連続修正を行うことで近似精度が向上する</li>
-                        <li>デルタ法は推定量 $f(\bar{X}_n)$ の漸近分布を求める標準的な手法で、推測統計で頻繁に利用される</li>
-                        <li>極値分布の収束先はガンベル・フレシェ・ワイブルの3種類のみ</li>
-                        <li>スルツキーの補題の要点：$X_n$ と $Y_n$ の同時分布を知る必要がない</li>
+                        <li><strong>収束の強さ</strong>：概収束 $\Rightarrow$ 確率収束 $\Leftarrow$ 平均二乗収束 $\Rightarrow$ 分布収束。統計で中心的に使うのは確率収束と分布収束。</li>
+                        <li><strong>大数の法則の強さ</strong>：サンプルサイズを増やせば必ず真の平均に近づく。ただし分散が有限であることが前提。</li>
+                        <li><strong>中心極限定理の意義</strong>：元の分布が何であれ（分散有限なら）、標本平均の標準化が正規分布に近づく。これが正規分布の「普遍性」の源です。</li>
+                        <li><strong>連続修正の有効性</strong>：離散分布の正規近似では $\pm 0.5$ のずらしで近似精度が上がる。特に二項分布の近似でよく使う。</li>
+                        <li><strong>スルツキーの補題の要点</strong>：$X_n \xrightarrow{d} X$、$Y_n \xrightarrow{p} c$ のとき $X_n/Y_n \xrightarrow{d} X/c$。$\sigma$ を $S_n$ で置き換える操作の正当化に使う。</li>
+                        <li><strong>デルタ法の実用</strong>：$f(\bar{X}_n)$ の漸近分散は $[f'(\mu)]^2\sigma^2/n$。推定量の信頼区間にも応用できる。</li>
+                        <li><strong>極値分布は3種類だけ</strong>：ガンベル（軽い裾）、フレシェ（重い裾）、ワイブル（有界な上端）。どれに収束するかは元の分布の裾の重さで決まる。</li>
                     </ul>
                 </section>
 

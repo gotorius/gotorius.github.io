@@ -52,284 +52,736 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#uniform">連続一様分布</a></li>
+                            <li><a href="#normal">正規分布</a></li>
+                            <li><a href="#gamma-family">指数・ガンマ・ベータ分布</a></li>
+                            <li><a href="#special-dist">コーシー・対数正規分布</a></li>
+                            <li><a href="#multivariate-normal">多変量正規分布</a></li>
+                            <li><a href="#sampling-dist">標本分布（χ²・t・F）</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. はじめに                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> 連続型確率分布――「連続」する世界を確率で表す</h2>
                     <p>
-                        第6章では、代表的な<strong>連続型分布</strong>について解説する。
-                        連続一様分布、正規分布、指数分布、ガンマ分布、ベータ分布、コーシー分布、対数正規分布、2変量正規分布、多変量正規分布、混合正規分布を扱う。
-                        また、正規分布からの無作為標本に基づく統計量の<strong>標本分布</strong>に現れるカイ二乗分布、$t$ 分布、$F$ 分布（非心分布を含む）も扱う。
+                        5章では「コインを何回投げたか」「不良品の個数」など、飛び飛びの整数値をとる<strong>離散型分布</strong>を学びました。
+                        しかし現実のデータにはもっと多くの「連続的な量」が存在します。
+                        身長・体重・血圧・待ち時間・株価の変動……これらはすべて実数値をとり、離散型分布では扱えません。
                     </p>
-                    <p><strong>キーワード：</strong>連続一様分布、正規分布、指数分布、ガンマ分布、ベータ分布、コーシー分布、対数正規分布、2変量正規分布、多変量正規分布、混合正規分布、カイ二乗分布、$t$ 分布、$F$ 分布（非心分布を含む）</p>
+                    <p>
+                        そこでこの章では、実数値を連続的にとる<strong>連続型確率分布</strong>を体系的に学びます。
+                        なかでも<strong>正規分布</strong>は「統計学の王様」とも呼ばれ、自然・社会現象の多くに現れるうえ、
+                        理論的な美しさも兼ね備えた最重要分布です。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
+                        <ol>
+                            <li>連続一様分布――すべての区間に「同じ密度」で存在する</li>
+                            <li>正規分布――釣り鐘型の黄金律、標準化・再生性・標本分布へのつながり</li>
+                            <li>指数・ガンマ・ベータ分布――正の実数上に広がる重要分布ファミリー</li>
+                            <li>コーシー・対数正規分布――「重い裾」と「乗法モデル」で使われる特殊分布</li>
+                            <li>多変量正規分布――複数の変数を同時に扱うための拡張</li>
+                            <li>標本分布（χ²・t・F）――正規分布からのサンプルが生み出す3つの重要分布</li>
+                        </ol>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <!-- ======================================================== -->
+                <!-- 1. 連続一様分布                                            -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="uniform">
+                    <h2><i class="fas fa-ruler-horizontal"></i> 1. 連続一様分布 $U(a, b)$</h2>
 
-                    <h3>連続一様分布 $U(a, b)$</h3>
+                    <h3>直感的イメージ</h3>
+                    <p>
+                        「区間 $[a, b]$ のどの値も同じ確率で起こる」という最もシンプルな連続分布です。
+                        たとえばバスの到着時刻が「0分〜10分後のどこかで均等」という状況が $U(0, 10)$ で表せます。
+                        「均等」ということは確率密度 $f(x)$ がどこでも同じ高さ（平坦）になります。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義</div>
+                        <p>$a &lt; b$ のとき、$X \sim U(a, b)$ の確率密度関数は</p>
+                        <div class="formula-block">
+                            $$f(x) = \frac{1}{b - a} \quad (a \leq x \leq b), \quad f(x) = 0 \quad (\text{それ以外})$$
+                        </div>
+                        <p>
+                            この式の解釈：区間の長さが $b - a$ で、その上に「高さ $\frac{1}{b-a}$」の長方形が乗っている。
+                            長方形の面積 $= (b-a) \times \frac{1}{b-a} = 1$ となって、確率の総和条件を満たします。
+                        </p>
+                    </div>
+
+                    <h3>期待値・分散の導出</h3>
+                    <p>定義に従って積分で計算します。</p>
+                    <div class="formula-block">
+                        $$E[X] = \int_a^b x \cdot \frac{1}{b-a}\, dx = \frac{1}{b-a} \cdot \frac{b^2 - a^2}{2} = \frac{(b+a)(b-a)}{2(b-a)} = \frac{a+b}{2}$$
+                    </div>
+                    <p>
+                        直感的に正しい結果：区間の真ん中が平均です。
+                        分散は $V[X] = E[X^2] - (E[X])^2$ を使って計算します。
+                    </p>
+                    <div class="formula-block">
+                        $$E[X^2] = \int_a^b x^2 \cdot \frac{1}{b-a}\, dx = \frac{a^2 + ab + b^2}{3}$$
+                    </div>
+                    <div class="formula-block">
+                        $$V[X] = \frac{a^2 + ab + b^2}{3} - \left(\frac{a+b}{2}\right)^2 = \frac{(b-a)^2}{12}$$
+                    </div>
+
+                    <h3>モーメント母関数</h3>
+                    <div class="formula-block">
+                        $$M(t) = E[e^{tX}] = \int_a^b e^{tx} \cdot \frac{1}{b-a}\, dx = \frac{e^{bt} - e^{at}}{(b-a)t} \quad (t \neq 0)$$
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 $U(0,1)$ の特別な役割</div>
+                        <p>
+                            $U(0, 1)$ は「乱数生成の基本」として特別重要です。
+                            コンピュータで生成する一様乱数はほぼ $U(0, 1)$ に従います。
+                            これを変換することで任意の分布に従う乱数が作れます（逆変換法）。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 2. 正規分布                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="normal">
+                    <h2><i class="fas fa-chart-bell"></i> 2. 正規分布 $N(\mu, \sigma^2)$――統計学の中心</h2>
+
+                    <h3>なぜ正規分布が重要なのか？</h3>
+                    <p>
+                        正規分布（ガウス分布）は統計学で最も重要な分布です。その理由は2つあります。
+                    </p>
                     <ul>
-                        <li>$a < b$ に対し、確率密度関数：$f(x) = \dfrac{1}{b - a} \quad (a \leq x \leq b)$</li>
-                        <li>$E[X] = \dfrac{a + b}{2}$、$V[X] = \dfrac{(b - a)^2}{12}$</li>
-                        <li>モーメント母関数：$M(t) = \dfrac{e^{bt} - e^{at}}{(b - a)t}$</li>
+                        <li><strong>自然現象への当てはまり</strong>：身長・測定誤差・試験の得点など、多くの現象が正規分布で近似できます。これは「独立な多数の微小変動の和」は正規分布に近づくという<em>中心極限定理</em>（7章）によります。</li>
+                        <li><strong>数学的な扱いやすさ</strong>：積分が解析的に計算でき、「再生性」「標準化」など便利な性質を多数持ちます。</li>
                     </ul>
 
-                    <h3>正規分布 $N(\mu, \sigma^2)$</h3>
-                    <ul>
-                        <li>確率密度関数：$f(x) = \dfrac{1}{\sqrt{2\pi}\,\sigma} \exp\!\left(-\dfrac{(x - \mu)^2}{2\sigma^2}\right)$</li>
-                        <li>$\mu = 0,\; \sigma = 1$ のとき $N(0, 1)$ を<strong>標準正規分布</strong>という。確率密度関数を $\phi(z)$、累積分布関数を $\Phi(z)$ で表す</li>
-                        <li>$E[X] = \mu$、$V[X] = \sigma^2$</li>
-                        <li>モーメント母関数：$M(t) = \exp\!\left(\mu t + \dfrac{\sigma^2 t^2}{2}\right)$</li>
-                        <li>$X \sim N(\mu, \sigma^2)$ のとき $Z = (X - \mu)/\sigma \sim N(0, 1)$（標準化）</li>
-                        <li><strong>再生性</strong>：$X_1 \sim N(\mu_1, \sigma_1^2),\; X_2 \sim N(\mu_2, \sigma_2^2)$ が独立 $\Rightarrow$ $X_1 + X_2 \sim N(\mu_1 + \mu_2,\; \sigma_1^2 + \sigma_2^2)$</li>
-                    </ul>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義</div>
+                        <p>平均 $\mu$（$-\infty < \mu < \infty$）、分散 $\sigma^2 > 0$ の正規分布 $N(\mu, \sigma^2)$ の確率密度関数：</p>
+                        <div class="formula-block">
+                            $$f(x) = \frac{1}{\sqrt{2\pi}\,\sigma} \exp\!\left(-\frac{(x - \mu)^2}{2\sigma^2}\right), \quad -\infty < x < \infty$$
+                        </div>
+                        <p>
+                            この式の各部分の意味：
+                        </p>
+                        <ul>
+                            <li>$\exp\!\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)$：$x = \mu$ のとき最大、$x$ が $\mu$ から離れるほど急速に0に近づく（釣り鐘型の形）</li>
+                            <li>$\frac{1}{\sqrt{2\pi}\,\sigma}$：「全体の面積が1になるよう正規化する定数」</li>
+                            <li>$\sigma$ が大きいほど横に広がり平坦に、小さいほど細く高くなります</li>
+                        </ul>
+                    </div>
 
-                    <h3>指数分布 $\mathrm{Exp}(\lambda)$</h3>
-                    <ul>
-                        <li>$\lambda > 0$ に対し、確率密度関数：$f(x) = \lambda e^{-\lambda x},\; x > 0$</li>
-                        <li>累積分布関数：$F(x) = 1 - e^{-\lambda x},\; x > 0$</li>
-                        <li>$E[X] = \dfrac{1}{\lambda}$、$V[X] = \dfrac{1}{\lambda^2}$</li>
-                        <li>モーメント母関数：$M(t) = \dfrac{\lambda}{\lambda - t},\; t < \lambda$</li>
-                        <li><strong>無記憶性</strong>：$P(X \geq t_1 + t_2 \mid X \geq t_1) = P(X \geq t_2)$</li>
-                    </ul>
+                    <h3>標準正規分布と標準化</h3>
+                    <p>
+                        $\mu = 0,\; \sigma = 1$ の場合を<strong>標準正規分布 $N(0, 1)$</strong> といいます。
+                        確率密度関数を $\phi(z)$、累積分布関数を $\Phi(z)$ と書きます。
+                        確率の計算では必ず標準正規分布表を使うため、一般の正規分布を標準正規分布に変換する操作が必要です。これを<strong>標準化</strong> といいます。
+                    </p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-exchange-alt"></i> 標準化の公式</div>
+                        <p>$X \sim N(\mu, \sigma^2)$ のとき</p>
+                        <div class="formula-block">
+                            $$Z = \frac{X - \mu}{\sigma} \sim N(0, 1)$$
+                        </div>
+                        <p>
+                            <strong>なぜこれで $N(0,1)$ になるか：</strong><br>
+                            平均を引いて「中心を0に移動」し、標準偏差で割って「スケールを1に正規化」します。
+                            どんな正規分布も $Z$ に変換すると同じ標準正規分布になるため、
+                            確率の計算を $\Phi(z)$ の表1つで済ませることができます。
+                        </p>
+                        <p>→ 例：$X \sim N(65, 10^2)$ のとき、$P(X \leq 75) = P\!\left(Z \leq \frac{75-65}{10}\right) = P(Z \leq 1) = \Phi(1) \approx 0.841$</p>
+                    </div>
 
-                    <h3>ガンマ分布 $\mathrm{Ga}(a, b)$</h3>
-                    <ul>
-                        <li>$a > 0,\; b > 0$ に対し、確率密度関数：$f(x) = \dfrac{1}{\Gamma(a)\, b^a}\, x^{a-1}\, e^{-x/b},\; x > 0$</li>
-                        <li>$\Gamma(a) = \displaystyle\int_0^\infty x^{a-1} e^{-x}\, dx$（ガンマ関数）</li>
-                        <li>$a = 1$ のとき $\mathrm{Ga}(1, b) = \mathrm{Exp}(1/b)$</li>
-                        <li>$E[X] = ab$、$V[X] = ab^2$</li>
-                        <li>モーメント母関数：$M(t) = (1 - bt)^{-a},\; t < 1/b$</li>
-                        <li><strong>再生性</strong>：$X_1 \sim \mathrm{Ga}(a_1, b),\; X_2 \sim \mathrm{Ga}(a_2, b)$ が独立 $\Rightarrow$ $X_1 + X_2 \sim \mathrm{Ga}(a_1 + a_2, b)$</li>
-                    </ul>
+                    <h3>期待値・分散・モーメント母関数</h3>
+                    <div class="formula-block">
+                        $$E[X] = \mu, \quad V[X] = \sigma^2$$
+                        $$M(t) = \exp\!\left(\mu t + \frac{\sigma^2 t^2}{2}\right)$$
+                    </div>
+                    <p>
+                        モーメント母関数の形を覚えておくと、後で「再生性の証明」や「積率の計算」に非常に役立ちます。
+                    </p>
 
-                    <h3>ベータ分布 $\mathrm{Be}(a, b)$</h3>
-                    <ul>
-                        <li>$a > 0,\; b > 0$ に対し、確率密度関数：$f(x) = \dfrac{1}{B(a, b)}\, x^{a-1}(1 - x)^{b-1},\; 0 < x < 1$</li>
-                        <li>$B(a, b) = \displaystyle\int_0^1 x^{a-1}(1-x)^{b-1}\, dx$（ベータ関数）</li>
-                        <li>$E[X] = \dfrac{a}{a + b}$、$V[X] = \dfrac{ab}{(a+b)^2(a+b+1)}$</li>
-                        <li>ガンマ分布からの導出：$X_1 \sim \mathrm{Ga}(a_1, b),\; X_2 \sim \mathrm{Ga}(a_2, b)$ が独立のとき $\dfrac{X_1}{X_1 + X_2} \sim \mathrm{Be}(a_1, a_2)$</li>
-                    </ul>
+                    <h3>正規分布の再生性</h3>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-plus"></i> 再生性（正規分布の和も正規分布）</div>
+                        <p>$X_1 \sim N(\mu_1, \sigma_1^2)$ と $X_2 \sim N(\mu_2, \sigma_2^2)$ が<strong>独立</strong>なら</p>
+                        <div class="formula-block">
+                            $$X_1 + X_2 \sim N(\mu_1 + \mu_2,\; \sigma_1^2 + \sigma_2^2)$$
+                        </div>
+                        <p><strong>証明の方針（モーメント母関数法）：</strong></p>
+                        <div class="formula-block">
+                            $$M_{X_1+X_2}(t) = M_{X_1}(t) \cdot M_{X_2}(t) \quad \text{（独立なら積になる）}$$
+                        </div>
+                        <div class="formula-block">
+                            $$= e^{\mu_1 t + \sigma_1^2 t^2/2} \cdot e^{\mu_2 t + \sigma_2^2 t^2/2} = e^{(\mu_1+\mu_2)t + (\sigma_1^2+\sigma_2^2)t^2/2}$$
+                        </div>
+                        <p>これは $N(\mu_1+\mu_2, \sigma_1^2+\sigma_2^2)$ のモーメント母関数と一致します。</p>
+                    </div>
 
-                    <h3>コーシー分布</h3>
-                    <ul>
-                        <li>確率密度関数：$f(x) = \dfrac{1}{\pi(1 + x^2)}$</li>
-                        <li>裾が重い分布であり、<strong>平均やより高次のモーメントが存在しない</strong></li>
-                        <li>一般に位置母数 $\mu$ と尺度母数 $\sigma > 0$ を導入し $\dfrac{1}{\pi\sigma\!\left(1 + \left(\frac{x - \mu}{\sigma}\right)^2\right)}$ とする</li>
-                    </ul>
+                    <div class="memo-box">
+                        <div class="box-title">💡 なぜ「分散が足し算」になるのか</div>
+                        <p>
+                            独立な正規分布を足すと、平均は足し算（当然）ですが、分散も足し算になります。
+                            これは「ばらつき（誤差）が独立に重なる」イメージです。
+                            たとえば2つの測定誤差（それぞれ独立に正規分布）を足すと、合計の不確かさも大きくなります。
+                            一般に、独立な確率変数の和では分散が加算されます（正規分布に限らない）。
+                        </p>
+                    </div>
+                </section>
 
-                    <h3>対数正規分布 $\Lambda(\mu, \sigma^2)$</h3>
-                    <ul>
-                        <li>$Y \sim N(\mu, \sigma^2)$ のとき $X = e^Y > 0$ が従う分布</li>
-                        <li>確率密度関数：$f(x) = \dfrac{1}{\sqrt{2\pi}\,\sigma\, x} \exp\!\left(-\dfrac{(\log x - \mu)^2}{2\sigma^2}\right),\; x > 0$</li>
-                        <li>$X \sim \Lambda(\mu, \sigma^2)$ のとき $\log X \sim N(\mu, \sigma^2)$</li>
-                        <li>$E[X] = \exp\!\left(\mu + \dfrac{\sigma^2}{2}\right)$、$V[X] = \exp(2\mu + \sigma^2)(e^{\sigma^2} - 1)$</li>
-                    </ul>
+                <!-- ======================================================== -->
+                <!-- 3. 指数・ガンマ・ベータ分布                               -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="gamma-family">
+                    <h2><i class="fas fa-clock"></i> 3. 指数・ガンマ・ベータ分布――正の実数上の分布ファミリー</h2>
 
-                    <h3>2変量正規分布 $N_2(\boldsymbol{\mu}, \Sigma)$</h3>
-                    <ul>
-                        <li>平均ベクトル $\boldsymbol{\mu} = (\mu_1, \mu_2)^\top$、分散共分散行列 $\Sigma = \begin{pmatrix} \sigma_1^2 & \rho\sigma_1\sigma_2 \\ \rho\sigma_1\sigma_2 & \sigma_2^2 \end{pmatrix}$</li>
-                        <li>$\rho$ は $X_1$ と $X_2$ の相関係数。$\rho = 0$ のとき $X_1$ と $X_2$ は独立</li>
-                        <li>周辺分布：$X_1 \sim N(\mu_1, \sigma_1^2)$、$X_2 \sim N(\mu_2, \sigma_2^2)$</li>
-                        <li>条件付き分布 $X_2 \mid X_1 = x_1$：
-                            <ul>
-                                <li>期待値：$\mu_2 + \rho\dfrac{\sigma_2}{\sigma_1}(x_1 - \mu_1)$</li>
-                                <li>分散：$\sigma_2^2(1 - \rho^2)$</li>
-                            </ul>
-                        </li>
-                        <li>1次結合：任意の $\mathbf{c} = (c_1, c_2)^\top$ に対し $\mathbf{c}^\top \mathbf{X} \sim N(\mathbf{c}^\top \boldsymbol{\mu},\; \mathbf{c}^\top \Sigma \mathbf{c})$</li>
-                        <li>モーメント母関数：$M(\mathbf{t}) = \exp\!\left(\boldsymbol{\mu}^\top \mathbf{t} + \dfrac{1}{2}\mathbf{t}^\top \Sigma \mathbf{t}\right)$</li>
-                    </ul>
+                    <h3>指数分布 $\mathrm{Exp}(\lambda)$――「次の出来事まで」の時間</h3>
+                    <p>
+                        指数分布は「次のバス・地震・故障などが発生するまでの待ち時間」のモデルです。
+                        ポアソン過程（単位時間にランダムに $\lambda$ 回起きるプロセス）において、
+                        イベント間の時間は指数分布に従います。
+                    </p>
 
-                    <h3>多変量正規分布 $N_p(\boldsymbol{\mu}, \Sigma)$</h3>
-                    <ul>
-                        <li>2変量の一般化。$p$ 次ベクトル $\boldsymbol{\mu}$ と $p \times p$ 正定値行列 $\Sigma$ に対する分布</li>
-                        <li>確率密度関数：$f(\mathbf{x}) = \dfrac{1}{(2\pi)^{p/2} (\det\Sigma)^{1/2}} \exp\!\left(-\dfrac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top \Sigma^{-1}(\mathbf{x} - \boldsymbol{\mu})\right)$</li>
-                        <li>モーメント母関数は2変量の場合と同じ形</li>
-                    </ul>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義</div>
+                        <p>$\lambda > 0$ をレート（単位時間あたりの平均発生回数）とすると</p>
+                        <div class="formula-block">
+                            $$f(x) = \lambda e^{-\lambda x}, \quad x > 0$$
+                            $$F(x) = 1 - e^{-\lambda x}, \quad x > 0$$
+                        </div>
+                        <p>
+                            直感：$\lambda$ が大きいほど（頻繁に起きるほど）待ち時間は短い。
+                            $E[X] = 1/\lambda$ なので「平均待ち時間 $=$ 発生頻度の逆数」です。
+                        </p>
+                    </div>
+
+                    <div class="formula-block">
+                        $$E[X] = \frac{1}{\lambda}, \quad V[X] = \frac{1}{\lambda^2}, \quad M(t) = \frac{\lambda}{\lambda - t} \quad (t < \lambda)$$
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 無記憶性（指数分布の最大の特徴）</div>
+                        <div class="formula-block">
+                            $$P(X \geq t_1 + t_2 \mid X \geq t_1) = P(X \geq t_2)$$
+                        </div>
+                        <p>
+                            直感：「すでに $t_1$ 分待っていた」という情報が、「あとどれだけ待つか」の確率に一切影響しない。
+                            つまり<strong>「過去を忘れる」</strong>性質です。
+                        </p>
+                        <p><strong>証明：</strong></p>
+                        <div class="formula-block">
+                            $$P(X \geq t_1 + t_2 \mid X \geq t_1) = \frac{e^{-\lambda(t_1+t_2)}}{e^{-\lambda t_1}} = e^{-\lambda t_2} = P(X \geq t_2) \checkmark$$
+                        </div>
+                        <p>
+                            連続分布で無記憶性をもつのは指数分布だけです（離散では幾何分布）。
+                        </p>
+                    </div>
+
+                    <h3>ガンマ分布 $\mathrm{Ga}(a, b)$――指数分布の「$a$ 回分の和」</h3>
+                    <p>
+                        ガンマ分布は指数分布を一般化したもので「$a$ 個の独立な指数分布の和が従う分布」です。
+                        たとえば「ポアソン過程で $a$ 番目のイベントまでの待ち時間」がガンマ分布に従います。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義</div>
+                        <p>形状パラメータ $a > 0$、尺度パラメータ $b > 0$ に対して</p>
+                        <div class="formula-block">
+                            $$f(x) = \frac{1}{\Gamma(a)\, b^a}\, x^{a-1}\, e^{-x/b}, \quad x > 0$$
+                        </div>
+                        <p>
+                            ここで $\Gamma(a) = \displaystyle\int_0^\infty x^{a-1} e^{-x}\, dx$ は<strong>ガンマ関数</strong>（積分定数の役割を担う正規化因子）です。
+                        </p>
+                        <p>重要な特殊ケース：$a = 1$ のとき $\mathrm{Ga}(1, b) = \mathrm{Exp}(1/b)$（指数分布）。</p>
+                    </div>
+
+                    <div class="formula-block">
+                        $$E[X] = ab, \quad V[X] = ab^2, \quad M(t) = (1 - bt)^{-a} \quad (t < 1/b)$$
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-plus"></i> ガンマ分布の再生性</div>
+                        <p>$X_1 \sim \mathrm{Ga}(a_1, b)$ と $X_2 \sim \mathrm{Ga}(a_2, b)$ が独立（スケール $b$ が同じ）なら</p>
+                        <div class="formula-block">
+                            $$X_1 + X_2 \sim \mathrm{Ga}(a_1 + a_2, b)$$
+                        </div>
+                        <p>
+                            証明はモーメント母関数の積：$(1-bt)^{-a_1} \cdot (1-bt)^{-a_2} = (1-bt)^{-(a_1+a_2)}$。
+                        </p>
+                    </div>
+
+                    <h3>ベータ分布 $\mathrm{Be}(a, b)$――$[0,1]$ 上の確率の確率分布</h3>
+                    <p>
+                        ベータ分布は $0 < x < 1$ 上で定義され、「確率そのもの（$0$〜$1$の値）」をモデル化するのに使います。
+                        ベイズ統計では「コインの表の出る確率 $p$ の事前分布」としてよく使われます。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義</div>
+                        <p>$a > 0,\; b > 0$ に対して</p>
+                        <div class="formula-block">
+                            $$f(x) = \frac{1}{B(a, b)}\, x^{a-1}(1 - x)^{b-1}, \quad 0 < x < 1$$
+                        </div>
+                        <p>ここで $B(a, b) = \displaystyle\int_0^1 x^{a-1}(1-x)^{b-1}\, dx = \dfrac{\Gamma(a)\Gamma(b)}{\Gamma(a+b)}$（ベータ関数）。</p>
+                    </div>
+
+                    <div class="formula-block">
+                        $$E[X] = \frac{a}{a + b}, \quad V[X] = \frac{ab}{(a+b)^2(a+b+1)}$$
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 ガンマ分布からベータ分布を作る</div>
+                        <p>
+                            $X_1 \sim \mathrm{Ga}(a_1, b)$、$X_2 \sim \mathrm{Ga}(a_2, b)$ が独立のとき、
+                            比 $\dfrac{X_1}{X_1 + X_2} \sim \mathrm{Be}(a_1, a_2)$ に従います。
+                            これは「全体に占める割合」が自然にベータ分布になるという性質です。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 4. コーシー・対数正規分布                                  -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="special-dist">
+                    <h2><i class="fas fa-exclamation-triangle"></i> 4. コーシー・対数正規分布――特殊な性質をもつ分布</h2>
+
+                    <h3>コーシー分布――「平均が存在しない」分布</h3>
+                    <p>
+                        コーシー分布は一見普通の釣り鐘型に見えますが、正規分布よりはるかに「裾が重い」分布です。
+                        裾が重すぎて、<strong>平均も分散も存在しない</strong>という特異な性質を持ちます。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義（標準コーシー分布）</div>
+                        <div class="formula-block">
+                            $$f(x) = \frac{1}{\pi(1 + x^2)}, \quad -\infty < x < \infty$$
+                        </div>
+                        <p>
+                            一般形では位置母数 $\mu$ と尺度母数 $\sigma > 0$ を使って
+                            $f(x) = \dfrac{1}{\pi\sigma\left(1 + \left(\frac{x-\mu}{\sigma}\right)^2\right)}$ と書きます。
+                        </p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 なぜ平均が存在しないのか</div>
+                        <p>
+                            平均は $E[X] = \int_{-\infty}^\infty x \cdot f(x)\, dx$ で定義されますが、
+                            コーシー分布では $x f(x) \sim \frac{1}{\pi |x|}$（$|x| \to \infty$）となり、
+                            この積分が発散（収束しない）してしまいます。
+                            裾が $|x|^{-1}$ より速く減衰しないため「重すぎる」のです。
+                        </p>
+                        <p>
+                            また $t$ 分布（後述）の自由度 $n = 1$ がコーシー分布と一致します。
+                        </p>
+                    </div>
+
+                    <h3>対数正規分布 $\Lambda(\mu, \sigma^2)$――「掛け算のばらつき」</h3>
+                    <p>
+                        「加法モデル（足し算による誤差）」が正規分布に対応するなら、「乗法モデル（掛け算による誤差）」に対応するのが対数正規分布です。
+                        株価・企業規模・年収・細胞の大きさなど、「何%変化するか」が一定なものは対数正規分布で表せます。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義と性質</div>
+                        <p>$Y \sim N(\mu, \sigma^2)$ のとき $X = e^Y > 0$ が従う分布を<strong>対数正規分布</strong>といいます。</p>
+                        <div class="formula-block">
+                            $$f(x) = \frac{1}{\sqrt{2\pi}\,\sigma\, x} \exp\!\left(-\frac{(\log x - \mu)^2}{2\sigma^2}\right), \quad x > 0$$
+                        </div>
+                        <p>
+                            <strong>直感的な定義</strong>：$X$ が対数正規分布に従う $\Longleftrightarrow$ $\log X$ が正規分布に従う。
+                            つまり、値を対数変換すると正規分布になる分布です。
+                        </p>
+                    </div>
+
+                    <div class="formula-block">
+                        $$E[X] = \exp\!\left(\mu + \frac{\sigma^2}{2}\right), \quad V[X] = \exp(2\mu + \sigma^2)(e^{\sigma^2} - 1)$$
+                    </div>
+
+                    <p>
+                        なぜ $E[X] = e^{\mu + \sigma^2/2}$ なのか？$E[X] = E[e^Y]$ はモーメント母関数の $t = 1$ での値 $M_Y(1) = e^{\mu + \sigma^2/2}$ に等しいからです。
+                    </p>
 
                     <h3>混合正規分布</h3>
-                    <ul>
-                        <li>$K$ 個の正規分布 $N(\mu_j, \sigma_j^2)$ の確率密度関数 $f_j(x)$ と混合比率 $p_1, \ldots, p_K$（$p_j > 0$、$\sum p_j = 1$）に対し</li>
-                        <li>確率密度関数：$f(x) = p_1 f_1(x) + \cdots + p_K f_K(x)$</li>
-                        <li>$K = 2$、$p_1 = p_2 = 1/2$、$\sigma_1 = \sigma_2 = \sigma$ のとき、二峰性の条件は $|\mu_1 - \mu_2|/\sigma > 2$</li>
-                    </ul>
+                    <p>
+                        複数の正規分布を重み付きで「混ぜ合わせた」分布です。
+                        文系・理系が混在するクラスの試験得点分布や、複数の部品メーカーが混在する製品の寿命分布など、
+                        「いくつかの異なる集団が混ざっている」状況でよく現れます。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義</div>
+                        <p>$K$ 個の正規分布 $N(\mu_j, \sigma_j^2)$（$j = 1, \ldots, K$）と混合比率 $p_j > 0$（$\sum p_j = 1$）に対して</p>
+                        <div class="formula-block">
+                            $$f(x) = \sum_{j=1}^K p_j \cdot \frac{1}{\sqrt{2\pi}\,\sigma_j} \exp\!\left(-\frac{(x-\mu_j)^2}{2\sigma_j^2}\right)$$
+                        </div>
+                        <p>
+                            確率的解釈：確率 $p_j$ でグループ $j$ を選び、そのグループの正規分布 $N(\mu_j, \sigma_j^2)$ から値をとります。
+                        </p>
+                        <p>
+                            <strong>二峰性の条件</strong>（$K=2$、$p_1 = p_2 = 1/2$、$\sigma_1 = \sigma_2 = \sigma$ の場合）：
+                            $\dfrac{|\mu_1 - \mu_2|}{\sigma} > 2$ のとき二峰性（山が2つ）が現れます。
+                        </p>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 標本分布</h2>
+                <!-- ======================================================== -->
+                <!-- 5. 多変量正規分布                                          -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="multivariate-normal">
+                    <h2><i class="fas fa-project-diagram"></i> 5. 多変量正規分布 $N_p(\boldsymbol{\mu}, \Sigma)$――複数変数の同時分布</h2>
 
-                    <h3>カイ二乗分布 $\chi^2(n)$</h3>
-                    <ul>
-                        <li>$Z_i \sim N(0, 1)$（$i = 1, \ldots, n$）が互いに独立のとき $Y = Z_1^2 + \cdots + Z_n^2 \sim \chi^2(n)$</li>
-                        <li>ガンマ分布 $\mathrm{Ga}(n/2, 2)$ と一致</li>
-                        <li>$E[Y] = n$、$V[Y] = 2n$</li>
-                        <li>モーメント母関数：$M(t) = (1 - 2t)^{-n/2},\; t < 1/2$</li>
-                        <li><strong>再生性</strong>：$Y_1 \sim \chi^2(n_1),\; Y_2 \sim \chi^2(n_2)$ が独立 $\Rightarrow$ $Y_1 + Y_2 \sim \chi^2(n_1 + n_2)$</li>
-                        <li>正規母集団からの標本分散：$X_1, \ldots, X_n \sim N(\mu, \sigma^2)$ のとき
-                            <ul>
-                                <li>$\bar{X}$ と $S^2$ は独立</li>
-                                <li>$\sqrt{n}(\bar{X} - \mu)/\sigma \sim N(0, 1)$</li>
-                                <li>$(n-1)S^2/\sigma^2 = \displaystyle\sum_{i=1}^{n}\left(\frac{X_i - \bar{X}}{\sigma}\right)^2 \sim \chi^2(n-1)$</li>
-                            </ul>
-                        </li>
-                    </ul>
+                    <h3>なぜ多変量が必要なのか？</h3>
+                    <p>
+                        現実のデータでは複数の変数が同時に存在し、互いに相関することがほとんどです。
+                        例えば英語の Listening 点数と Reading 点数は独立ではなく、英語力が高い人は両方高い傾向があります。
+                        これを「2つの変数をまとめた1つの確率分布」で表すのが<strong>多変量正規分布</strong>です。
+                    </p>
 
-                    <h3>非心カイ二乗分布 $\chi^2(n, \lambda)$</h3>
-                    <ul>
-                        <li>$Z_i \sim N(\mu_i, 1)$ のとき $Y = Z_1^2 + \cdots + Z_n^2 \sim \chi^2(n, \lambda)$（$\lambda = \mu_1^2 + \cdots + \mu_n^2$）</li>
-                        <li>$\chi^2(n, 0) = \chi^2(n)$</li>
-                        <li>$E[Y] = n + \lambda$、$V[Y] = 2n + 4\lambda$</li>
-                        <li><strong>再生性</strong>：$Y_1 \sim \chi^2(n_1, \lambda_1),\; Y_2 \sim \chi^2(n_2, \lambda_2)$ が独立 $\Rightarrow$ $Y_1 + Y_2 \sim \chi^2(n_1 + n_2,\; \lambda_1 + \lambda_2)$</li>
-                    </ul>
+                    <h3>2変量正規分布 $N_2(\boldsymbol{\mu}, \Sigma)$</h3>
 
-                    <h3>$t$ 分布 $t(n)$</h3>
-                    <ul>
-                        <li>$Z \sim N(0, 1),\; Y \sim \chi^2(n)$ が独立のとき $T = \dfrac{Z}{\sqrt{Y/n}} \sim t(n)$</li>
-                        <li>確率密度関数：$f(t) = \dfrac{\Gamma((n+1)/2)}{\sqrt{n\pi}\,\Gamma(n/2)} \left(1 + \dfrac{t^2}{n}\right)^{-(n+1)/2}$</li>
-                        <li>$n = 1$ のとき<strong>コーシー分布</strong>に一致</li>
-                        <li>$n \to \infty$ のとき標準正規分布 $N(0, 1)$ に収束</li>
-                        <li>$E[T] = 0 \;(n > 1)$、$V[T] = \dfrac{n}{n-2} \;(n > 2)$</li>
-                        <li>$n = 1$ のとき平均は存在せず、$n = 1, 2$ のとき分散は存在しない</li>
-                    </ul>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> パラメータの定義</div>
+                        <p>
+                            2次元確率ベクトル $(X_1, X_2)^\top$ に対して、以下のパラメータで分布が決まります。
+                        </p>
+                        <ul>
+                            <li><strong>平均ベクトル</strong>：$\boldsymbol{\mu} = (\mu_1, \mu_2)^\top$</li>
+                            <li><strong>分散共分散行列</strong>：$\Sigma = \begin{pmatrix} \sigma_1^2 & \rho\sigma_1\sigma_2 \\ \rho\sigma_1\sigma_2 & \sigma_2^2 \end{pmatrix}$</li>
+                        </ul>
+                        <p>
+                            ここで $\rho$（$-1 \leq \rho \leq 1$）は $X_1$ と $X_2$ の<strong>相関係数</strong>です。
+                            $\rho = 0$ のとき $X_1$ と $X_2$ は<strong>独立</strong>（正規分布では無相関 $\Leftrightarrow$ 独立が成り立つ）。
+                        </p>
+                    </div>
 
-                    <h3>非心 $t$ 分布 $t(n, \lambda)$</h3>
-                    <ul>
-                        <li>$t$ 分布の定義で $Z \sim N(\lambda, 1)$ とした場合。$t(n, 0) = t(n)$</li>
-                        <li>$t$ 統計量：$t = \dfrac{\bar{X} - \mu_0}{S/\sqrt{n}}$
-                            <ul>
-                                <li>$\mu = \mu_0$ のとき $t \sim t(n-1)$</li>
-                                <li>$\mu \neq \mu_0$ のとき $t \sim t(n-1,\; \sqrt{n}\,\mu/\sigma)$（非心 $t$ 分布）</li>
-                            </ul>
-                        </li>
-                        <li>$t$ 分布は検定統計量の帰無分布に、非心 $t$ 分布は検出力に現れる</li>
-                    </ul>
+                    <h3>周辺分布・条件付き分布</h3>
+                    <p>
+                        多変量正規分布では「どれか1変数だけ見た分布（周辺分布）」は個別の正規分布になり、
+                        「もう一方の値が判明したときの条件付き分布」も正規分布になります。
+                        これは多変量正規分布の重要な性質です。
+                    </p>
 
-                    <h3>$F$ 分布 $F(n_1, n_2)$</h3>
-                    <ul>
-                        <li>$Y_1 \sim \chi^2(n_1),\; Y_2 \sim \chi^2(n_2)$ が独立のとき $X = \dfrac{Y_1/n_1}{Y_2/n_2} \sim F(n_1, n_2)$</li>
-                        <li>$E[X] = \dfrac{n_2}{n_2 - 2} \;(n_2 > 2)$、$V[X] = \dfrac{2n_2^2(n_1 + n_2 - 2)}{n_1(n_2 - 2)^2(n_2 - 4)} \;(n_2 > 4)$</li>
-                        <li>2標本の標本分散の比：$\dfrac{S_1^2/\sigma_1^2}{S_2^2/\sigma_2^2} \sim F(n_1 - 1, n_2 - 1)$</li>
-                    </ul>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-calculator"></i> 条件付き分布の公式</div>
+                        <p>$X_2 \mid X_1 = x_1$ の条件付き分布は $N(\mu_{2|1},\; \sigma_{2|1}^2)$ で、</p>
+                        <div class="formula-block">
+                            $$\mu_{2|1} = \mu_2 + \rho\frac{\sigma_2}{\sigma_1}(x_1 - \mu_1)$$
+                            $$\sigma_{2|1}^2 = \sigma_2^2(1 - \rho^2)$$
+                        </div>
+                        <p>
+                            直感：$X_1 = x_1$ がわかると、$X_2$ の予測が改善されます。
+                            $\rho$ が大きいほど「$x_1$ の情報が $X_2$ の予測に与える影響が大きい」。
+                            また、$\rho^2$ の分だけ「不確かさ（分散）」が減ります。
+                        </p>
+                    </div>
 
-                    <h3>非心 $F$ 分布 $F(n_1, n_2, \lambda)$</h3>
-                    <ul>
-                        <li>$F$ 分布の定義で $Y_1 \sim \chi^2(n_1, \lambda)$ とした場合。$F(n_1, n_2, 0) = F(n_1, n_2)$</li>
-                        <li>$T \sim t(n, \lambda)$ のとき $T^2 \sim F(1, n, \lambda^2)$</li>
-                        <li>回帰モデルや分散分析モデルにおける $F$ 検定の検出力の計算に現れる</li>
-                    </ul>
+                    <h3>線形結合の性質</h3>
+                    <div class="formula-block">
+                        $$\mathbf{c}^\top \mathbf{X} = c_1 X_1 + c_2 X_2 \sim N(\mathbf{c}^\top \boldsymbol{\mu},\; \mathbf{c}^\top \Sigma \mathbf{c})$$
+                    </div>
+                    <p>
+                        任意の線形結合（係数を変えた足し算）も正規分布になります。
+                        これは「多変量正規分布の任意の方向への射影も正規分布」ということで、多変量正規分布の安定性を示しています。
+                    </p>
+
+                    <h3>$p$ 変量への一般化 $N_p(\boldsymbol{\mu}, \Sigma)$</h3>
+                    <p>
+                        2変量を $p$ 変量に自然に拡張できます。
+                        $p$ 次元確率ベクトル $\mathbf{X} = (X_1, \ldots, X_p)^\top$ に対して、
+                        $p$ 次元平均ベクトル $\boldsymbol{\mu}$ と $p \times p$ 正定値対称行列（分散共分散行列）$\Sigma$ でパラメータ化されます。
+                    </p>
+                    <div class="formula-block">
+                        $$f(\mathbf{x}) = \frac{1}{(2\pi)^{p/2} (\det\Sigma)^{1/2}} \exp\!\left(-\frac{1}{2}(\mathbf{x} - \boldsymbol{\mu})^\top \Sigma^{-1}(\mathbf{x} - \boldsymbol{\mu})\right)$$
+                    </div>
+                    <p>
+                        指数部の $(\mathbf{x} - \boldsymbol{\mu})^\top \Sigma^{-1}(\mathbf{x} - \boldsymbol{\mu})$ は「$\Sigma$ で測った距離の二乗」（マハラノビス距離の二乗）に相当します。
+                        これが一定の値をとる集合は楕円体（多次元での等確率密度面）です。
+                    </p>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                <!-- ======================================================== -->
+                <!-- 6. 標本分布                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="sampling-dist">
+                    <h2><i class="fas fa-flask"></i> 6. 標本分布――正規分布サンプルから生まれる3つの分布</h2>
+
+                    <h3>なぜ標本分布が必要なのか？</h3>
+                    <p>
+                        正規母集団 $N(\mu, \sigma^2)$ からサンプルを取って検定・推定を行うとき、
+                        「標本平均の標準化」「不偏分散がどんな分布に従うか」「2グループの分散の比」などを評価する必要があります。
+                        これらに答えるのがカイ二乗分布、$t$ 分布、$F$ 分布です。
+                    </p>
+
+                    <h3>カイ二乗分布 $\chi^2(n)$――標準正規変数の2乗和</h3>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義と由来</div>
+                        <p>$Z_1, \ldots, Z_n \overset{\text{i.i.d.}}{\sim} N(0, 1)$ のとき</p>
+                        <div class="formula-block">
+                            $$Y = Z_1^2 + Z_2^2 + \cdots + Z_n^2 \sim \chi^2(n)$$
+                        </div>
+                        <p>
+                            $Y$ を<strong>自由度 $n$ のカイ二乗分布</strong>といいます。
+                            「$n$ 個の独立な標準正規変数を2乗して足したもの」という構成で覚えましょう。
+                        </p>
+                        <p>ガンマ分布との関係：$\chi^2(n) = \mathrm{Ga}(n/2, 2)$（形状パラメータ $n/2$、尺度パラメータ 2）</p>
+                    </div>
+
+                    <div class="formula-block">
+                        $$E[Y] = n, \quad V[Y] = 2n$$
+                        $$M(t) = (1 - 2t)^{-n/2} \quad (t < 1/2)$$
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 正規母集団での重要定理</div>
+                        <p>$X_1, \ldots, X_n \overset{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$ のとき、標本平均 $\bar{X}$ と不偏分散 $S^2 = \dfrac{1}{n-1}\sum_{i=1}^n(X_i - \bar{X})^2$ について：</p>
+                        <div class="formula-block">
+                            $$\frac{\sqrt{n}(\bar{X} - \mu)}{\sigma} \sim N(0, 1), \quad \frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1)$$
+                        </div>
+                        <p>さらに<strong>$\bar{X}$ と $S^2$ は独立</strong>です（正規分布ならではの性質）。</p>
+                        <p>
+                            直感：自由度が $n-1$（$n$ でなく）になるのは、$\bar{X}$ の計算で自由度が1つ失われるためです。
+                            $\sum(X_i - \bar{X}) = 0$ という制約が1つあるので、$n$ 個の偏差は $n-1$ 個で決まります。
+                        </p>
+                    </div>
+
+                    <h3>$t$ 分布 $t(n)$――母分散が未知のときの主役</h3>
+                    <p>
+                        実際の問題では $\sigma^2$ は未知です。$\sigma$ の代わりに標本標準偏差 $S$ を使った
+                        $T = \dfrac{\bar{X} - \mu}{S/\sqrt{n}}$ は何分布に従うでしょうか？
+                        これが<strong>$t$ 分布</strong>です。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義</div>
+                        <p>$Z \sim N(0,1)$ と $Y \sim \chi^2(n)$ が独立のとき</p>
+                        <div class="formula-block">
+                            $$T = \frac{Z}{\sqrt{Y/n}} \sim t(n) \quad \text{（自由度 $n$ の $t$ 分布）}$$
+                        </div>
+                    </div>
+
+                    <div class="formula-block">
+                        $$f(t) = \frac{\Gamma\!\left(\frac{n+1}{2}\right)}{\sqrt{n\pi}\,\Gamma\!\left(\frac{n}{2}\right)} \left(1 + \frac{t^2}{n}\right)^{-(n+1)/2}$$
+                        $$E[T] = 0 \quad (n > 1), \quad V[T] = \frac{n}{n-2} \quad (n > 2)$$
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 $t$ 分布と正規分布の違い</div>
+                        <ul>
+                            <li>$t$ 分布は正規分布より裾が重い（外れ値が出やすい）</li>
+                            <li>$n = 1$ はコーシー分布（平均・分散なし）</li>
+                            <li>$n \to \infty$ で標準正規分布 $N(0,1)$ に収束（サンプルが増えるほど $S$ が $\sigma$ に近づくので）</li>
+                            <li>実用上 $n \geq 30$ ほどあれば正規分布で近似してもよい</li>
+                        </ul>
+                    </div>
+
+                    <h3>$F$ 分布 $F(n_1, n_2)$――2つの分散の比</h3>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 定義</div>
+                        <p>$Y_1 \sim \chi^2(n_1)$ と $Y_2 \sim \chi^2(n_2)$ が独立のとき</p>
+                        <div class="formula-block">
+                            $$X = \frac{Y_1/n_1}{Y_2/n_2} \sim F(n_1, n_2) \quad \text{（自由度 $(n_1, n_2)$ の $F$ 分布）}$$
+                        </div>
+                    </div>
+
+                    <div class="formula-block">
+                        $$E[X] = \frac{n_2}{n_2 - 2} \quad (n_2 > 2)$$
+                    </div>
+
+                    <p>
+                        実用的な場面：2つの正規母集団の標本分散の比 $S_1^2 / S_2^2$ を評価するとき、
+                        $\sigma_1^2 = \sigma_2^2$ のもとで $S_1^2 / S_2^2 \sim F(n_1-1, n_2-1)$ が成り立ちます。
+                        分散が等しいかどうかのF検定に使います。
+                    </p>
+
+                    <h3>非心分布――「帰無仮説が偽のとき」の分布</h3>
+                    <p>
+                        検定の検出力（第2種の誤りを犯さない確率）を計算するために使うのが非心分布です。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 3種類の非心分布</div>
+                        <ul>
+                            <li><strong>非心カイ二乗分布 $\chi^2(n, \lambda)$</strong>：$Z_i \sim N(\mu_i, 1)$（独立）のとき $\sum Z_i^2 \sim \chi^2(n, \lambda)$。ここで非心度 $\lambda = \sum \mu_i^2$。$\lambda = 0$ のとき通常のカイ二乗分布。</li>
+                            <li><strong>非心 $t$ 分布 $t(n, \lambda)$</strong>：$t$ 分布の定義で $Z \sim N(\lambda, 1)$ とした場合。一標本 $t$ 検定で $\mu \neq \mu_0$ のとき登場。</li>
+                            <li><strong>非心 $F$ 分布 $F(n_1, n_2, \lambda)$</strong>：$F$ 分布の分子を非心カイ二乗に替えた場合。$T \sim t(n, \lambda)$ ならば $T^2 \sim F(1, n, \lambda^2)$。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 7. 公式まとめ                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="formulas">
+                    <h2><i class="fas fa-square-root-variable"></i> 7. 公式まとめ</h2>
+                    <div class="formula-block">
+                        <p><strong>連続一様分布 $U(a,b)$</strong></p>
+                        $$E[X] = \frac{a+b}{2}, \quad V[X] = \frac{(b-a)^2}{12}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>正規分布 $N(\mu, \sigma^2)$</strong></p>
+                        $$E[X] = \mu, \quad V[X] = \sigma^2, \quad M(t) = e^{\mu t + \sigma^2 t^2/2}$$
+                        $$Z = \frac{X-\mu}{\sigma} \sim N(0,1) \quad \text{（標準化）}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>指数分布 $\mathrm{Exp}(\lambda)$</strong></p>
+                        $$E[X] = \frac{1}{\lambda}, \quad V[X] = \frac{1}{\lambda^2}; \quad \text{無記憶性：} P(X \geq t_1+t_2 \mid X \geq t_1) = P(X \geq t_2)$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>ガンマ分布 $\mathrm{Ga}(a,b)$</strong></p>
+                        $$E[X] = ab, \quad V[X] = ab^2, \quad M(t) = (1-bt)^{-a} \quad (t < 1/b)$$
+                        $$\chi^2(n) = \mathrm{Ga}(n/2, 2)$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>ベータ分布 $\mathrm{Be}(a,b)$</strong></p>
+                        $$E[X] = \frac{a}{a+b}, \quad V[X] = \frac{ab}{(a+b)^2(a+b+1)}$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>対数正規分布 $\Lambda(\mu,\sigma^2)$</strong></p>
+                        $$E[X] = e^{\mu + \sigma^2/2}, \quad V[X] = e^{2\mu+\sigma^2}(e^{\sigma^2}-1)$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>2変量正規分布　条件付き分布</strong></p>
+                        $$E[X_2 \mid X_1 = x_1] = \mu_2 + \rho\frac{\sigma_2}{\sigma_1}(x_1 - \mu_1), \quad V[X_2 \mid X_1 = x_1] = \sigma_2^2(1-\rho^2)$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>標本分布の関係性</strong></p>
+                        $$\frac{(n-1)S^2}{\sigma^2} \sim \chi^2(n-1), \quad T = \frac{\bar{X}-\mu}{S/\sqrt{n}} \sim t(n-1)$$
+                        $$T \sim t(n, \lambda) \Rightarrow T^2 \sim F(1, n, \lambda^2)$$
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 8. 例題・演習                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 8. 例題・演習</h2>
 
                     <h3>問6.1：正規分布の偏差値と四分位範囲</h3>
                     <p>受験者1000人のテストの得点が $N(65, 10^2)$ に従う。A君は85点、B君は60点。</p>
                     <div class="answer-block">
                     <p><strong>(1) A君およびB君の偏差値はいくらか。</strong></p>
-                    <p>標準化得点：A君 $(85 - 65)/10 = 2$、B君 $(60 - 65)/10 = -0.5$</p>
+                    <p>偏差値は「標準化得点を 50・10 スケールに変換」したものです。まず標準化します。</p>
                     <div class="formula-block">
-                        $$\text{A君の偏差値} = 50 + 10 \times 2 = \mathbf{70}$$
-                        $$\text{B君の偏差値} = 50 + 10 \times (-0.5) = \mathbf{45}$$
+                        $$z_A = \frac{85 - 65}{10} = 2, \quad z_B = \frac{60 - 65}{10} = -0.5$$
+                        $$\text{偏差値} = 50 + 10z \implies \text{A君：} \mathbf{70}, \quad \text{B君：} \mathbf{45}$$
                     </div>
 
-                    <p><strong>(2) A君の得点とB君の得点の間に入る受験者の人数はおおよそ何人か。</strong></p>
-                    <p>標準化得点が $-0.5$ から $2$ に入る割合は</p>
+                    <p><strong>(2) A君の得点とB君の得点の間に入る受験者の人数はおよそ何人か。</strong></p>
+                    <p>$P(60 < X \leq 85) = P(-0.5 < Z \leq 2)$ を標準正規分布表で求めます。</p>
                     <div class="formula-block">
-                        $$P(-0.5 < Z \leq 2) = \Phi(2) - \Phi(-0.5) = (1 - 0.0228) - 0.3085 = 0.6687$$
+                        $$P(-0.5 < Z \leq 2) = \Phi(2) - \Phi(-0.5) = 0.9772 - 0.3085 = 0.6687$$
                     </div>
-                    <p>$1000 \times 0.6687 = 668.7$ より、おおよそ <strong>669人</strong>。</p>
+                    <p>$1000 \times 0.6687 \approx 669$ より、おおよそ <strong>669人</strong>。</p>
 
-                    <p><strong>(3) 全受験者の得点の箱ひげ図を描いた場合、四分位範囲はいくらか。</strong></p>
-                    <p>$N(0, 1)$ の下側25%点は $-0.675$ なので</p>
+                    <p><strong>(3) 四分位範囲（IQR）はいくらか。</strong></p>
+                    <p>$N(0,1)$ の下側25%点が $z_{0.25} = -0.675$ であることを使います。</p>
                     <div class="formula-block">
-                        $$x_{0.25} = 65 - 0.675 \times 10, \quad x_{0.75} = 65 + 0.675 \times 10$$
-                    </div>
-                    <div class="formula-block">
-                        $$\text{四分位範囲} = x_{0.75} - x_{0.25} = 2 \times 0.675 \times 10 = 13.5 \approx \mathbf{14\text{点}}$$
+                        $$x_{0.25} = 65 + 10 \times (-0.675) = 58.25, \quad x_{0.75} = 65 + 10 \times 0.675 = 71.75$$
+                        $$\text{IQR} = x_{0.75} - x_{0.25} = 2 \times 0.675 \times 10 = \mathbf{13.5\text{点}}$$
                     </div>
 
-                    <p><strong>(4) 65点以上の受験者のみを集めた場合、彼らの得点の平均値はおおよそいくらか。</strong></p>
-                    <p>$Z = (X - 65)/10 \sim N(0,1)$ とする。$Z \geq 0$ のもとでの条件付き分布を考えると</p>
+                    <p><strong>(4) 65点以上の受験者だけを集めたとき、その平均得点はおよそいくらか。</strong></p>
+                    <p>$Z = (X-65)/10$ として、$Z \geq 0$ のもとでの半正規分布の期待値を使います。</p>
                     <div class="formula-block">
-                        $$E[Z \mid Z \geq 0] = \int_0^\infty z \cdot 2\phi(z)\, dz = \frac{2}{\sqrt{2\pi}} = \sqrt{\frac{2}{\pi}} \approx 0.798$$
-                    </div>
-                    <div class="formula-block">
-                        $$E[X \mid X \geq 65] = 65 + 10 \times 0.798 = 72.98 \approx \mathbf{73\text{点}}$$
+                        $$E[Z \mid Z \geq 0] = \frac{\phi(0)}{1 - \Phi(0)} = \frac{1/\sqrt{2\pi}}{0.5} = \sqrt{\frac{2}{\pi}} \approx 0.798$$
+                        $$E[X \mid X \geq 65] = 65 + 10 \times 0.798 \approx \mathbf{73\text{点}}$$
                     </div>
                     </div>
 
                     <h3>問6.2：2変量正規分布の相関と条件付き期待値</h3>
-                    <p>英語能力試験の Listening（平均305, 標準偏差80）、Reading（平均250, 標準偏差90）、Total（平均555, 標準偏差150）。</p>
+                    <p>英語能力試験の Listening（$L$：平均305, 標準偏差80）と Reading（$R$：平均250, 標準偏差90）、
+                    Total（$T = L + R$：平均555, 標準偏差150）。$(L, R)$ は2変量正規分布に従うとする。</p>
                     <div class="answer-block">
-                    <p><strong>(1) Listening と Reading の相関係数はいくらか。</strong></p>
-                    <p>$V[\text{Total}] = V[L] + V[R] + 2\,\mathrm{Cov}(L, R)$ より</p>
+                    <p><strong>(1) $L$ と $R$ の相関係数はいくらか。</strong></p>
+                    <p>$V[T] = V[L] + V[R] + 2\,\mathrm{Cov}(L, R)$ を解きます。</p>
                     <div class="formula-block">
-                        $$\mathrm{Cov}(L, R) = \frac{150^2 - 80^2 - 90^2}{2} = \frac{22500 - 6400 - 8100}{2} = 4000$$
-                    </div>
-                    <div class="formula-block">
-                        $$\rho = \frac{4000}{80 \times 90} = 0.5556 \approx \mathbf{0.56}$$
+                        $$150^2 = 80^2 + 90^2 + 2\,\mathrm{Cov}(L, R)$$
+                        $$\mathrm{Cov}(L,R) = \frac{22500 - 6400 - 8100}{2} = 4000$$
+                        $$\rho = \frac{4000}{80 \times 90} \approx \mathbf{0.556}$$
                     </div>
 
-                    <p><strong>(2) Listening が335点の人たちの Reading の条件付き期待値の推定値はいくらか。</strong></p>
+                    <p><strong>(2) $L = 335$ 点の人たちの $R$ の条件付き期待値はいくらか。</strong></p>
+                    <p>条件付き期待値の公式 $E[R \mid L = 335] = \mu_R + \rho\dfrac{\sigma_R}{\sigma_L}(335 - \mu_L)$ を使います。</p>
                     <div class="formula-block">
-                        $$E[R \mid L = 335] = 250 + 0.556 \times \frac{90}{80} \times (335 - 305) = 250 + 0.556 \times 1.125 \times 30 = 268.8 \approx \mathbf{269}$$
+                        $$E[R \mid L = 335] = 250 + 0.556 \times \frac{90}{80} \times (335 - 305) \approx \mathbf{269}$$
                     </div>
                     </div>
 
                     <h3>問6.3：指数分布と生存関数</h3>
-                    <p>患者の死亡までの時間 $T \geq 0$ に対し $S(t) = P(T > t) = \exp(-\lambda t)$ とした。</p>
+                    <p>患者の死亡までの時間 $T \geq 0$ に対し生存関数 $S(t) = P(T > t) = e^{-\lambda t}$ とする。</p>
                     <div class="answer-block">
                     <p><strong>(1) 確率密度関数 $f(t)$ を求めよ。</strong></p>
+                    <p>$F(t) = 1 - S(t)$ を微分します。</p>
                     <div class="formula-block">
-                        $$f(t) = \lambda \exp(-\lambda t), \quad t \geq 0$$
+                        $$f(t) = F'(t) = S'(t) \cdot (-1) = \lambda e^{-\lambda t}, \quad t \geq 0$$
                     </div>
+                    <p>これは $\mathrm{Exp}(\lambda)$ の確率密度関数と一致します。</p>
 
                     <p><strong>(2) 平均と上側25%点を求めよ。</strong></p>
-                    <p>平均は $E[T] = \mathbf{1/\lambda}$。上側25%点は $S(t) = 1/4$ を解いて</p>
+                    <p>平均 $E[T] = 1/\lambda$。上側25%点 $t_{0.75}$ は $S(t) = 1/4$ を解きます。</p>
                     <div class="formula-block">
-                        $$e^{-\lambda t} = \frac{1}{4} \;\Longrightarrow\; t = \frac{\log 4}{\lambda}$$
+                        $$e^{-\lambda t} = \frac{1}{4} \implies t = \frac{\ln 4}{\lambda}$$
                     </div>
 
-                    <p><strong>(3) 10人の標本平均が3.0年のとき、上側25%点の推定値はいくらか。</strong></p>
-                    <p>$E[T] = 1/\lambda$ を $\bar{T} = 3.0$ で推定する。上側25%点の推定値は</p>
+                    <p><strong>(3) 標本平均が $\bar{T} = 3.0$ 年のとき、上側25%点の推定値はいくらか。</strong></p>
+                    <p>$1/\lambda$ を $\bar{T} = 3.0$ で推定（最尤推定 $\hat\lambda = 1/\bar{T}$）します。</p>
                     <div class="formula-block">
-                        $$\frac{\log 4}{\lambda} = \log 4 \times \frac{1}{\lambda} \approx 1.4 \times 3.0 = \mathbf{4.2\text{年}}$$
+                        $$\frac{\ln 4}{\hat\lambda} = \ln 4 \times \bar{T} \approx 1.386 \times 3.0 \approx \mathbf{4.16\text{年}}$$
                     </div>
                     </div>
 
                     <h3>問6.4：混合正規分布と合格率</h3>
-                    <p>受講生500名（文系300名 $N(65, 4^2)$、理系200名 $N(85, 3^2)$）の混合正規分布。</p>
+                    <p>受講生500名（文系300名：$N(65, 4^2)$、理系200名：$N(85, 3^2)$）が混在している。</p>
                     <div class="answer-block">
-                    <p><strong>(1) 文系のAさん（67点）と理系のBさん（82点）の偏差値はいくらか。</strong></p>
+                    <p><strong>(1) 文系Aさん（67点）と理系Bさん（82点）の偏差値はいくらか（自分のグループ内での偏差値）。</strong></p>
                     <div class="formula-block">
-                        $$\text{Aさん：} 50 + 10 \times \frac{67 - 65}{4} = \mathbf{55}$$
-                        $$\text{Bさん：} 50 + 10 \times \frac{82 - 85}{3} = \mathbf{40}$$
+                        $$\text{Aさん：} 50 + 10 \times \frac{67-65}{4} = \mathbf{55}, \quad \text{Bさん：} 50 + 10 \times \frac{82-85}{3} = \mathbf{40}$$
                     </div>
 
-                    <p><strong>(2) 60点以上を合格としたとき、合格率はおよそ何%か。</strong></p>
-                    <p>混合正規分布の累積分布関数は $P(X \leq x) = \dfrac{3}{5}\,\Phi\!\left(\dfrac{x - 65}{4}\right) + \dfrac{2}{5}\,\Phi\!\left(\dfrac{x - 85}{3}\right)$</p>
+                    <p><strong>(2) 60点以上を合格とするとき、合格率はおよそ何%か。</strong></p>
+                    <p>混合比率は文系 $3/5$、理系 $2/5$ です。</p>
                     <div class="formula-block">
-                        $$P(X \geq 60) = 1 - \frac{3}{5}\,\Phi(-1.25) - \frac{2}{5}\,\Phi(-8.33)$$
+                        $$P(X \geq 60) = 1 - P(X < 60) = 1 - \frac{3}{5}\Phi\!\left(\frac{60-65}{4}\right) - \frac{2}{5}\Phi\!\left(\frac{60-85}{3}\right)$$
+                        $$= 1 - \frac{3}{5}\Phi(-1.25) - \frac{2}{5}\Phi(-8.33)$$
+                        $$\approx 1 - 0.6 \times 0.1056 - 0.4 \times 0.0000 \approx 1 - 0.0634 \approx \mathbf{94\%}$$
                     </div>
-                    <div class="formula-block">
-                        $$= 1 - \frac{3}{5} \times 0.1056 - \frac{2}{5} \times 0.0000 = 1 - 0.0634 = 0.9366$$
-                    </div>
-                    <p>よって合格率はおよそ <strong>94%</strong>。</p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <!-- ======================================================== -->
+                <!-- 9. まとめ・ポイント                                        -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> 9. まとめ・ポイント</h2>
                     <ul>
-                        <li>正規分布・ガンマ分布・カイ二乗分布はいずれも<strong>再生性</strong>（独立な同種分布の和が同種分布）をもつ</li>
-                        <li>指数分布は連続分布における<strong>無記憶性</strong>をもつ唯一の分布。離散分布では幾何分布が対応</li>
-                        <li>カイ二乗分布 $\chi^2(n)$ はガンマ分布 $\mathrm{Ga}(n/2, 2)$ の特殊ケース</li>
-                        <li>$t$ 分布は $n = 1$ でコーシー分布、$n \to \infty$ で標準正規分布。正規分布より裾が重い</li>
-                        <li>$T \sim t(n, \lambda)$ ならば $T^2 \sim F(1, n, \lambda^2)$ が成り立ち、非心カイ二乗・非心 $t$・非心 $F$ の三者は定義から自然に関連する</li>
-                        <li>対数正規分布の $k$ 次モーメントは、正規分布のモーメント母関数の $t = k$ における値に等しい</li>
-                        <li>2変量正規分布で $\rho = 0$ ならば独立。一般の分布では「無相関 $\neq$ 独立」だが正規分布では一致する</li>
-                        <li>混合正規分布は必ずしも多峰性を示すとは限らない。二峰性の条件 $|\mu_1 - \mu_2|/\sigma > 2$（$K = 2$、等比率・等分散の場合）に注意</li>
+                        <li><strong>正規分布が統計学の中心</strong>にある理由は、数学的扱いやすさ（再生性・標準化・MGF）と自然現象への当てはまりの両方に由来します。7章の中心極限定理がその背景です。</li>
+                        <li><strong>指数分布は「無記憶性」をもつ唯一の連続分布</strong>。「記憶なしエージング」が仮定できる待ち時間・寿命データに適しています。離散版は幾何分布。</li>
+                        <li><strong>ガンマ分布は指数分布の和</strong>：$n$ 個の独立な $\mathrm{Exp}(\lambda)$ の和は $\mathrm{Ga}(n, 1/\lambda)$ に従い、再生性を持ちます。カイ二乗分布 $\chi^2(n) = \mathrm{Ga}(n/2, 2)$ もガンマ分布の特殊ケース。</li>
+                        <li><strong>2変量正規分布で $\rho = 0$ ならば独立</strong>。一般の分布では「無相関 $\not\Rightarrow$ 独立」ですが、正規分布では同値です。</li>
+                        <li><strong>$t$ 分布は「母分散が未知のとき」の正規検定の代替</strong>。自由度が大きくなると正規分布に近づきます。</li>
+                        <li><strong>非心分布は検出力計算に使う</strong>。帰無仮説が偽のとき検定統計量が従う分布です。$T \sim t(n, \lambda)$ ならば $T^2 \sim F(1, n, \lambda^2)$ の関係も重要。</li>
+                        <li><strong>対数正規分布は「乗法モデル」に対応</strong>。株価・所得など「変化率が一定」な量のモデルとして自然です。</li>
                     </ul>
                 </section>
 
