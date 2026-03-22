@@ -52,119 +52,403 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#concept">信頼区間とは</a></li>
+                            <li><a href="#mean-known">母平均の区間推定（分散既知）</a></li>
+                            <li><a href="#mean-unknown">母平均の区間推定（分散未知）</a></li>
+                            <li><a href="#variance">母分散の区間推定</a></li>
+                            <li><a href="#ratio-variances">分散の比の区間推定</a></li>
+                            <li><a href="#proportion">母比率・比率の差の信頼区間</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. はじめに                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> 区間推定――「一点の推測」から「範囲での推測」へ</h2>
                     <p>
-                        第9章では<strong>区間推定</strong>を扱う。
-                        正規分布の母平均・母分散の信頼区間の構成、分散の比の区間推定、
-                        多項分布の比率の信頼区間および比率の差の信頼区間を学ぶ。
-                        信頼率と区間幅のトレードオフ、標本サイズとの関係も理解する。
+                        第8章では点推定を学びました。たとえば「内閣支持率の標本推定値は43%」というように、
+                        一つの数値でパラメータを推定する方法です。
+                        しかし点推定は「どのくらいの誤差があるか」が分かりません。
                     </p>
-                    <p><strong>キーワード：</strong>平均および分散の区間推定、多項分布の比率の信頼区間</p>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
-
-                    <h3>区間推定の基本</h3>
-                    <ul>
-                        <li><strong>区間推定</strong>（interval estimation）：データから未知母数 $\theta$ の存在範囲を区間として推定する方法</li>
-                        <li><strong>信頼率</strong>（confidence level）：信頼区間が母数を含む確率（例：0.95）</li>
-                        <li><strong>信頼限界</strong>（confidence limit）：信頼区間の上限・下限</li>
-                        <li>信頼率を大きくすると区間幅は広がり、小さくすると狭まる。信頼率を一定にして区間幅を狭くするには $n$ を大きくすればよい</li>
-                    </ul>
-
-                    <h3>母平均の区間推定（母分散 $\sigma^2$ が既知）</h3>
-                    <ul>
-                        <li>$X \sim N(\mu, \sigma^2)$ より $u = \dfrac{\bar{X} - \mu}{\sqrt{\sigma^2/n}} \sim N(0, 1)$</li>
-                        <li>95%信頼区間：$\left(\bar{X} - 1.96\sqrt{\sigma^2/n},\; \bar{X} + 1.96\sqrt{\sigma^2/n}\right)$</li>
-                    </ul>
-
-                    <h3>母分散の区間推定</h3>
-                    <ul>
-                        <li>偏差平方和 $T = \sum(X_i - \bar{X})^2$ に対し $\chi^2 = T/\sigma^2$ は自由度 $n-1$ のカイ二乗分布に従う</li>
-                        <li>95%信頼区間：$\left(\dfrac{T}{\chi^2_{0.025}(n-1)},\; \dfrac{T}{\chi^2_{0.975}(n-1)}\right)$</li>
-                    </ul>
-
-                    <h3>分散の比の区間推定</h3>
-                    <ul>
-                        <li>2つの独立な正規母集団の標本分散の比 $\dfrac{V_1/\sigma_1^2}{V_2/\sigma_2^2}$ は自由度 $(n_1-1, n_2-1)$ の $F$ 分布に従う</li>
-                        <li>95%信頼区間：$F$ 分布の分位点を用いて構成</li>
-                    </ul>
-
-                    <h3>多項分布の信頼区間</h3>
-                    <ul>
-                        <li>$\hat{p}_i = N_i/n$ とすると漸近的に $\dfrac{\hat{p}_i - p_i}{\sqrt{p_i(1-p_i)/n}} \sim N(0,1)$</li>
-                        <li>$p_i$ の95%信頼区間：$\hat{p}_i \pm 1.96\sqrt{\hat{p}_i(1-\hat{p}_i)/n}$</li>
-                        <li>共分散：$\mathrm{Cov}[N_i, N_j] = -np_ip_j$（負の値をとる）</li>
-                    </ul>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-
-                    <h3>母平均の95%信頼区間（分散既知）</h3>
+                    <p>
+                        <strong>区間推定（interval estimation）</strong>では、「支持率は41%〜45%の範囲内にある（95%の確信度で）」のように、
+                        パラメータが入っていると考えられる<strong>区間</strong>を与えます。
+                        これにより、推定の不確かさを定量的に表現できます。
+                    </p>
                     <div class="formula-block">
-                        $$P\!\left(\bar{X} - 1.96\sqrt{\frac{\sigma^2}{n}} \leq \mu \leq \bar{X} + 1.96\sqrt{\frac{\sigma^2}{n}}\right) = 0.95$$
-                    </div>
-
-                    <h3>母分散の95%信頼区間</h3>
-                    <div class="formula-block">
-                        $$P\!\left(\frac{T}{\chi^2_{0.025}(n-1)} \leq \sigma^2 \leq \frac{T}{\chi^2_{0.975}(n-1)}\right) = 0.95$$
-                    </div>
-
-                    <h3>分散の比の95%信頼区間</h3>
-                    <div class="formula-block">
-                        $$P\!\left(\frac{V_1/V_2}{F_{0.025}(\phi_1, \phi_2)} \leq \frac{\sigma_1^2}{\sigma_2^2} \leq \frac{V_1/V_2}{F_{0.975}(\phi_1, \phi_2)}\right) = 0.95$$
-                    </div>
-
-                    <h3>多項分布の比率の差の信頼区間</h3>
-                    <p>$\hat{p}_1 - \hat{p}_2$ の95%信頼区間：</p>
-                    <div class="formula-block">
-                        $$(\hat{p}_1 - \hat{p}_2) \pm 1.96\sqrt{\frac{\hat{p}_1(1-\hat{p}_1) + \hat{p}_2(1-\hat{p}_2) + 2\hat{p}_1\hat{p}_2}{n}}$$
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
+                        <ol>
+                            <li>信頼区間の考え方と「95%」の正しい解釈</li>
+                            <li>母平均の信頼区間――分散既知（$Z$ 分布）と分散未知（$t$ 分布）の場合</li>
+                            <li>母分散の信頼区間――$\chi^2$ 分布を使う</li>
+                            <li>分散の比の信頼区間――$F$ 分布を使う</li>
+                            <li>母比率・比率の差の信頼区間――正規近似による構成</li>
+                        </ol>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                <!-- ======================================================== -->
+                <!-- 1. 信頼区間とは                                            -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="concept">
+                    <h2><i class="fas fa-lightbulb"></i> 1. 信頼区間とは――「確率」の正しい解釈</h2>
 
-                    <h3>問9.1：内閣支持率の信頼区間</h3>
-                    <p>回答者1240人、支持率43%。</p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 信頼区間（信頼係数・信頼率）の定義</div>
+                        <p>
+                            パラメータ $\theta$ に対して、データ $X_1, \ldots, X_n$ から構成される区間 $[L(X), U(X)]$ が
+                        </p>
+                        <div class="formula-block">
+                            $$P_\theta\bigl(L(X) \leq \theta \leq U(X)\bigr) = 1 - \alpha \quad \text{（すべての $\theta$ に対して）}$$
+                        </div>
+                        <p>
+                            を満たすとき、$[L(X), U(X)]$ を $\theta$ の<strong>$100(1-\alpha)$\% 信頼区間</strong>といいます。$1-\alpha$ を<strong>信頼係数（信頼率）</strong>といいます（例：$1-\alpha = 0.95$）。
+                        </p>
+                    </div>
+
+                    <h3>「95%」の意味――頻度論的解釈</h3>
+                    <p>
+                        「95%信頼区間が支持率 $p$ を含む確率は95%」は正確ではありません。
+                        $p$ は固定した値であり、区間 $[L, U]$ が確率変数です。
+                        正確な表現は：
+                    </p>
+                    <div class="formula-block">
+                        <p>「同じ方法で100回標本を取り直しても、95回はその都度作った信頼区間がパラメータを含む。」</p>
+                    </div>
+                    <p>
+                        一度計算してしまった信頼区間は固定の数値区間であり、「パラメータが含まれる確率は50%か100%」のどちらかです。
+                        「95%の確信度で含まれている」というのはベイズ的文脈の表現です。
+                    </p>
+
+                    <h3>信頼率・区間幅・標本サイズのトレードオフ</h3>
+                    <div class="memo-box">
+                        <div class="box-title">💡 トレードオフの関係</div>
+                        <ul>
+                            <li>信頼率を高める（例：95%→99%）→ 区間幅は広がる（より「慎重に」なる分、精度が落ちる）</li>
+                            <li>信頼率を一定に保って区間幅を狭める → 標本サイズ $n$ を大きくする</li>
+                            <li>区間幅は $\propto 1/\sqrt{n}$（標本サイズを4倍にすると幅は半分）</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 2. 母平均の区間推定（分散既知）                           -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="mean-known">
+                    <h2><i class="fas fa-chart-line"></i> 2. 母平均の区間推定（母分散 $\sigma^2$ が既知）</h2>
+
+                    <p>
+                        $X_1, \ldots, X_n \overset{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$、$\sigma^2$ は既知とします（実際には稀ですが、大標本近似で使われます）。
+                    </p>
+
+                    <h3>信頼区間の導出</h3>
+                    <ol class="step-list">
+                        <li>標本平均 $\bar{X} = \frac{1}{n}\sum X_i \sim N(\mu, \sigma^2/n)$</li>
+                        <li>標準化：$Z = \dfrac{\bar{X} - \mu}{\sigma/\sqrt{n}} \sim N(0,1)$（$\mu$ を含む）</li>
+                        <li>$P(-z_{\alpha/2} \leq Z \leq z_{\alpha/2}) = 1 - \alpha$ の不等式を $\mu$ について解く</li>
+                        <li>$\mu$ の $100(1-\alpha)$\% 信頼区間が得られる</li>
+                    </ol>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 母平均の信頼区間（分散既知）</div>
+                        <div class="formula-block">
+                            $$\left(\bar{X} - z_{\alpha/2}\,\frac{\sigma}{\sqrt{n}},\quad \bar{X} + z_{\alpha/2}\,\frac{\sigma}{\sqrt{n}}\right)$$
+                        </div>
+                        <p>95%の場合：$z_{0.025} = 1.96$ を代入→ $\bar{X} \pm 1.96\,\sigma/\sqrt{n}$</p>
+                        <p>99%の場合：$z_{0.005} = 2.576$ を代入→ $\bar{X} \pm 2.576\,\sigma/\sqrt{n}$</p>
+                    </div>
+
+                    <div class="formula-block">
+                        <p><strong>区間幅を $2d$ 以下にするために必要な標本サイズ</strong>：</p>
+                        $$2z_{\alpha/2}\,\frac{\sigma}{\sqrt{n}} \leq 2d \implies n \geq \left(\frac{z_{\alpha/2}\,\sigma}{d}\right)^2$$
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 3. 母平均の区間推定（分散未知）                           -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="mean-unknown">
+                    <h2><i class="fas fa-chart-line"></i> 3. 母平均の区間推定（母分散 $\sigma^2$ が未知）</h2>
+
+                    <p>
+                        実際には $\sigma^2$ は未知なことがほとんどです。
+                        $\sigma^2$ の代わりに不偏標本分散 $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$ を使います。
+                        すると標準化における「$\sigma$」が「$S$」（推定値）に変わり、正規分布ではなく $t$ 分布に従います。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> スチューデントの $t$ 統計量</div>
+                        <div class="formula-block">
+                            $$T = \frac{\bar{X} - \mu}{S/\sqrt{n}} \sim t(n-1)$$
+                        </div>
+                        <p>
+                            $t(n-1)$ は自由度 $n-1$ の $t$ 分布。$n$ が大きくなると $t$ 分布は $N(0,1)$ に近づきます。
+                        </p>
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 母平均の信頼区間（分散未知）</div>
+                        <div class="formula-block">
+                            $$\left(\bar{X} - t_{\alpha/2}(n-1)\,\frac{S}{\sqrt{n}},\quad \bar{X} + t_{\alpha/2}(n-1)\,\frac{S}{\sqrt{n}}\right)$$
+                        </div>
+                        <p>$t_{\alpha/2}(n-1)$ は自由度 $n-1$ の $t$ 分布の上側 $\alpha/2$ 点です。</p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 なぜ $t$ 分布は正規分布より裾が重いのか？</div>
+                        <p>
+                            $\sigma$ を $S$ で推定したことで不確かさが増加します。
+                            $S$ が真の $\sigma$ より小さく出てしまうと、$T$ は実際より大きくなります。
+                            この追加的なばらつきが $t$ 分布の「裾の重さ」として現れます。
+                            自由度が大きくなる（= $S$ の推定精度が上がる）につれ、$t$ 分布は $N(0,1)$ に収束します。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 4. 母分散の区間推定                                        -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="variance">
+                    <h2><i class="fas fa-compress-arrows-alt"></i> 4. 母分散の区間推定</h2>
+
+                    <p>
+                        「製品の重さのばらつき（分散）がどの範囲にあるか」を推定したい場合に使います。
+                        分散の推定には $\chi^2$ 分布を使います。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 偏差平方和と $\chi^2$ 分布</div>
+                        <div class="formula-block">
+                            $$\chi^2 = \frac{(n-1)S^2}{\sigma^2} = \frac{T}{\sigma^2} \sim \chi^2(n-1)$$
+                        </div>
+                        <p>ここで $T = \sum_{i=1}^n (X_i - \bar{X})^2 = (n-1)S^2$ は偏差平方和です。</p>
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 母分散の $100(1-\alpha)$\% 信頼区間</div>
+                        <div class="formula-block">
+                            $$\left(\frac{T}{\chi^2_{\alpha/2}(n-1)},\quad \frac{T}{\chi^2_{1-\alpha/2}(n-1)}\right)$$
+                        </div>
+                        <p>
+                            $\chi^2_{\alpha/2}(n-1)$：自由度 $n-1$ の $\chi^2$ 分布の上側 $\alpha/2$ 点（大きい方の分位点）<br>
+                            $\chi^2_{1-\alpha/2}(n-1)$：自由度 $n-1$ の $\chi^2$ 分布の下側 $\alpha/2$ 点（小さい方の分位点）
+                        </p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 信頼区間が非対称な理由</div>
+                        <p>
+                            $\chi^2$ 分布は正の値のみを取る非対称な分布なので、信頼区間の幅も右側で広く左側で狭くなります（正規分布の場合と異なり、中心対称ではない）。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 5. 分散の比の区間推定                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="ratio-variances">
+                    <h2><i class="fas fa-balance-scale"></i> 5. 分散の比の区間推定</h2>
+
+                    <p>
+                        「2つの製品の重さのばらつきの比はどの範囲か」のように、2つの集団の分散を比較するときに使います。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> $F$ 統計量</div>
+                        <p>
+                            母集団A（$n_A$ 個、分散 $\sigma_A^2$）と母集団B（$n_B$ 個、分散 $\sigma_B^2$）から独立な標本。
+                            偏差平方和をそれぞれ $T_A$、$T_B$ とすると：
+                        </p>
+                        <div class="formula-block">
+                            $$F = \frac{T_A/\sigma_A^2 / (n_A - 1)}{T_B/\sigma_B^2 / (n_B - 1)} = \frac{V_A/\sigma_A^2}{V_B/\sigma_B^2} \sim F(n_A-1,\; n_B-1)$$
+                        </div>
+                        <p>ここで $V_A = T_A/(n_A-1)$、$V_B = T_B/(n_B-1)$ は不偏標本分散です。</p>
+                    </div>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 分散の比の $100(1-\alpha)$\% 信頼区間</div>
+                        <div class="formula-block">
+                            $$\left(\frac{V_A/V_B}{F_{\alpha/2}(\phi_A,\phi_B)},\quad \frac{V_A/V_B}{F_{1-\alpha/2}(\phi_A,\phi_B)}\right)$$
+                        </div>
+                        <p>$\phi_A = n_A-1$、$\phi_B = n_B-1$。$F_{1-\alpha/2} = 1/F_{\alpha/2}(\phi_B, \phi_A)$ の関係を使います。</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 6. 母比率・比率の差の信頼区間                             -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="proportion">
+                    <h2><i class="fas fa-percent"></i> 6. 母比率・比率の差の信頼区間</h2>
+
+                    <h3>母比率の信頼区間</h3>
+                    <p>
+                        $n$ 人を調査し $k$ 人が「賛成」のとき、標本比率 $\hat{p} = k/n$。
+                        $n$ が大きいとき中心極限定理より：
+                    </p>
+                    <div class="formula-block">
+                        $$\frac{\hat{p} - p}{\sqrt{p(1-p)/n}} \xrightarrow{d} N(0,1)$$
+                    </div>
+                    <p>
+                        ただし $p$ は未知なので、区間を求めるには $p$ を $\hat{p}$ で置き換えます（Wald 型信頼区間）。
+                    </p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 母比率の近似 $100(1-\alpha)$\% 信頼区間（Wald型）</div>
+                        <div class="formula-block">
+                            $$\hat{p} \pm z_{\alpha/2}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$$
+                        </div>
+                        <p>一般に $n \hat{p} \geq 5$ かつ $n(1-\hat{p}) \geq 5$ ならこの近似は有効です。</p>
+                    </div>
+
+                    <h3>比率の差の信頼区間（2標本）</h3>
+                    <p>
+                        2つの独立な集団（標本サイズ $n_1$、$n_2$、実数の比率 $\hat{p}_1$、$\hat{p}_2$）の差 $p_1 - p_2$ の区間推定。
+                    </p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-star"></i> 比率の差の $100(1-\alpha)$\% 信頼区間</div>
+                        <div class="formula-block">
+                            $$(\hat{p}_1 - \hat{p}_2) \pm z_{\alpha/2}\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n_1} + \frac{\hat{p}_2(1-\hat{p}_2)}{n_2}}$$
+                        </div>
+                    </div>
+
+                    <h3>多項分布での注意（負の共分散）</h3>
+                    <div class="memo-box">
+                        <div class="box-title">💡 多項分布の同時の表現</div>
+                        <p>
+                            $n$ 人に複数の選択肢（カテゴリA、B、C…）を選ばせる場合、
+                            各カテゴリの度数 $N_i$ は<strong>多項分布</strong>に従います。
+                            $\mathrm{Cov}(N_i, N_j) = -np_ip_j &lt; 0$（$i \neq j$）という<strong>負の共分散</strong>があります
+                            （「Aが多い」なら「Bが少ない」となる関係）。
+                            よって「Aの比率」と「Bの比率」の差の分散は、独立2標本の式と異なります：
+                        </p>
+                        <div class="formula-block">
+                            $$V[\hat{p}_1 - \hat{p}_2] = \frac{p_1(1-p_1) + p_2(1-p_2) + 2p_1p_2}{n}$$
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 7. 例題・演習                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 7. 例題・演習</h2>
+
+                    <h3>問9.1：内閣支持率調査の信頼区間</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        ある調査で全国の有権者から無作為に $n = 1{,}240$ 人を抽出し、現内閣への支持を尋ねた結果、
+                        $533$ 人（$\hat{p} = 533/1{,}240 \approx 0.43$、43%）が「支持する」と回答した。
+                    </p>
+                    <ol>
+                        <li>この結果から、内閣支持率 $p$ の95%信頼区間を求めよ（$z_{0.025} = 1.96$）。</li>
+                        <li>信頼区間の幅を2ポイント（0.02）以内にしたい。最低何人を調査する必要があるか（$p \approx 0.4$ と仮定）。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) 95%信頼区間：</strong></p>
-                    <div class="formula-block">
-                        $$0.43 \pm 1.96\sqrt{\frac{0.43 \times 0.57}{1240}} = 0.43 \pm 0.0274 = \mathbf{(0.403,\; 0.457)}$$
-                    </div>
-                    <p><strong>(2) 区間幅2%に必要な標本サイズ：</strong></p>
-                    <div class="formula-block">
-                        $$2 \times 1.96\sqrt{\frac{0.4 \times 0.6}{n}} = 0.02 \implies n = \left(\frac{2 \times 1.96}{0.02}\right)^2 \times 0.4 \times 0.6 = \mathbf{9220}$$
-                    </div>
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1) 95%信頼区間：</strong></p>
+                        <div class="formula-block">
+                            $$\hat{p} \pm z_{0.025}\sqrt{\frac{\hat{p}(1-\hat{p})}{n}} = 0.43 \pm 1.96\sqrt{\frac{0.43 \times 0.57}{1240}}$$
+                        </div>
+                        <p>$\sqrt{0.43 \times 0.57 / 1240} = \sqrt{0.000198} \approx 0.01407$</p>
+                        <div class="formula-block">
+                            $$0.43 \pm 1.96 \times 0.01407 = 0.43 \pm 0.0276 \implies \mathbf{(0.402,\; 0.458)}$$
+                        </div>
+                        <p>解釈：「内閣支持率は40.2%〜45.8%の範囲にある（95%信頼区間）」。</p>
+
+                        <p><strong>(2) 必要な標本サイズ：</strong></p>
+                        <p>区間幅 $2d = 0.02$、すなわち $d = 0.01$ とするとき：</p>
+                        <div class="formula-block">
+                            $$n \geq \left(\frac{z_{\alpha/2}\,\sqrt{p(1-p)}}{d}\right)^2 = \left(\frac{1.96\sqrt{0.4 \times 0.6}}{0.01}\right)^2 = (1.96 \times 49)^2 \approx \mathbf{9{,}220}$$
+                        </div>
+                        <p>区間幅を半分にするには標本サイズを約7倍にする必要があることがわかります（$1240 \times 7.4 \approx 9200$）。</p>
                     </div>
 
-                    <h3>問9.2：スポーツ選手の支持率</h3>
-                    <p>有効回答数917人。イチロー26.2%、羽生結弦8.0%。</p>
+                    <h3>問9.2：人気スポーツ選手の支持率調査――比率の差の信頼区間</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        「最も好きな日本人スポーツ選手」について無作為抽出した $n = 917$ 人にアンケートを行った結果、
+                        野球選手Aを挙げた人が $\hat{p}_1 = 240/917 \approx 0.262$（26.2%）、
+                        フィギュアスケート選手Bを挙げた人が $\hat{p}_2 = 73/917 \approx 0.080$（8.0%）であった。
+                        <strong>注意：これは1つの標本から2つの比率を求めているので多項分布の設定</strong>が適切。
+                    </p>
+                    <ol>
+                        <li>選手Aの割合 $p_1$ の95%信頼区間を求めよ。</li>
+                        <li>選手Aと選手Bの割合の差 $p_1 - p_2$ の95%信頼区間を求めよ。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) イチローの割合の95%信頼区間：</strong></p>
-                    <div class="formula-block">
-                        $$0.262 \pm 1.96\sqrt{\frac{0.262 \times 0.738}{917}} = 0.262 \pm 0.0285 = \mathbf{(0.2335,\; 0.2905)}$$
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1) 選手Aの95%信頼区間：</strong></p>
+                        <div class="formula-block">
+                            $$0.262 \pm 1.96\sqrt{\frac{0.262 \times 0.738}{917}} = 0.262 \pm 1.96 \times 0.01455 = 0.262 \pm 0.0285 \implies \mathbf{(0.234,\; 0.291)}$$
+                        </div>
+
+                        <p><strong>(2) 差 $p_1 - p_2$ の95%信頼区間（多項分布の場合）：</strong></p>
+                        <p>多項分布での共分散 $-n\hat{p}_1\hat{p}_2$ を考慮すると：</p>
+                        <div class="formula-block">
+                            $$V[\hat{p}_1 - \hat{p}_2] = \frac{\hat{p}_1(1-\hat{p}_1) + \hat{p}_2(1-\hat{p}_2) + 2\hat{p}_1\hat{p}_2}{n}$$
+                        </div>
+                        <div class="formula-block">
+                            $$= \frac{0.262 \times 0.738 + 0.080 \times 0.920 + 2 \times 0.262 \times 0.080}{917} = \frac{0.1934 + 0.0736 + 0.0419}{917} = \frac{0.3089}{917} \approx 0.000337$$
+                        </div>
+                        <div class="formula-block">
+                            $$\hat{p}_1 - \hat{p}_2 = 0.182, \quad \sqrt{0.000337} \approx 0.01835$$
+                            $$(0.182 - 1.96 \times 0.01835,\; 0.182 + 1.96 \times 0.01835) \approx \mathbf{(0.146,\; 0.218)}$$
+                        </div>
+                        <p>「選手Aは選手Bより14.6〜21.8ポイント好き」という95%信頼区間が得られます。</p>
                     </div>
-                    <p><strong>(2) 割合の差の95%信頼区間：</strong>$\hat{p}_1 = 0.262$、$\hat{p}_2 = 0.08$</p>
-                    <div class="formula-block">
-                        $$0.182 \pm 1.96 \times 0.01835 = \mathbf{(0.1460,\; 0.2180)}$$
+
+                    <h3>問9.3：製品重量の分散推定</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        ある工場でオリジナルコーヒー缶（仕様355mL）を16個無作為に抽出して内容量を測定したとき、
+                        偏差平方和 $T = \sum(x_i - \bar{x})^2 = 120$ (mL²) であった。
+                        内容量の母分散 $\sigma^2$ の95%信頼区間を求めよ。
+                        （自由度15の $\chi^2$ 分布の上側2.5%点 $= 27.49$、下側2.5%点（= 上側97.5%点）$= 6.26$）
+                    </p>
                     </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>偏差平方和 $T = 120$、自由度 $\phi = n - 1 = 15$。</p>
+                        <div class="formula-block">
+                            $$\left(\frac{T}{\chi^2_{0.025}(15)},\; \frac{T}{\chi^2_{0.975}(15)}\right) = \left(\frac{120}{27.49},\; \frac{120}{6.26}\right) \approx \mathbf{(4.37,\; 19.17)} \text{ (mL}^2\text{)}$$
+                        </div>
+                        <p>
+                            この区間は非対称（上限19.17が下限4.37の4倍以上）です。
+                            分散の区間推定では $\chi^2$ 分布が非対称なため、必ずこのような非対称な区間になります。
+                        </p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <!-- ======================================================== -->
+                <!-- 8. まとめ・ポイント                                        -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> 8. まとめ・ポイント</h2>
                     <ul>
-                        <li>母平均の信頼区間は正規分布に基づいて構成。母分散が未知の場合は $t$ 分布を使う（第11章）</li>
-                        <li>母分散の信頼区間はカイ二乗分布、分散の比は $F$ 分布を利用する</li>
-                        <li>多項分布の信頼区間は中心極限定理に基づく正規近似による</li>
-                        <li>多項分布の2つのカテゴリの度数には負の共分散がある（一方が増えれば他方が減る）</li>
-                        <li>信頼率を一定に保ったまま精度を上げるには標本サイズを大きくする</li>
+                        <li><strong>信頼区間は確率変数</strong>：パラメータが固定で区間が変わる。「95%CI はこの方法で繰り返せば95回含む」が正しい解釈。</li>
+                        <li><strong>分散既知 → $Z$ 分布、分散未知 → $t$ 分布</strong>：$\sigma^2$ を $S^2$ で推定したことで不確かさが増し、$t$ 分布の裾が重くなる。</li>
+                        <li><strong>母分散 → $\chi^2$ 分布、分散の比 → $F$ 分布</strong>：どちらも非対称な分布なので信頼区間も非対称になる。</li>
+                        <li><strong>母比率は正規近似</strong>：$n\hat{p} \geq 5$ かつ $n(1-\hat{p}) \geq 5$ が目安。</li>
+                        <li><strong>多項分布の2比率の差では負の共分散に注意</strong>：同一標本から2つの比率を計算する場合は独立2標本の式とは異なる。</li>
+                        <li><strong>区間幅と標本サイズ</strong>：区間幅 $\propto 1/\sqrt{n}$。幅を半分にするには標本サイズを4倍にする必要がある。</li>
                     </ul>
                 </section>
 

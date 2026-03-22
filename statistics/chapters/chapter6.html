@@ -677,95 +677,167 @@
                 <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 8. 例題・演習</h2>
 
-                    <h3>問6.1：正規分布の偏差値と四分位範囲</h3>
-                    <p>受験者1000人のテストの得点が $N(65, 10^2)$ に従う。A君は85点、B君は60点。</p>
+                    <h3>問6.1：正規分布の偏差値・確率・条件付き期待値</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        ある国家試験の受験者1000人の得点は正規分布 $N(65,\, 10^2)$ に従っているとする。
+                        試験を受けたA君の得点は85点、B君の得点は60点であった。次の各問いに答えよ。
+                        ただし、標準正規分布について次の値を用いてよい：
+                        $\Phi(2)=0.9772$、$\Phi(0.5)=0.6915$（$\Phi$は標準正規分布の累積分布関数）、
+                        標準正規分布の下側25%点は $z_{0.25}=-0.675$。
+                    </p>
+                    <ol>
+                        <li>A君およびB君の偏差値を求めよ（偏差値 $= 50 + 10 \times$標準化得点）。</li>
+                        <li>受験者のうち、B君の得点60点以上かつA君の得点85点以下に入る人数は約何人か。</li>
+                        <li>この試験の四分位範囲（IQR; 第3四分位点 − 第1四分位点）はいくらか。</li>
+                        <li>試験の合格最低点を65点（平均点）とするとき、合格者だけを集めた場合の平均得点はおよそ何点か。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) A君およびB君の偏差値はいくらか。</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>(1) A君・B君の偏差値</strong></p>
                     <p>偏差値は「標準化得点を 50・10 スケールに変換」したものです。まず標準化します。</p>
                     <div class="formula-block">
                         $$z_A = \frac{85 - 65}{10} = 2, \quad z_B = \frac{60 - 65}{10} = -0.5$$
                         $$\text{偏差値} = 50 + 10z \implies \text{A君：} \mathbf{70}, \quad \text{B君：} \mathbf{45}$$
                     </div>
 
-                    <p><strong>(2) A君の得点とB君の得点の間に入る受験者の人数はおよそ何人か。</strong></p>
-                    <p>$P(60 < X \leq 85) = P(-0.5 < Z \leq 2)$ を標準正規分布表で求めます。</p>
+                    <p><strong>(2) B君とA君の得点の間に入る受験者の人数</strong></p>
+                    <p>求めるのは $P(60 < X \leq 85) = P(-0.5 < Z \leq 2)$ です。</p>
                     <div class="formula-block">
-                        $$P(-0.5 < Z \leq 2) = \Phi(2) - \Phi(-0.5) = 0.9772 - 0.3085 = 0.6687$$
+                        $$P(-0.5 < Z \leq 2) = \Phi(2) - \Phi(-0.5) = \Phi(2) - (1 - \Phi(0.5))$$
+                        $$= 0.9772 - (1 - 0.6915) = 0.9772 - 0.3085 = 0.6687$$
                     </div>
                     <p>$1000 \times 0.6687 \approx 669$ より、おおよそ <strong>669人</strong>。</p>
 
-                    <p><strong>(3) 四分位範囲（IQR）はいくらか。</strong></p>
-                    <p>$N(0,1)$ の下側25%点が $z_{0.25} = -0.675$ であることを使います。</p>
+                    <p><strong>(3) 四分位範囲</strong></p>
+                    <p>$N(0,1)$ の下側25%点 $z_{0.25} = -0.675$ を使って, $N(65,10^2)$ の分位点に変換します。</p>
                     <div class="formula-block">
-                        $$x_{0.25} = 65 + 10 \times (-0.675) = 58.25, \quad x_{0.75} = 65 + 10 \times 0.675 = 71.75$$
+                        $$x_{0.25} = 65 + 10 \times (-0.675) = 58.25$$
+                        $$x_{0.75} = 65 + 10 \times 0.675 = 71.75 \quad \text{（対称性より）}$$
                         $$\text{IQR} = x_{0.75} - x_{0.25} = 2 \times 0.675 \times 10 = \mathbf{13.5\text{点}}$$
                     </div>
 
-                    <p><strong>(4) 65点以上の受験者だけを集めたとき、その平均得点はおよそいくらか。</strong></p>
-                    <p>$Z = (X-65)/10$ として、$Z \geq 0$ のもとでの半正規分布の期待値を使います。</p>
+                    <p><strong>(4) 65点以上の合格者の平均得点</strong></p>
+                    <p>$Z = (X-65)/10 \sim N(0,1)$ として、$Z \geq 0$ という条件のもとでの期待値を使います。</p>
+                    <p>半正規分布の結果：$E[Z \mid Z \geq 0] = \dfrac{\phi(0)}{P(Z \geq 0)} = \dfrac{1/\sqrt{2\pi}}{0.5} = \sqrt{2/\pi} \approx 0.798$</p>
                     <div class="formula-block">
-                        $$E[Z \mid Z \geq 0] = \frac{\phi(0)}{1 - \Phi(0)} = \frac{1/\sqrt{2\pi}}{0.5} = \sqrt{\frac{2}{\pi}} \approx 0.798$$
                         $$E[X \mid X \geq 65] = 65 + 10 \times 0.798 \approx \mathbf{73\text{点}}$$
                     </div>
+                    <p>「合格者だけ見ると、平均は65点から8点ほど上がって73点になる」という直感的に納得できる結果です。</p>
                     </div>
 
                     <h3>問6.2：2変量正規分布の相関と条件付き期待値</h3>
-                    <p>英語能力試験の Listening（$L$：平均305, 標準偏差80）と Reading（$R$：平均250, 標準偏差90）、
-                    Total（$T = L + R$：平均555, 標準偏差150）。$(L, R)$ は2変量正規分布に従うとする。</p>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        ある英語能力試験では Listening（$L$）と Reading（$R$）の2セクションが実施される。
+                        受験者全体について次のデータが得られているとする：
+                        $L$ の平均305点・標準偏差80点、$R$ の平均250点・標準偏差90点、
+                        合計スコア $T = L + R$ の平均555点・標準偏差150点。
+                        $(L, R)$ は2変量正規分布に従うとする。次の各問いに答えよ。
+                    </p>
+                    <ol>
+                        <li>$L$ と $R$ の相関係数 $\rho$ を求めよ。</li>
+                        <li>$L = 335$ 点の受験者の $R$ の条件付き期待値 $E[R \mid L = 335]$ を求めよ。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) $L$ と $R$ の相関係数はいくらか。</strong></p>
-                    <p>$V[T] = V[L] + V[R] + 2\,\mathrm{Cov}(L, R)$ を解きます。</p>
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>(1) 相関係数の計算</strong></p>
+                    <p>$V[T] = V[L+R] = V[L] + V[R] + 2\,\mathrm{Cov}(L, R)$ を解きます。</p>
                     <div class="formula-block">
                         $$150^2 = 80^2 + 90^2 + 2\,\mathrm{Cov}(L, R)$$
-                        $$\mathrm{Cov}(L,R) = \frac{22500 - 6400 - 8100}{2} = 4000$$
-                        $$\rho = \frac{4000}{80 \times 90} \approx \mathbf{0.556}$$
+                        $$22500 = 6400 + 8100 + 2\,\mathrm{Cov}(L, R)$$
+                        $$\mathrm{Cov}(L,R) = \frac{22500 - 14500}{2} = 4000$$
+                        $$\rho = \frac{\mathrm{Cov}(L,R)}{\sigma_L \cdot \sigma_R} = \frac{4000}{80 \times 90} \approx \mathbf{0.556}$$
                     </div>
 
-                    <p><strong>(2) $L = 335$ 点の人たちの $R$ の条件付き期待値はいくらか。</strong></p>
-                    <p>条件付き期待値の公式 $E[R \mid L = 335] = \mu_R + \rho\dfrac{\sigma_R}{\sigma_L}(335 - \mu_L)$ を使います。</p>
+                    <p><strong>(2) 条件付き期待値</strong></p>
+                    <p>2変量正規分布の条件付き期待値の公式：$E[Y \mid X = x] = \mu_Y + \rho\dfrac{\sigma_Y}{\sigma_X}(x - \mu_X)$</p>
                     <div class="formula-block">
-                        $$E[R \mid L = 335] = 250 + 0.556 \times \frac{90}{80} \times (335 - 305) \approx \mathbf{269}$$
+                        $$E[R \mid L = 335] = 250 + 0.556 \times \frac{90}{80} \times (335 - 305) = 250 + 0.556 \times 1.125 \times 30 \approx \mathbf{269\text{点}}$$
                     </div>
+                    <p>
+                        <strong>解釈：</strong>$L = 335$（平均305より1/3標準偏差高い）の人の $R$ の予測値は、
+                        $R$ の平均250から19点上がって269点となります。
+                        相関係数0.556が「正の相関」を示すため、リスニングが高い人はリーディングも高い傾向にあることが読み取れます。
+                    </p>
                     </div>
 
-                    <h3>問6.3：指数分布と生存関数</h3>
-                    <p>患者の死亡までの時間 $T \geq 0$ に対し生存関数 $S(t) = P(T > t) = e^{-\lambda t}$ とする。</p>
+                    <h3>問6.3：指数分布・生存関数・上側分位点の推定</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        ある機械部品の故障時間 $T$（年）は、パラメータ $\lambda>0$ の指数分布に従うとする。
+                        生存関数（寿命が $t$ 年を超える確率）は $S(t) = P(T > t) = e^{-\lambda t}$（$t \geq 0$）で与えられる。
+                        次の各問いに答えよ。
+                    </p>
+                    <ol>
+                        <li>故障時間の確率密度関数 $f(t)$ を求めよ。</li>
+                        <li>平均故障時間（MTTF）$E[T]$ と上側25%点（全体の25%の部品が故障するまでの時間）を求めよ。</li>
+                        <li>同種の部品10個について故障時間を観測したところ、標本平均 $\bar{T} = 3.0$（年）であった。上側25%点の推定値を求めよ。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) 確率密度関数 $f(t)$ を求めよ。</strong></p>
-                    <p>$F(t) = 1 - S(t)$ を微分します。</p>
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>(1) 確率密度関数の導出</strong></p>
+                    <p>累積分布関数 $F(t) = 1 - S(t) = 1 - e^{-\lambda t}$ を $t$ について微分します。</p>
                     <div class="formula-block">
-                        $$f(t) = F'(t) = S'(t) \cdot (-1) = \lambda e^{-\lambda t}, \quad t \geq 0$$
+                        $$f(t) = F'(t) = \lambda e^{-\lambda t}, \quad t \geq 0$$
                     </div>
                     <p>これは $\mathrm{Exp}(\lambda)$ の確率密度関数と一致します。</p>
 
-                    <p><strong>(2) 平均と上側25%点を求めよ。</strong></p>
-                    <p>平均 $E[T] = 1/\lambda$。上側25%点 $t_{0.75}$ は $S(t) = 1/4$ を解きます。</p>
+                    <p><strong>(2) 平均故障時間と上側25%点</strong></p>
+                    <p>平均 $E[T] = 1/\lambda$（指数分布の性質）。</p>
+                    <p>上側25%点 $t_{0.75}$ は $S(t_{0.75}) = 0.25$（生存確率25%）を解きます。</p>
                     <div class="formula-block">
-                        $$e^{-\lambda t} = \frac{1}{4} \implies t = \frac{\ln 4}{\lambda}$$
+                        $$e^{-\lambda t_{0.75}} = \frac{1}{4} \implies -\lambda t_{0.75} = \ln\frac{1}{4} = -\ln 4 \implies t_{0.75} = \frac{\ln 4}{\lambda}$$
                     </div>
 
-                    <p><strong>(3) 標本平均が $\bar{T} = 3.0$ 年のとき、上側25%点の推定値はいくらか。</strong></p>
-                    <p>$1/\lambda$ を $\bar{T} = 3.0$ で推定（最尤推定 $\hat\lambda = 1/\bar{T}$）します。</p>
+                    <p><strong>(3) 上側25%点の推定</strong></p>
+                    <p>最尤推定量：$\hat{\lambda} = 1/\bar{T} = 1/3.0$（指数分布では標本平均の逆数がMLE）。</p>
                     <div class="formula-block">
-                        $$\frac{\ln 4}{\hat\lambda} = \ln 4 \times \bar{T} \approx 1.386 \times 3.0 \approx \mathbf{4.16\text{年}}$$
+                        $$\hat{t}_{0.75} = \frac{\ln 4}{\hat{\lambda}} = \ln 4 \times \bar{T} = \ln 4 \times 3.0 \approx 1.386 \times 3.0 \approx \mathbf{4.16\text{年}}$$
                     </div>
+                    <p>「平均3年で故障する部品のうち、75%が故障するのは約4.16年後」という解釈になります。</p>
                     </div>
 
                     <h3>問6.4：混合正規分布と合格率</h3>
-                    <p>受講生500名（文系300名：$N(65, 4^2)$、理系200名：$N(85, 3^2)$）が混在している。</p>
-                    <div class="answer-block">
-                    <p><strong>(1) 文系Aさん（67点）と理系Bさん（82点）の偏差値はいくらか（自分のグループ内での偏差値）。</strong></p>
-                    <div class="formula-block">
-                        $$\text{Aさん：} 50 + 10 \times \frac{67-65}{4} = \mathbf{55}, \quad \text{Bさん：} 50 + 10 \times \frac{82-85}{3} = \mathbf{40}$$
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        ある大学では文系学部と理系学部の学生が混在して受ける共通試験がある。
+                        文系学部の300名は $N(65, 4^2)$ に、理系学部の200名は $N(85, 3^2)$ に従って得点が分布しているとする。
+                        次の各問いに答えよ。
+                    </p>
+                    <ol>
+                        <li>文系のAさん（67点）と理系のBさん（82点）について、それぞれ自分の所属学部内での偏差値を求めよ。</li>
+                        <li>合格最低点を60点とするとき、全体500名のうち合格者の割合（合格率）はおよそ何%か。ただし、標準正規分布について $\Phi(-1.25) \approx 0.1056$ を用いてよい。</li>
+                    </ol>
                     </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>(1) 各学部内の偏差値</strong></p>
+                    <div class="formula-block">
+                        $$\text{Aさん（文系）：} 50 + 10 \times \frac{67-65}{4} = 50 + 10 \times 0.5 = \mathbf{55}$$
+                        $$\text{Bさん（理系）：} 50 + 10 \times \frac{82-85}{3} = 50 + 10 \times (-1) = \mathbf{40}$$
+                    </div>
+                    <p>Bさんは絶対点数82点と高いが、理系の中では平均以下（偏差値40）であることがわかります。</p>
 
-                    <p><strong>(2) 60点以上を合格とするとき、合格率はおよそ何%か。</strong></p>
+                    <p><strong>(2) 全体の合格率</strong></p>
                     <p>混合比率は文系 $3/5$、理系 $2/5$ です。</p>
                     <div class="formula-block">
                         $$P(X \geq 60) = 1 - P(X < 60) = 1 - \frac{3}{5}\Phi\!\left(\frac{60-65}{4}\right) - \frac{2}{5}\Phi\!\left(\frac{60-85}{3}\right)$$
                         $$= 1 - \frac{3}{5}\Phi(-1.25) - \frac{2}{5}\Phi(-8.33)$$
-                        $$\approx 1 - 0.6 \times 0.1056 - 0.4 \times 0.0000 \approx 1 - 0.0634 \approx \mathbf{94\%}$$
+                        $$\approx 1 - 0.6 \times 0.1056 - 0.4 \times 0 \approx 1 - 0.0634 \approx \mathbf{94\%}$$
                     </div>
+                    <p>
+                        理系学生200名は平均85点なので $\Phi(-8.33) \approx 0$（ほぼ全員合格）、
+                        文系300名は $\Phi(-1.25) \approx 0.106$（約10.6%が不合格）です。
+                        全体の合格率は約94%となります。
+                    </p>
                     </div>
                 </section>
 

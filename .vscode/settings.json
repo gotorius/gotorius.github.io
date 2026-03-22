@@ -1,0 +1,20 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "/^cd /Users/gotou1/goto/statistics/chapters && python3 - << 'EOF'\nfor ch in \\['chapter10'\\]:\n    fname = f'\\{ch\\}\\.html'\n    with open\\(fname, 'r'\\) as f:\n        content = f\\.read\\(\\)\n    marker = '    </main>\\\\n'\n    first = content\\.find\\(marker\\)\n    second = content\\.find\\(marker, first \\+ 1\\)\n    if second != -1:\n        new_content = content\\[:first \\+ len\\(marker\\)\\] \\+ content\\[second \\+ len\\(marker\\):\\]\n        with open\\(fname, 'w'\\) as f:\n            f\\.write\\(new_content\\)\n        print\\(f\"\\{fname\\}: Removed duplicate\\. Lines: \\{new_content\\.count\\(chr\\(10\\)\\)\\}\"\\)\n    else:\n        print\\(f\"\\{fname\\}: No duplicate\\. Lines: \\{content\\.count\\(chr\\(10\\)\\)\\}\"\\)\nEOF$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /Users/gotou1/goto/statistics/chapters && python3 - << 'EOF'\nfname = 'chapter10\\.html'\nwith open\\(fname, 'r'\\) as f:\n    content = f\\.read\\(\\)\n\n# Find both </main> positions\nmarker = '</main>'\nfirst = content\\.find\\(marker\\)\nsecond = content\\.find\\(marker, first \\+ 1\\)\nprint\\(f\"First </main> at char \\{first\\}: \\.\\.\\.\\{content\\[first:first\\+50\\]!r\\}\"\\)\nprint\\(f\"Second </main> at char \\{second\\}: \\.\\.\\.\\{content\\[second:second\\+50\\]!r\\}\"\\)\n\nif second != -1:\n    # Keep content up to and including first </main>, then skip to after second </main>\n    new_content = content\\[:first \\+ len\\(marker\\)\\] \\+ '\\\\n' \\+ content\\[second \\+ len\\(marker\\):\\]\n    with open\\(fname, 'w'\\) as f:\n        f\\.write\\(new_content\\)\n    print\\(f\"Fixed\\. Lines: \\{new_content\\.count\\(chr\\(10\\)\\)\\}\"\\)\nEOF$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^cd /Users/gotou1/goto/statistics/chapters && python3 -c \"\nfname = 'chapter11\\.html'\nwith open\\(fname, 'r'\\) as f:\n    content = f\\.read\\(\\)\nmarker = '</main>'\nfirst = content\\.find\\(marker\\)\nsecond = content\\.find\\(marker, first \\+ 1\\)\nif second != -1:\n    new_content = content\\[:first \\+ len\\(marker\\)\\] \\+ '\\\\n' \\+ content\\[second \\+ len\\(marker\\):\\]\n    with open\\(fname, 'w'\\) as f:\n        f\\.write\\(new_content\\)\n    print\\('Fixed duplicate\\. Lines:', new_content\\.count\\(chr\\(10\\)\\)\\)\nelse:\n    print\\('No duplicate\\. Lines:', content\\.count\\(chr\\(10\\)\\)\\)\n\"\n$/": {
+            "approve": true,
+            "matchCommandLine": true
+        },
+        "/^python3 /tmp/fix_chapters\\.py 2>&1$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}

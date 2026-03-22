@@ -52,13 +52,36 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <!-- イントロ -->
-                <section class="content-section">
-                    <h2><i class="fas fa-compass"></i> イントロ：「時間とともに変化する確率」を捉える</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#stochastic-process">確率過程と独立定常増分過程</a></li>
+                            <li><a href="#brownian">ブラウン運動</a></li>
+                            <li><a href="#brownian-estimation">ブラウン運動のパラメータ推定</a></li>
+                            <li><a href="#poisson">ポアソン過程</a></li>
+                            <li><a href="#poisson-estimation">ポアソン過程のパラメータ推定</a></li>
+                            <li><a href="#compound-poisson">複合ポアソン過程</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. はじめに                                               -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-compass"></i> 確率過程の基礎――「時間とともに変化する確率」を捉える</h2>
                     <p>
-                        これまでの章では、ある固定した時点での確率変数やその分布を扱ってきた。しかし現実の世界では、株価・気温・地震の発生回数のように、<strong>値が時間とともにランダムに変化するもの</strong>を扱う必要がある。このような「時間つきの確率変数の集まり」を<strong>確率過程</strong>（stochastic process）という。
+                        これまでの章では、ある固定した時点での確率変数やその分布を扱ってきました。しかし現実の世界では、株価・気温・地震の発生回数のように、<strong>値が時間とともにランダムに変化するもの</strong>を扱う必要があります。このような「時間つきの確率変数の集まり」を<strong>確率過程</strong>（stochastic process）といいます。
                     </p>
                     <div class="formula-block">
                         <p><strong>本章で学ぶ4つのテーマ</strong></p>
@@ -70,56 +93,60 @@
                         </ul>
                     </div>
                     <p>
-                        これら2つ（ブラウン運動・ポアソン過程）はどちらも「独立定常増分過程」として統一的に理解できる。まずその基本を押さえてから個々の過程に入ろう。
+                        ブラウン運動・ポアソン過程はどちらも「独立定常増分過程」として統一的に理解できます。まずその基本を押さえてから個々の過程に入りましょう。
                     </p>
                 </section>
 
-                <!-- ① 確率過程・独立定常増分過程 -->
-                <section class="content-section">
-                    <h2><i class="fas fa-wave-square"></i> ① 確率過程と独立定常増分過程</h2>
+                <!-- ======================================================== -->
+                <!-- 1. 確率過程と独立定常増分過程                             -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="stochastic-process">
+                    <h2><i class="fas fa-wave-square"></i> 1. 確率過程と独立定常増分過程</h2>
 
-                    <h3 style="margin-top:1.2rem;">確率過程とは</h3>
+                    <h3>確率過程とは</h3>
                     <p>
                         時間 $t \geq 0$ に対して確率変数 $X_t$ が割り当てられているとき、その族
                         $$X = (X_t)_{t \geq 0}$$
-                        を<strong>確率過程</strong>（stochastic process）という。
+                        を<strong>確率過程</strong>（stochastic process）といいます。
                     </p>
-                    <div class="formula-block">
-                        <p><strong>イメージ</strong></p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-lightbulb"></i> イメージ</p>
                         <ul>
                             <li>$t$ が固定された一瞬 → $X_t$ は1つの確率変数（通常の確率論）</li>
                             <li>$t$ を動かす → 確率変数が時系列でつながって「軌道（パス）」を描く</li>
                         </ul>
-                        <p>時間が<strong>連続</strong>（$t \in [0,\infty)$）の場合を<strong>連続時間確率過程</strong>、<strong>離散</strong>（$t = 0,1,2,\ldots$）の場合を<strong>時系列</strong>という（27章で詳述）。</p>
+                        <p>時間が<strong>連続</strong>（$t \in [0,\infty)$）の場合を<strong>連続時間確率過程</strong>、<strong>離散</strong>（$t = 0,1,2,\ldots$）の場合を<strong>時系列</strong>といいます。</p>
                     </div>
-                    <p>
-                        ある確率過程の1つの実現（「もし世界がこう動いたら」という1つの軌跡）を<strong>パス（path）</strong>という。パスは連続なものもあれば、階段状（不連続）なものもある。
-                    </p>
 
-                    <h3 style="margin-top:1.5rem;">独立定常増分過程</h3>
+                    <h3>独立定常増分過程</h3>
                     <p>
-                        応用上特に重要な確率過程は、次の2つの性質を持つものである。
+                        応用上特に重要な確率過程は、次の2つの性質をもつものです。
                     </p>
                     <div class="formula-block">
                         <p><strong>定義：独立定常増分過程</strong></p>
-                        <p>確率過程 $X = (X_t)_{t \geq 0}$ が以下の2つを満たすとき、<strong>独立定常増分過程</strong>という。</p>
+                        <p>確率過程 $X = (X_t)_{t \geq 0}$ が以下の2つを満たすとき、<strong>独立定常増分過程</strong>といいます。</p>
                         <p><strong>（1）独立増分性</strong>：$0 = t_0 < t_1 < \cdots < t_n$ を任意にとると、</p>
                         $$X_{t_0},\quad X_{t_1}-X_{t_0},\quad X_{t_2}-X_{t_1},\quad \ldots,\quad X_{t_n}-X_{t_{n-1}}$$
                         <p>がすべて互いに独立。</p>
                         <p><strong>（2）定常増分性</strong>：$X_{t+h} - X_t$ の分布が $t$ によらず $h$ だけで決まる（増分のスタート時点がどこでも関係ない）。</p>
                     </div>
-                    <p>
-                        <strong>直感的なイメージ</strong>：独立増分性は「過去の変化と未来の変化は無関係」、定常増分性は「10分間の変化の分布は、それが朝9時から9時10分でも、午後2時から2時10分でも同じ」という意味である。
-                    </p>
+                    <div class="memo-box">
+                        <p class="box-title"><i class="fas fa-info-circle"></i> 直感的なイメージ</p>
+                        <p>
+                            独立増分性は「過去の変化と未来の変化は無関係」、定常増分性は「10分間の変化の分布は、それが朝9時から9時10分でも、午後2時から2時10分でも同じ」という意味です。
+                        </p>
+                    </div>
                 </section>
 
-                <!-- ② ブラウン運動 -->
-                <section class="content-section">
-                    <h2><i class="fas fa-chart-line"></i> ② ブラウン運動（Brownian Motion）</h2>
+                <!-- ======================================================== -->
+                <!-- 2. ブラウン運動                                           -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="brownian">
+                    <h2><i class="fas fa-chart-line"></i> 2. ブラウン運動（Brownian Motion）</h2>
 
-                    <h3 style="margin-top:1.2rem;">定義</h3>
+                    <h3>定義</h3>
                     <p>
-                        $B_0 = 0$ を初期値とし、以下の3つの性質を持つ確率過程 $B = (B_t)_{t \geq 0}$ を<strong>ブラウン運動</strong>（Brownian motion）という。
+                        $B_0 = 0$ を初期値とし、以下の3つの性質を持つ確率過程 $B = (B_t)_{t \geq 0}$ を<strong>ブラウン運動</strong>（Brownian motion）といいます。
                     </p>
 
                     <div class="formula-block">
@@ -131,418 +158,372 @@
                         <p><strong>（3）パス（軌道）が連続</strong>：時間が少し変化すると $B_t$ の値もわずかしか変わらない（ジャンプしない）。</p>
                     </div>
                     <p>
-                        特に $\mu = 0$, $\sigma^2 = 1$ の場合を<strong>標準ブラウン運動</strong>（またはウィーナー過程）という。
+                        特に $\mu = 0$, $\sigma^2 = 1$ の場合を<strong>標準ブラウン運動</strong>（またはウィーナー過程）といいます。
                     </p>
 
-                    <h3 style="margin-top:1.5rem;">ブラウン運動の性質</h3>
+                    <h3>ブラウン運動の性質</h3>
                     <div class="formula-block">
-                        <p>（2）の定義から直接導ける性質：</p>
-                        $$E[B_t] = \mu t \qquad \text{（時間に比例して平均が増える）}$$
-                        $$\mathrm{Var}[B_t] = \sigma^2 t \qquad \text{（時間に比例してばらつきが広がる）}$$
+                        <p>定義(2)から直接導ける性質：</p>
+                        $$E[B_t] = \mu t, \qquad \mathrm{Var}[B_t] = \sigma^2 t$$
+                        <p>時間に比例して平均が増え、ばらつきも広がっていきます。</p>
                     </div>
-                    <p>
-                        ブラウン運動のパスは「ランダムウォーク」の連続版として理解できる。時間区間 $[0,1]$ を $n$ 等分して各小区間で独立な微少変動を積み重ねると、$n \to \infty$ でブラウン運動のパスが現れる。
-                    </p>
 
-                    <h3 style="margin-top:1.5rem;">ブラウン運動の作り方</h3>
+                    <h3>標準ブラウン運動との関係</h3>
                     <p>
                         標準ブラウン運動 $W = (W_t)_{t \geq 0}$ があれば、
                         $$B_t = \mu t + \sigma W_t$$
-                        はドリフト $\mu$・拡散係数 $\sigma^2$ のブラウン運動になる。これは次のように確認できる：
+                        はドリフト $\mu$・拡散係数 $\sigma^2$ のブラウン運動になります。$B_{t+h} - B_t = \mu h + \sigma(W_{t+h}-W_t) \sim N(\mu h, \sigma^2 h)$ が確認できます。
                     </p>
-                    <div class="formula-block">
-                        <p><strong>確認</strong>：$B_{t+h} - B_t = \mu h + \sigma(W_{t+h}-W_t)$</p>
-                        <p>$W$ の定常増分性により $W_{t+h}-W_t \sim N(0, h)$ なので：</p>
-                        $$B_{t+h} - B_t \;\sim\; N(\mu h,\; \sigma^2 h)$$
-                        <p>定義の（2）を満たす 。独立増分性とパスの連続性も $W$ の性質から従う。</p>
-                    </div>
                 </section>
 
-                <!-- ③ ブラウン運動のパラメータ推定 -->
-                <section class="content-section">
-                    <h2><i class="fas fa-sliders-h"></i> ③ ブラウン運動のパラメータ推定</h2>
+                <!-- ======================================================== -->
+                <!-- 3. ブラウン運動のパラメータ推定                           -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="brownian-estimation">
+                    <h2><i class="fas fa-sliders-h"></i> 3. ブラウン運動のパラメータ推定</h2>
 
-                    <h3 style="margin-top:1.2rem;">設定</h3>
+                    <h3>設定</h3>
                     <p>
-                        ブラウン運動 $B_t \sim N(\mu t, \sigma^2 t)$ の実現値を、時間間隔 $\Delta > 0$ ごとに測定してデータ
-                        $$B_0,\; B_\Delta,\; B_{2\Delta},\; \ldots,\; B_{n\Delta}$$
-                        を得たとする。ここから $\mu$ と $\sigma^2$ を推定したい。
+                        ブラウン運動の実現値を、時間間隔 $\Delta > 0$ ごとに測定してデータ
+                        $B_0, B_\Delta, B_{2\Delta}, \ldots, B_{n\Delta}$
+                        を得たとします。ここから $\mu$ と $\sigma^2$ を推定します。
+                    </p>
+                    <p>
+                        増分 $Z_k := B_{k\Delta} - B_{(k-1)\Delta}$（$k = 1, \ldots, n$）とおくと、独立定常増分性から
+                        $$Z_1, Z_2, \ldots, Z_n \quad \text{は独立に} \quad Z_k \sim N(\mu\Delta,\; \sigma^2\Delta)$$
+                        に従います。平均 $\mu\Delta$・分散 $\sigma^2\Delta$ の正規分布から独立に $n$ 回サンプリングした構造と同じです。
                     </p>
 
-                    <h3 style="margin-top:1.5rem;">増分を使う</h3>
-                    <p>
-                        $Z_k := B_{k\Delta} - B_{(k-1)\Delta}$（$k = 1, \ldots, n$）とおくと、独立定常増分性から
-                        $$Z_1, Z_2, \ldots, Z_n \quad \text{は互いに独立に} \quad Z_k \sim N(\mu\Delta,\; \sigma^2\Delta)$$
-                        に従う。つまり平均 $\mu\Delta$、分散 $\sigma^2\Delta$ の正規分布から独立に $n$ 回サンプリングしたデータと同じ構造になる。
-                    </p>
-
-                    <h3 style="margin-top:1.5rem;">最尤推定量（＝モーメント推定量）</h3>
-                    <p>
-                        正規分布の最尤推定量の公式を思い出すと、$N(\mu\Delta, \sigma^2\Delta)$ からのサンプル $Z_1,\ldots,Z_n$ に対して：
-                    </p>
+                    <h3>最尤推定量</h3>
                     <div class="formula-block">
-                        <p><strong>増分の標本平均と標本分散</strong>（最尤推定量）</p>
-                        $$\widehat{\mu\Delta} = \bar{Z} = \frac{1}{n}\sum_{k=1}^n Z_k = \frac{B_{n\Delta}}{n} \quad\Rightarrow\quad \hat{\mu} = \frac{\bar{Z}}{\Delta} = \frac{B_{n\Delta}}{n\Delta}$$
-                        $$\widehat{\sigma^2\Delta} = \frac{1}{n}\sum_{k=1}^n(Z_k - \bar{Z})^2 \quad\Rightarrow\quad \hat{\sigma}^2 = \frac{1}{n\Delta}\sum_{k=1}^n(Z_k - \bar{Z})^2$$
+                        $$\hat{\mu} = \frac{\bar{Z}}{\Delta} = \frac{B_{n\Delta}}{n\Delta}$$
+                        $$\hat{\sigma}^2 = \frac{1}{n\Delta}\sum_{k=1}^n(Z_k - \bar{Z})^2$$
                     </div>
                     <p>
-                        <strong>$\hat{\mu}$ の式の意味</strong>：$B_{n\Delta}$ はスタートから終点までの全体の変化量で、それを総時間 $n\Delta$ で割るだけ。観測の細かさに関係なく「始点と終点だけ」で決まる。
+                        $\hat{\mu}$ はスタートから終点までの全体の変化量 $B_{n\Delta}$ を総時間 $n\Delta$ で割るだけで、観測の細かさに関係なく始点と終点だけで決まります。
                     </p>
 
-                    <h3 style="margin-top:1.5rem;">高頻度観測（High-Frequency Observations）</h3>
-                    <p>
-                        $\Delta \to 0$（観測を細かくする）と何が変わるのか？
-                    </p>
+                    <h3>モーメント法による確認</h3>
                     <div class="formula-block">
-                        <p><strong>重要な違い</strong></p>
+                        <p><strong>1次モーメント</strong>（$E[Z_k] = \mu\Delta$ と標本平均を等置）：$\bar{Z} = \hat{\mu}\Delta \Rightarrow \hat{\mu} = \bar{Z}/\Delta$</p>
+                        <p><strong>2次モーメント</strong>（$E[Z_k^2] = \sigma^2\Delta + (\mu\Delta)^2$）：</p>
+                        $$\frac{1}{n}\sum_{k=1}^n Z_k^2 = \hat{\sigma}^2\Delta + (\hat{\mu}\Delta)^2 \quad \Rightarrow \quad \hat{\sigma}^2 = \frac{S_Z^2 - \hat{\mu}^2\Delta^2}{\Delta}$$
+                        <p>（$S_Z^2 = \frac{1}{n}\sum Z_k^2$）</p>
+                    </div>
+
+                    <h3>高頻度観測（High-Frequency Observations）の重要結論</h3>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-exclamation-circle"></i> $\hat{\mu}$ と $\hat{\sigma}^2$ の精度の違い</p>
                         <ul>
-                            <li>
-                                $\hat{\sigma}^2$（分散の推定）：観測間隔 $\Delta$ を小さくして観測を細かくすると、推定精度が<strong>向上する</strong>（一致推定量）。実際、$\sum (Z_k - \bar{Z})^2/\Delta \approx \sigma^2$ に収束する。
-                            </li>
-                            <li>
-                                $\hat{\mu}$（ドリフトの推定）：$\hat{\mu} = B_{n\Delta}/(n\Delta)$ は始点と終点のみで決まるため、観測間隔 $\Delta$ を細かくしても精度は<strong>改善しない</strong>。精度は観測総時間 $T = n\Delta$ の長さにのみ依存する。
-                            </li>
+                            <li><strong>$\hat{\sigma}^2$（分散の推定）</strong>：観測間隔 $\Delta$ を小さくして高頻度で観測すると推定精度が<strong>向上</strong>します。サンプルサイズが増えるためです。</li>
+                            <li><strong>$\hat{\mu}$（ドリフトの推定）</strong>：始点と終点のみで決まるため、観測間隔を細かくしても精度は<strong>改善しません</strong>。精度は総観測時間 $T = n\Delta$ にのみ依存します。</li>
                         </ul>
-                    </div>
-                    <p>
-                        これは直感的にも納得できる：ドリフト $\mu$ は「全体的なトレンド」なので、観測の細かさではなく観測期間の長さが重要なのである。
-                    </p>
-
-                    <h3 style="margin-top:1.5rem;">モーメント法による導出</h3>
-                    <p>
-                        モーメント法でも同じ推定量が得られることを確認しよう。$E[Z_k] = \mu\Delta$, $E[Z_k^2] = \sigma^2\Delta + (\mu\Delta)^2$ を利用して：
-                    </p>
-                    <div class="formula-block">
-                        <p><strong>1次モーメント</strong>（$E[Z_k] = \mu\Delta$ と実現値の平均を等置）：</p>
-                        $$\bar{Z} = \hat{\mu}\Delta \quad\Rightarrow\quad \hat{\mu} = \frac{\bar{Z}}{\Delta}$$
-                        <p><strong>2次モーメント</strong>（$E[Z_k^2] = \sigma^2\Delta + (\mu\Delta)^2$ と実現値の2乗平均を等置）：</p>
-                        $$\frac{1}{n}\sum_{k=1}^n Z_k^2 = \hat{\sigma}^2\Delta + (\hat{\mu}\Delta)^2$$
-                        <p>→ これを解くと $\hat{\sigma}^2$ は最尤推定量と同じ式になる。</p>
+                        <p>直感：ドリフト（全体的なトレンド）は「長期間眺める」ことで初めて推測できます。日中の細かい動きを観察しても、年間のトレンドはわかりません。</p>
                     </div>
                 </section>
 
-                <!-- ④ ポアソン過程 -->
-                <section class="content-section">
-                    <h2><i class="fas fa-bolt"></i> ④ ポアソン過程（Poisson Process）</h2>
+                <!-- ======================================================== -->
+                <!-- 4. ポアソン過程                                           -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="poisson">
+                    <h2><i class="fas fa-bolt"></i> 4. ポアソン過程（Poisson Process）</h2>
 
-                    <h3 style="margin-top:1.2rem;">定義</h3>
+                    <h3>定義</h3>
                     <p>
-                        $N_0 = 0$ を初期値とし（最初はイベントが0件）、以下の2つを満たす確率過程 $N = (N_t)_{t \geq 0}$ を<strong>強度 $\lambda$ のポアソン過程</strong>という。
+                        $N_0 = 0$ を初期値とし（最初はイベントが0件）、以下の2つを満たす確率過程 $N = (N_t)_{t \geq 0}$ を<strong>強度 $\lambda$ のポアソン過程</strong>といいます。
                     </p>
                     <div class="formula-block">
                         <p><strong>ポアソン過程の定義</strong></p>
                         <p><strong>（1）独立定常増分過程</strong>である。</p>
                         <p><strong>（2）任意の $t > s \geq 0$ に対して</strong>、増分はポアソン分布に従う：</p>
                         $$N_t - N_s \;\sim\; \mathrm{Poi}\!\left(\lambda(t-s)\right)$$
-                        $$P(N_t - N_s = k) = \frac{e^{-\lambda(t-s)}\,[\lambda(t-s)]^k}{k!}, \quad k = 0, 1, 2, \ldots$$
                     </div>
-                    <p>
-                        $N_t$ は「時刻 $t$ までに発生したイベントの累積件数」を表す。パスは非減少の階段状になる（イベントが起きるたびに1ずつ増える）。
-                    </p>
                     <div class="formula-block">
-                        <p><strong>平均と分散（ポアソン分布の性質より）</strong></p>
+                        <p><strong>平均と分散</strong></p>
                         $$E[N_t] = \lambda t, \qquad \mathrm{Var}[N_t] = \lambda t$$
-                        <p>$\lambda$ は<strong>単位時間あたりの平均発生件数</strong>（強度）を表す。</p>
+                        <p>$\lambda$ は<strong>単位時間あたりの平均発生件数</strong>（強度）を表します。</p>
                     </div>
                     <p>
-                        <strong>どんな現象に使うか？</strong>：稀なイベントで、かつ過去の発生が未来の発生に影響を与えない（独立）ような現象のモデルとして使われる。例:地震発生回数、コールセンターへの着信件数、ウェブサイトへのアクセス件数など。
+                        $N_t$ は「時刻 $t$ までに発生したイベントの累積件数」を表します。パスは非減少の<strong>右連続階段状</strong>になります（イベントが起きるたびに1ずつ増える）。
                     </p>
 
-                    <h3 style="margin-top:1.5rem;">計数過程と点過程としての表現</h3>
-                    <p>
-                        別の視点から考えよう。イベントが起きた時刻を $T_1 < T_2 < T_3 < \cdots$ とすると、
-                        $$N_t = \sum_{k=1}^{\infty} \mathbf{1}(T_k \leq t)$$
-                        と書ける（$T_k \leq t$ となる $k$ の個数を数えている）。このような $N$ を<strong>計数過程</strong>または<strong>点過程</strong>という。
-                    </p>
+                    <h3>適用例</h3>
+                    <p>稀なイベントで、かつ過去の発生が未来に影響を与えない（独立）ような現象に使われます：地震発生回数、コールセンターへの着信、ウェブサイトへのアクセス件数など。</p>
 
-                    <h3 style="margin-top:1.5rem;">発生間隔と指数分布</h3>
+                    <h3>発生間隔と指数分布</h3>
                     <p>
-                        $k$ 番目のイベントの発生間隔を $W_k = T_k - T_{k-1}$（$T_0 = 0$）とおくと：
+                        $k$ 番目のイベントの発生間隔を $W_k = T_k - T_{k-1}$（$T_0 = 0$）とおきます。
                     </p>
                     <div class="formula-block">
                         <p><strong>定理</strong>：$N$ が強度 $\lambda$ のポアソン過程 $\Longleftrightarrow$ $W_1, W_2, W_3, \ldots$ が独立に指数分布 $\mathrm{Exp}(\lambda)$ に従う。</p>
-                        $$W_k \;\sim\; \mathrm{Exp}(\lambda), \quad f_W(w) = \lambda e^{-\lambda w} \quad (w > 0)$$
-                        <p>平均 $E[W_k] = 1/\lambda$（待ち時間の平均＝強度の逆数）</p>
+                        $$W_k \;\sim\; \mathrm{Exp}(\lambda), \quad f_W(w) = \lambda e^{-\lambda w} \quad (w > 0), \quad E[W_k] = \frac{1}{\lambda}$$
                     </div>
-                    <p>
-                        <strong>直感的な理解</strong>：指数分布は<strong>無記憶性</strong>（$P(W > s+t \mid W > s) = P(W > t)$）を持つ唯一の分布。「前回のイベントからどれだけ時間が経っていても、次が起きるまでの待ち時間の分布は変わらない」という性質が、ポアソン過程の独立増分性と整合する。
-                    </p>
-                </section>
-
-                <!-- ⑤ ポアソン過程のパラメータ推定 -->
-                <section class="content-section">
-                    <h2><i class="fas fa-calculator"></i> ⑤ ポアソン過程のパラメータ推定</h2>
-
-                    <p>
-                        強度 $\lambda$ を推定するデータの形式には2種類ある。どちらを使っても推定量は同じ形になる。
-                    </p>
-
-                    <h3 style="margin-top:1.2rem;">形式 (I)：発生時刻 $T_1, T_2, \ldots, T_n$ を観測した場合</h3>
-                    <p>
-                        発生間隔 $W_k = T_k - T_{k-1}$ は独立に $\mathrm{Exp}(\lambda)$ に従うので、対数尤度関数は：
-                    </p>
-                    <div class="formula-block">
-                        <p><strong>対数尤度</strong>（$f_W(w) = \lambda e^{-\lambda w}$ より）：</p>
-                        $$\ell_n(\lambda) = \sum_{k=1}^n \log(\lambda e^{-\lambda W_k}) = n\log\lambda - \lambda\sum_{k=1}^n W_k$$
-                        <p><strong>最尤方程式</strong>（$\lambda$ で微分 $=0$）：</p>
-                        $$\frac{d\ell_n}{d\lambda} = \frac{n}{\lambda} - \sum_{k=1}^n W_k = 0$$
-                        <p><strong>最尤推定量</strong>：</p>
-                        $$\hat{\lambda} = \frac{n}{\sum_{k=1}^n W_k} = \frac{n}{T_n} = \frac{\text{イベントの総件数}}{\text{観測時間}}$$
-                    </div>
-
-                    <h3 style="margin-top:1.5rem;">形式 (II)：時間間隔 $\Delta$ ごとのカウント $N_0, N_\Delta, N_{2\Delta}, \ldots, N_{n\Delta}$ を観測した場合</h3>
-                    <p>
-                        各区間のカウント $M_k = N_{k\Delta} - N_{(k-1)\Delta}$ は独立に $M_k \sim \mathrm{Poi}(\lambda\Delta)$ に従う。対数尤度は：
-                    </p>
-                    <div class="formula-block">
-                        <p><strong>対数尤度</strong>（ポアソン分布の対数尤度より）：</p>
-                        $$\ell_n(\lambda) = \sum_{k=1}^n \log\frac{e^{-\lambda\Delta}(\lambda\Delta)^{M_k}}{M_k!} = -n\lambda\Delta + \left(\sum_{k=1}^n M_k\right)\log(\lambda\Delta) - \text{定数}$$
-                        <p><strong>最尤方程式</strong>：</p>
-                        $$\frac{d\ell_n}{d\lambda} = -n\Delta + \frac{\sum_{k=1}^n M_k}{\lambda} = 0$$
-                        <p><strong>最尤推定量</strong>（$\sum M_k = N_{n\Delta}$）：</p>
-                        $$\hat{\lambda} = \frac{\sum_{k=1}^n M_k}{n\Delta} = \frac{N_{n\Delta}}{n\Delta} = \frac{\text{イベントの総件数}}{\text{観測時間}}$$
-                    </div>
-
-                    <div class="formula-block">
-                        <p><strong>重要な結論</strong>：どちらのデータ形式でも、</p>
-                        $$\hat{\lambda} = \frac{\text{イベントの総件数}}{\text{観測時間}}$$
-                        <p>という直感的な形になる。「1時間に平均何件起きたか」をそのまま推定量にすればよい。</p>
+                    <div class="memo-box">
+                        <p class="box-title"><i class="fas fa-info-circle"></i> 無記憶性との関係</p>
+                        <p>
+                            指数分布は<strong>無記憶性</strong>（$P(W > s+t \mid W > s) = P(W > t)$）をもつ唯一の分布です。
+                            「前回のイベントからどれだけ時間が経っていても、次が起きるまでの待ち時間の分布は変わらない」という性質が、ポアソン過程の独立増分性と整合しています。
+                        </p>
                     </div>
                 </section>
 
-                <!-- ⑥ 複合ポアソン過程 -->
-                <section class="content-section">
-                    <h2><i class="fas fa-layer-group"></i> ⑥ 複合ポアソン過程</h2>
+                <!-- ======================================================== -->
+                <!-- 5. ポアソン過程のパラメータ推定                           -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="poisson-estimation">
+                    <h2><i class="fas fa-calculator"></i> 5. ポアソン過程のパラメータ推定</h2>
 
-                    <h3 style="margin-top:1.2rem;">定義</h3>
+                    <p>強度 $\lambda$ を推定するデータの形式には2種類ありますが、どちらも同じ形の推定量になります。</p>
+
+                    <h3>形式 (I)：発生時刻 $T_1 < T_2 < \cdots < T_n$ を観測した場合</h3>
+                    <div class="formula-block">
+                        <p>対数尤度（$W_k \sim \mathrm{Exp}(\lambda)$ より）：</p>
+                        $$\ell(\lambda) = \sum_{k=1}^n \log(\lambda e^{-\lambda W_k}) = n\log\lambda - \lambda\sum_{k=1}^n W_k$$
+                        <p>最尤方程式 $d\ell/d\lambda = 0$：</p>
+                        $$\frac{n}{\lambda} - \sum_{k=1}^n W_k = 0 \quad \Rightarrow \quad \hat{\lambda} = \frac{n}{\sum_{k=1}^n W_k} = \frac{n}{T_n}$$
+                    </div>
+
+                    <h3>形式 (II)：区間カウント $M_k = N_{k\Delta} - N_{(k-1)\Delta}$ を観測した場合</h3>
+                    <div class="formula-block">
+                        <p>$M_k \sim \mathrm{Poi}(\lambda\Delta)$（独立）なので、対数尤度を $\lambda$ で微分して：</p>
+                        $$\hat{\lambda} = \frac{\sum_{k=1}^n M_k}{n\Delta} = \frac{N_{n\Delta}}{n\Delta}$$
+                    </div>
+
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-star"></i> 共通の結論</p>
+                        <div class="formula-block">
+                            $$\hat{\lambda} = \frac{\text{イベントの総件数}}{\text{観測時間}}$$
+                        </div>
+                        <p>データ形式によらず常にこの直感的な形になります。「1時間に平均何件起きたか」をそのまま推定量にすればよいです。</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 6. 複合ポアソン過程                                       -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="compound-poisson">
+                    <h2><i class="fas fa-layer-group"></i> 6. 複合ポアソン過程</h2>
+
+                    <h3>定義</h3>
                     <p>
                         ポアソン過程 $N_t$（強度 $\lambda$）の各イベントに「大きさ」$U_k$ を付与した累積和
                         $$X_t = \sum_{k=1}^{N_t} U_k$$
-                        を<strong>複合ポアソン過程</strong>（compound Poisson process）という。ただし $U_1, U_2, \ldots$ は互いに独立同分布で、$N_t$ とも独立。
+                        を<strong>複合ポアソン過程</strong>（compound Poisson process）といいます。$U_1, U_2, \ldots$ は互いに独立同分布で、$N_t$ とも独立です。
                     </p>
-                    <div class="formula-block">
-                        <p><strong>具体例：地震の総損害額</strong></p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-lightbulb"></i> 具体例：地震の総損害額</p>
                         <ul>
                             <li>$N_t$：時刻 $t$ までの地震の発生件数（ポアソン過程）</li>
                             <li>$U_k$：$k$ 回目の地震による損害額</li>
-                            <li>$X_t = \sum_{k=1}^{N_t} U_k$：時刻 $t$ までの総損害額（複合ポアソン過程）</li>
+                            <li>$X_t = \sum_{k=1}^{N_t} U_k$：時刻 $t$ までの総損害額</li>
                         </ul>
-                        <p>特に $U_k = 1$（全イベントが同じ大きさ1）のとき、$X_t = N_t$（通常のポアソン過程）。</p>
+                        <p>$U_k = 1$ のとき $X_t = N_t$（通常のポアソン過程）。</p>
                     </div>
 
-                    <h3 style="margin-top:1.5rem;">期待値と分散の計算（条件付き期待値）</h3>
+                    <h3>期待値と分散</h3>
+                    <p>$E[U_k] = \nu$、$E[U_k^2] = \nu^2 + \sigma_U^2$（$\mathrm{Var}[U_k] = \sigma_U^2$）とおきます。</p>
                     <p>
-                        $E[U_k] = \nu$, $\mathrm{Var}[U_k] = \sigma_U^2$（すなわち $E[U_k^2] = \sigma_U^2 + \nu^2$）とおく。
-                    </p>
-                    <p>
-                        <strong>計算のコツ</strong>：$N_t$ を既知（定数 $m$）として固定して計算し、後で $N_t$ の期待値をとる（<strong>条件付き期待値のタワー性</strong>）。
+                        計算のコツ：$N_t$ を既知（定数 $m$）として固定して計算し、後で $N_t$ の期待値をとる（<strong>条件付き期待値のタワー性</strong>）。
                     </p>
                     <div class="formula-block">
-                        <p><strong>期待値の計算</strong></p>
-                        <p>まず $N_t = m$ と固定すると $X_t = U_1 + \cdots + U_m$ なので：</p>
-                        $$E[X_t \mid N_t = m] = m\nu$$
-                        <p>次に $m$ を動かして平均をとる（$E[N_t] = \lambda t$）：</p>
-                        $$E[X_t] = E\!\left[E[X_t \mid N_t]\right] = E[N_t \cdot \nu] = \nu\,E[N_t] = \nu\lambda t$$
+                        <p><strong>期待値</strong>：$N_t = m$ と固定すると $X_t = U_1+\cdots+U_m$ なので $E[X_t \mid N_t = m] = m\nu$。</p>
+                        $$E[X_t] = E\!\left[E[X_t \mid N_t]\right] = E[N_t \cdot \nu] = \nu\lambda t$$
                     </div>
                     <div class="formula-block">
-                        <p><strong>分散の計算</strong></p>
-                        <p>$N_t = m$ と固定すると $X_t = U_1 + \cdots + U_m$（独立和）なので：</p>
-                        $$\mathrm{Var}[X_t \mid N_t = m] = m\sigma_U^2$$
-                        <p>2次モーメントの計算（$E[X_t^2 \mid N_t = m] = m\sigma_U^2 + m^2\nu^2$）を使って：</p>
-                        $$E[X_t^2] = E[N_t\sigma_U^2 + N_t^2\nu^2] = \sigma_U^2\lambda t + \nu^2 E[N_t^2]$$
-                        <p>ポアソン分布の性質から $E[N_t^2] = \lambda t + (\lambda t)^2$（分散＋平均² ）なので：</p>
-                        $$E[X_t^2] = \sigma_U^2\lambda t + \nu^2(\lambda t + (\lambda t)^2) = (\sigma_U^2 + \nu^2)\lambda t + (\nu\lambda t)^2$$
-                        $$\mathrm{Var}[X_t] = E[X_t^2] - (E[X_t])^2 = (\sigma_U^2 + \nu^2)\lambda t$$
+                        <p><strong>分散</strong>：$\mathrm{Var}[X_t \mid N_t = m] = m\sigma_U^2$、$E[N_t^2] = \lambda t + (\lambda t)^2$ を使って：</p>
+                        $$\mathrm{Var}[X_t] = (\sigma_U^2 + \nu^2)\lambda t$$
                     </div>
                     <div class="formula-block">
                         <p><strong>公式まとめ</strong>（$E[U_k]=\nu$, $E[U_k^2]=\nu^2+\sigma_U^2$）</p>
-                        $$E[X_t] = \lambda t \cdot \nu = \lambda t \cdot E[U_k]$$
-                        $$\mathrm{Var}[X_t] = \lambda t \cdot E[U_k^2]$$
-                    </div>
-                </section>
-
-                <!-- ⑦ 公式まとめ -->
-                <section class="content-section">
-                    <h2><i class="fas fa-clipboard-list"></i> ⑦ 公式まとめ</h2>
-
-                    <div class="formula-block">
-                        <p><strong>ブラウン運動 $B_t \sim N(\mu t, \sigma^2 t)$</strong></p>
-                        $$B_t - B_s \sim N(\mu(t-s),\; \sigma^2(t-s)), \quad E[B_t] = \mu t, \quad \mathrm{Var}[B_t] = \sigma^2 t$$
-                    </div>
-                    <div class="formula-block">
-                        <p><strong>ブラウン運動のパラメータ推定</strong>（間隔 $\Delta$、$n$ 点観測、$Z_k = B_{k\Delta}-B_{(k-1)\Delta}$）</p>
-                        $$\hat{\mu} = \frac{B_{n\Delta}}{n\Delta} = \frac{\bar{Z}}{\Delta}, \qquad \hat{\sigma}^2 = \frac{1}{n\Delta}\sum_{k=1}^n(Z_k-\bar{Z})^2$$
-                        <p>高頻度観測（$\Delta\to 0$）：$\hat{\sigma}^2$ の精度は改善するが $\hat{\mu}$ の精度は観測時間 $T=n\Delta$ にのみ依存。</p>
-                    </div>
-                    <div class="formula-block">
-                        <p><strong>ポアソン過程 $N_t \sim \mathrm{Poi}(\lambda t)$</strong></p>
-                        $$N_t - N_s \sim \mathrm{Poi}(\lambda(t-s)), \quad E[N_t] = \lambda t, \quad \mathrm{Var}[N_t] = \lambda t$$
-                        <p>発生間隔：$W_k \sim \mathrm{Exp}(\lambda)$（平均 $1/\lambda$）</p>
-                    </div>
-                    <div class="formula-block">
-                        <p><strong>ポアソン過程のパラメータ推定</strong></p>
-                        $$\hat{\lambda} = \frac{\text{イベントの総件数}}{\text{観測時間}}$$
-                        <p>（発生時刻データでも区間カウントデータでも同じ形）</p>
-                    </div>
-                    <div class="formula-block">
-                        <p><strong>複合ポアソン過程 $X_t = \sum_{k=1}^{N_t} U_k$</strong></p>
                         $$E[X_t] = \lambda t \cdot E[U_k], \qquad \mathrm{Var}[X_t] = \lambda t \cdot E[U_k^2]$$
                     </div>
                 </section>
 
-                <!-- 例題・演習 -->
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil-alt"></i> 例題・演習</h2>
-                    <p style="color:#555; font-style:italic;">以下の問題はすべて自作問題です。問題文と解答は分けているので、まず自分で解いてから答え合わせをしてください。</p>
+                <!-- ======================================================== -->
+                <!-- 7. 公式まとめ                                             -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="formulas">
+                    <h2><i class="fas fa-clipboard-list"></i> 7. 公式まとめ</h2>
 
-                    <!-- 問1 -->
+                    <table class="dist-table">
+                        <thead>
+                            <tr><th>過程</th><th>増分の分布</th><th>$E$, $\mathrm{Var}$</th><th>パスの形</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ブラウン運動</td>
+                                <td>$B_t-B_s \sim N(\mu(t-s), \sigma^2(t-s))$</td>
+                                <td>$\mu t$, $\sigma^2 t$</td>
+                                <td>連続</td>
+                            </tr>
+                            <tr>
+                                <td>ポアソン過程</td>
+                                <td>$N_t-N_s \sim \mathrm{Poi}(\lambda(t-s))$</td>
+                                <td>$\lambda t$, $\lambda t$</td>
+                                <td>右連続階段状</td>
+                            </tr>
+                            <tr>
+                                <td>複合ポアソン</td>
+                                <td>—</td>
+                                <td>$\lambda t \nu$, $\lambda t E[U^2]$</td>
+                                <td>右連続階段状</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>推定量まとめ</h3>
+                    <table class="dist-table">
+                        <thead>
+                            <tr><th>過程</th><th>パラメータ</th><th>最尤推定量</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>ブラウン運動</td>
+                                <td>$\mu$</td>
+                                <td>$\hat{\mu} = B_{n\Delta}/(n\Delta)$（始点・終点のみ）</td>
+                            </tr>
+                            <tr>
+                                <td>ブラウン運動</td>
+                                <td>$\sigma^2$</td>
+                                <td>$\hat{\sigma}^2 = \frac{1}{n\Delta}\sum(Z_k - \bar{Z})^2$（高頻度で改善）</td>
+                            </tr>
+                            <tr>
+                                <td>ポアソン過程</td>
+                                <td>$\lambda$</td>
+                                <td>$\hat{\lambda} = \text{総件数}/\text{観測時間}$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 8. 例題・演習                                             -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 8. 例題・演習</h2>
+
+                    <h3>問15.1：ブラウン運動のパラメータ推定</h3>
                     <div class="example-block">
-                        <p><strong>問1（ブラウン運動のパラメータ推定）</strong></p>
+                        <span class="prob-badge badge-q">問題</span>
                         <p>
                             ある株価が $S_t = S_0 + \sigma W_t$（$S_0 = 100$、$W_t$：標準ブラウン運動）でモデル化されている（ドリフト $\mu = 0$）。時間単位を「日」とし、毎日の終値を観測した。
                         </p>
-                        <p><strong>（1）</strong> $n=200$ 日間の観測（$\Delta = 1$ 日）で、増分の2乗平均が
-                        $$V_1 = \frac{1}{200}\sum_{k=1}^{200}(S_{k} - S_{k-1})^2 = 9.00$$
-                        であった。モーメント法により $\hat{\sigma}$ を求めよ。</p>
-
-                        <p><strong>（2）</strong> 同じ期間を2時間ごと（$\Delta = 2/24$ 日、1日12観測）に高頻度で観測した結果、
-                        $$V_2 = \frac{1}{2400}\sum_{k=1}^{2400}\left(S_{k\cdot\frac{1}{12}} - S_{(k-1)\cdot\frac{1}{12}}\right)^2 = 0.750$$
-                        であった。モーメント法により $\hat{\sigma}$ を求め、（1）の結果と比較せよ。</p>
-
-                        <p><strong>（3）</strong> もし株価がドリフト $\mu \neq 0$ のブラウン運動 $S_t = \mu t + \sigma W_t$ に従うとき、$n = 200$ 日の月次（$\Delta=1$）観測で $\hat{\mu}$ の推定精度を改善するにはどうすればよいか？「観測間隔を細かくする」「観測期間を延ばす」のどちらが有効か説明せよ。</p>
+                        <ol>
+                            <li>$n=200$ 日間の観測（$\Delta = 1$ 日）で、増分の2乗平均が $V_1 = \frac{1}{200}\sum_{k=1}^{200}(S_{k} - S_{k-1})^2 = 9.00$ であった。モーメント法により $\hat{\sigma}$ を求めよ。</li>
+                            <li>同じ期間を2時間ごと（$\Delta = 1/12$ 日）に高頻度で観測した結果、$V_2 = \frac{1}{2400}\sum_{k=1}^{2400}(Z_k)^2 = 0.750$ であった。モーメント法により $\hat{\sigma}$ を求め、(1) の結果と比較せよ。</li>
+                            <li>もし株価がドリフト $\mu \neq 0$ のブラウン運動に従うとき、$\hat{\mu}$ の推定精度を改善するには「観測間隔を細かくする」「観測期間を延ばす」のどちらが有効か説明せよ。</li>
+                        </ol>
                     </div>
-
                     <div class="answer-block">
-                        <p><strong>解答（問1）</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
 
-                        <p><strong>（1）$\Delta = 1$ 日の推定</strong></p>
-                        <p>増分 $Z_k = S_k - S_{k-1} \sim N(\mu\Delta, \sigma^2\Delta) = N(0, \sigma^2)$（$\Delta=1$, $\mu=0$）。</p>
-                        <p>2次モーメント法：$E[Z_k^2] = \sigma^2\Delta = \sigma^2$（$\Delta=1$ なので）なので、</p>
-                        $$V_1 = \frac{1}{n}\sum Z_k^2 \approx E[Z_k^2] = \sigma^2$$
-                        $$\hat{\sigma}^2 = V_1 = 9.00 \quad\Rightarrow\quad \hat{\sigma} = 3.00$$
-                        <div class="formula-block"> $\hat{\sigma} = 3.00$（日次ボラティリティ）</div>
-
-                        <p><strong>（2）高頻度（$\Delta = 1/12$ 日）の推定</strong></p>
-                        <p>今度は $\Delta = 1/12$、$n = 2400$ 観測。増分 $Z_k \sim N(0, \sigma^2/12)$ なので $E[Z_k^2] = \sigma^2\Delta = \sigma^2/12$。</p>
-                        $$V_2 = \hat{\sigma}^2 \cdot \Delta \quad\Rightarrow\quad \hat{\sigma}^2 = \frac{V_2}{\Delta} = 0.750 \times 12 = 9.00$$
-                        $$\hat{\sigma} = 3.00$$
-                        <p>（1）と同じ結果になった。</p>
-                        <div class="formula-block"> $\hat{\sigma} = 3.00$（観測間隔が変わっても $\sigma^2$ の推定値は同じ。ただし、高頻度で得た（2）の結果の方が<strong>統計的精度（推定量の分散）が高い</strong>。サンプルサイズが200→2400と12倍になっているため。）</div>
-
-                        <p><strong>（3）$\hat{\mu}$ の精度改善</strong></p>
-                        <p>$\hat{\mu} = B_{n\Delta}/(n\Delta) = (S_{n\Delta} - S_0)/(n\Delta)$。これはスタートと終点のみで決まる。</p>
+                        <p><strong>(1) $\Delta = 1$ 日の推定</strong></p>
+                        <p>増分 $Z_k = S_k - S_{k-1} \sim N(0, \sigma^2)$（$\Delta=1$, $\mu=0$）。2次モーメント $E[Z_k^2] = \sigma^2\Delta = \sigma^2$（$\Delta=1$）なので：</p>
                         <div class="formula-block">
-                            <p> $\hat{\mu}$ の推定精度は<strong>観測期間 $T = n\Delta$ の長さ</strong>にのみ依存する。観測間隔を細かくしても $T$ が変わらなければ精度は改善しない。したがって「<strong>観測期間を延ばす</strong>」ことが有効。</p>
-                            <p>直感：ドリフト（全体的なトレンド）は「長期間眺める」ことで初めて推測できる。日中の細かい動きをいくら観察しても、年間のトレンドはわからない。</p>
+                            $$\hat{\sigma}^2 = V_1 = 9.00 \quad\Rightarrow\quad \hat{\sigma} = 3.00$$
                         </div>
+
+                        <p><strong>(2) 高頻度（$\Delta = 1/12$ 日）の推定</strong></p>
+                        <p>$\Delta = 1/12$ のとき $E[Z_k^2] = \sigma^2\Delta = \sigma^2/12$ なので：</p>
+                        <div class="formula-block">
+                            $$V_2 = \hat{\sigma}^2 \cdot \Delta \quad\Rightarrow\quad \hat{\sigma}^2 = \frac{V_2}{\Delta} = 0.750 \times 12 = 9.00 \quad\Rightarrow\quad \hat{\sigma} = 3.00$$
+                        </div>
+                        <p>推定値は(1)と同じです。ただし観測数が200→2400（12倍）になったため、(2)の推定量の<strong>分散は小さく</strong>（精度が高く）なっています。</p>
+
+                        <p><strong>(3) $\hat{\mu}$ の精度改善</strong></p>
+                        <p>$\hat{\mu} = B_{n\Delta}/(n\Delta)$ はスタートと終点のみで決まります。観測間隔を細かくしても $T = n\Delta$ が変わらなければ精度は改善しません。</p>
+                        <p><strong>「観測期間を延ばす」ことが有効</strong>です。ドリフト（全体的なトレンド）は長期間観察することで初めて推測できます。</p>
                     </div>
 
-                    <!-- 問2 -->
+                    <h3>問15.2：ポアソン過程の強度推定</h3>
                     <div class="example-block">
-                        <p><strong>問2（ポアソン過程の強度推定）</strong></p>
+                        <span class="prob-badge badge-q">問題</span>
                         <p>
                             あるコールセンターへの着信件数がポアソン過程 $N_t$（強度 $\lambda$）に従うとモデル化する。
                         </p>
-                        <p><strong>（1）</strong> 着信ごとに正確な時刻を記録したところ、8時間の営業時間中に次の着信時刻（単位：時間）が記録された：</p>
-                        $$T_1 = 0.12, \quad T_2 = 0.45, \quad T_3 = 0.78, \quad \ldots, \quad T_{24} = 7.85$$
-                        <p>（合計24件の着信）。最尤推定量 $\hat{\lambda}$ を求めよ。</p>
-
-                        <p><strong>（2）</strong> 別の日に、1時間ごとの着信件数を記録したところ：</p>
-                        <table style="border-collapse:collapse; margin:0.8rem 0; width:100%; text-align:center;">
-                            <tr style="background:#e8f0fe;"><th style="border:1px solid #aaa;padding:6px;">時間帯</th><th style="border:1px solid #aaa;padding:6px;">1時間目</th><th style="border:1px solid #aaa;padding:6px;">2時間目</th><th style="border:1px solid #aaa;padding:6px;">3時間目</th><th style="border:1px solid #aaa;padding:6px;">4時間目</th><th style="border:1px solid #aaa;padding:6px;">5時間目</th><th style="border:1px solid #aaa;padding:6px;">6時間目</th><th style="border:1px solid #aaa;padding:6px;">7時間目</th><th style="border:1px solid #aaa;padding:6px;">8時間目</th></tr>
-                            <tr><td style="border:1px solid #aaa;padding:6px;">着信件数</td><td style="border:1px solid #aaa;padding:6px;">3</td><td style="border:1px solid #aaa;padding:6px;">4</td><td style="border:1px solid #aaa;padding:6px;">2</td><td style="border:1px solid #aaa;padding:6px;">5</td><td style="border:1px solid #aaa;padding:6px;">3</td><td style="border:1px solid #aaa;padding:6px;">4</td><td style="border:1px solid #aaa;padding:6px;">2</td><td style="border:1px solid #aaa;padding:6px;">1</td></tr>
-                        </table>
-                        <p>最尤推定量 $\hat{\lambda}$ を求めよ。</p>
-                        <p><strong>（3）</strong> （1）と（2）の結果を比べて気づくことを述べよ。また「強度 $\lambda$ の推定量の一般的な形」を式で書け。</p>
+                        <ol>
+                            <li>8時間の営業時間中にちょうど24件の着信があり、最後の着信時刻が $T_{24} = 7.85$ 時間であった。最尤推定量 $\hat{\lambda}$ を求めよ。</li>
+                            <li>別の日に、1時間ごとの着信件数（各時間帯で 3, 4, 2, 5, 3, 4, 2, 1 件）が記録された。最尤推定量 $\hat{\lambda}$ を求めよ。</li>
+                            <li>2つの推定値を比較し、ポアソン強度推定量の一般的な形を述べよ。</li>
+                        </ol>
                     </div>
-
                     <div class="answer-block">
-                        <p><strong>解答（問2）</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
 
-                        <p><strong>（1）発生時刻データの場合</strong></p>
-                        <p>$W_k \sim \mathrm{Exp}(\lambda)$（独立）なので、公式 $\hat{\lambda} = n/T_n$ を使う：</p>
+                        <p><strong>(1) 発生時刻データ</strong></p>
                         <div class="formula-block">
-                            $$\hat{\lambda} = \frac{n}{T_n} = \frac{24}{7.85} \approx 3.06 \text{（件/時間）}$$
+                            $$\hat{\lambda} = \frac{n}{T_n} = \frac{24}{7.85} \approx 3.06 \text{ 件/時間}$$
                         </div>
 
-                        <p><strong>（2）区間カウントデータの場合</strong></p>
-                        <p>合計件数 $= 3+4+2+5+3+4+2+1 = 24$、観測時間 $= 8$ 時間。公式 $\hat{\lambda} = N_{n\Delta}/(n\Delta)$ を使う：</p>
+                        <p><strong>(2) 区間カウントデータ</strong></p>
+                        <p>合計 $= 3+4+2+5+3+4+2+1 = 24$ 件、観測時間 $= 8$ 時間：</p>
                         <div class="formula-block">
-                            $$\hat{\lambda} = \frac{24}{8} = 3.00 \text{（件/時間）}$$
+                            $$\hat{\lambda} = \frac{24}{8} = 3.00 \text{ 件/時間}$$
                         </div>
 
-                        <p><strong>（3）まとめ・比較</strong></p>
-                        <p>（1）は 3.06件/時間、（2）は 3.00件/時間。わずかに違うのは（1）の $T_{24}=7.85$ が8時間を少し下回るから。どちらの手法を使っても概ね同じ結果になる。</p>
+                        <p><strong>(3) 比較と一般的な形</strong></p>
+                        <p>(1)は3.06、(2)は3.00で近い値です（(1)で $T_{24}=7.85 < 8$ のため$わずかな差がある）。どちらの形式でも：</p>
                         <div class="formula-block">
-                            <p> 一般的な推定量の形：</p>
                             $$\hat{\lambda} = \frac{\text{イベントの総件数}}{\text{観測時間}}$$
-                            <p>データ形式（発生時刻か区間カウントか）に関わらずこの共通した形になる。直感的にも「1時間あたり平均何件起きたか」そのままなので覚えやすい。</p>
                         </div>
                     </div>
 
-                    <!-- 問3 -->
+                    <h3>問15.3：複合ポアソン過程の期待値・分散</h3>
                     <div class="example-block">
-                        <p><strong>問3（複合ポアソン過程の期待値・分散）</strong></p>
+                        <span class="prob-badge badge-q">問題</span>
                         <p>
-                            ある保険会社が自動車事故の保険金支払いをモデル化する。
+                            ある保険会社が自動車事故の保険金支払いを複合ポアソン過程でモデル化する。
                         </p>
                         <ul>
-                            <li>$N_t$：時刻 $t$（単位：年）までの事故発生件数 → 強度 $\lambda = 50$（件/年）のポアソン過程</li>
-                            <li>$U_k$：$k$ 件目の事故の保険金支払額（単位：万円）→ 互いに独立で、$E[U_k] = 30$, $E[U_k^2] = 1300$（よって $\mathrm{Var}[U_k] = 1300 - 30^2 = 400$）</li>
-                            <li>$X_t = \sum_{k=1}^{N_t} U_k$：時刻 $t$ までの総支払額（万円）</li>
+                            <li>$N_t$：強度 $\lambda = 50$（件/年）のポアソン過程</li>
+                            <li>$U_k$：$k$ 件目の保険金支払額（万円）、$E[U_k] = 30$, $E[U_k^2] = 1300$</li>
+                            <li>$X_t = \sum_{k=1}^{N_t} U_k$：$t$ 年間の総支払額（万円）</li>
                         </ul>
-                        <p><strong>（1）</strong> $E[X_t]$ と $\mathrm{Var}[X_t]$ を求め、$t = 2$（2年間）での値を計算せよ。</p>
-                        <p><strong>（2）</strong> 条件付き期待値のタワー性（$E[X_t] = E[E[X_t \mid N_t]]$）を使って $E[X_t]$ を丁寧に導出せよ。</p>
-                        <p><strong>（3）</strong> 保険会社が「2年間の総支払額が4000万円を超えない」ために必要な準備金を考えたい。$X_2$ の平均と標準偏差を計算し、平均の何倍程度の準備金が必要か考察せよ。</p>
+                        <ol>
+                            <li>$E[X_t]$ と $\mathrm{Var}[X_t]$ を $t$ の関数として求めよ。</li>
+                            <li>$t = 2$（2年間）での平均と標準偏差を求めよ。</li>
+                            <li>タワー性 $E[X_t] = E[E[X_t \mid N_t]]$ を使って $E[X_t]$ を丁寧に導出せよ。</li>
+                        </ol>
                     </div>
-
                     <div class="answer-block">
-                        <p><strong>解答（問3）</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
 
-                        <p><strong>（1）期待値と分散の公式適用</strong></p>
-                        <p>複合ポアソン過程の公式 $E[X_t] = \lambda t \cdot E[U_k]$、$\mathrm{Var}[X_t] = \lambda t \cdot E[U_k^2]$ を使う。</p>
+                        <p><strong>(1) 期待値と分散の公式</strong></p>
                         <div class="formula-block">
                             $$E[X_t] = \lambda t \cdot E[U_k] = 50t \times 30 = 1500t \text{（万円）}$$
-                            $$\mathrm{Var}[X_t] = \lambda t \cdot E[U_k^2] = 50t \times 1300 = 65000t \text{（万円²）}$$
+                            $$\mathrm{Var}[X_t] = \lambda t \cdot E[U_k^2] = 50t \times 1300 = 65000t \text{（万円}^2\text{）}$$
                         </div>
-                        <p>$t = 2$ のとき：</p>
+
+                        <p><strong>(2) $t = 2$ 年間</strong></p>
                         <div class="formula-block">
                             $$E[X_2] = 1500 \times 2 = \mathbf{3000} \text{ 万円}$$
-                            $$\mathrm{Var}[X_2] = 65000 \times 2 = 130000 \text{ 万円}^2$$
-                            $$\mathrm{SD}[X_2] = \sqrt{130000} \approx 360.6 \text{ 万円}$$
+                            $$\mathrm{SD}[X_2] = \sqrt{65000 \times 2} = \sqrt{130000} \approx 360.6 \text{ 万円}$$
                         </div>
 
-                        <p><strong>（2）$E[X_t]$ の丁寧な導出</strong></p>
-                        <p>タワー性：$E[X_t] = E\!\left[E[X_t \mid N_t]\right]$ を使う。</p>
-                        <p><strong>ステップ1</strong>：$N_t = m$ と固定した条件のもとで期待値を計算する。このとき $X_t = U_1 + U_2 + \cdots + U_m$（固定された $m$ 個の独立和）なので：</p>
-                        $$E[X_t \mid N_t = m] = E[U_1 + \cdots + U_m] = m \cdot E[U_k] = 30m$$
-                        <p>つまり $E[X_t \mid N_t] = 30 N_t$（$N_t$ の関数として）。</p>
-                        <p><strong>ステップ2</strong>：$N_t$ に関して期待値をとる（$E[N_t] = \lambda t = 50t$）：</p>
-                        $$E[X_t] = E\!\left[E[X_t \mid N_t]\right] = E[30N_t] = 30\,E[N_t] = 30 \times 50t = 1500t$$
-                        <div class="formula-block"> 公式と一致。条件付き期待値の考え方：「まず発生件数を固定して計算し、次に発生件数のランダム性を考慮する」という2段階の計算がポイント。</div>
-
-                        <p><strong>（3）準備金の考察</strong></p>
-                        <p>$t=2$ 年後の総支払額 $X_2$ について：</p>
+                        <p><strong>(3) タワー性を使った導出</strong></p>
+                        <p><strong>ステップ1</strong>：$N_t = m$ と固定 → $X_t = U_1 + \cdots + U_m$（独立和）</p>
+                        $$E[X_t \mid N_t = m] = m \cdot E[U_k] = 30m$$
+                        <p>つまり $E[X_t \mid N_t] = 30 N_t$（$N_t$ の関数）。</p>
+                        <p><strong>ステップ2</strong>：$N_t$ に関して期待値をとる（$E[N_t] = 50t$）：</p>
                         <div class="formula-block">
-                            $$E[X_2] = 3000 \text{ 万円}, \quad \mathrm{SD}[X_2] \approx 361 \text{ 万円}$$
-                            <p>「4000万円を超えない」には、平均（3000万）から約 $\frac{4000-3000}{361} \approx 2.8$ 標準偏差分の余裕が必要。</p>
-                            <p>正規分布近似（件数が多いのである程度正当化される）を使うと：</p>
-                            <p>$P(X_2 \leq 4000) \approx P\!\left(Z \leq 2.77\right) \approx 99.7\%$（約99.7%の確率で4000万以内）。</p>
-                            <p> 準備金は平均（3000万円）の約<strong>1.33倍</strong>（4000万円）を用意すれば、約99.7%の安全率が確保できる。</p>
+                            $$E[X_t] = E[E[X_t \mid N_t]] = E[30 N_t] = 30 \cdot E[N_t] = 30 \times 50t = 1500t \quad \checkmark$$
                         </div>
                     </div>
+                </section>
 
-                    <!-- 学習メモ -->
-                    <div class="formula-block" style="margin-top:1.5rem;">
-                        <p><strong>学習メモ</strong></p>
-                        <ul>
-                            <li>ブラウン運動とポアソン過程は「独立定常増分過程」という共通の土台に乗っている。ブラウン運動は連続パス・正規分布増分、ポアソン過程は階段状パス・ポアソン分布増分という対比が重要</li>
-                            <li>ブラウン運動の $\sigma^2$ 推定は高頻度観測で精度が上がるが、$\mu$ 推定は観測期間の長さにしか依存しない（金融実務で重要な知識）</li>
-                            <li>ポアソン過程の $\hat{\lambda}$「総件数÷総時間」は最もシンプルで覚えやすい推定量。データ形式に関わらず同じ形になる</li>
-                            <li>複合ポアソン過程の計算では「$N_t$ で条件づけ → $N_t$ の分布で平均をとる」という2段階計算が基本テクニック</li>
-                            <li>ポアソン過程と指数分布の関係（$W_k \sim \mathrm{Exp}(\lambda)$）は、「無記憶性を持つ唯一の分布が指数分布」という事実から理解できる</li>
-                        </ul>
-                    </div>
+                <!-- ======================================================== -->
+                <!-- 9. まとめ・ポイント                                       -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> 9. まとめ・ポイント</h2>
+                    <ul>
+                        <li><strong>独立定常増分過程</strong>：「過去と未来の変化が無関係」「どの時点から測っても同じ増分分布」という2条件でブラウン運動とポアソン過程が統一的に理解できます。</li>
+                        <li><strong>ブラウン運動</strong>：増分が正規分布 $N(\mu(t-s), \sigma^2(t-s))$、パスが連続。$E[B_t]=\mu t$、$\mathrm{Var}[B_t]=\sigma^2 t$。</li>
+                        <li><strong>ポアソン過程</strong>：増分がポアソン分布 $\mathrm{Poi}(\lambda(t-s))$、パスが右連続階段状。発生間隔は $\mathrm{Exp}(\lambda)$（独立）。</li>
+                        <li><strong>推定の非対称性</strong>（ブラウン運動）：$\hat{\sigma}^2$ は高頻度観測で精度向上、$\hat{\mu}$ は観測時間の長さのみに依存します。</li>
+                        <li><strong>ポアソン強度の推定</strong>：$\hat{\lambda} = \text{総件数}/\text{観測時間}$。データ形式によらず同じ形。</li>
+                        <li><strong>複合ポアソン過程</strong>：$X_t = \sum_{k=1}^{N_t} U_k$。$E[X_t] = \lambda t E[U]$、$\mathrm{Var}[X_t] = \lambda t E[U^2]$。タワー性で計算します。</li>
+                    </ul>
                 </section>
 
                 <nav class="chapter-pager">
@@ -557,8 +538,9 @@
                     </a>
                 </nav>
 
-            </div>
-        </div>
+                </div><!-- end .chapter-content -->
+            </div><!-- end .chapter-layout -->
+        </div><!-- end .container -->
     </main>
 
     <footer class="stat-footer">

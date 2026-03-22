@@ -52,181 +52,516 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#fisher">フィッシャーの三原則</a></li>
+                            <li><a href="#one-way">1元配置分散分析</a></li>
+                            <li><a href="#two-way">2元配置分散分析</a></li>
+                            <li><a href="#block">乱塊法</a></li>
+                            <li><a href="#orthogonal">直交表と一部実施要因計画</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> はじめに：「複数グループの平均を比べる」</h2>
                     <p>
-                        第20章では<strong>分散分析と実験計画法</strong>を扱う。フィッシャーの三原則に基づく
-                        実験計画、1元配置・2元配置分散分析、乱塊法、直交表を用いた一部実施要因計画を学ぶ。
+                        「3種類の肥料のどれが最も収穫量を増やすか？」
+                        「4つの工場の製品品質に差はあるか？」
+                        こういった<strong>3つ以上のグループの平均値に統計的な差があるかどうか</strong>を調べる方法が
+                        <strong>分散分析（ANOVA: Analysis of Variance）</strong>です。
                     </p>
-                    <p><strong>キーワード：</strong>フィッシャーの三原則、1元配置、2元配置、乱塊法、直交表、交互作用、交絡</p>
+                    <p>
+                        名前に「分散」とありますが、検定の本質は「グループ<em>間</em>のばらつき」と「グループ<em>内</em>のばらつき」を比べることです。
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-question-circle"></i> なぜt検定を繰り返すのでだめなのか？</p>
+                        <p>
+                            グループが3つある場合、ペアごとにt検定（A-B、A-C、B-C）すると合計3回行うことになります。
+                            各検定の有意水準が5%でも、3回繰り返すと「少なくとも1回は偶然有意になる確率」は約14%に膨れ上がります
+                            （多重比較問題）。分散分析はこれを一度の検定でまとめて扱います。
+                        </p>
+                    </div>
+                    <p>また、効率的な実験の設計法（どの条件を組み合わせて試すか）が<strong>実験計画法</strong>です。</p>
+                    <p><strong>キーワード：</strong>フィッシャーの三原則、1元配置、2元配置、乱塊法、直交表</p>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <section class="content-section section-anchor" id="fisher">
+                    <h2><i class="fas fa-flask"></i> フィッシャーの三原則</h2>
 
-                    <h3>フィッシャーの三原則</h3>
-                    <ol>
-                        <li><strong>反復（繰り返し）の原則：</strong>同じ条件で複数回実験し、偶然誤差を推定</li>
-                        <li><strong>ランダム化の原則：</strong>実験順序・割り当てを乱数で決定し、系統的偏りを排除</li>
-                        <li><strong>局所管理の原則：</strong>均一とみなせるブロックに分け、各ブロック内で一揃いの水準を実験</li>
-                    </ol>
+                    <h3>良い実験を設計するための3つの原則</h3>
+                    <p>
+                        統計学者ロナルド・フィッシャーは、バイアスのない信頼できる実験を行うための
+                        3つの基本原則を提唱しました。農業実験（どの肥料が最も収量を上げるか）を背景に生まれた考え方ですが、
+                        医学・工学・社会科学すべての実験に当てはまります。
+                    </p>
 
-                    <h3>1元配置分散分析</h3>
-                    <p>モデル：$y_{ij} = \mu + \alpha_i + \varepsilon_{ij}$, $\varepsilon_{ij} \sim N(0, \sigma^2)$</p>
+                    <h3>①反復（Replication）</h3>
+                    <p>
+                        同じ条件で複数の実験を行う。これにより：
+                    </p>
                     <ul>
-                        <li>帰無仮説 $H_0: \alpha_1 = \cdots = \alpha_a = 0$</li>
-                        <li>平方和の分解：$S_T = S_A + S_E$</li>
-                        <li>F検定：$F = V_A / V_E \sim F(\phi_A, \phi_E)$</li>
+                        <li>1回の偶然による外れ値の影響を小さくできる</li>
+                        <li>実験誤差（within-group variability）の推定ができる</li>
+                        <li>サンプルサイズが増え、統計的検出力が上がる</li>
+                    </ul>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-exclamation-triangle"></i> 反復なしの問題</p>
+                        <p>
+                            もし肥料Aと肥料Bをそれぞれ1区画ずつしか試さなかったら、
+                            A区画の土が偶然に良い土だった場合、それが「肥料の効果」か「土の差」かを区別できません。
+                        </p>
+                    </div>
+
+                    <h3>②無作為化（Randomization）</h3>
+                    <p>
+                        実験単位（区画・患者・工場など）への処理（肥料の種類・薬の投与）の割り当てを<strong>ランダム</strong>に行う。
+                    </p>
+                    <ul>
+                        <li>未知の交絡変数（confounding variable）の影響を無作為化によって均等に分散させる</li>
+                        <li>研究者の主観的な割り当てを排除して、統計的推論の前提（独立性）を満たす</li>
                     </ul>
 
-                    <h3>2元配置分散分析</h3>
-                    <p>モデル：$y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}$</p>
+                    <h3>③局所管理（Local Control）</h3>
+                    <p>
+                        実験誤差を小さくするために、実験単位をできるだけ均一なグループ（ブロック）にまとめる。
+                    </p>
                     <ul>
-                        <li>主効果 $\alpha_i, \beta_j$ と交互作用 $(\alpha\beta)_{ij}$</li>
-                        <li>平方和の分解：$S_T = S_A + S_B + S_{A \times B} + S_E$</li>
-                        <li>交互作用が有意なら、主効果だけでなく水準の組み合わせで評価</li>
-                    </ul>
-
-                    <h3>乱塊法</h3>
-                    <p>ブロック因子を導入し、ブロック間変動を誤差から分離：</p>
-                    <p>$y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \gamma_k + \varepsilon_{ijk}$</p>
-                    <ul>
-                        <li>ブロック因子による変動が大きい場合、誤差分散が小さくなり検出力が向上</li>
-                        <li>ブロック因子の変動がほとんどない場合は、誤差の自由度が減り検出しにくくなる</li>
-                    </ul>
-
-                    <h3>直交表と一部実施要因計画</h3>
-                    <ul>
-                        <li><strong>$L_8(2^7)$ 直交表：</strong>2水準7因子を8回の実験で評価</li>
-                        <li>因子を列に割り付け、主効果と交互作用の推定を行う</li>
-                        <li><strong>交絡（別名関係）：</strong>主効果と交互作用、または交互作用同士が区別できない関係</li>
-                        <li><strong>成分記号：</strong>列の積で交互作用が現れる列を特定</li>
-                    </ul>
-
-                    <h3>一部実施要因計画 $2^{k-1}$</h3>
-                    <ul>
-                        <li>$D = A \times B \times C$：主効果と2因子交互作用の交絡なし、2因子交互作用同士が交絡</li>
-                        <li>$D = A \times B$：一部の主効果と2因子交互作用が交絡</li>
-                        <li>目的に応じた使い分けが重要</li>
+                        <li>たとえば農場を土壌の肥よくさによってブロック分けし、各ブロック内で全処理を割り当てる</li>
+                        <li>ブロック内の変動は「土の差」として取り除けるので、処理効果の検出力が上がる</li>
                     </ul>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                <section class="content-section section-anchor" id="one-way">
+                    <h2><i class="fas fa-layer-group"></i> 1元配置分散分析</h2>
 
-                    <h3>1元配置の平方和</h3>
+                    <h3>設定：1つの因子・a水準</h3>
+                    <p>
+                        因子（Factor）が1つの場合を<strong>1元配置分散分析（one-way ANOVA）</strong>といいます。
+                        たとえば「肥料の種類（A, B, C）が収穫量に影響するか？」で、
+                        因子は「肥料の種類」、水準（level）は「A, B, C」（3水準）です。
+                    </p>
+
+                    <h3>統計モデル</h3>
                     <div class="formula-block">
-                        $$S_T = \sum_{i=1}^{a}\sum_{j=1}^{n_i}(y_{ij}-\bar{y})^2 = S_A + S_E$$
+                        $$y_{ij} = \mu + \alpha_i + \varepsilon_{ij}, \quad \varepsilon_{ij} \overset{\text{i.i.d.}}{\sim} N(0, \sigma^2)$$
                     </div>
+                    <ul>
+                        <li>$y_{ij}$：$i$ 番目の水準、$j$ 番目の反復の観測値</li>
+                        <li>$\mu$：全体平均</li>
+                        <li>$\alpha_i$：水準 $i$ の効果（全体平均からのずれ。$\sum_i \alpha_i = 0$）</li>
+                        <li>$\varepsilon_{ij}$：誤差（偶然変動）</li>
+                    </ul>
+
+                    <h3>変動の分解（平方和の分解）</h3>
+                    <p>
+                        全変動 = グループ間の変動 + グループ内の変動 という分解が鍵です：
+                    </p>
                     <div class="formula-block">
-                        $$F = \frac{S_A / (a-1)}{S_E / (n-a)} = \frac{V_A}{V_E} \sim F(a-1, n-a)$$
+                        $$SS_T = SS_A + SS_e$$
+                    </div>
+                    <table>
+                        <thead><tr><th>変動の名前</th><th>計算式</th><th>意味</th></tr></thead>
+                        <tbody>
+                            <tr><td>全変動 $SS_T$</td><td>$\sum_{i,j}(y_{ij} - \bar{y})^2$</td><td>全データが全体平均からどれだけ散らばっているか</td></tr>
+                            <tr><td>グループ間 $SS_A$</td><td>$n \sum_i (\bar{y}_{i.} - \bar{y})^2$</td><td>グループ平均同士の差（処理効果）</td></tr>
+                            <tr><td>グループ内（誤差） $SS_e$</td><td>$\sum_{i,j}(y_{ij} - \bar{y}_{i.})^2$</td><td>グループ内での個体差（偶然誤差）</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>F検定</h3>
+                    <p>
+                        「グループ間のばらつき」が「グループ内のばらつき」より十分大きければ、
+                        グループ間に平均の差があると判断できます：
+                    </p>
+                    <div class="formula-block">
+                        $$F = \frac{MS_A}{MS_e} = \frac{SS_A / (a-1)}{SS_e / (n-a)} \sim F(a-1,\; n-a)$$
+                    </div>
+                    <ul>
+                        <li>$a$：水準の数、$n$：全データ数</li>
+                        <li>$MS_A = SS_A/(a-1)$：グループ間分散（平均平方）</li>
+                        <li>$MS_e = SS_e/(n-a)$：誤差分散（平均平方）</li>
+                        <li>$F$ が大きいほど「グループ間に差がある」証拠が強い</li>
+                    </ul>
+                </section>
+
+                <section class="content-section section-anchor" id="two-way">
+                    <h2><i class="fas fa-table-cells"></i> 2元配置分散分析</h2>
+
+                    <h3>2因子の効果と交互作用</h3>
+                    <p>
+                        因子が2つある場合が<strong>2元配置分散分析（two-way ANOVA）</strong>です。
+                        たとえば「薬の種類（A, B）と投与量（低、中、高）が血圧低下量に影響するか？」では
+                        因子が「薬の種類」と「投与量」の2つです。
+                    </p>
+                    <p>
+                        2元配置で重要なのが<strong>交互作用（interaction）</strong>の概念です。
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-arrows-alt"></i> 交互作用とは？</p>
+                        <p>
+                            「薬Aは低投与量でも高投与量でも同じ効果だが、薬Bは投与量が増えると効果が急増する」という場合、
+                            薬の種類と投与量の<strong>掛け合わせ（交互作用）</strong>が血圧に影響しています。
+                            <br>→ どちらか一方の因子だけでは説明できない「2つの因子が一緒に働くことで生じる追加効果」。
+                        </p>
                     </div>
 
-                    <h3>2元配置の平方和分解</h3>
+                    <h3>均衡2元配置モデル</h3>
                     <div class="formula-block">
-                        $$S_T = S_A + S_B + S_{A \times B} + S_E$$
+                        $$y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}$$
+                    </div>
+                    <ul>
+                        <li>$\alpha_i$：因子Aの主効果（水準 $i$ の効果）</li>
+                        <li>$\beta_j$：因子Bの主効果（水準 $j$ の効果）</li>
+                        <li>$(\alpha\beta)_{ij}$：AとBの交互作用効果</li>
+                    </ul>
+
+                    <h3>変動の分解</h3>
+                    <div class="formula-block">
+                        $$SS_T = SS_A + SS_B + SS_{AB} + SS_e$$
+                    </div>
+                    <p>各ソースについてF比を計算し、それぞれ独立にF検定します。</p>
+
+                    <h3>繰り返しのない2元配置（交互作用の検定不可）</h3>
+                    <p>
+                        各セルに1観測しかない場合（繰り返しなし）、誤差分散を推定できないため交互作用の検定ができません。
+                        モデルは $y_{ij} = \mu + \alpha_i + \beta_j + \varepsilon_{ij}$ となり、主効果のみを推定します。
+                    </p>
+                </section>
+
+                <section class="content-section section-anchor" id="block">
+                    <h2><i class="fas fa-puzzle-piece"></i> 乱塊法</h2>
+
+                    <h3>「ノイズ源」をブロックとして取り除く</h3>
+                    <p>
+                        実験の誤差の一部が「既知のノイズ源」（例：農場の土質、患者の年齢層、機械の個体差）に起因する場合、
+                        そのノイズ源を<strong>ブロック（block）</strong>として明示的にモデルに組み込むことで、
+                        残差（誤差）が小さくなり、処理効果の検定精度が向上します。
+                    </p>
+
+                    <h3>タイヤの例</h3>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-car"></i> タイヤの摩耗比較</p>
+                        <p>
+                            4種類のタイヤブランド（A, B, C, D）の摩耗を比較したい。
+                            しかし「どの車に装着するか」が結果に影響する（車によって走行パターンが異なる）。
+                            <br><strong>解決策：</strong>各車に4種類すべてのタイヤを1本ずつ装着し、車（ブロック）の効果を取り除く。
+                        </p>
+                        <p>→ 乱塊法（randomized block design）：各ブロック内でランダムに処理を割り当て。</p>
                     </div>
 
-                    <h3>ネイマン配分法（層化抽出法）</h3>
+                    <h3>統計モデル</h3>
                     <div class="formula-block">
-                        $$n_h = \frac{N_h \sigma_h}{\sum_{k=1}^{L} N_k \sigma_k} \times n$$
+                        $$y_{ij} = \mu + \alpha_i + \beta_j + \varepsilon_{ij}$$
+                    </div>
+                    <ul>
+                        <li>$\alpha_i$：処理効果（タイヤブランド $i$ の効果）</li>
+                        <li>$\beta_j$：ブロック効果（車 $j$ の効果）。これを取り除くことで $SS_e$ が縮小し、検出力が上がる。</li>
+                    </ul>
+                    <p>変動の分解：$SS_T = SS_A + SS_B + SS_e$（ブロック変動を分離）</p>
+                </section>
+
+                <section class="content-section section-anchor" id="orthogonal">
+                    <h2><i class="fas fa-border-all"></i> 直交表・一部実施要因計画</h2>
+
+                    <h3>「全組み合わせ」は無理でも「賢いサンプリング」で解決</h3>
+                    <p>
+                        7つの因子それぞれが2水準なら、全組み合わせは $2^7 = 128$ 通り。
+                        すべて試す「完全実施要因計画（full factorial design）」は多くの場合コストが高すぎます。
+                        そこで、「特定の組み合わせだけ試しても、各因子の主効果が推定できる」という
+                        巧妙な実験計画が<strong>一部実施要因計画（fractional factorial design）</strong>です。
+                    </p>
+
+                    <h3>L8直交表</h3>
+                    <p>
+                        $L_8(2^7)$ 直交表は「8回の実験で7つの2水準因子の主効果を推定できる」設計です。
+                        8 $= 2^3$ 回だけで、$2^7 = 128$ 回必要な情報の主要部分を得られます。
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-check"></i> 直交表の「直交」とは？</p>
+                        <p>
+                            直交表では、どの2列をとっても「$(1,1), (1,2), (2,1), (2,2)$ の組み合わせが同数現れる」
+                            という性質（直交性）があります。これにより、ある因子の効果を推定する際に
+                            他の因子の影響がキャンセルされ、各因子の主効果を独立に推定できます。
+                        </p>
+                    </div>
+
+                    <p>L8直交表（行=実験番号、列=因子）：</p>
+                    <table>
+                        <thead><tr><th>実験</th><th>$A$</th><th>$B$</th><th>$AB$</th><th>$C$</th><th>$AC$</th><th>$BC$</th><th>$ABC$</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                            <tr><td>2</td><td>1</td><td>1</td><td>1</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+                            <tr><td>3</td><td>1</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td></tr>
+                            <tr><td>4</td><td>1</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td></tr>
+                            <tr><td>5</td><td>2</td><td>1</td><td>2</td><td>1</td><td>2</td><td>1</td><td>2</td></tr>
+                            <tr><td>6</td><td>2</td><td>1</td><td>2</td><td>2</td><td>1</td><td>2</td><td>1</td></tr>
+                            <tr><td>7</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td><td>1</td></tr>
+                            <tr><td>8</td><td>2</td><td>2</td><td>1</td><td>2</td><td>1</td><td>1</td><td>2</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>交絡（confounding）</h3>
+                    <p>
+                        一部実施では「$A$ の主効果」と「交互作用 $BC$」が同じ列に割り当てられることがあります（<strong>交絡</strong>）。
+                        「交互作用が無視できる（主効果が支配的）」という仮定のもとで主効果のみを推定します。
+                    </p>
+                </section>
+
+                <section class="content-section section-anchor" id="formulas">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
+
+                    <h3>1元配置 ANOVA 表</h3>
+                    <table>
+                        <thead><tr><th>変動源</th><th>平方和 (SS)</th><th>自由度 (df)</th><th>平均平方 (MS)</th><th>F値</th></tr></thead>
+                        <tbody>
+                            <tr><td>グループ間</td><td>$SS_A$</td><td>$a-1$</td><td>$MS_A = SS_A/(a-1)$</td><td>$F = MS_A/MS_e$</td></tr>
+                            <tr><td>誤差（グループ内）</td><td>$SS_e$</td><td>$n-a$</td><td>$MS_e = SS_e/(n-a)$</td><td>—</td></tr>
+                            <tr><td>全体</td><td>$SS_T$</td><td>$n-1$</td><td>—</td><td>—</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>2元配置（繰り返しあり）ANOVA 表</h3>
+                    <table>
+                        <thead><tr><th>変動源</th><th>自由度</th><th>F比の分母</th></tr></thead>
+                        <tbody>
+                            <tr><td>因子A</td><td>$a-1$</td><td>$MS_e$</td></tr>
+                            <tr><td>因子B</td><td>$b-1$</td><td>$MS_e$</td></tr>
+                            <tr><td>交互作用AB</td><td>$(a-1)(b-1)$</td><td>$MS_e$</td></tr>
+                            <tr><td>誤差</td><td>$ab(n-1)$</td><td>—</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>F分布の臨界値</h3>
+                    <div class="formula-block">
+                        $$F_0 > F(\alpha;\, a-1,\, n-a) \implies \text{帰無仮説（全グループ平均が等しい）を棄却}$$
                     </div>
                 </section>
 
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
 
-                    <h3>問20.1：フィッシャーの三原則</h3>
-                    <div class="answer-block">
-                        <p><strong>(1)</strong> ランダム化の原則 → 苗の大小の影響を除くためランダムに割当て</p>
-                        <p><strong>(2)</strong> 局所管理の原則 → 均一な区画内で $A_1, A_2$ の一揃いを実験</p>
-                        <p><strong>(3)</strong> 反復の原則＋局所管理 → 複数区画で $A_1, A_2$ の一揃いをランダムに実施</p>
-                    </div>
-
-                    <h3>問20.2：研磨機械の1元配置分散分析</h3>
-                    <div class="answer-block">
-                        <p><strong>(1)</strong> モデル：$y_{ij} = \mu + \alpha_i + \varepsilon_{ij}$, $H_0: \alpha_1 = \cdots = \alpha_4 = 0$</p>
-                        <p><strong>(2)</strong> 分散分析表：$S_A = 21.47$, $\phi_A = 3$, $V_A = 7.157$。$S_E = 19.00$, $\phi_E = 13$, $V_E = 1.462$。$F = 4.897$。$F_{0.05}(3,13)=3.41$ より $H_0$ 棄却。機械により生産個数の母平均は異なる。</p>
-                        <p><strong>(3)</strong> $\hat{\mu} = 17.5$, 95%信頼区間：$17.5 \pm 2.16\sqrt{1.462/4} = (16.19,\; 18.81)$</p>
-                    </div>
-
-                    <h3>問20.4：ゴムの2元配置分散分析</h3>
-                    <div class="answer-block">
-                        <p>$S_T = 57$, $S_A = 3$, $S_B = 18$, $S_{A \times B} = 32$, $S_E = 4$</p>
+                    <h3>問20.1：1元配置 ANOVA</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            3種類の肥料（A, B, C）について、それぞれ4区画で米の収穫量（kg）を測定した。
+                            次の分散分析表を完成させ、肥料の効果があるか5%水準で検定せよ。
+                        </p>
                         <table>
-                            <thead><tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr></thead>
+                            <thead><tr><th>変動源</th><th>SS</th><th>df</th><th>MS</th><th>F値</th></tr></thead>
                             <tbody>
-                                <tr><td>A</td><td>3.00</td><td>1</td><td>3.00</td><td>4.50</td></tr>
-                                <tr><td>B</td><td>18.00</td><td>2</td><td>9.00</td><td><strong>13.50</strong></td></tr>
-                                <tr><td>$A \times B$</td><td>32.00</td><td>2</td><td>16.00</td><td><strong>24.00</strong></td></tr>
-                                <tr><td>誤差</td><td>4.00</td><td>6</td><td>0.67</td><td>-</td></tr>
+                                <tr><td>肥料間</td><td>120</td><td>?</td><td>?</td><td>?</td></tr>
+                                <tr><td>誤差</td><td>135</td><td>?</td><td>?</td><td>—</td></tr>
+                                <tr><td>合計</td><td>255</td><td>?</td><td>—</td><td>—</td></tr>
                             </tbody>
                         </table>
-                        <p>Bの主効果と$A \times B$の交互作用が有意（5%水準）。交互作用があるため $A_2, B_3$ の組合せが最も好ましい。</p>
+                        <p>（$F_{0.05}(2, 9) = 4.26$）</p>
                     </div>
-
-                    <h3>問20.5：タイヤ耐摩耗（乱塊法）</h3>
                     <div class="answer-block">
-                        <p><strong>3元配置（ブロック因子なし）：</strong>$A, B$ の主効果、$A \times B$ は5%で有意とならない。</p>
-                        <p><strong>乱塊法（ブロック因子あり）：</strong>$A, B, V$ の主効果、$A \times B$ が5%で有意。ブロック因子による変動を分離したことで検出力が向上。</p>
-                    </div>
-
-                    <h3>問20.6：$2^{4-1}$ 一部実施要因計画</h3>
-                    <div class="answer-block">
-                        <p><strong>$D=A \times B \times C$：</strong>主効果と2因子交互作用の交絡なし。2因子交互作用同士が交絡（$A \times B$ と $C \times D$ など）。</p>
-                        <p><strong>$D=A \times B$：</strong>$A$ と $B \times D$, $B$ と $A \times D$, $D$ と $A \times B$ が交絡。</p>
-                        <p>特定の因子に興味があり交互作用を調べたい場合は $D=A \times B$、まんべんなく交絡を避けたい場合は $D=A \times B \times C$ を使用。</p>
-                    </div>
-
-                    <h3>問20.7：クランクシャフト研磨（直交表）</h3>
-                    <div class="answer-block">
-                        <p><strong>(1)</strong> $A \times B$：第[3]列、$A \times C$：第[5]列</p>
-                        <p><strong>(2)</strong> 成分記号の積から、主効果と2因子交互作用は直交（交絡しない）。</p>
-                        <p><strong>(3)</strong> 分散分析表（$A \times B, A \times C$ 以外を誤差とみなす）：</p>
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>水準数 $a = 3$、各4反復なので $n = 12$ の1元配置です。</p>
                         <table>
-                            <thead><tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr></thead>
+                            <thead><tr><th>変動源</th><th>SS</th><th>df</th><th>MS</th><th>F値</th></tr></thead>
                             <tbody>
-                                <tr><td>A</td><td>171.13</td><td>1</td><td>171.13</td><td><strong>6.08</strong></td></tr>
-                                <tr><td>B</td><td>45.13</td><td>1</td><td>45.13</td><td>1.60</td></tr>
-                                <tr><td>C</td><td>66.13</td><td>1</td><td>66.13</td><td><strong>2.35</strong></td></tr>
-                                <tr><td>D</td><td>6.13</td><td>1</td><td>6.13</td><td>0.22</td></tr>
-                                <tr><td>$A \times B$</td><td>3.13</td><td>1</td><td>3.13</td><td>0.11</td></tr>
-                                <tr><td>$A \times C$</td><td>136.13</td><td>1</td><td>136.13</td><td><strong>4.84</strong></td></tr>
-                                <tr><td>誤差</td><td>28.13</td><td>1</td><td>28.13</td><td>-</td></tr>
+                                <tr><td>肥料間</td><td>120</td><td>$3-1=2$</td><td>$120/2=60$</td><td>$60/15=4.0$</td></tr>
+                                <tr><td>誤差</td><td>135</td><td>$12-3=9$</td><td>$135/9=15$</td><td>—</td></tr>
+                                <tr><td>合計</td><td>255</td><td>$12-1=11$</td><td>—</td><td>—</td></tr>
                             </tbody>
                         </table>
-                        <p><strong>(4)</strong> $F = 2$ を目安とすると $A, C, A \times C$ を考慮。表面粗さを小さくするには $A_1, C_2$ の組み合わせがよい。</p>
+                        <p>
+                            $F_0 = 4.0 < F_{0.05}(2,9) = 4.26$ なので、<strong>有意水準5%では肥料の効果は有意でない</strong>（帰無仮説を棄却できない）。
+                        </p>
+                    </div>
+
+                    <h3>問20.2：乱塊法</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            タイヤの摩耗量を比較する実験で、4種類のタイヤ（処理1〜4）を4台の車（ブロック1〜4）に1本ずつ装着して走行し、摩耗量（mm）を測定した。
+                        </p>
+                        <table>
+                            <thead><tr><th></th><th>車1</th><th>車2</th><th>車3</th><th>車4</th></tr></thead>
+                            <tbody>
+                                <tr><td>タイヤA</td><td>13</td><td>10</td><td>12</td><td>11</td></tr>
+                                <tr><td>タイヤB</td><td>17</td><td>14</td><td>16</td><td>15</td></tr>
+                                <tr><td>タイヤC</td><td>15</td><td>12</td><td>14</td><td>13</td></tr>
+                                <tr><td>タイヤD</td><td>16</td><td>13</td><td>15</td><td>14</td></tr>
+                            </tbody>
+                        </table>
+                        <p>乱塊法の分散分析を行い、タイヤ間に差があるか検定せよ（$F_{0.05}(3,9) = 3.86$）。</p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>全体平均：$\bar{y} = (13+10+\cdots+14)/16 = 210/16 = 13.125$</p>
+
+                        <p><strong>各タイヤの平均（行平均）：</strong></p>
+                        <ul>
+                            <li>タイヤA：$(13+10+12+11)/4 = 46/4 = 11.5$</li>
+                            <li>タイヤB：$(17+14+16+15)/4 = 62/4 = 15.5$</li>
+                            <li>タイヤC：$(15+12+14+13)/4 = 54/4 = 13.5$</li>
+                            <li>タイヤD：$(16+13+15+14)/4 = 58/4 = 14.5$</li>
+                        </ul>
+
+                        <p><strong>タイヤ間SS（$SS_A$）：</strong></p>
+                        <div class="formula-block">
+                            $$SS_A = 4\left[(11.5-13.125)^2 + (15.5-13.125)^2 + (13.5-13.125)^2 + (14.5-13.125)^2\right]$$
+                            $$= 4[2.641 + 5.641 + 0.141 + 1.891] = 4 \times 10.314 = 41.25$$
+                        </div>
+
+                        <p><strong>各車の平均（列平均）：</strong>車1=15.25, 車2=12.25, 車3=14.25, 車4=13.25</p>
+
+                        <p><strong>ブロック（車）SS（$SS_B$）：</strong></p>
+                        <div class="formula-block">
+                            $$SS_B = 4[(15.25-13.125)^2 + (12.25-13.125)^2 + (14.25-13.125)^2 + (13.25-13.125)^2] = 4 \times 5.1875 = 20.75$$
+                        </div>
+
+                        <p><strong>全体SS：</strong> $SS_T = \sum_{i,j}(y_{ij}-13.125)^2 = 62.75$</p>
+
+                        <p><strong>誤差SS：</strong> $SS_e = SS_T - SS_A - SS_B = 62.75 - 41.25 - 20.75 = 0.75$</p>
+
+                        <table>
+                            <thead><tr><th>変動源</th><th>SS</th><th>df</th><th>MS</th><th>F値</th></tr></thead>
+                            <tbody>
+                                <tr><td>タイヤ（処理）</td><td>41.25</td><td>3</td><td>13.75</td><td>$13.75/0.0833 = 165$</td></tr>
+                                <tr><td>車（ブロック）</td><td>20.75</td><td>3</td><td>6.917</td><td>83.1</td></tr>
+                                <tr><td>誤差</td><td>0.75</td><td>9</td><td>0.0833</td><td>—</td></tr>
+                                <tr><td>合計</td><td>62.75</td><td>15</td><td>—</td><td>—</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>
+                            $F_0 = 165 \gg F_{0.05}(3,9) = 3.86$ なので、<strong>タイヤ間の摩耗量の差は有意</strong>（5%水準）。
+                        </p>
+                    </div>
+
+                    <h3>問20.4：2元配置（交互作用の解釈）</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            薬の種類（A, B）と投与量（低, 高）の2因子について、血圧低下量（mmHg）を測定した。
+                            各セルに2反復として次の結果を得た：
+                        </p>
+                        <table>
+                            <thead><tr><th></th><th>投与量：低</th><th>投与量：高</th></tr></thead>
+                            <tbody>
+                                <tr><td>薬A</td><td>10, 12</td><td>14, 16</td></tr>
+                                <tr><td>薬B</td><td>8, 10</td><td>20, 22</td></tr>
+                            </tbody>
+                        </table>
+                        <p>（1）各セルの平均を求め、交互作用があるかをグラフ（交互作用プロット）的に判断せよ。</p>
+                        <p>（2）交互作用がある場合、主効果をどのように解釈すべきか述べよ。</p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1) セル平均：</strong></p>
+                        <table>
+                            <thead><tr><th></th><th>低投与</th><th>高投与</th><th>差（高−低）</th></tr></thead>
+                            <tbody>
+                                <tr><td>薬A</td><td>11</td><td>15</td><td><strong>+4</strong></td></tr>
+                                <tr><td>薬B</td><td>9</td><td>21</td><td><strong>+12</strong></td></tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            薬Aでは投与量が増えると効果が+4増えるのに対し、薬Bでは+12増える。
+                            「投与量を上げたときの追加効果」が薬の種類によって大きく違う
+                            → <strong>交互作用が存在する</strong>と判断できます。
+                        </p>
+
+                        <p><strong>(2) 交互作用がある場合の解釈：</strong></p>
+                        <p>
+                            交互作用が有意なとき、主効果（「薬全体の効果」「投与量全体の効果」）を
+                            単独で解釈することは<strong>ミスリーディング</strong>になります。
+                            なぜなら、ある薬の効果は投与量によって大きく異なるからです。
+                            正しい解釈は「低投与量ではA・B両方に効果があるが差は小さい。
+                            高投与量では薬Bの方が顕著に効く」という<strong>条件付きの記述</strong>です。
+                        </p>
+                    </div>
+
+                    <h3>問20.5：L8直交表の割り付け</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            製品の中に含まれる不良品の割合を下げるため、製造工程の7因子（A〜G、各2水準）を
+                            $L_8(2^7)$ 直交表を使って評価した。なぜ128回の実験をせず8回で主効果を推定できるのか説明せよ。
+                        </p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>
+                            $L_8(2^7)$ 直交表の各列はどの2列をとっても<strong>直交</strong>（どの組み合わせも同数現れる）しています。
+                            この直交性により、あるの因子の主効果を計算する際に他の因子の影響が等しく分散され、
+                            互いにキャンセルされます。
+                        </p>
+                        <p>
+                            ただし交互作用は主効果と<strong>交絡</strong>しているため、
+                            「交互作用が無視できる（主効果が支配的）」という仮定のもとで初めて主効果の独立推定が成り立ちます。
+                            この仮定が成り立つ場合は8回の実験だけで7因子の主効果が推定可能です。
+                        </p>
+                    </div>
+
+                    <h3>問20.6・20.7：多重比較</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            問20.1（肥料A・B・C）でF検定が有意だった場合、どのペアの平均が異なるかを調べるには何を行えばよいか。ボンフェローニ補正の考え方も含めて説明せよ。
+                        </p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>
+                            F検定が有意 → 「3グループのどこかに差がある」ことはわかるが、<strong>具体的にどのペアが違うかはわからない</strong>。
+                            そこで<strong>多重比較（multiple comparison）</strong>を行います。
+                        </p>
+                        <p>代表的な方法：</p>
+                        <ul>
+                            <li><strong>ボンフェローニ法：</strong>比較するペアの数 $m = 3$ として、各検定の有意水準を $\alpha/m = 0.05/3 \approx 0.0167$ に厳しくしてt検定を行う。シンプルだが保守的（真の差を見落としやすい）。</li>
+                            <li><strong>Tukey-HSD法：</strong>全ペアを同時に検定する方法。第一種過誤の全体的確率を $\alpha$ に保てる。実践でよく使われる。</li>
+                        </ul>
+                        <p>
+                            ボンフェローニ補正の理論：各検定の過誤を $\alpha/m$ にすると、
+                            $m$ 回行っても全体の第一種過誤が $m \cdot (\alpha/m) = \alpha$ 以下になる（ボンフェローニの不等式）。
+                        </p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-star"></i> 分散分析・実験計画法のまとめ</p>
+                        <table>
+                            <thead><tr><th>手法</th><th>設定</th><th>特徴</th></tr></thead>
+                            <tbody>
+                                <tr><td>1元配置ANOVA</td><td>1因子・複数水準</td><td>グループ間のF検定</td></tr>
+                                <tr><td>2元配置ANOVA</td><td>2因子</td><td>主効果＋交互作用を分離して検定</td></tr>
+                                <tr><td>乱塊法</td><td>処理＋ブロック</td><td>既知のノイズ源を取り除いて検出力UP</td></tr>
+                                <tr><td>一部実施要因計画</td><td>多因子・実験数削減</td><td>直交表で主効果のみ効率よく推定</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <ul>
-                        <li>分散分析はF検定に基づく → 平方和の分解が基本</li>
-                        <li>交互作用が有意なら主効果だけでなく、水準の組み合わせで最適条件を判断</li>
-                        <li>乱塊法：ブロック変動が大きいほど有効 → 誤差分散が減り検出力が上がる</li>
-                        <li>直交表：少ない実験回数で多くの因子の効果を推定。ただし交絡に注意</li>
-                        <li>$2^{k-1}$ 計画で $D=A \times B \times C$ は解像度IV → 主効果と2因子交互作用は交絡しない</li>
-                        <li>誤差の自由度が小さい場合は $F=2$ 程度でも考慮（AICとの対応）</li>
+                        <li>分散分析のF比 = 「グループ間MS / 誤差MS」。これが大きいほどグループ間に差がある証拠</li>
+                        <li>2元配置では<strong>交互作用が有意なら主効果単独の解釈に注意</strong></li>
+                        <li>乱塊法はブロック変動を除くことで誤差MSが小さくなり、検定精度が改善</li>
+                        <li>直交表は「交互作用が無視できる」という前提が必要。大きな交互作用があると結果が誤る</li>
+                        <li>F検定後に有意差があればTukey-HSD法などで多重比較を行う</li>
                     </ul>
                 </section>
 
-                <nav class="chapter-pager">
-                    <a href="#" class="pager-link" id="prev-link">
-                        <i class="fas fa-arrow-left"></i> 前の章
-                    </a>
-                    <a href="../index.html" class="pager-home">
-                        <i class="fas fa-th-large"></i> 目次
-                    </a>
-                    <a href="#" class="pager-link" id="next-link">
-                        次の章 <i class="fas fa-arrow-right"></i>
-                    </a>
-                </nav>
-
-            </div>
-        </div>
+                </div><!-- end .chapter-content -->
+            </div><!-- end .chapter-layout -->
+        </div><!-- end .container -->
     </main>
 
     <footer class="stat-footer">

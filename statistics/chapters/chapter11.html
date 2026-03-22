@@ -52,192 +52,357 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#onesample-known">1標本平均の検定（分散既知）</a></li>
+                            <li><a href="#onesample-unknown">1標本平均の検定（分散未知・t検定）</a></li>
+                            <li><a href="#twosample-known">2標本平均の検定（分散既知）</a></li>
+                            <li><a href="#twosample-unknown">2標本平均の検定（分散未知）</a></li>
+                            <li><a href="#variance-test">分散の検定</a></li>
+                            <li><a href="#summary-table">検定統計量一覧</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. はじめに                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> 正規分布に関する検定――平均・分散を厳密に比較する</h2>
                     <p>
-                        第11章では、母集団分布が<strong>正規分布</strong>であると仮定したうえでの<strong>平均の検定</strong>と<strong>分散の検定</strong>を体系的に扱う。
-                        1標本問題（分散既知・未知）の検定、2標本問題（分散既知・未知）の検定、
-                        1標本・2標本の分散の検定について、検定統計量・棄却域・P-値を学ぶ。
+                        第10章で学んだ仮説検定の枠組みを、母集団分布が正規分布であるという仮定のもとで具体的に展開します。
+                        正規分布の場合、有限標本でも<strong>厳密に（近似ではなく）</strong>分布が導出できることが最大の利点です。
                     </p>
-                    <p><strong>キーワード：</strong>平均の検定、分散の検定、$t$ 分布、$\chi^2$ 分布、$F$ 分布</p>
+                    <p>
+                        正規母集団の検定問題は「群の数（1標本 or 2標本）」と「分散が既知か未知か」で場合分けされます。
+                    </p>
+                    <div class="formula-block">
+                        <p>🔑 <strong>この章の構成</strong></p>
+                        <ol>
+                            <li>1標本平均の検定――$\sigma^2$ 既知 →$Z$ 検定、$\sigma^2$ 未知 → $t$ 検定</li>
+                            <li>2標本平均の差の検定――$\sigma^2$ 既知・等分散未知・非等分散</li>
+                            <li>1標本・2標本の分散の検定――$\chi^2$ 検定・$F$ 検定</li>
+                        </ol>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <!-- ======================================================== -->
+                <!-- 1. 1標本平均の検定（分散既知）                            -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="onesample-known">
+                    <h2><i class="fas fa-chart-simple"></i> 1. 1標本平均の検定（母分散 $\sigma^2$ が既知）</h2>
 
-                    <h3>1標本の平均の検定（分散が既知）</h3>
-                    <p>$X_1, \ldots, X_n \overset{i.i.d.}{\sim} N(\mu, \sigma^2)$、$\sigma^2$ は既知。</p>
-                    <p>$H_0: \mu = \mu_0$ のもとで、検定統計量</p>
-                    <div class="formula-block">
-                        $$Z = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}} \sim N(0,1)$$
-                    </div>
-                    <ul>
-                        <li>$H_1: \mu > \mu_0$（右側）：$Z \geq z_{\alpha/2}$ で棄却</li>
-                        <li>$H_1: \mu < \mu_0$（左側）：$Z \leq -z_{\alpha/2}$ で棄却</li>
-                        <li>$H_1: \mu \neq \mu_0$（両側）：$|Z| \geq z_{\alpha/2}$ で棄却</li>
-                    </ul>
+                    <p>
+                        $X_1, \ldots, X_n \overset{\text{i.i.d.}}{\sim} N(\mu, \sigma^2)$（$\sigma^2$ は既知）。
+                        帰無仮説 $H_0: \mu = \mu_0$ のもとで検定統計量を構成します。
+                    </p>
 
-                    <h3>1標本の平均の検定（分散が未知）― $t$ 検定</h3>
-                    <p>$\sigma^2$ は未知。標本分散 $S^2 = \dfrac{1}{n-1}\sum_{i=1}^{n}(X_i - \bar{X})^2$ で推定。</p>
-                    <p>$H_0: \mu = \mu_0$ のもとで、検定統計量</p>
-                    <div class="formula-block">
-                        $$T = \frac{\bar{X} - \mu_0}{S / \sqrt{n}} \sim t(n-1)$$
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> $Z$ 検定（分散既知）</div>
+                        <p>$H_0: \mu = \mu_0$ のもとで</p>
+                        <div class="formula-block">
+                            $$Z = \frac{\bar{X} - \mu_0}{\sigma/\sqrt{n}} \sim N(0,1)$$
+                        </div>
+                        <table style="width:100%; border-collapse:collapse; margin:0.5em 0;">
+                            <thead><tr style="background:var(--light-bg);">
+                                <th style="padding:0.5em; text-align:left;">対立仮説</th>
+                                <th style="padding:0.5em; text-align:left;">棄却域</th>
+                                <th style="padding:0.5em; text-align:left;">P値</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \mu > \mu_0$</td><td>$Z \geq z_{\alpha/2}$</td><td>$P(Z \geq z_0)$</td></tr>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \mu &lt; \mu_0$</td><td>$Z \leq -z_{\alpha/2}$</td><td>$P(Z \leq z_0)$</td></tr>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \mu \neq \mu_0$</td><td>$|Z| \geq z_{\alpha/2}$</td><td>$2P(Z \geq |z_0|)$</td></tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <ul>
-                        <li>$H_1: \mu > \mu_0$：$T \geq t_{\alpha/2}(n-1)$ で棄却</li>
-                        <li>$H_1: \mu < \mu_0$：$T \leq -t_{\alpha/2}(n-1)$ で棄却</li>
-                        <li>$H_1: \mu \neq \mu_0$：$|T| \geq t_{\alpha/2}(n-1)$ で棄却</li>
-                    </ul>
-
-                    <h3>2標本の平均の検定（分散が既知）</h3>
-                    <p>群A：$X_{Ai} \sim N(\mu_A, \sigma_A^2)$（$n_A$ 個）、群B：$X_{Bi} \sim N(\mu_B, \sigma_B^2)$（$n_B$ 個）。$\delta = \mu_A - \mu_B$ とする。</p>
-                    <p>$H_0: \delta = \delta_0$ のもとで、検定統計量</p>
-                    <div class="formula-block">
-                        $$Z = \frac{(\bar{X}_A - \bar{X}_B) - \delta_0}{\sqrt{\sigma_A^2/n_A + \sigma_B^2/n_B}} \sim N(0,1)$$
-                    </div>
-                    <p>$\sigma_A = \sigma_B = \sigma$ の場合：</p>
-                    <div class="formula-block">
-                        $$Z = \frac{(\bar{X}_A - \bar{X}_B) - \delta_0}{\sigma\sqrt{1/n_A + 1/n_B}}$$
-                    </div>
-
-                    <h3>2標本の平均の検定（分散が未知）― 2標本 $t$ 検定</h3>
-                    <p>共通の母分散 $\sigma_A^2 = \sigma_B^2 = \sigma^2$ を仮定。プールした標本分散：</p>
-                    <div class="formula-block">
-                        $$S_p^2 = \frac{(n_A - 1)S_A^2 + (n_B - 1)S_B^2}{n_A + n_B - 2}$$
-                    </div>
-                    <p>$H_0: \delta = \delta_0$ のもとで、検定統計量</p>
-                    <div class="formula-block">
-                        $$T = \frac{(\bar{X}_A - \bar{X}_B) - \delta_0}{S_p\sqrt{1/n_A + 1/n_B}} \sim t(n_A + n_B - 2)$$
-                    </div>
-                    <ul>
-                        <li>$H_1: \delta > \delta_0$：$T \geq t_{\alpha/2}(n_A + n_B - 2)$ で棄却</li>
-                        <li>$H_1: \delta < \delta_0$：$T \leq -t_{\alpha/2}(n_A + n_B - 2)$ で棄却</li>
-                        <li>$H_1: \delta \neq \delta_0$：$|T| \geq t_{\alpha/2}(n_A + n_B - 2)$ で棄却</li>
-                    </ul>
-                    <p>※ 2群の分散が異なる場合は<strong>ベーレンス・フィッシャー問題</strong>が生じる。</p>
-
-                    <h3>1標本の分散の検定</h3>
-                    <p>$\mu$ は未知。$H_0: \sigma^2 = \sigma_0^2$ のもとで、検定統計量</p>
-                    <div class="formula-block">
-                        $$V = \frac{(n-1)S^2}{\sigma_0^2} \sim \chi^2(n-1)$$
-                    </div>
-                    <ul>
-                        <li>$H_1: \sigma^2 > \sigma_0^2$：$V \geq \chi^2_{\alpha/2}(n-1)$ で棄却</li>
-                        <li>$H_1: \sigma^2 < \sigma_0^2$：$V \leq \chi^2_{1-\alpha/2}(n-1)$ で棄却</li>
-                        <li>$H_1: \sigma^2 \neq \sigma_0^2$：$V \geq \chi^2_{\alpha/2}(n-1)$ または $V \leq \chi^2_{1-\alpha/2}(n-1)$ で棄却</li>
-                    </ul>
-
-                    <h3>2標本の分散の検定（$F$ 検定）</h3>
-                    <p>$\mu_A, \mu_B$ は未知。$H_0: \sigma_A^2 = \sigma_B^2$ のもとで、検定統計量</p>
-                    <div class="formula-block">
-                        $$F = \frac{S_B^2}{S_A^2} = \frac{\sum(X_{Bi} - \bar{X}_B)^2/(n_B - 1)}{\sum(X_{Ai} - \bar{X}_A)^2/(n_A - 1)} \sim F(n_B - 1, n_A - 1)$$
-                    </div>
-                    <ul>
-                        <li>$H_1: \sigma_A^2 < \sigma_B^2$：$F \geq F_{\alpha/2}(n_B-1, n_A-1)$ で棄却</li>
-                        <li>$H_1: \sigma_A^2 > \sigma_B^2$：$F \leq F_{1-\alpha/2}(n_B-1, n_A-1)$ で棄却</li>
-                        <li>$H_1: \sigma_A^2 \neq \sigma_B^2$：上側または下側で棄却</li>
-                    </ul>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                <!-- ======================================================== -->
+                <!-- 2. 1標本平均の検定（分散未知・t検定）                    -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="onesample-unknown">
+                    <h2><i class="fas fa-chart-simple"></i> 2. 1標本平均の検定（分散未知）――$t$ 検定</h2>
 
-                    <h3>検定統計量一覧</h3>
-                    <table style="width:100%; border-collapse:collapse; margin:1em 0;">
+                    <p>
+                        $\sigma^2$ が未知の場合、$\sigma$ の代わりに標本標準偏差 $S = \sqrt{\frac{1}{n-1}\sum(X_i-\bar{X})^2}$ を使います。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 1標本 $t$ 検定</div>
+                        <p>$H_0: \mu = \mu_0$ のもとで</p>
+                        <div class="formula-block">
+                            $$T = \frac{\bar{X} - \mu_0}{S/\sqrt{n}} \sim t(n-1)$$
+                        </div>
+                        <table style="width:100%; border-collapse:collapse; margin:0.5em 0;">
+                            <thead><tr style="background:var(--light-bg);">
+                                <th style="padding:0.5em; text-align:left;">対立仮説</th>
+                                <th style="padding:0.5em; text-align:left;">棄却域（有意水準 $\alpha$）</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \mu > \mu_0$</td><td>$T \geq t_{\alpha/2}(n-1)$</td></tr>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \mu &lt; \mu_0$</td><td>$T \leq -t_{\alpha/2}(n-1)$</td></tr>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \mu \neq \mu_0$</td><td>$|T| \geq t_{\alpha/2}(n-1)$</td></tr>
+                            </tbody>
+                        </table>
+                        <p>$t_{\alpha/2}(n-1)$：自由度 $n-1$ の $t$ 分布の上側 $\alpha/2$ 点。</p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 なぜ自由度が $n-1$ か</div>
+                        <p>
+                            $S^2 = \frac{1}{n-1}\sum(X_i - \bar{X})^2$ の計算で $\bar{X}$ を推定に使ったため、
+                            $n$ 個の偏差 $X_i - \bar{X}$ は $\sum(X_i - \bar{X}) = 0$ という制約により
+                            1自由度が消費されます。残りの自由度は $n-1$ です。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 3. 2標本平均の検定（分散既知）                            -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="twosample-known">
+                    <h2><i class="fas fa-arrows-left-right"></i> 3. 2標本平均の検定（分散既知）</h2>
+
+                    <p>
+                        群A（$n_A$ 個、$N(\mu_A, \sigma_A^2)$）と群B（$n_B$ 個、$N(\mu_B, \sigma_B^2)$）、
+                        $\sigma_A^2$、$\sigma_B^2$ は既知。差 $\delta = \mu_A - \mu_B$ を検定します。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 2標本 $Z$ 検定（分散既知）</div>
+                        <p>$H_0: \delta = \delta_0$ のもとで</p>
+                        <div class="formula-block">
+                            $$Z = \frac{(\bar{X}_A - \bar{X}_B) - \delta_0}{\sqrt{\sigma_A^2/n_A + \sigma_B^2/n_B}} \sim N(0,1)$$
+                        </div>
+                        <p>特に $\sigma_A = \sigma_B = \sigma$ の等分散の場合：$\sqrt{\sigma^2(1/n_A + 1/n_B)}$ が分母。</p>
+                    </div>
+
+                    <h3>対応のある2標本</h3>
+                    <p>
+                        「同じ被験者に2回測定（例：治療前・治療後）」のように対応がある場合は、
+                        差 $D_i = X_{Ai} - X_{Bi}$ を計算して1標本問題に帰着させます。
+                    </p>
+                    <div class="formula-block">
+                        $$T = \frac{\bar{D} - \delta_0}{S_D/\sqrt{n}} \sim t(n-1) \quad \text{（$\sigma^2$ 未知の場合）}$$
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 4. 2標本平均の検定（分散未知）                            -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="twosample-unknown">
+                    <h2><i class="fas fa-arrows-left-right"></i> 4. 2標本平均の検定（分散未知）――2標本 $t$ 検定</h2>
+
+                    <p>
+                        $\sigma_A^2$、$\sigma_B^2$ が未知の場合。<strong>等分散 $\sigma_A^2 = \sigma_B^2 = \sigma^2$</strong> を仮定するかどうかで場合分けされます。
+                    </p>
+
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 等分散の2標本 $t$ 検定（プールした分散推定量）</div>
+                        <p>$\sigma_A^2 = \sigma_B^2 = \sigma^2$ を仮定（等分散仮定）。<strong>プールした標本分散</strong>：</p>
+                        <div class="formula-block">
+                            $$S_p^2 = \frac{(n_A-1)S_A^2 + (n_B-1)S_B^2}{n_A + n_B - 2}$$
+                        </div>
+                        <p>$H_0: \delta = \delta_0$ のもとで：</p>
+                        <div class="formula-block">
+                            $$T = \frac{(\bar{X}_A - \bar{X}_B) - \delta_0}{S_p\sqrt{1/n_A + 1/n_B}} \sim t(n_A + n_B - 2)$$
+                        </div>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 ベーレンス・フィッシャー問題（等分散でない場合）</div>
+                        <p>
+                            $\sigma_A^2 \neq \sigma_B^2$（非等分散）の場合、厳密な $t$ 分布に従う統計量は存在しません（<strong>ベーレンス・フィッシャー問題</strong>）。
+                            実用的な近似として<strong>ウェルチの $t$ 検定</strong>があり、自由度をサターウェイト法で近似します：
+                        </p>
+                        <div class="formula-block">
+                            $$T_W = \frac{(\bar{X}_A - \bar{X}_B) - \delta_0}{\sqrt{S_A^2/n_A + S_B^2/n_B}}, \quad \hat{\nu} = \frac{(S_A^2/n_A + S_B^2/n_B)^2}{\frac{(S_A^2/n_A)^2}{n_A-1} + \frac{(S_B^2/n_B)^2}{n_B-1}}$$
+                        </div>
+                        <p>$T_W$ は近似的に自由度 $\hat{\nu}$ の $t$ 分布に従います。</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 5. 分散の検定                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="variance-test">
+                    <h2><i class="fas fa-ruler-combined"></i> 5. 分散の検定</h2>
+
+                    <h3>1標本の分散の検定（$\chi^2$ 検定）</h3>
+                    <p>$\mu$ は未知。$H_0: \sigma^2 = \sigma_0^2$ に対し、</p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> カイ二乗検定（分散の検定）</div>
+                        <div class="formula-block">
+                            $$V = \frac{(n-1)S^2}{\sigma_0^2} \sim \chi^2(n-1)$$
+                        </div>
+                        <table style="width:100%; border-collapse:collapse; margin:0.5em 0;">
+                            <thead><tr style="background:var(--light-bg);">
+                                <th style="padding:0.5em; text-align:left;">対立仮説</th>
+                                <th style="padding:0.5em; text-align:left;">棄却域</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \sigma^2 > \sigma_0^2$</td><td>$V \geq \chi^2_{\alpha/2}(n-1)$</td></tr>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \sigma^2 &lt; \sigma_0^2$</td><td>$V \leq \chi^2_{1-\alpha/2}(n-1)$</td></tr>
+                                <tr style="border-top:1px solid #ddd;"><td>$H_1: \sigma^2 \neq \sigma_0^2$</td><td>$V \geq \chi^2_{\alpha/2}$ または $V \leq \chi^2_{1-\alpha/2}$</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2標本の分散の比の検定（$F$ 検定）</h3>
+                    <p>$\mu_A$、$\mu_B$ は未知。$H_0: \sigma_A^2 = \sigma_B^2$ に対し、</p>
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-bookmark"></i> $F$ 検定（2標本分散比の検定）</div>
+                        <div class="formula-block">
+                            $$F = \frac{S_B^2}{S_A^2} = \frac{\sum(X_{Bi}-\bar{X}_B)^2/(n_B-1)}{\sum(X_{Ai}-\bar{X}_A)^2/(n_A-1)} \sim F(n_B-1,\; n_A-1)$$
+                        </div>
+                        <ul>
+                            <li>$H_1: \sigma_A^2 &lt; \sigma_B^2$：$F \geq F_{\alpha/2}(n_B-1, n_A-1)$ で棄却</li>
+                            <li>$H_1: \sigma_A^2 > \sigma_B^2$：$F \leq F_{1-\alpha/2}(n_B-1, n_A-1)$ で棄却</li>
+                        </ul>
+                        <p>（$F_{1-\alpha/2}(m,n) = 1/F_{\alpha/2}(n,m)$ の関係を利用）</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 6. 検定統計量一覧                                          -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="summary-table">
+                    <h2><i class="fas fa-table"></i> 6. 検定統計量一覧</h2>
+
+                    <table style="width:100%; border-collapse:collapse; margin:0.5em 0;">
                         <thead>
-                            <tr style="border-bottom:2px solid var(--primary);">
-                                <th style="text-align:left; padding:0.5em;">検定</th>
-                                <th style="text-align:left; padding:0.5em;">統計量</th>
-                                <th style="text-align:left; padding:0.5em;">帰無分布</th>
+                            <tr style="background:var(--primary); color:white;">
+                                <th style="padding:0.6em; text-align:left;">検定</th>
+                                <th style="padding:0.6em; text-align:left;">統計量</th>
+                                <th style="padding:0.6em; text-align:left;">帰無分布</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr style="border-bottom:1px solid #ddd;">
-                                <td style="padding:0.5em;">1標本平均（$\sigma^2$ 既知）</td>
-                                <td style="padding:0.5em;">$Z = \dfrac{\bar{X}-\mu_0}{\sigma/\sqrt{n}}$</td>
-                                <td style="padding:0.5em;">$N(0,1)$</td>
-                            </tr>
-                            <tr style="border-bottom:1px solid #ddd;">
-                                <td style="padding:0.5em;">1標本平均（$\sigma^2$ 未知）</td>
-                                <td style="padding:0.5em;">$T = \dfrac{\bar{X}-\mu_0}{S/\sqrt{n}}$</td>
-                                <td style="padding:0.5em;">$t(n-1)$</td>
-                            </tr>
-                            <tr style="border-bottom:1px solid #ddd;">
-                                <td style="padding:0.5em;">2標本平均（$\sigma^2$ 未知、等分散）</td>
-                                <td style="padding:0.5em;">$T = \dfrac{(\bar{X}_A - \bar{X}_B)-\delta_0}{S_p\sqrt{1/n_A+1/n_B}}$</td>
-                                <td style="padding:0.5em;">$t(n_A+n_B-2)$</td>
-                            </tr>
-                            <tr style="border-bottom:1px solid #ddd;">
-                                <td style="padding:0.5em;">1標本分散</td>
-                                <td style="padding:0.5em;">$V = \dfrac{(n-1)S^2}{\sigma_0^2}$</td>
-                                <td style="padding:0.5em;">$\chi^2(n-1)$</td>
-                            </tr>
-                            <tr>
-                                <td style="padding:0.5em;">2標本分散</td>
-                                <td style="padding:0.5em;">$F = S_B^2 / S_A^2$</td>
-                                <td style="padding:0.5em;">$F(n_B-1, n_A-1)$</td>
-                            </tr>
+                            <tr style="border-bottom:1px solid #ddd;"><td style="padding:0.5em;">1標本平均（$\sigma^2$ 既知）</td><td style="padding:0.5em;">$Z = \dfrac{\bar{X}-\mu_0}{\sigma/\sqrt{n}}$</td><td style="padding:0.5em;">$N(0,1)$</td></tr>
+                            <tr style="border-bottom:1px solid #ddd;"><td style="padding:0.5em;">1標本平均（$\sigma^2$ 未知）</td><td style="padding:0.5em;">$T = \dfrac{\bar{X}-\mu_0}{S/\sqrt{n}}$</td><td style="padding:0.5em;">$t(n-1)$</td></tr>
+                            <tr style="border-bottom:1px solid #ddd;"><td style="padding:0.5em;">2標本平均（$\sigma^2$ 既知）</td><td style="padding:0.5em;">$Z = \dfrac{(\bar{X}_A-\bar{X}_B)-\delta_0}{\sqrt{\sigma_A^2/n_A+\sigma_B^2/n_B}}$</td><td style="padding:0.5em;">$N(0,1)$</td></tr>
+                            <tr style="border-bottom:1px solid #ddd;"><td style="padding:0.5em;">2標本平均（等分散未知）</td><td style="padding:0.5em;">$T = \dfrac{(\bar{X}_A-\bar{X}_B)-\delta_0}{S_p\sqrt{1/n_A+1/n_B}}$</td><td style="padding:0.5em;">$t(n_A+n_B-2)$</td></tr>
+                            <tr style="border-bottom:1px solid #ddd;"><td style="padding:0.5em;">1標本分散</td><td style="padding:0.5em;">$V = \dfrac{(n-1)S^2}{\sigma_0^2}$</td><td style="padding:0.5em;">$\chi^2(n-1)$</td></tr>
+                            <tr><td style="padding:0.5em;">2標本分散比</td><td style="padding:0.5em;">$F = S_B^2/S_A^2$</td><td style="padding:0.5em;">$F(n_B-1,n_A-1)$</td></tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                <!-- ======================================================== -->
+                <!-- 7. 例題・演習                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 7. 例題・演習</h2>
 
-                    <h3>問11.1：ポテトの重量検定（1標本 $t$ 検定）</h3>
-                    <p>大阪の店舗のポテト（$M$ サイズ120g）を10個測定。$\bar{x} = 125$g、$s = 10.0$g。</p>
-                    <p>$H_0: \mu = 120$ vs $H_1: \mu > 120$（片側 $t$ 検定、有意水準2.5%）</p>
+                    <h3>問11.1：ポテトの重量に関する1標本 $t$ 検定</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        あるファストフードチェーンの大阪店で販売される Mサイズのポテトは、
+                        仕様上「平均120g以上」とされている。マネージャーが「実際はもっと多い」と考えて検証することにした。
+                        無作為に10個抽出して重さを測定したところ、標本平均 $\bar{x} = 125$g、標本標準偏差 $s = 10.0$g であった。
+                        帰無仮説 $H_0: \mu = 120$ に対して対立仮説 $H_1: \mu > 120$ の右片側 $t$ 検定を有意水準 2.5% で行え。
+                        （自由度9の $t$ 分布の上側2.5%点：$t_{0.025}(9) = 2.262$）
+                    </p>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) 検定統計量：</strong></p>
-                    <div class="formula-block">
-                        $$T = \frac{125 - 120}{10/\sqrt{10}} = \mathbf{1.581}$$
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1) 検定統計量の計算：</strong></p>
+                        <div class="formula-block">
+                            $$T = \frac{\bar{x} - \mu_0}{s/\sqrt{n}} = \frac{125 - 120}{10/\sqrt{10}} = \frac{5}{3.162} \approx \mathbf{1.581}$$
+                        </div>
+
+                        <p><strong>(2) 棄却限界値と判定：</strong></p>
+                        <p>右片側検定で有意水準 2.5% → 棄却域：$T \geq t_{0.025}(9) = 2.262$</p>
+                        <p>$T = 1.581 &lt; 2.262$ → 帰無仮説は<strong>棄却されない</strong>。</p>
+                        <p>「$n=10$ の標本ではポテトが120gより重いとは統計的に言えない。」</p>
+
+                        <p><strong>(3) 最小標本サイズ（棄却されるために）：</strong></p>
+                        <p>
+                            検定統計量 $T = \frac{5}{10/\sqrt{n}} = \frac{\sqrt{n}}{2}$ が $t_{0.025}(n-1)$ 以上になる $n$ を求める。
+                            $t_{0.025}$ は $n$ が大きいほど小さくなるので、試行する：
+                        </p>
+                        <ul>
+                            <li>$n=17$：$T = \sqrt{17}/2 = 2.06$、$t_{0.025}(16) = 2.12$ → まだ棄却されない</li>
+                            <li>$n=18$：$T = \sqrt{18}/2 = 2.12$、$t_{0.025}(17) = 2.11$ → $T > t_{0.025}$、<strong>棄却される</strong></li>
+                        </ul>
+                        <p>→ 最小は $n = \mathbf{18}$。</p>
                     </div>
 
-                    <p><strong>(2) 棄却限界値：</strong></p>
-                    <p>自由度9の $t$ 分布の上側2.5%点：$t_{0.025}(9) = \mathbf{2.262}$</p>
-
-                    <p><strong>(3) 判定：</strong></p>
-                    <p>$T = 1.581 < 2.262$ より、帰無仮説は<strong>棄却されない</strong>。</p>
-
-                    <p><strong>(4) 棄却される最小の標本サイズ：</strong></p>
-                    <div class="formula-block">
-                        $$\frac{125 - 120}{10/\sqrt{n}} \geq t_{0.025}(n-1)$$
+                    <h3>問11.2：東京と大阪のポテト重量の比較――2標本 $t$ 検定</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        同じチェーンの東京店と大阪店で、それぞれ独立に Mサイズポテトを10個ずつ抽出して重さを測定した。
+                        結果：大阪店 $\bar{x}_A = 125$g、$s_A = 10.0$g（$n_A = 10$）；
+                              東京店 $\bar{x}_B = 115$g、$s_B = 8.0$g（$n_B = 10$）。
+                        等分散を仮定した2標本 $t$ 検定で、2店の平均重量に差があるかを有意水準5%で両側検定せよ。
+                        （自由度18の $t$ 分布の上側2.5%点：$t_{0.025}(18) = 2.101$）
+                    </p>
                     </div>
-                    <p>反復的に解くと $n = \mathbf{18}$</p>
-                    </div>
-
-                    <h3>問11.2：東京 vs 大阪の2標本 $t$ 検定</h3>
-                    <p>大阪：$n_A = 10$、$\bar{x}_A = 125$、$s_A = 10.0$。東京：$n_B = 10$、$\bar{x}_B = 115$、$s_B = 8.0$。</p>
-                    <p>共通分散を仮定。$H_0: \mu_A = \mu_B$ vs $H_1: \mu_A \neq \mu_B$（両側、有意水準5%）</p>
                     <div class="answer-block">
-                    <p><strong>(1) プールした標本分散：</strong></p>
-                    <div class="formula-block">
-                        $$S_p^2 = \frac{9 \times 10^2 + 9 \times 8^2}{10 + 10 - 2} = \frac{900 + 576}{18} = \mathbf{82}$$
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1) プールした標本分散：</strong></p>
+                        <div class="formula-block">
+                            $$S_p^2 = \frac{(n_A-1)s_A^2 + (n_B-1)s_B^2}{n_A+n_B-2} = \frac{9 \times 100 + 9 \times 64}{18} = \frac{900 + 576}{18} = \frac{1476}{18} = \mathbf{82}$$
+                        </div>
+
+                        <p><strong>(2) 検定統計量：</strong></p>
+                        <div class="formula-block">
+                            $$T = \frac{(\bar{x}_A - \bar{x}_B) - 0}{S_p\sqrt{1/n_A + 1/n_B}} = \frac{125 - 115}{\sqrt{82}\sqrt{1/10 + 1/10}} = \frac{10}{\sqrt{82 \times 0.2}} = \frac{10}{\sqrt{16.4}} = \frac{10}{4.050} \approx \mathbf{2.469}$$
+                        </div>
+
+                        <p><strong>(3) 棄却の判定：</strong></p>
+                        <p>両側検定で自由度 $n_A + n_B - 2 = 18$ → 棄却域 $|T| \geq t_{0.025}(18) = 2.101$</p>
+                        <p>$|T| = 2.469 > 2.101$ → 帰無仮説を<strong>棄却する</strong>。</p>
+                        <p>「大阪店と東京店のポテトの平均重量には統計的に有意な差がある（95%水準）。」</p>
                     </div>
 
-                    <p><strong>(2) 検定統計量：</strong></p>
-                    <div class="formula-block">
-                        $$T = \frac{125 - 115}{\sqrt{82}\sqrt{1/10 + 1/10}} = \frac{10}{\sqrt{82 \times 0.2}} = \mathbf{2.469}$$
+                    <h3>問11.3（オリジナル）：新工程の品質ばらつき検定</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        従来工程の製品の重さのばらつきは $\sigma_0^2 = 9$ (g²) とわかっている。
+                        新しい工程を導入したところ、25個の製品を検査した結果 $(n-1)s^2 = 168$ (g²) だった。
+                        新工程の分散は従来工程と異なるかを有意水準5%の両側検定で確認せよ。
+                        （自由度24の $\chi^2$ の上側2.5%点 = 39.36、下側2.5%点 = 12.40）
+                    </p>
                     </div>
-
-                    <p><strong>(3) 棄却限界値：</strong></p>
-                    <p>自由度18の $t$ 分布の上側2.5%点：$t_{0.025}(18) = \mathbf{2.101}$</p>
-
-                    <p><strong>(4) 判定：</strong></p>
-                    <p>$|T| = 2.469 > 2.101$ より、帰無仮説は<strong>棄却される</strong>。</p>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>検定統計量：</strong></p>
+                        <div class="formula-block">
+                            $$V = \frac{(n-1)S^2}{\sigma_0^2} = \frac{168}{9} = \mathbf{18.67}$$
+                        </div>
+                        <p>棄却域：$V \geq 39.36$ または $V \leq 12.40$（両側、有意水準5%）</p>
+                        <p>$12.40 &lt; 18.67 &lt; 39.36$ → 帰無仮説は<strong>棄却されない</strong>。</p>
+                        <p>「この標本では新工程の分散が従来と異なるとは言えない。」</p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <!-- ======================================================== -->
+                <!-- 8. まとめ・ポイント                                        -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> 8. まとめ・ポイント</h2>
                     <ul>
-                        <li>分散が既知なら $Z$ 検定（標準正規分布）、未知なら $t$ 検定（$t$ 分布）を使う</li>
-                        <li>2標本で対応がある場合は差を取って1標本問題に帰着できる</li>
-                        <li>2標本 $t$ 検定では等分散の仮定が必要。等分散でない場合はベーレンス・フィッシャー問題（ウェルチの $t$ 検定などで近似）</li>
-                        <li>$F$ 検定の統計量は分散の比 $S_B^2/S_A^2$ であり、$F$ 分布の自由度は $(n_B-1, n_A-1)$</li>
-                        <li>問11.1 では $n=10$ で棄却されなかったが、$n=18$ まで増やすと棄却される → 標本サイズの重要性</li>
+                        <li><strong>$\sigma^2$ 既知 → $Z$ 検定（$N(0,1)$）、未知 → $t$ 検定（$t(n-1)$）</strong>：$\sigma$ の代わりに $S$ を使ったことの「不確かさ増加」が $t$ 分布の裾の重さとして現れる。</li>
+                        <li><strong>2標本 $t$ 検定では等分散の仮定に注意</strong>：仮定が満たされない場合はウェルチの $t$ 検定（自由度をサターウェイト近似）を使う。</li>
+                        <li><strong>対応のある2標本は1標本問題に帰着</strong>：差 $D_i = X_{Ai} - X_{Bi}$ を使って $t$ 検定を行う。</li>
+                        <li><strong>分散の検定は $\chi^2$ 分布、分散比の検定は $F$ 分布</strong>：どちらも非対称分布なので棄却域の定め方に注意。</li>
+                        <li><strong>$F$ 検定の統計量は $S_B^2/S_A^2$</strong>：自由度の順番を間違えないこと（分子の自由度が第1引数）。</li>
+                        <li><strong>サンプルサイズと検出力</strong>：問11.1のように、同じ効果でも $n$ が小さいと検出できないことがある。十分な $n$ を事前設計することが重要。</li>
                     </ul>
                 </section>
 
@@ -256,6 +421,7 @@
             </div>
         </div>
     </main>
+
 
     <footer class="stat-footer">
         <div class="container">

@@ -442,71 +442,145 @@
                 <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 8. 例題・演習</h2>
 
-                    <h3>問8.1：統計量に関する正誤判定</h3>
-                    <p>$N(\mu, \sigma^2)$ からの標本 $X_1, \ldots, X_n$ に対し、以下の各記述の正誤を答えよ。</p>
+                    <h3>問8.1：統計量・十分統計量・不偏推定量に関する正誤判定</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        未知の平均 $\mu$、分散 $\sigma^2$ をもつ正規分布 $N(\mu, \sigma^2)$ から独立・同一に得られた標本を
+                        $X_1, \ldots, X_n$ とし、その標本平均を $\bar{X}$ と書く。
+                        以下の①〜⑤の文章のうち、正しいものをすべて選べ（複数回答あり）。
+                    </p>
+                    <ol>
+                        <li>$\displaystyle\sum_{i=1}^n (X_i - \mu)^2$ は統計量である。</li>
+                        <li>順序統計量を並べたベクトル $(X_{(1)}, \ldots, X_{(n)})$ はパラメータ $(\mu, \sigma^2)$ の十分統計量である。</li>
+                        <li>$\displaystyle\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2$ は $\sigma^2$ の不偏推定量である。</li>
+                        <li>$\displaystyle\sqrt{\frac{1}{n}\sum_{i=1}^n(X_i - \bar{X})^2}$ は標準偏差 $\sigma$ の最尤推定量である。</li>
+                        <li>標本分散 $S^2 = \frac{1}{n-1}\sum(X_i-\bar{X})^2$ は $\sigma^2$ の漸近有効推定量ではない。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                    <div class="formula-block">
+                        <p>✅ 正しいのは <strong>②・④</strong></p>
+                    </div>
                     <ul>
-                        <li><strong>① $\sum(X_i - \mu)^2$ は統計量である</strong>：<span style="color:red"><strong>誤り</strong></span>。未知パラメータ $\mu$ を含むので統計量ではない。</li>
-                        <li><strong>② 順序統計量 $(X_{(1)}, \ldots, X_{(n)})$ は $(\mu, \sigma^2)$ の十分統計量である</strong>：<span style="color:green"><strong>正しい</strong></span>。順序統計量は常に十分統計量（情報を失わずにデータをソートしただけ）。</li>
-                        <li><strong>③ $\frac{1}{n}\sum(X_i - \bar{X})^2$ は $\sigma^2$ の不偏推定量である</strong>：<span style="color:red"><strong>誤り</strong></span>。その期待値は $\frac{n-1}{n}\sigma^2 \neq \sigma^2$（$n-1$ で割ったものが不偏）。</li>
-                        <li><strong>④ $\sqrt{\frac{1}{n}\sum(X_i - \bar{X})^2}$ は $\sigma$ の最尤推定量である</strong>：<span style="color:green"><strong>正しい</strong></span>。MLEの不変性（$g(\hat\theta)$ は $g(\theta)$ のMLE）より。</li>
-                        <li><strong>⑤ 標本分散 $S^2$ は $\sigma^2$ の漸近有効推定量ではない</strong>：<span style="color:red"><strong>誤り</strong></span>。$S^2$ も $\hat\sigma^2$ も大標本では漸近有効。</li>
+                        <li><strong>① 誤り</strong>：$\sum(X_i - \mu)^2$ は未知パラメータ $\mu$ を含むため、データだけの関数ではない → 統計量ではない。</li>
+                        <li><strong>② 正しい</strong>：順序統計量はデータ全体の情報を失わずにソートしただけなので、常に十分統計量になる。</li>
+                        <li><strong>③ 誤り</strong>：$\frac{1}{n}\sum(X_i-\bar{X})^2$ の期待値は $\frac{n-1}{n}\sigma^2 \neq \sigma^2$ なので不偏ではない。$\frac{1}{n-1}$ で割ると不偏になる。</li>
+                        <li><strong>④ 正しい</strong>：正規分布の MLE に不変性（$g(\hat\theta)$ は $g(\theta)$ の MLE）が成立。$\hat{\sigma}^2 = \frac{1}{n}\sum(X_i-\bar{X})^2$ が $\sigma^2$ の MLE なので、その平方根は $\sigma$ の MLE。</li>
+                        <li><strong>⑤ 誤り</strong>：$S^2$ も大標本では漸近有効推定量である（フィッシャー情報量下限（CRB）を漸近的に達成する）。</li>
                     </ul>
                     </div>
 
-                    <h3>問8.2：ポアソン分布の推定</h3>
-                    <p>平均 $\lambda$ のポアソン分布からの標本 $X_1, \ldots, X_n$。</p>
+                    <h3>問8.2：ポアソン分布のMLE・フィッシャー情報量・有効推定量</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        ある交差点で1時間あたりの事故件数は平均 $\lambda > 0$ のポアソン分布に従うとし、
+                        独立に $n$ 時間分の観測データ $X_1, \ldots, X_n$ が得られているとする。
+                        ポアソン分布の確率関数：$f(x; \lambda) = \dfrac{e^{-\lambda}\lambda^x}{x!}$（$x = 0, 1, 2, \ldots$）
+                    </p>
+                    <ol>
+                        <li>パラメータ $\lambda$ の最尤推定量 $\hat{\lambda}$ を求めよ。</li>
+                        <li>1標本のフィッシャー情報量 $J_1(\lambda)$ を求めよ。</li>
+                        <li>$\hat{\lambda} = \bar{X}$ が有効推定量（クラーメル・ラオ下限を達成する推定量）であることを示せ。</li>
+                        <li>中心極限定理を用いて $\hat{\lambda}$ の漸近正規性と漸近有効性を示せ。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) 最尤推定量：</strong></p>
-                    <p>$\ell(\lambda) = -n\lambda + \sum x_i \log\lambda - \sum\log x_i!$。$\ell'(\lambda) = -n + (\sum x_i)/\lambda = 0$ を解くと：$\hat\lambda = \bar{X}$。</p>
-
-                    <p><strong>(2) フィッシャー情報量：</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>(1) 最尤推定量の導出</strong></p>
+                    <p>対数尤度関数：</p>
                     <div class="formula-block">
-                        $$J_1(\lambda) = -E\!\left[\frac{\partial^2}{\partial\lambda^2}\log f(X;\lambda)\right] = -E\!\left[-\frac{X}{\lambda^2}\right] = \frac{E[X]}{\lambda^2} = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}$$
-        		    </div>
-                    <p>よって $\mathrm{CRB} = \lambda/n$。</p>
-
-                    <p><strong>(3) $\bar{X}$ が有効推定量であることの確認：</strong></p>
+                        $$\ell(\lambda) = \log L(\lambda) = \sum_{i=1}^n \log f(X_i;\lambda) = -n\lambda + \left(\sum_{i=1}^n X_i\right)\log\lambda - \sum_{i=1}^n \log X_i!$$
+                    </div>
+                    <p>$\partial\ell/\partial\lambda = -n + (\sum X_i)/\lambda = 0$ を解くと：</p>
                     <div class="formula-block">
-                        $$V[\bar{X}] = \frac{\lambda}{n} = \mathrm{CRB} \quad \Rightarrow \text{ クラーメル・ラオの下限を達成} \Rightarrow \text{ 有効推定量}$$
+                        $$\hat{\lambda} = \frac{\sum_{i=1}^n X_i}{n} = \bar{X}$$
                     </div>
 
-                    <p><strong>(4) 漸近正規性：</strong></p>
+                    <p><strong>(2) フィッシャー情報量</strong></p>
+                    <p>$\log f(x;\lambda) = -\lambda + x\log\lambda - \log x!$ より</p>
+                    <div class="formula-block">
+                        $$\frac{\partial^2}{\partial\lambda^2}\log f(x;\lambda) = -\frac{x}{\lambda^2}$$
+                        $$J_1(\lambda) = -E\!\left[\frac{\partial^2}{\partial\lambda^2}\log f(X;\lambda)\right] = \frac{E[X]}{\lambda^2} = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}$$
+                    </div>
+
+                    <p><strong>(3) 有効性の確認</strong></p>
+                    <p>$n$ 標本のクラーメル・ラオ下限：$\mathrm{CRB} = 1/(nJ_1(\lambda)) = \lambda/n$。</p>
+                    <div class="formula-block">
+                        $$V[\bar{X}] = \frac{V[X_1]}{n} = \frac{\lambda}{n} = \mathrm{CRB} \quad \Rightarrow \text{ 有効推定量}$$
+                    </div>
+
+                    <p><strong>(4) 漸近正規性と漸近有効性</strong></p>
+                    <p>$X_1, \ldots, X_n$ は独立で $E[X_i] = V[X_i] = \lambda$ なので、中心極限定理より：</p>
                     <div class="formula-block">
                         $$\sqrt{n}(\bar{X} - \lambda) \xrightarrow{d} N(0, \lambda) = N\!\left(0, J_1(\lambda)^{-1}\right)$$
                     </div>
-                    <p>漸近分散 $\lambda = J_1(\lambda)^{-1}$ から漸近有効性も成立。</p>
+                    <p>漸近分散 $J_1(\lambda)^{-1} = \lambda$ がフィッシャー情報量の逆数と一致するため、漸近有効性も成立しています。</p>
                     </div>
 
-                    <h3>問8.3：コインの面積のバイアス補正</h3>
-                    <p>5枚のコインの半径測定値（mm）：$8.4, 9.0, 8.2, 10.4, 9.2$。面積 $\pi\mu^2$ を推定する（半径の真の平均を $\mu$ とする）。</p>
+                    <h3>問8.3：コインの面積推定――バイアス・バイアス補正・デルタ法</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        コインを製造する工場で5つの円形のコインを試作し、その半径（mm）を測定したところ、
+                        次のデータが得られた：
+                        $$8.4, \quad 9.0, \quad 8.2, \quad 10.4, \quad 9.2 \text{（単位: mm）}$$
+                        コインは真円とし、半径の真の平均を $\mu$（未知）、分散 $\sigma^2$（未知）とする。
+                        コインの面積の真の値 $\pi\mu^2$ を推定したい。ただし $\pi = 3.14$ を使え。
+                    </p>
+                    <ol>
+                        <li>$T_1 = \pi\bar{X}^2$ のバイアス（$E[T_1] - \pi\mu^2$）を求めよ。</li>
+                        <li>$(1)$ の結果を説明として使い、「各コインの面積の平均値」を推定値として使うことの問題点を述べよ。</li>
+                        <li>$(1)$ で求めたバイアスに標本平均 $\bar{X}$ と不偏分散 $U = S^2$ を代入してバイアス補正した推定値を計算せよ。</li>
+                        <li>デルタ法を使い、$T_1 = \pi\bar{X}^2$ の漸近分散を求めよ（$\sigma^2$・$\mu$ で表せ）。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>基本量の計算：</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>基本量の計算</strong></p>
                     <div class="formula-block">
-                        $$\bar{X} = \frac{8.4 + 9.0 + 8.2 + 10.4 + 9.2}{5} = \frac{45.2}{5} = 9.04$$
-                        $$U = S^2 = \frac{1}{4}\sum(X_i - \bar{X})^2 = \frac{1}{4}\bigl[(0.64)^2 + (0.04)^2 + \cdots\bigr] \approx 0.748$$
+                        $$\bar{X} = \frac{8.4 + 9.0 + 8.2 + 10.4 + 9.2}{5} = \frac{45.2}{5} = 9.04\text{ mm}$$
+                    </div>
+                    <div class="formula-block">
+                        $$U = S^2 = \frac{1}{4}\sum_{i=1}^5(X_i - \bar{X})^2$$
+                    </div>
+                    <p>各偏差の2乗：$(8.4-9.04)^2 = 0.4096$、$(9.0-9.04)^2 = 0.0016$、$(8.2-9.04)^2 = 0.7056$、$(10.4-9.04)^2 = 1.8496$、$(9.2-9.04)^2 = 0.0256$</p>
+                    <div class="formula-block">
+                        $$U = \frac{0.4096 + 0.0016 + 0.7056 + 1.8496 + 0.0256}{4} = \frac{2.992}{4} = 0.748\text{ mm}^2$$
                     </div>
 
-                    <p><strong>(1) $T_1 = \pi\bar{X}^2$ のバイアス：</strong></p>
+                    <p><strong>(1) $T_1 = \pi\bar{X}^2$ のバイアス</strong></p>
                     <div class="formula-block">
-                        $$E[T_1] = \pi E[\bar{X}^2] = \pi(V[\bar{X}] + (E[\bar{X}])^2) = \pi\!\left(\frac{\sigma^2}{n} + \mu^2\right) = \pi\mu^2 + \frac{\pi\sigma^2}{n}$$
-                        $$\text{バイアス} = \frac{\pi\sigma^2}{n}$$
+                        $$E[T_1] = \pi E[\bar{X}^2] = \pi\!\left(V[\bar{X}] + (E[\bar{X}])^2\right) = \pi\!\left(\frac{\sigma^2}{n} + \mu^2\right) = \pi\mu^2 + \frac{\pi\sigma^2}{n}$$
+                    </div>
+                    <div class="formula-block">
+                        $$\mathrm{Bias}(T_1) = E[T_1] - \pi\mu^2 = \frac{\pi\sigma^2}{n} > 0$$
+                    </div>
+                    <p>$T_1 = \pi\bar{X}^2$ は面積 $\pi\mu^2$ を過大評価します（正のバイアス）。</p>
+
+                    <p><strong>(2) 問題点の説明</strong></p>
+                    <p>
+                        「各コインの面積を計算して平均する」推定量は $\frac{1}{n}\sum \pi X_i^2 = \pi\overline{X^2}$ です。
+                        $E\!\left[\pi\overline{X^2}\right] = \pi E[X_i^2] = \pi\!\left(\sigma^2 + \mu^2\right) = \pi\mu^2 + \pi\sigma^2$
+                        となり、バイアス $\pi\sigma^2$ があります（$T_1$ のバイアスより大きい）。
+                        コインの半径にばらつきがある限り、面積の直接平均は真の面積 $\pi\mu^2$ を過大評価します。
+                    </p>
+
+                    <p><strong>(3) バイアス補正推定値</strong></p>
+                    <p>$\sigma^2/n$ を $U/n = S^2/n$ で推定してバイアスを引きます：</p>
+                    <div class="formula-block">
+                        $$\tilde{T}_1 = \pi\!\left(\bar{X}^2 - \frac{U}{n}\right) = 3.14 \times \!\left(9.04^2 - \frac{0.748}{5}\right)$$
+                        $$= 3.14 \times (81.7216 - 0.1496) = 3.14 \times 81.572 \approx \mathbf{256.1\text{ mm}^2}$$
                     </div>
 
-                    <p><strong>(3) バイアス補正推定値（$\sigma^2$ を $U$ で推定）：</strong></p>
+                    <p><strong>(4) 漸近分散（デルタ法）</strong></p>
+                    <p>$g(x) = \pi x^2$ とおくと $g'(\mu) = 2\pi\mu$。デルタ法より $T_1 = g(\bar{X})$ の漸近分散：</p>
                     <div class="formula-block">
-                        $$\pi\!\left(\bar{X}^2 - \frac{U}{n}\right) = \pi\!\left(9.04^2 - \frac{0.748}{5}\right) = \pi(81.72 - 0.150) = \pi \times 81.57 \approx \mathbf{256\text{ mm}^2}$$
+                        $$[g'(\mu)]^2 \cdot \frac{\sigma^2}{n} = (2\pi\mu)^2 \cdot \frac{\sigma^2}{n} = \frac{4\pi^2\mu^2\sigma^2}{n}$$
                     </div>
-
-                    <p><strong>(4) ジャックナイフ法による推定：</strong></p>
-                    <p>5つの $\hat\theta_{(i)} = \pi\bar{X}_{(i)}^2$（$i$ 番目を除いた平均の2乗 $\times \pi$）を計算し、$\hat\theta_{\mathrm{jack}} = 5\pi\bar{X}^2 - 4\bar{\hat\theta}_{(\cdot)}$ とします。
-                    計算結果はバイアス補正と同様に $\approx \mathbf{256}$ になります。</p>
-
-                    <p><strong>(5) デルタ法による漸近分散：</strong></p>
-                    <p>$g(x) = \pi x^2$、$g'(\mu) = 2\pi\mu$ より、$g(\bar{X})$ の漸近分散：</p>
-                    <div class="formula-block">
-                        $$[g'(\mu)]^2 \frac{\sigma^2}{n} = (2\pi\mu)^2 \frac{\sigma^2}{n} = \frac{4\pi^2\mu^2\sigma^2}{n}$$
-                    </div>
+                    <p>つまり $\sqrt{n}(T_1 - \pi\mu^2) \xrightarrow{d} N(0, 4\pi^2\mu^2\sigma^2)$ となります。</p>
                     </div>
                 </section>
 

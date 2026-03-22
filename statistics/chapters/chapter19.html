@@ -52,168 +52,451 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#tobit">トービットモデル</a></li>
+                            <li><a href="#survival">生存時間解析</a></li>
+                            <li><a href="#cox">Cox比例ハザードモデル</a></li>
+                            <li><a href="#kaplan-meier">カプラン・マイヤー推定量</a></li>
+                            <li><a href="#neural">ニューラルネットワーク</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> はじめに：特殊な構造を持つデータ</h2>
                     <p>
-                        第19章では<strong>回帰分析その他</strong>のトピックとして、打ち切りデータを扱う
-                        トービットモデル、生存時間解析（ハザード関数、比例ハザードモデル、カプラン・マイヤー推定量）、
-                        およびニューラルネットワークモデルを学ぶ。
+                        通常の回帰分析では「応答変数はどんな実数値もとれる」「データは打ち切られていない（fully observed）」「変数間の関係が線形」などを前提としています。
+                        しかし現実のデータには、こうした前提が成り立たない場合が多くあります。
                     </p>
-                    <p><strong>キーワード：</strong>打ち切り、トービットモデル、比例ハザードモデル、ニューラルネットワークモデル</p>
+                    <ul>
+                        <li><strong>トービットモデル：</strong>応答変数に「床（または天井）」があり、一定値以下（以上）が観測されない（打ち切りデータ）</li>
+                        <li><strong>生存時間解析：</strong>「いつ事象が起きるか」という<em>時間</em>を分析。まだ事象が起きていない観測（打ち切り）を正しく扱う</li>
+                        <li><strong>Cox比例ハザードモデル：</strong>生存時間の分布を仮定せずに、グループ間のハザード比を推定</li>
+                        <li><strong>カプラン＝マイヤー推定量：</strong>ノンパラメトリックな生存関数の推定</li>
+                        <li><strong>ニューラルネットワーク：</strong>非線形な関係を多層の計算で近似</li>
+                    </ul>
+                    <p><strong>キーワード：</strong>打ち切り、生存関数、ハザード関数、比例ハザード仮定、ニューラルネット</p>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <section class="content-section section-anchor" id="tobit">
+                    <h2><i class="fas fa-compress-arrows-alt"></i> トービットモデル</h2>
 
-                    <h3>トービットモデル（打ち切り回帰モデル）</h3>
-                    <p>被説明変数 $y_i$ に打ち切りが発生する場合の線形モデル。潜在変数 $y_i^*$ との関係：</p>
-                    <ul>
-                        <li><strong>左打ち切り：</strong>$y_i = y_i^*$ ($y_i^* > L$), $y_i = L$ ($y_i^* \leq L$)</li>
-                        <li><strong>右打ち切り：</strong>$y_i = y_i^*$ ($y_i^* < U$), $y_i = U$ ($y_i^* \geq U$)</li>
-                        <li><strong>両側打ち切り：</strong>上記の組み合わせ</li>
-                    </ul>
-                    <p>タイプIトービットモデル：$y_i^* = x_i^T\beta + \varepsilon_i$, $\varepsilon_i \sim N(0, \sigma^2)$</p>
+                    <h3>「床効果」のある応答変数</h3>
+                    <p>
+                        雪の量を考えてみましょう。「今日の積雪量は-5cm」とはなりません。0cmより少なくなれないという<strong>制約（床）</strong>があります。
+                        消費額も同様で、「ある商品を購入しない人」の消費額はぴったり0であり、
+                        「マイナスの消費」は観測されません。
+                    </p>
+                    <p>
+                        このような場合、潜在的な意向（$Y^*$）は正にも負にもなれるが、
+                        実際の観測値 $Y$ は $Y^* > 0$ のときだけ観測できる（それ以外は0になる）と考えます。
+                        これが<strong>トービットモデル（censored regression model）</strong>です。
+                    </p>
 
-                    <h3>生存時間解析</h3>
-                    <p>ある時点からイベント（死亡・完治など）までの時間 $T \geq 0$ を分析。</p>
-                    <ul>
-                        <li><strong>生存関数：</strong>$S(t) = P(T > t) = \int_t^\infty f(u|\theta) du$</li>
-                        <li><strong>ハザード関数：</strong>$h(t) = -S'(t)/S(t)$（瞬間的なイベント発生率）</li>
-                    </ul>
-
-                    <h3>ハザード関数の例</h3>
+                    <h3>3種類の打ち切り</h3>
                     <table>
-                        <thead><tr><th>分布</th><th>$h(t)$</th><th>特徴</th></tr></thead>
+                        <thead><tr><th>打ち切りの種類</th><th>観測される条件</th><th>具体例</th></tr></thead>
                         <tbody>
-                            <tr><td>指数分布</td><td>$\lambda$（一定）</td><td>健康状態が安定な人のモデル</td></tr>
-                            <tr><td>ワイブル分布</td><td>$\lambda p(\lambda t)^{p-1}$</td><td>$p>1$: 単調増加, $p<1$: 単調減少</td></tr>
-                            <tr><td>対数正規分布</td><td>増加後減少</td><td>慢性疾患のモデル</td></tr>
+                            <tr><td><strong>下方打ち切り（Left censoring）</strong></td><td>$Y^* > L$ のとき $Y = Y^*$、それ以外 $Y = L$</td><td>消費額（最低0円）</td></tr>
+                            <tr><td><strong>上方打ち切り（Right censoring）</strong></td><td>$Y^* < U$ のとき $Y = Y^*$、それ以外 $Y = U$</td><td>試験の満点上限</td></tr>
+                            <tr><td><strong>区間打ち切り（Interval censoring）</strong></td><td>$L < Y^* < U$ のとき $Y = Y^*$、それ以外は境界</td><td>年収（上下限あり）</td></tr>
                         </tbody>
                     </table>
 
-                    <h3>Cox比例ハザードモデル</h3>
+                    <h3>標準的なトービットモデル</h3>
+                    <p>
+                        潜在変数 $Y_i^*$ が正規分布に従うと仮定：
+                    </p>
                     <div class="formula-block">
-                        $$h(t; z) = h_0(t)\exp(z^T\beta) \quad (h_0(t) > 0)$$
+                        $$Y_i^* = \beta_0 + \beta_1 x_{1i} + \cdots + \beta_p x_{pi} + \varepsilon_i, \quad \varepsilon_i \sim N(0, \sigma^2)$$
                     </div>
-                    <ul>
-                        <li>$h_0(t)$：基準ハザード（baseline hazard） — 形を指定しない → セミパラメトリック</li>
-                        <li><strong>比例ハザード性：</strong>$\frac{h(t;z)}{h(t;z^*)} = \exp\{(z-z^*)^T\beta\}$（時間に依存しない）</li>
-                        <li>比例ハザード性の検証：$\log(-\log S(t;z)) = z^T\beta + \log H_0(t)$</li>
-                    </ul>
-
-                    <h3>カプラン・マイヤー推定量（積極限推定量）</h3>
-                    <p>右打ち切りがある場合の生存関数のノンパラメトリック推定量：</p>
                     <div class="formula-block">
-                        $$\hat{S}(t) = \prod_{i: t_i \leq t}\frac{n_i - d_i}{n_i}$$
+                        $$Y_i = \begin{cases} Y_i^* & \text{if } Y_i^* > 0 \\ 0 & \text{if } Y_i^* \leq 0 \end{cases}$$
                     </div>
-                    <p>$n_i$：時刻 $t_i$ の直前まで生存していた人数、$d_i$：時刻 $t_i$ での死亡数</p>
+                    <p>
+                        普通の最小二乗法は「$Y = 0$」の観測を無視するバイアスが生じます。
+                        正しくは<strong>最尤法</strong>で推定します。0の観測には「$Y^* \leq 0$ である確率」を、正の観測には正規分布の密度を使います。
+                    </p>
 
-                    <h3>ニューラルネットワークモデル</h3>
-                    <ul>
-                        <li>入力 $x$、出力 $y$、活性化関数 $f$ による非線形回帰</li>
-                        <li><strong>活性化関数：</strong>シグモイド $f(z) = \frac{1}{1+e^{-z}}$、ReLU $f(z) = \max\{0, z\}$</li>
-                        <li>中間層（隠れ層）を持つ合成関数：$y = h_\theta(g_\theta(f_\theta(x)))$</li>
-                        <li>深層ニューラルネットワーク（DNN）：中間層の数が多いモデル</li>
-                    </ul>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-
-                    <h3>トービットモデルの尤度関数（左打ち切り, $L=0$）</h3>
-                    <div class="formula-block">
-                        $$L(\beta, \sigma) = \prod_{y_i > 0}\frac{1}{\sigma}\phi\!\left(\frac{y_i - x_i^T\beta}{\sigma}\right) \prod_{y_i \leq 0}\Phi\!\left(\frac{-x_i^T\beta}{\sigma}\right)$$
-                    </div>
-
-                    <h3>比例ハザードモデルの生存関数</h3>
-                    <div class="formula-block">
-                        $$S(t; z) = \exp\left\{-H_0(t)e^{z^T\beta}\right\}$$
-                    </div>
-                    <p>ここで $H_0(t) = \int_0^t h_0(u)du$ は累積基準ハザード。</p>
-
-                    <h3>カプラン・マイヤー推定量の条件付き表現</h3>
-                    <div class="formula-block">
-                        $$\hat{S}(t_j) = \hat{S}(t_{j-1}) \times \hat{P}(T > t_j \mid T \geq t_j)$$
-                    </div>
-
-                    <h3>ワイブル分布の生存関数</h3>
-                    <div class="formula-block">
-                        $$S(t) = e^{-(\lambda t)^p}$$
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-exclamation-triangle"></i> OLSはなぜダメか？</p>
+                        <p>
+                            $Y = 0$ の観測があるとき、OLSで全データを使うと係数が過小推定されます。
+                            例えば「年収が0の人（無職）」を「収入が本当に0の人」として扱うと、
+                            年収に影響する変数の係数が実態より小さく推定されてしまいます。
+                        </p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                <section class="content-section section-anchor" id="survival">
+                    <h2><i class="fas fa-heartbeat"></i> 生存時間解析</h2>
 
-                    <h3>問19.1：越後湯沢の積雪量（トービットモデル）</h3>
-                    <p>2018年12月〜2019年1月の62日間の積雪量を平均気温・日照時間で回帰（左打ち切り $L=0$）。</p>
-                    <div class="answer-block">
-                        <p><strong>(1) 尤度関数：</strong></p>
-                        <p>$L(\beta,\sigma) = \prod_{y_i>0}\frac{1}{\sigma}\phi\!\left(\frac{y_i - \beta_0 - \beta_1 x_{i1} - \beta_2 x_{i2}}{\sigma}\right)\prod_{y_i=0}\Phi\!\left(\frac{-\beta_0 - \beta_1 x_{i1} - \beta_2 x_{i2}}{\sigma}\right)$</p>
+                    <h3>「いつ起きるか」を分析する</h3>
+                    <p>
+                        医学では「がん治療後の再発までの時間」、工学では「機械が壊れるまでの時間」、
+                        経済学では「失業から再就職までの時間」など、
+                        <strong>ある事象が「いつ」起きるか</strong>を分析したい場面があります。
+                        これを<strong>生存時間解析（survival analysis）</strong>またはイベント時間分析といいます。
+                    </p>
+                    <p>特徴的なのが<strong>打ち切り（censoring）</strong>の問題です。</p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-scissors"></i> 打ち切りとは？</p>
+                        <p>
+                            研究終了時点でまだ事象（死亡・再発・故障）が起きていない人・機械は「打ち切り」と呼ばれます。
+                            たとえば、5年間の調査で終了時点まで生存していた患者は「5年以上生きた」ことはわかりますが、
+                            正確な生存時間は不明です。このデータを「捨てる」のは情報の無駄→<strong>打ち切りを正しく扱う</strong>必要があります。
+                        </p>
+                    </div>
 
-                        <p><strong>(2) AICによるモデル選択：</strong></p>
+                    <h3>生存関数とハザード関数</h3>
+                    <p>
+                        時刻 $t$ を超えて生存（事象が起きない）する確率を<strong>生存関数</strong>といいます：
+                    </p>
+                    <div class="formula-block">
+                        $$S(t) = P(T > t)$$
+                    </div>
+                    <p>
+                        特性：$S(0) = 1$（最初は全員生存）、$t$ が増えるにつれ単調に減少し $S(\infty) = 0$。
+                    </p>
+                    <p>
+                        <strong>ハザード関数</strong>（hazard function） $h(t)$ は「時刻 $t$ まで生存した条件のもとで、次の瞬間に事象が起きる瞬間的な確率率」です：
+                    </p>
+                    <div class="formula-block">
+                        $$h(t) = \lim_{\Delta t \to 0} \frac{P(t \leq T < t + \Delta t \mid T \geq t)}{\Delta t}$$
+                    </div>
+                    <p>直感的には「今この瞬間の死亡（故障）リスクの強度」です。</p>
+
+                    <h3>代表的な分布</h3>
+                    <table>
+                        <thead><tr><th>分布</th><th>$S(t)$ の形</th><th>ハザード $h(t)$ の特性</th><th>用途例</th></tr></thead>
+                        <tbody>
+                            <tr><td>指数分布</td><td>$e^{-\lambda t}$</td><td>定数（$h(t) = \lambda$）：時間によらず一定</td><td>電子部品の故障</td></tr>
+                            <tr><td>ワイブル分布</td><td>$e^{-(t/\lambda)^k}$</td><td>単調増加（$k>1$）/定数（$k=1$）/単調減少（$k<1$）</td><td>機械の摩耗・老化</td></tr>
+                            <tr><td>ログ正規分布</td><td>$\Phi$で表現</td><td>先に増加後に減少（山型）</td><td>がんの再発時間</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="content-section section-anchor" id="cox">
+                    <h2><i class="fas fa-balance-scale"></i> Cox比例ハザードモデル</h2>
+
+                    <h3>分布を仮定しない「半パラメトリック」な方法</h3>
+                    <p>
+                        指数分布やワイブル分布を使うと「基準となるハザード関数（ベースラインハザード）の形を仮定する」必要があります。
+                        しかし、実際に分布が正しいかどうか検証は難しい。
+                        Coxモデルでは、ベースラインハザードの形を一切仮定せず、
+                        グループ間のハザード比（どちらが何倍危険か）だけを推定します。
+                    </p>
+
+                    <h3>比例ハザードモデル</h3>
+                    <div class="formula-block">
+                        $$h(t \mid x) = h_0(t) \cdot \exp(\beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_p x_p)$$
+                    </div>
+                    <p>
+                        $h_0(t)$：ベースラインハザード（$x_1=\cdots=x_p=0$ の基準グループのハザード）。
+                        <br>$\exp(\beta_1 x_1 + \cdots)$：共変量による「倍率」。
+                    </p>
+                    <p>
+                        重要な仮定が<strong>比例ハザード仮定</strong>（proportional hazards assumption）：
+                        2つのグループのハザード比 $h(t|x_A)/h(t|x_B)$ が<strong>時間 $t$ によらず一定</strong>である、ということです。
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-equals"></i> 比例ハザード仮定のイメージ</p>
+                        <p>
+                            「男性の死亡リスクは女性の2倍」というとき、
+                            比例ハザード仮定は「30歳でも50歳でも70歳でも常に2倍」を意味します。
+                            年齢によってこの比率が変わる場合は仮定が成り立ちません。
+                        </p>
+                    </div>
+
+                    <h3>偏尤度による推定</h3>
+                    <p>
+                        ベースラインハザード $h_0(t)$ を推定せずに係数 $\beta$ だけを推定するため、<strong>偏尤度（partial likelihood）</strong>を使います。
+                        各「死亡イベント」が起きた時刻 $t_j$ において、「リスクセットにいる人の中でこの人が死亡した条件付き確率」の積をとります：
+                    </p>
+                    <div class="formula-block">
+                        $$L(\beta) = \prod_{j=1}^{D} \frac{\exp(x_j^T \beta)}{\sum_{i \in R(t_j)} \exp(x_i^T \beta)}$$
+                    </div>
+                    <p>$R(t_j)$：時刻 $t_j$ にまだ「生存かつ未打ち切り」の人の集合（リスクセット）。</p>
+                </section>
+
+                <section class="content-section section-anchor" id="kaplan-meier">
+                    <h2><i class="fas fa-stairs"></i> カプラン＝マイヤー推定量</h2>
+
+                    <h3>生存関数をノンパラメトリックに推定する</h3>
+                    <p>
+                        Coxモデルは回帰（共変量の影響を見る）のためでしたが、
+                        まず「集団全体の生存率がどう変化するか」を視覚化したい場合は
+                        <strong>カプラン＝マイヤー（KM）推定量</strong>を使います。
+                        分布の仮定は一切不要です。
+                    </p>
+
+                    <h3>計算の仕組み：積限推定量</h3>
+                    <p>
+                        各「死亡（事象発生）時刻 $t_j$」において、生存確率が少しずつ下がります。
+                        死亡が起きた時刻だけで更新され、打ち切りがあっても正しく扱えます：
+                    </p>
+                    <div class="formula-block">
+                        $$\hat{S}(t) = \prod_{t_j \leq t} \left(1 - \frac{d_j}{n_j}\right)$$
+                    </div>
+                    <ul>
+                        <li>$t_j$：$j$ 番目の死亡時刻</li>
+                        <li>$d_j$：時刻 $t_j$ に死亡した人数</li>
+                        <li>$n_j$：時刻 $t_j$ 直前のリスクセット人数（まだ生存かつ未打ち切り）</li>
+                    </ul>
+
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-table"></i> ミニ例：5人のデータ（◆=死亡、○=打ち切り）</p>
                         <table>
-                            <thead><tr><th>説明変数</th><th>パラメータ数</th><th>AIC</th></tr></thead>
+                            <thead><tr><th>観察時間（月）</th><th>結果</th><th>リスクセット $n_j$</th><th>死亡 $d_j$</th><th>$(1-d_j/n_j)$</th><th>$\hat{S}(t)$</th></tr></thead>
                             <tbody>
-                                <tr><td>日照時間＋平均気温</td><td>4</td><td><strong>532.69</strong></td></tr>
-                                <tr><td>日照時間＋平均気温＋最高気温</td><td>5</td><td>533.81</td></tr>
-                                <tr><td>日照時間＋平均気温＋最低気温</td><td>5</td><td>533.95</td></tr>
-                                <tr><td>日照時間＋平均気温＋最低気温＋最高気温</td><td>6</td><td>535.72</td></tr>
+                                <tr><td>2</td><td>◆死亡</td><td>5</td><td>1</td><td>$4/5=0.800$</td><td>0.800</td></tr>
+                                <tr><td>4</td><td>○打切</td><td>—</td><td>—</td><td>生存続く</td><td>0.800</td></tr>
+                                <tr><td>7</td><td>◆死亡</td><td>3</td><td>1</td><td>$2/3=0.667$</td><td>$0.800 \times 0.667 = 0.533$</td></tr>
+                                <tr><td>10</td><td>◆死亡</td><td>2</td><td>1</td><td>$1/2=0.500$</td><td>$0.533 \times 0.500 = 0.267$</td></tr>
+                                <tr><td>12</td><td>○打切</td><td>—</td><td>—</td><td>生存続く</td><td>0.267</td></tr>
                             </tbody>
                         </table>
-                        <p>AICが最小の「日照時間＋平均気温」が最適モデル。</p>
+                        <p>
+                            月4と月12の打ち切り観察は、その時点まで「生きていた」としてリスクセットに含めるが、
+                            その後は分母から除外。これで打ち切りを正しく処理できます。
+                        </p>
+                    </div>
+                    <p>
+                        グループ間の生存曲線を比較するには<strong>ログランク検定（log-rank test）</strong>を使います。
+                        「2つのグループの生存曲線に差がない」という帰無仮説を検定します。
+                    </p>
+                </section>
+
+                <section class="content-section section-anchor" id="neural">
+                    <h2><i class="fas fa-brain"></i> ニューラルネットワーク</h2>
+
+                    <h3>脳のニューロンを数式でまねる</h3>
+                    <p>
+                        ニューラルネットワークは、人間の脳の<strong>神経細胞（ニューロン）のつながり</strong>をコンピュータ上でまねた数理モデルです。
+                        複雑な非線形関係も学習できる汎用的な予測モデルです。
+                    </p>
+
+                    <h3>基本構造：入力層・隠れ層・出力層</h3>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-network-wired"></i> 3層ニューラルネット</p>
+                        <ul>
+                            <li><strong>入力層（Input Layer）：</strong>説明変数 $x_1, x_2, \ldots, x_p$ を受け取るノード。計算はしない。</li>
+                            <li><strong>隠れ層（Hidden Layer）：</strong>重み（weight） $w_{jk}$ でつながれたノード。各ノードで「重み付き和 $z = \sum w_k x_k + b$ → 活性化関数 $f(z)$」を計算する。</li>
+                            <li><strong>出力層（Output Layer）：</strong>最後の予測値 $\hat{y}$ を出力。回帰なら恒等関数、分類ならソフトマックスなど。</li>
+                        </ul>
                     </div>
 
-                    <h3>問19.2：指数分布のハザード関数</h3>
-                    <div class="answer-block">
-                        <p>$f(t) = \lambda e^{-\lambda t}$ → $S(t) = e^{-\lambda t}$ → $h(t) = -\frac{S'(t)}{S(t)} = \frac{\lambda e^{-\lambda t}}{e^{-\lambda t}} = \lambda$</p>
+                    <h3>活性化関数</h3>
+                    <p>各ノードで線形変換の後に適用する（非線形を導入する）関数：</p>
+                    <table>
+                        <thead><tr><th>活性化関数</th><th>式</th><th>特徴</th></tr></thead>
+                        <tbody>
+                            <tr><td>シグモイド</td><td>$1/(1+e^{-z})$</td><td>出力が (0,1)。勾配消失問題あり</td></tr>
+                            <tr><td>ReLU</td><td>$\max(0, z)$</td><td>現在最もよく使われる。計算効率◎</td></tr>
+                            <tr><td>tanh</td><td>$(e^z - e^{-z})/(e^z + e^{-z})$</td><td>出力が (−1,1)</td></tr>
+                        </tbody>
+                    </table>
+
+                    <h3>学習：誤差逆伝播法</h3>
+                    <p>
+                        ニューラルネットのパラメータ（重み $w$ とバイアス $b$）は、<strong>誤差逆伝播法（backpropagation）</strong>で学習します：
+                    </p>
+                    <ol>
+                        <li>入力 $x$ を順番に流し予測 $\hat{y}$ を計算（順伝播）</li>
+                        <li>損失関数 $L = (y - \hat{y})^2$ を計算</li>
+                        <li>連鎖律（chain rule）で各層の重みに対する勾配 $\partial L / \partial w$ を逆算（逆伝播）</li>
+                        <li>勾配降下法で $w \leftarrow w - \eta \cdot \partial L/\partial w$ と更新（$\eta$: 学習率）</li>
+                    </ol>
+                </section>
+
+                <section class="content-section section-anchor" id="formulas">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
+
+                    <h3>トービットモデルの対数尤度</h3>
+                    <div class="formula-block">
+                        $$\ell(\beta,\sigma) = \sum_{y_i>0}\log\phi\!\left(\frac{y_i - x_i^T\beta}{\sigma}\right) - \sum_{y_i=0} \log\Phi\!\left(\frac{x_i^T\beta}{\sigma}\right)$$
+                    </div>
+                    <p>$\phi$: 標準正規密度、$\Phi$: 標準正規CDF（累積分布関数）。</p>
+
+                    <h3>カプラン＝マイヤー推定量</h3>
+                    <div class="formula-block">
+                        $$\hat{S}(t) = \prod_{t_j \leq t} \frac{n_j - d_j}{n_j}$$
                     </div>
 
-                    <h3>問19.3：比例ハザードモデルの対数変換</h3>
-                    <div class="answer-block">
-                        <p>$S(t;z) = \exp\{-H_0(t)e^{z^T\beta}\}$ より：</p>
-                        <p>$-\log S = H_0(t)e^{z^T\beta}$ → $\log(-\log S(t;z)) = z^T\beta + \log H_0(t)$</p>
+                    <h3>Cox比例ハザードモデルのハザード</h3>
+                    <div class="formula-block">
+                        $$h(t \mid x) = h_0(t) \exp(x^T \beta)$$
                     </div>
 
-                    <h3>問19.4：白血病データの比例ハザード性</h3>
-                    <div class="answer-block">
-                        <p><strong>(1) 比例ハザード性の妥当性：</strong></p>
-                        <p>$\log(-\log \hat{S})$ の2重対数プロットで治療群と対照群がほぼ平行 → 比例ハザード性の仮定は妥当。</p>
-
-                        <p><strong>(2) 2曲線の距離の意味：</strong></p>
-                        <p>$\beta = \log(-\log S(t;1)) - \log(-\log S(t;0))$</p>
-                        <p>2つのKM推定量の2重対数間の距離は、<strong>治療効果 $\beta$ の大きさ</strong>を表す。</p>
+                    <h3>ハザード比（2グループ比較）</h3>
+                    <div class="formula-block">
+                        $$\text{HR} = \frac{h(t \mid x_A)}{h(t \mid x_B)} = \exp\left(\hat{\beta}(x_A - x_B)\right)$$
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+
+                    <h3>問19.1：女性の稼ぎとトービットモデル</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            夫の収入（$x_1$）、子供の数（$x_2$）、妻の教育年数（$x_3$）が
+                            妻の年間労働所得（万円）に与える影響を調べる。
+                            妻が働いていない場合（所得=0）が全体の40%ある。
+                            なぜトービットモデルが適切か。また、OLSが問題をとなる理由を述べよ。
+                        </p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>
+                            <strong>トービットが適切な理由：</strong>
+                            妻の所得は「働く意欲・能力」という潜在変数 $Y^*$ によって決まるが、
+                            $Y^* \leq 0$（就労しない状態）の場合は実際の所得は0で観測される。
+                            つまり応答変数に下方打ち切りがある。
+                        </p>
+                        <p>
+                            <strong>OLSの問題：</strong>
+                            OLSで「所得 > 0」の人だけを使うと、「働く意欲が高い人」だけのサンプルになり、
+                            係数が選択バイアスを持つ（Heckman選択バイアス）。
+                            全データを使ったOLSでも、0のパイルアップがあると残差が正規分布に従わず、
+                            推定量も一致性を失う。
+                        </p>
+                    </div>
+
+                    <h3>問19.2：2群の生存時間比較</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            2つの治療法（A群・B群）の5年生存率を比較する研究で、
+                            次のカプラン＝マイヤー推定量の結果を得た：
+                        </p>
+                        <table>
+                            <thead><tr><th>月</th><th>A群 $\hat{S}(t)$</th><th>B群 $\hat{S}(t)$</th></tr></thead>
+                            <tbody>
+                                <tr><td>0</td><td>1.000</td><td>1.000</td></tr>
+                                <tr><td>12</td><td>0.820</td><td>0.760</td></tr>
+                                <tr><td>24</td><td>0.680</td><td>0.580</td></tr>
+                                <tr><td>36</td><td>0.540</td><td>0.420</td></tr>
+                                <tr><td>48</td><td>0.410</td><td>0.290</td></tr>
+                                <tr><td>60</td><td>0.310</td><td>0.190</td></tr>
+                            </tbody>
+                        </table>
+                        <p>5年（60か月）時点での2群の生存率の差を述べよ。また、どのような統計検定でこの差を評価するか。</p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>
+                            <strong>5年生存率の差：</strong>
+                            A群の5年生存率は 31.0%、B群は 19.0%。A群の方が 12.0ポイント高い。
+                        </p>
+                        <p>
+                            <strong>統計検定：</strong> ログランク検定（log-rank test）を用いる。
+                            観測された死亡数 $O_k$ と、帰無仮説（2群で生存曲線が同じ）のもとで期待される死亡数 $E_k$ を比較し、
+                            カイ二乗統計量 $\chi^2 = \sum_k (O_k - E_k)^2 / E_k$ で判定する。
+                        </p>
+                    </div>
+
+                    <h3>問19.3：Cox比例ハザードモデルの解釈</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            心筋梗塞患者のデータにCoxモデルを適用した結果：
+                        </p>
+                        <table>
+                            <thead><tr><th>変数</th><th>$\hat{\beta}$</th><th>SE</th><th>p値</th><th>HR（$e^{\hat{\beta}}$）</th></tr></thead>
+                            <tbody>
+                                <tr><td>年齢（歳）</td><td>0.0423</td><td>0.011</td><td>0.001</td><td>1.043</td></tr>
+                                <tr><td>喫煙（1=あり）</td><td>0.4812</td><td>0.198</td><td>0.015</td><td>1.618</td></tr>
+                                <tr><td>治療（1=新薬）</td><td>$-0.3219$</td><td>0.152</td><td>0.034</td><td>0.724</td></tr>
+                            </tbody>
+                        </table>
+                        <ol>
+                            <li>喫煙のハザード比を解釈せよ。</li>
+                            <li>新薬投与のハザード比を解釈せよ。</li>
+                        </ol>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>
+                            <strong>(1) 喫煙：</strong> HR $= e^{0.4812} = 1.618$。
+                            他の条件（年齢・治療法）が同じ場合、喫煙者は非喫煙者に比べて
+                            <strong>死亡リスクが約1.62倍（62%高い）</strong>。$p = 0.015 < 0.05$ なので有意。
+                        </p>
+                        <p>
+                            <strong>(2) 新薬：</strong> HR $= e^{-0.3219} = 0.724$。
+                            新薬を投与された患者は従来治療の患者に比べて
+                            <strong>死亡リスクが約0.72倍（28%低い）</strong>→ 新薬は生存を延ばす効果がある。$p = 0.034 < 0.05$ なので有意。
+                        </p>
+                    </div>
+
+                    <h3>問19.4：ニューラルネットワークの構造</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            入力層3ノード・隠れ層1層4ノード（シグモイド活性化）・出力層1ノード（恒等）のニューラルネットワークを考える。
+                            (1) パラメータ数（重みとバイアスの総数）はいくつか。
+                            (2) 「過学習」とは何か、そのモデルではなぜ起きやすいか。
+                        </p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1) パラメータ数：</strong></p>
+                        <ul>
+                            <li>入力層→隠れ層：$3 \times 4 = 12$（重み）$+ 4$（バイアス）$= 16$</li>
+                            <li>隠れ層→出力層：$4 \times 1 = 4$（重み）$+ 1$（バイアス）$= 5$</li>
+                            <li>合計：$16 + 5 = \mathbf{21}$ パラメータ</li>
+                        </ul>
+                        <p><strong>(2) 過学習：</strong></p>
+                        <p>
+                            過学習（overfitting）とは、モデルが訓練データのノイズまで学習してしまい、
+                            新しいデータへの予測精度（汎化能力）が落ちること。
+                            ニューラルネットはパラメータ数が多く複雑な形を表現できるため、
+                            データ数が少ない場合に過学習しやすい。
+                            対策：ドロップアウト（Dropout）、L1/L2正則化、データ拡張など。
+                        </p>
+                    </div>
+                </section>
+
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-star"></i> 4つのモデルの使い分け</p>
+                        <table>
+                            <thead><tr><th>データの特性</th><th>使うモデル</th></tr></thead>
+                            <tbody>
+                                <tr><td>応答変数に下方（上方）打ち切りがある</td><td>トービットモデル</td></tr>
+                                <tr><td>事象が起きるまでの時間、ノンパラメトリック推定</td><td>カプラン＝マイヤー</td></tr>
+                                <tr><td>生存時間に対する共変量の影響（分布仮定なし）</td><td>Cox比例ハザード</td></tr>
+                                <tr><td>複雑な非線形関係</td><td>ニューラルネットワーク</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <ul>
-                        <li>トービットモデル：打ち切りのある連続値応答に対する回帰 → 打ち切られた部分は $\Phi$ で処理</li>
-                        <li>Cox比例ハザードモデルが広く使われる理由：基準ハザードの形を指定しないセミパラメトリック性 → 頑健</li>
-                        <li>比例ハザード性のチェック：$\log(-\log S)$ プロットで2群が平行かどうか</li>
-                        <li>カプラン・マイヤー推定量は右打ち切りデータを扱える万能な生存関数推定法</li>
-                        <li>NNモデルは活性化関数の合成 → 非線形回帰の柔軟なフレームワーク</li>
-                        <li>AICの計算：$\text{AIC} = -2 \times \text{最大対数尤度} + 2k$（小さいほど良い）</li>
+                        <li>トービットでOLSを使うと<strong>バイアスが生じる</strong>→ 最尤法を使う</li>
+                        <li>生存時間分析では<strong>打ち切り（censoring）</strong>を正しく扱うことが最重要</li>
+                        <li>CoxモデルはベースラインHの形を指定しない<strong>半パラメトリック</strong>→ 柔軟で広く使われる</li>
+                        <li>KMは<strong>ステップ関数</strong>で生存曲線を描く。死亡が起きた時刻だけ下がる</li>
+                        <li>ニューラルネットはどんな関数でも近似できる（普遍近似定理）が、<strong>解釈しにくく過学習しやすい</strong></li>
                     </ul>
                 </section>
 
-                <nav class="chapter-pager">
-                    <a href="#" class="pager-link" id="prev-link">
-                        <i class="fas fa-arrow-left"></i> 前の章
-                    </a>
-                    <a href="../index.html" class="pager-home">
-                        <i class="fas fa-th-large"></i> 目次
-                    </a>
-                    <a href="#" class="pager-link" id="next-link">
-                        次の章 <i class="fas fa-arrow-right"></i>
-                    </a>
-                </nav>
-
-            </div>
-        </div>
+                </div><!-- end .chapter-content -->
+            </div><!-- end .chapter-layout -->
+        </div><!-- end .container -->
     </main>
 
     <footer class="stat-footer">

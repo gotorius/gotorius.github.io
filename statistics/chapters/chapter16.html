@@ -52,10 +52,32 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <!-- ① イントロ -->
-                <section class="content-section">
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#model">ガウス・マルコフモデル</a></li>
+                            <li><a href="#ols">最小二乗法（OLS）</a></li>
+                            <li><a href="#anova">変動の分解と決定係数</a></li>
+                            <li><a href="#properties">OLS推定量の性質</a></li>
+                            <li><a href="#inference">仮説検定（F検定・t検定）</a></li>
+                            <li><a href="#regularization">正則化（Ridge・Lasso）</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. はじめに                                               -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="intro">
                     <h2><i class="fas fa-lightbulb"></i> なぜ重回帰分析が必要か</h2>
                     <p>
                         単回帰は「1つの説明変数で1つの応答変数を予測する」手法でした。しかし現実のデータは複数の要因が絡み合っています。
@@ -72,7 +94,7 @@
                 </section>
 
                 <!-- ② ガウス・マルコフモデル -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="model">
                     <h2><i class="fas fa-table"></i> ガウス・マルコフモデル</h2>
                     <p>観測数 $n$、説明変数の個数 $d$ とする。モデルを行列形式で書くと：</p>
                     <div class="formula-block">
@@ -93,7 +115,7 @@
                 </section>
 
                 <!-- ③ 最小二乗法 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="ols">
                     <h2><i class="fas fa-bullseye"></i> 最小二乗法（OLS）</h2>
                     <p>
                         <strong>最小二乗法（Ordinary Least Squares, OLS）</strong>は、残差平方和
@@ -133,7 +155,7 @@
                 </section>
 
                 <!-- ④ 変動の分解と決定係数 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="anova">
                     <h2><i class="fas fa-chart-bar"></i> 変動の分解と決定係数</h2>
                     <h3>変動の分解（ANOVA分解）</h3>
                     <p>応答変数の全変動を「回帰で説明できる部分」と「残差」に分解できます：</p>
@@ -164,7 +186,7 @@
                 </section>
 
                 <!-- ⑤ OLS推定量の性質 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="properties">
                     <h2><i class="fas fa-check-circle"></i> OLS推定量の性質</h2>
 
                     <h3>不偏性</h3>
@@ -201,7 +223,7 @@
                 </section>
 
                 <!-- ⑥ 仮説検定 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="inference">
                     <h2><i class="fas fa-vials"></i> 仮説検定（F検定・t検定）</h2>
 
                     <h3>一般的な枠組み</h3>
@@ -227,7 +249,7 @@
                 </section>
 
                 <!-- ⑦ 正則化 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="regularization">
                     <h2><i class="fas fa-sliders-h"></i> 正則化（Regularization）</h2>
                     <p>
                         説明変数の数 $d$ が大きい（特に $d \geq n$ の場合）、$(X^TX)^{-1}$ が不安定になり、OLS推定量の分散が爆発します。
@@ -324,7 +346,7 @@
                 </section>
 
                 <!-- ⑧ 公式まとめ -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="formulas">
                     <h2><i class="fas fa-bookmark"></i> 公式まとめ</h2>
                     <div class="formula-block">
                         <p><strong>モデル</strong>：$Y = X\beta + \varepsilon,\quad \varepsilon \sim N_n(\mathbf{0}, \sigma^2 I_n)$</p>
@@ -341,12 +363,13 @@
                     </div>
                 </section>
 
-                <!-- ⑨ 例題 -->
-                <section class="content-section">
+                <!-- ⑨ 例題・演習 -->
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil-alt"></i> 例題・演習</h2>
 
+                    <h3>問16.1：OLS 推定量の不偏性と分散</h3>
                     <div class="example-block">
-                        <p><strong>問1（OLS 推定量の不偏性と分散）</strong></p>
+                        <span class="prob-badge badge-q">問題</span>
                         <p>
                             次の単純な設定を考える。$n = 4$ 個のデータで、切片なし 1 変数モデル
                             $y_i = \beta x_i + \varepsilon_i$（$\varepsilon_i \overset{i.i.d.}{\sim} N(0, \sigma^2)$）を考える。
@@ -358,7 +381,7 @@
                     </div>
 
                     <div class="answer-block">
-                        <p><strong>解答（問1）</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
                         <p>
                             切片なし1変数なので $X = (x_1, x_2, x_3, x_4)^T = (1,2,3,4)^T$，$\beta$ はスカラー。
                         </p>
@@ -372,8 +395,9 @@
                         推定するパラメータが $1$ 個なので残差の自由度は $n - 1 = 3$。一般に切片を含む $d$ 変数モデルでは自由度 $n - d - 1$。</p>
                     </div>
 
+                    <h3>問16.2：決定係数と自由度調整済み決定係数の比較</h3>
                     <div class="example-block">
-                        <p><strong>問2（決定係数と自由度調整済み決定係数の比較）</strong></p>
+                        <span class="prob-badge badge-q">問題</span>
                         <p>
                             $n = 20$ のデータで 2 つのモデルを比較する。
                         </p>
@@ -387,7 +411,7 @@
                     </div>
 
                     <div class="answer-block">
-                        <p><strong>解答（問2）</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
                         <p><strong>（1）決定係数</strong></p>
                         $$R^2_A = 1 - \frac{480}{1200} = 1 - 0.4 = 0.600$$
                         $$R^2_B = 1 - \frac{360}{1200} = 1 - 0.3 = 0.700$$
@@ -400,8 +424,9 @@
                         変数を増やすコスト（自由度減少）を加味した $R^{*2}$ がよりフェアな比較を与えます。</p>
                     </div>
 
+                    <h3>問16.3：Ridge 回帰と正則化パラメータの効果</h3>
                     <div class="example-block">
-                        <p><strong>問3（Ridge 回帰と正則化パラメータの効果）</strong></p>
+                        <span class="prob-badge badge-q">問題</span>
                         <p>
                             $n = 3$，$d = 2$ の設定で切片なしモデルを考える。 
                         </p>
@@ -412,7 +437,7 @@
                     </div>
 
                     <div class="answer-block">
-                        <p><strong>解答（問3）</strong></p>
+                        <span class="prob-badge badge-a">解答</span>
                         <p><strong>（1）</strong> まず各行列を計算：</p>
                         $$X^TX = \begin{pmatrix} 1 & 0 & 1 \\ 0 & 1 & 1 \end{pmatrix}\begin{pmatrix} 1 & 0 \\ 0 & 1 \\ 1 & 1 \end{pmatrix} = \begin{pmatrix} 2 & 1 \\ 1 & 2 \end{pmatrix}$$
                         $$X^TY = \begin{pmatrix} 1\cdot2 + 0\cdot3 + 1\cdot6 \\ 0\cdot2 + 1\cdot3 + 1\cdot6 \end{pmatrix} = \begin{pmatrix} 8 \\ 9 \end{pmatrix}$$
@@ -438,8 +463,9 @@
                     </a>
                 </nav>
 
-            </div>
-        </div>
+                </div><!-- end .chapter-content -->
+            </div><!-- end .chapter-layout -->
+        </div><!-- end .container -->
     </main>
 
     <footer class="stat-footer">

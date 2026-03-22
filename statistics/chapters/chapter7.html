@@ -486,50 +486,107 @@
                     <h2><i class="fas fa-pencil"></i> 8. 例題・演習</h2>
 
                     <h3>問7.1：中心極限定理と連続修正</h3>
-                    <p>普通のサイコロを30回投げたとき、3が10回以上現れる確率の近似値を求めよ（連続修正あり）。</p>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        普通の（公平な）サイコロを30回独立に投げる試行を考える。
+                        出た目が「3」である回数を $S_{30}$ とおく。
+                        $S_{30} \geq 10$ となる確率の近似値を求めよ。
+                        ただし、正規近似には<strong>連続修正</strong>（continuity correction）を用いること。
+                        また、標準正規分布の値 $\Phi(2.20) = 0.9861$ を用いてよい。
+                    </p>
+                    </div>
                     <div class="answer-block">
-                    <p>$X_k$：$k$ 回目に3が出たら1、そうでなければ0とすると、$X_k \sim \mathrm{Bin}(1, 1/6)$。
-                    $E[X_k] = 1/6$、$V[X_k] = (1/6)(5/6) = 5/36$。$S_{30} = \sum_{k=1}^{30} X_k$。</p>
-
-                    <p>連続修正により $P(S_{30} \geq 10) \approx P\!\left(S_{30} \geq 9.5\right)$。</p>
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>Step 1：確率変数の設定</strong></p>
+                    <p>$k$ 回目に「3」が出れば $X_k = 1$、そうでなければ $X_k = 0$ とする。$X_k \sim \mathrm{Bin}(1, 1/6)$。</p>
                     <div class="formula-block">
-                        $$P(S_{30} \geq 9.5) = P\!\left(Z \geq \frac{9.5 - 30 \times \frac{1}{6}}{\sqrt{30 \times \frac{5}{36}}}\right) = P\!\left(Z \geq \frac{9.5 - 5}{\sqrt{25/6}}\right) = P\!\left(Z \geq \frac{4.5}{2.041}\right)$$
-    		    </div>
-                    <div class="formula-block">
-                        $$\approx P(Z \geq 2.20) \approx 1 - \Phi(2.20) \approx 1 - 0.9861 \approx \mathbf{0.014}$$
+                        $$E[X_k] = \frac{1}{6}, \quad V[X_k] = \frac{1}{6} \cdot \frac{5}{6} = \frac{5}{36}$$
                     </div>
+                    <p>$S_{30} = X_1 + \cdots + X_{30}$ の平均と分散：</p>
+                    <div class="formula-block">
+                        $$E[S_{30}] = 30 \times \frac{1}{6} = 5, \quad V[S_{30}] = 30 \times \frac{5}{36} = \frac{25}{6}$$
                     </div>
 
-                    <h3>例：大数の法則と連続関数の組み合わせ</h3>
-                    <p>$X_1, \ldots, X_n$ が区間 $[0, 1]$ 上の一様分布に従う独立な確率変数のとき、$Z_n = \sqrt{\bar{X}_n}$ はどのような値に確率収束するか。</p>
+                    <p><strong>Step 2：連続修正を適用する</strong></p>
+                    <p>
+                        $S_{30}$ は離散（整数値をとる）なので、$P(S_{30} \geq 10)$ を正規分布で近似するとき
+                        「$10 \to 9.5$」と修正します（$S_{30}$ が整数10以上 ＝ $S_{30} > 9.5$ と同値）。
+                    </p>
+                    <div class="formula-block">
+                        $$P(S_{30} \geq 10) \approx P\!\left(S_{30} \geq 9.5\right) = P\!\left(\frac{S_{30} - 5}{\sqrt{25/6}} \geq \frac{9.5 - 5}{\sqrt{25/6}}\right)$$
+                        $$= P\!\left(Z \geq \frac{4.5}{2.041}\right) = P(Z \geq 2.20)$$
+                        $$\approx 1 - \Phi(2.20) = 1 - 0.9861 = \mathbf{0.014}$$
+                    </div>
+                    <p>
+                        <strong>補足（連続修正なし）：</strong>$P\!\left(Z \geq \frac{5}{2.041}\right) = P(Z \geq 2.449) \approx 0.0071$ となり、
+                        連続修正ありの0.014とかなり異なります。$n=30$ のような小さな標本では連続修正の効果が大きいです。
+                    </p>
+                    </div>
+
+                    <h3>問7.2（オリジナル）：大数の法則と連続関数の組み合わせ</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        $U_1, U_2, \ldots$ を区間 $[0, 1]$ 上の一様分布に従う独立な確率変数列とする。
+                        標本平均を $\bar{U}_n = (U_1 + \cdots + U_n)/n$ とおく。
+                    </p>
+                    <ol>
+                        <li>大数の法則を使い、$\bar{U}_n$ が確率収束する先を求めよ。</li>
+                        <li>$Z_n = \sqrt{\bar{U}_n}$ が確率収束する先を求めよ（連続写像定理を使え）。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p>大数の法則：$\bar{X}_n \xrightarrow{p} E[X] = 1/2$。</p>
-                    <p>$h(x) = \sqrt{x}$ は $[0,1]$ 上連続なので，連続関数の確率収束の性質より：</p>
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>(1) $\bar{U}_n$ の確率収束</strong></p>
+                    <p>一様分布 $U[0,1]$ の期待値は $E[U] = 1/2$。大数の法則より：</p>
                     <div class="formula-block">
-                        $$Z_n = \sqrt{\bar{X}_n} \xrightarrow{p} \sqrt{1/2} = \frac{1}{\sqrt{2}} \approx 0.707$$
+                        $$\bar{U}_n \xrightarrow{p} E[U] = \frac{1}{2}$$
+                    </div>
+
+                    <p><strong>(2) $Z_n = \sqrt{\bar{U}_n}$ の確率収束</strong></p>
+                    <p>$h(x) = \sqrt{x}$ は $x = 1/2 > 0$ で連続。連続写像定理より：</p>
+                    <div class="formula-block">
+                        $$Z_n = \sqrt{\bar{U}_n} \xrightarrow{p} \sqrt{\frac{1}{2}} = \frac{1}{\sqrt{2}} \approx 0.707$$
                     </div>
                     </div>
 
-                    <h3>問7.2：デルタ法と分布収束</h3>
-                    <p>$\{X_n\}$ は平均 $\mu$、分散 $\sigma^2$ の i.i.d.。$\bar{X}_n$ を標本平均とする。各問に答えよ。</p>
+                    <h3>問7.3：デルタ法と漸近分布</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                    <p>
+                        $\{X_n\}$ は独立同一分布に従う確率変数列で、平均 $\mu$、分散 $\sigma^2$（有限）とする。
+                        $\bar{X}_n$ を標本平均（$n$個の標本の平均）とし、各問いに答えよ。
+                    </p>
+                    <ol>
+                        <li>$\dfrac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma}$ の漸近分布を求めよ。</li>
+                        <li>$\sqrt{n}\!\left(\bar{X}_n^3 - \mu^3\right)$ の漸近分布を求めよ（$\mu \neq 0$ とする）。</li>
+                        <li>$\left(\dfrac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma}\right)^2$ の漸近分布を求めよ。</li>
+                    </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) $\dfrac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma}$ の漸近分布は？</strong></p>
-                    <p>中心極限定理そのものにより $\mathbf{N(0, 1)}$ に収束。</p>
+                        <span class="prob-badge badge-a">解答</span>
+                    <p><strong>(1) 中心極限定理の応用</strong></p>
+                    <div class="formula-block">
+                        $$\frac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma} \xrightarrow{d} N(0, 1)$$
+                    </div>
+                    <p>これは中心極限定理そのものです。</p>
 
-                    <p><strong>(2) $\sqrt{n}(\bar{X}_n^3 - \mu^3)$ の漸近分布は？</strong></p>
+                    <p><strong>(2) デルタ法の適用</strong></p>
                     <p>$f(x) = x^3$ とおくと $f'(\mu) = 3\mu^2$。デルタ法より：</p>
                     <div class="formula-block">
-                        $$\sqrt{n}(\bar{X}_n^3 - \mu^3) \xrightarrow{d} N(0,\; 9\mu^4\sigma^2)$$
+                        $$\sqrt{n}(\bar{X}_n^3 - \mu^3) \xrightarrow{d} N\!\left(0,\; [f'(\mu)]^2 \sigma^2\right) = N\!\left(0,\; 9\mu^4\sigma^2\right)$$
                     </div>
 
-                    <p><strong>(3) $\left(\dfrac{\sqrt{n}(\bar{X}_n - \mu)}{\sigma}\right)^2$ の漸近分布は？</strong></p>
-                    <p>$(1)$ より $N(0,1)$ に収束する量を2乗しているので、CMT（連続写像定理）から <strong>$\chi^2(1)$（自由度1のカイ二乗分布）</strong>。</p>
+                    <p><strong>(3) 連続写像定理（CMT）の適用</strong></p>
+                    <p>
+                        (1)より $Y_n = \dfrac{\sqrt{n}(\bar{X}_n-\mu)}{\sigma} \xrightarrow{d} Z \sim N(0,1)$。
+                        $h(y) = y^2$ は連続関数なので CMT より：
+                    </p>
+                    <div class="formula-block">
+                        $$Y_n^2 = \left(\frac{\sqrt{n}(\bar{X}_n-\mu)}{\sigma}\right)^2 \xrightarrow{d} Z^2 \sim \chi^2(1)$$
                     </div>
-
-                    <h3>例：極値分布（指数分布の最大値）</h3>
-                    <p>$\{X_n\}$ が独立に平均1の指数分布に従うとき、$M_n = \max\{X_1, \ldots, X_n\}$ の極限分布を求めよ。</p>
-                    <div class="answer-block">
-                    <p>$P(M_n - \log n \leq y) \to e^{-e^{-y}}$（本文の導出より）。よって $M_n - \log n$ は<strong>ガンベル分布</strong>に収束します。</p>
+                    <p>自由度1のカイ二乗分布に収束します（標準正規分布の2乗はカイ二乗分布の定義そのものです）。</p>
                     </div>
                 </section>
 

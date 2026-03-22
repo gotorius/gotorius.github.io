@@ -420,6 +420,8 @@
 
                     <!-- 例1 -->
                     <h3>【例題1】単位円内の周辺分布と条件付き分布</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
                     <p>
                         $xy$ 平面の単位円内部 $\{(x,y) \mid x^2 + y^2 \leq 1\}$ から点を一様に抽出する。
                         同時確率密度関数を次のように定める：
@@ -428,8 +430,9 @@
                         $$f(x, y) = \begin{cases} \dfrac{1}{\pi} & (x^2 + y^2 \leq 1) \\ 0 & (\text{それ以外}) \end{cases}$$
                     </div>
                     <p>$X$ の周辺確率密度関数 $f_X(x)$ と、$X = x$ を与えたときの $Y$ の条件付き確率密度関数 $f_{Y|X}(y \mid x)$ を求めよ。</p>
-
+                    </div>
                     <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
                         <p><strong>【解答】</strong></p>
                         <p>
                             <strong>Step 1：$y$ の積分範囲を求める。</strong><br>
@@ -457,6 +460,8 @@
 
                     <!-- 問2.1 -->
                     <h3>【問2.1】三角形状の同時密度関数</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
                     <p>
                         領域 $\{(x, y) \mid x \geq 0,\; y \geq 0,\; x + y \leq 1\}$（三角形）上の確率密度関数を
                         $f(x, y) = c$ （定数）とおく。
@@ -464,8 +469,9 @@
                     <p>(1) 基準化定数 $c$ を求めよ。</p>
                     <p>(2) $X$ の周辺確率密度関数 $f_X(x)$ を求めよ（$0 \leq x \leq 1$）。</p>
                     <p>(3) $X = x$ が与えられたときの $Y$ の条件付き確率密度関数 $f_{Y|X}(y \mid x)$ を求めよ。</p>
-
+                    </div>
                     <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
                         <p><strong>【解答】</strong></p>
                         <p><strong>(1) 基準化定数の計算</strong></p>
                         <p>三角形の面積は $\dfrac{1}{2} \times 1 \times 1 = \dfrac{1}{2}$ なので、確率の合計が1になるためには</p>
@@ -495,14 +501,17 @@
 
                     <!-- 問2.2 -->
                     <h3>【問2.2】ポアソン分布の確率母関数・期待値・分散</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
                     <p>
                         確率変数 $X$ がパラメータ $\lambda > 0$ のポアソン分布に従うとする。
                         すなわち $x = 0, 1, 2, \ldots$ について
                         $$p(x) = \frac{e^{-\lambda} \lambda^x}{x!}$$
                         $X$ の確率母関数 $G(s)$ を求め、そこから期待値と分散を求めよ。
                     </p>
-
+                    </div>
                     <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
                         <p><strong>【解答】</strong></p>
                         <p><strong>Step 1：確率母関数を求める。</strong></p>
                         <div class="formula-block">
@@ -535,13 +544,16 @@
 
                     <!-- 問2.3 -->
                     <h3>【問2.3】指数分布のモーメント母関数・期待値・分散</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
                     <p>
                         確率変数 $X$ がパラメータ $\lambda > 0$ の指数分布に従うとする。
                         確率密度関数は $f(x) = \lambda e^{-\lambda x}$（$x \geq 0$）である。
                         $X$ のモーメント母関数 $m(\theta)$ を求め、そこから期待値と分散を求めよ。
                     </p>
-
+                    </div>
                     <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
                         <p><strong>【解答】</strong></p>
                         <p><strong>Step 1：MGFを求める。</strong>（$\theta < \lambda$ の場合に収束します）</p>
                         <div class="formula-block">

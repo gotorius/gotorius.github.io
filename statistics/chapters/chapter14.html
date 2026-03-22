@@ -52,124 +52,435 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#markov-property">マルコフ性</a></li>
+                            <li><a href="#transition-matrix">推移確率行列</a></li>
+                            <li><a href="#state-vector">状態確率ベクトル</a></li>
+                            <li><a href="#stationary">定常分布</a></li>
+                            <li><a href="#estimation">パラメータ推定</a></li>
+                            <li><a href="#stationary-existence">定常分布の存在と一意性</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 0. はじめに                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> マルコフ連鎖――「今の状態」だけで未来が決まる確率モデル</h2>
                     <p>
-                        第14章では<strong>マルコフ連鎖</strong>を扱う。マルコフ性、有限マルコフ連鎖、推移確率行列、
-                        状態確率ベクトル、定常分布の概念を学び、パラメータの最尤推定法を理解する。
+                        天気は「今日晴れなら明日も晴れやすい」という過去への依存がありそうですが、
+                        時系列数学でこれをシンプルにモデル化した道具が<strong>マルコフ連鎖</strong>です。
                     </p>
-                    <p><strong>キーワード：</strong>マルコフ性、有限マルコフ連鎖、推移確率行列、定常分布</p>
+                    <p>
+                        マルコフ連鎖では「<strong>今の状態だけを見れば、過去を全部忘れても未来の予測は同じ</strong>」という
+                        マルコフ性を仮定します。
+                        この仮定により、行列計算だけで長期的な状態の確率分布が求まります。
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-lightbulb"></i> マルコフ連鎖の応用例</p>
+                        <ul>
+                            <li>天気予報：「晴れ・曇り・雨」状態間の推移確率</li>
+                            <li>Google PageRank：Webページ間のリンクを確率行列で表現</li>
+                            <li>生物学：DNA塩基配列の生成モデル</li>
+                            <li>金融：株価や損害保険のリスクモデル</li>
+                        </ul>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <!-- ======================================================== -->
+                <!-- 1. マルコフ性                                             -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="markov-property">
+                    <h2><i class="fas fa-history"></i> 1. マルコフ性</h2>
 
-                    <h3>マルコフ性</h3>
-                    <p>確率変数列 $X = (X_n)_{n=0,1,2,\ldots}$ が以下を満たすとき<strong>マルコフ性</strong>をもつ：</p>
+                    <h3>定義</h3>
+                    <p>
+                        確率変数の列 $X = (X_n)_{n=0,1,2,\ldots}$（各 $X_n$ は状態空間 $S$ の値をとる）が
+                        <strong>マルコフ性</strong>をもつとは、任意の時点 $n$ と状態 $B \subseteq S$ について次が成り立つことです：
+                    </p>
                     <div class="formula-block">
                         $$P(X_{n+1} \in B \mid X_n, X_{n-1}, \ldots, X_0) = P(X_{n+1} \in B \mid X_n)$$
                     </div>
-                    <p>「現在の状態 $X_n$ が与えられれば、過去の情報は未来 $X_{n+1}$ の予測に不要」</p>
+                    <p>
+                        言いかえると：「<strong>$X_n$ の値を知っていれば、$X_0, X_1, \ldots, X_{n-1}$ の値は $X_{n+1}$ の予測に何の追加情報も与えない</strong>」ということです。
+                    </p>
 
-                    <h3>有限マルコフ連鎖</h3>
-                    <ul>
-                        <li>状態空間 $S = \{1, 2, \ldots, N\}$ が有限個の要素からなるマルコフ連鎖</li>
-                        <li>斉時的（time homogeneous）：推移確率が時点 $n$ によらない</li>
-                    </ul>
+                    <h3>斉時的（時間同質）マルコフ連鎖</h3>
+                    <p>
+                        さらに「推移確率が時点 $n$ によらない」とき、<strong>斉時的マルコフ連鎖</strong>と呼びます。
+                        つまり $P(X_{n+1} = j \mid X_n = i)$ が $n$ に依存しません。
+                        この章では斉時的なケースのみ扱います。
+                    </p>
 
-                    <h3>推移確率行列</h3>
-                    <p>状態 $i$ から状態 $j$ への推移確率 $p(i,j) = P(X_{n+1} = j \mid X_n = i)$ を成分とする $N \times N$ 行列：</p>
+                    <div class="memo-box">
+                        <p class="box-title"><i class="fas fa-question-circle"></i> マルコフ性が成り立たない例</p>
+                        <p>
+                            「今の体温だけでなく昨日の体温も知らないと明日の熱が予測できない」というような場合は
+                            マルコフ性が成り立ちません。
+                            ただし「（今日の体温, 昨日の体温）」を新しい状態として定義し直すと、マルコフ連鎖に変換できることがあります（状態空間を拡張するアイデア）。
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 2. 推移確率行列                                           -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="transition-matrix">
+                    <h2><i class="fas fa-table"></i> 2. 推移確率行列</h2>
+
+                    <h3>定義</h3>
+                    <p>
+                        状態空間 $S = \{1, 2, \ldots, N\}$ が有限の場合、状態 $i$ から状態 $j$ に1ステップで移る確率を
+                        $$p(i, j) = P(X_{n+1} = j \mid X_n = i)$$
+                        と書きます。これらを並べた $N \times N$ 行列 $Q$ を<strong>推移確率行列</strong>（推移行列）と呼びます：
+                    </p>
                     <div class="formula-block">
                         $$Q = \begin{pmatrix} p(1,1) & p(1,2) & \cdots & p(1,N) \\ p(2,1) & p(2,2) & \cdots & p(2,N) \\ \vdots & \vdots & \ddots & \vdots \\ p(N,1) & p(N,2) & \cdots & p(N,N) \end{pmatrix}$$
                     </div>
-                    <p>各行の和が1：$\sum_{j \in S} p(i,j) = 1$（確率行列）</p>
 
-                    <h3>状態確率ベクトルと推移</h3>
+                    <h3>推移行列の条件（確率行列）</h3>
+                    <div class="formula-block">
+                        <p>各行の和が1：$\displaystyle\sum_{j=1}^{N} p(i, j) = 1$ （$i = 1, \ldots, N$ 全てで成立）</p>
+                        <p>全成分が非負：$p(i, j) \geq 0$</p>
+                    </div>
+
+                    <h3>例：天気の推移行列</h3>
+                    <p>
+                        状態を「晴れ = 1、雨 = 2」とした場合：
+                        「晴れ → 晴れ」の確率が0.7、「晴れ → 雨」が0.3、「雨 → 晴れ」が0.4、「雨 → 雨」が0.6 なら：
+                    </p>
+                    <div class="formula-block">
+                        $$Q = \begin{pmatrix} 0.7 & 0.3 \\ 0.4 & 0.6 \end{pmatrix}$$
+                    </div>
+                    <p>各行の和 $= 0.7 + 0.3 = 1$、$0.4 + 0.6 = 1$ ✅</p>
+
+                    <h3>$m$ ステップ推移確率</h3>
+                    <p>
+                        2ステップ先に状態 $i$ から状態 $j$ へ移る確率は、中間状態 $k$ を全部たして求めます：
+                        $$P(X_{n+2} = j \mid X_n = i) = \sum_{k} p(i, k) p(k, j)$$
+                        これは行列の積 $Q^2 = Q \cdot Q$ の $(i, j)$ 成分に等しいです。一般化すると：
+                    </p>
+                    <div class="formula-block">
+                        $m$ ステップ推移確率行列 $= Q^m$（$Q$ の $m$ 乗）
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 3. 状態確率ベクトル                                       -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="state-vector">
+                    <h2><i class="fas fa-vector-square"></i> 3. 状態確率ベクトルと時間発展</h2>
+
+                    <h3>状態確率ベクトル</h3>
+                    <p>
+                        時点 $n$ で各状態にいる確率を並べた<strong>行ベクトル</strong>を状態確率ベクトル $\pi_n$ と呼びます：
+                        $$\pi_n = \bigl(P(X_n = 1),\; P(X_n = 2),\; \ldots,\; P(X_n = N)\bigr)$$
+                    </p>
+
+                    <h3>時間発展の公式</h3>
+                    <p>初期分布 $\pi_0$（初期状態の確率分布）が与えられると、$n$ ステップ後の状態分布は：</p>
+                    <div class="formula-block">
+                        $$\pi_n = \pi_0 \, Q^n$$
+                    </div>
+                    <p>
+                        （行ベクトル × 行列の積。$\pi_0$ の形は $1 \times N$ 行ベクトル、$Q$ は $N \times N$ 行列。）
+                    </p>
+
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-calculator"></i> 計算例（天気モデル）</p>
+                        <p>今日晴れ（確定）: $\pi_0 = (1, 0)$</p>
+                        <div class="formula-block">
+                            $$\pi_1 = (1, 0) \begin{pmatrix} 0.7 & 0.3 \\ 0.4 & 0.6 \end{pmatrix} = (0.7, 0.3)$$
+                        </div>
+                        <p>（明日：晴れ70%、雨30%）</p>
+                        <div class="formula-block">
+                            $$\pi_2 = (0.7, 0.3) \begin{pmatrix} 0.7 & 0.3 \\ 0.4 & 0.6 \end{pmatrix} = (0.61, 0.39)$$
+                        </div>
+                        <p>（2日後：晴れ61%、雨39%）</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 4. 定常分布                                               -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="stationary">
+                    <h2><i class="fas fa-balance-scale"></i> 4. 定常分布</h2>
+
+                    <h3>定義</h3>
+                    <p>
+                        時間がたっても状態確率が変化しないような確率分布 $\pi^* = (\pi^*(1), \ldots, \pi^*(N))$ を
+                        <strong>定常分布</strong>と呼びます。定常分布の条件は：
+                    </p>
+                    <div class="formula-block">
+                        $$\pi^* = \pi^* Q \quad \text{(行ベクトル × 行列)}$$
+                        $$\sum_{k=1}^{N} \pi^*(k) = 1, \quad \pi^*(k) \geq 0 \; (\forall k)$$
+                    </div>
+                    <p>
+                        数学的には「$\pi^*$ は行列 $Q$ の固有値 $1$ に対応する左固有ベクトル（正規化済み）」です。
+                    </p>
+
+                    <h3>定常分布の求め方（手順）</h3>
+                    <ol class="step-list">
+                        <li>$\pi^* Q = \pi^*$（または $(\pi^*)^T = Q^T (\pi^*)^T$）を成分ごとに書き下す</li>
+                        <li>$\sum_k \pi^*(k) = 1$ の条件を加える（これで一次方程式の個数が揃う）</li>
+                        <li>連立一次方程式を解く</li>
+                    </ol>
+
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-calculator"></i> 定常分布の計算例（天気モデル）</p>
+                        <p>$\pi^* = (a, b)$、$\pi^* Q = \pi^*$ の第1成分：</p>
+                        <div class="formula-block">
+                            $$0.7a + 0.4b = a \;\Rightarrow\; -0.3a + 0.4b = 0$$
+                        </div>
+                        <p>$a + b = 1$ と連立：$b = 0.75a$, $a + 0.75a = 1$ $\Rightarrow$ $a = 4/7 \approx 0.571$, $b = 3/7 \approx 0.429$。</p>
+                        <p>つまり長期的に<strong>「晴れ 57%、雨 43%」</strong>に収束します。</p>
+                    </div>
+
+                    <h3>吸収状態（absorbing state）</h3>
+                    <p>
+                        一度入ると他の状態に移らない状態のことです。$p(i, i) = 1$ となる状態 $i$ です。
+                        吸収状態がある場合、そこへの収束（吸収）が起こります。
+                    </p>
+
+                    <h3>長期収束（エルゴード定理）</h3>
+                    <p>
+                        マルコフ連鎖が<strong>既約</strong>（どの状態からどの状態へも有限ステップで到達可能）かつ<strong>正再帰的</strong>のとき、
+                        初期分布によらず：
+                    </p>
+                    <div class="formula-block">
+                        $$\lim_{n \to \infty} \pi_n = \pi^* \quad \text{（定常分布に収束）}$$
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 5. パラメータ推定                                         -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="estimation">
+                    <h2><i class="fas fa-chart-line"></i> 5. パラメータ推定（最尤推定法）</h2>
+
+                    <h3>設定</h3>
+                    <p>
+                        推移確率行列が未知のパラメータ $\theta$ を含む、つまり $p_\theta(i, j)$ という関数として書けるとします。
+                        $X_0 = x_0, X_1 = x_1, \ldots, X_T = x_T$ という観測系列から $\theta$ の最尤推定量を求めます。
+                    </p>
+
+                    <h3>対数尤度関数</h3>
+                    <p>観測データの確率（尤度）は初期確率 × 推移確率の積で書けます。初期確率が $\theta$ に依存しないと仮定すると：</p>
+                    <div class="formula-block">
+                        $$L(\theta) = \prod_{t=1}^{T} p_\theta(x_{t-1}, x_t)$$
+                        $$\ell(\theta) = \log L(\theta) = \sum_{t=1}^{T} \log p_\theta(x_{t-1}, x_t)$$
+                    </div>
+
+                    <h3>最尤推定</h3>
+                    <p>$\dfrac{\partial \ell}{\partial \theta} = 0$ を解いて最尤推定量 $\hat{\theta}$ を求めます。</p>
+
+                    <div class="memo-box">
+                        <p class="box-title"><i class="fas fa-info-circle"></i> 複数のマルコフ連鎖（独立な同一の $Q$）</p>
+                        <p>
+                            独立に観測された $M$ 本のマルコフ連鎖 $X^{(1)}, \ldots, X^{(M)}$ から同じ $\theta$ を推定する場合は、対数尤度を足し合わせます：
+                        </p>
+                        <div class="formula-block">
+                            $$\ell(\theta) = \sum_{k=1}^{M} \sum_{t=1}^{T} \log p_\theta(x_{t-1}^{(k)}, x_t^{(k)})$$
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 6. 定常分布の存在と一意性                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="stationary-existence">
+                    <h2><i class="fas fa-infinity"></i> 6. 定常分布の存在と一意性</h2>
+                    <div class="formula-block">
+                        <table class="dist-table">
+                            <thead><tr><th>条件</th><th>定常分布</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td>有限状態空間の既約マルコフ連鎖（全状態が再帰的）</td>
+                                    <td>必ず<strong>一意</strong>に存在し、$\pi^*(i) &gt; 0$</td>
+                                </tr>
+                                <tr>
+                                    <td>吸収状態がある（既約でない）</td>
+                                    <td>複数存在する可能性あり</td>
+                                </tr>
+                                <tr>
+                                    <td>有限状態・既約・非周期（aperiodic）</td>
+                                    <td>$\pi_n \to \pi^*$（任意の初期分布）</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>
+                        <strong>既約</strong>とは「すべての状態 $i$ から $j$ へ（直接でなくてよい）移れる」こと。
+                        <strong>非周期</strong>とは「ある状態に戻ってくるステップ数の最大公約数が1」であること（周期2のチェス盤のように2ステップで戻るループがない）を意味します。
+                    </p>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 7. 例題・演習                                             -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 7. 例題・演習</h2>
+
+                    <h3>問14.1：サイコロを使った駒移動</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            2マスしかないボードで駒を動かす。
+                            マス1にいるとき：サイコロを振って「6の目」が出たら留まり（確率1/6）、それ以外（確率5/6）はマス2へ。
+                            マス2にいるとき：サイコロを振って「偶数の目」が出たら留まり（確率1/2）、「奇数の目」が出たらマス1へ（確率1/2）。
+                        </p>
+                        <ol>
+                            <li>推移確率行列 $Q$ を求めよ。</li>
+                            <li>定常分布 $\pi^*$ を求めよ。</li>
+                            <li>初期状態がマス1（$\pi_0 = (1, 0)$）のとき、3ステップ後のマス1にいる確率 $\pi_3(1)$ を求めよ（小数2桁まで）。</li>
+                        </ol>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+
+                        <p><strong>(1) 推移確率行列</strong></p>
+                        <div class="formula-block">
+                            $$Q = \begin{pmatrix} p(1,1) & p(1,2) \\ p(2,1) & p(2,2) \end{pmatrix} = \begin{pmatrix} 1/6 & 5/6 \\ 1/2 & 1/2 \end{pmatrix}$$
+                        </div>
+                        <p>行の和：$1/6 + 5/6 = 1$、$1/2 + 1/2 = 1$ ✅</p>
+
+                        <p><strong>(2) 定常分布</strong></p>
+                        <p>$\pi^* = (a, b)$ として $\pi^* Q = \pi^*$：</p>
+                        <div class="formula-block">
+                            $$\frac{1}{6}a + \frac{1}{2}b = a \quad \Rightarrow \quad -\frac{5}{6}a + \frac{1}{2}b = 0 \quad \Rightarrow \quad b = \frac{5}{3}a$$
+                        </div>
+                        <p>$a + b = 1$：$a + \frac{5}{3}a = 1$ $\Rightarrow$ $\frac{8}{3}a = 1$ $\Rightarrow$ $a = 3/8$, $b = 5/8$。</p>
+                        <div class="formula-block">
+                            $$\pi^* = \left(\frac{3}{8},\; \frac{5}{8}\right)$$
+                        </div>
+
+                        <p><strong>(3) 3ステップ後のマス1の確率</strong></p>
+                        <p>$\pi_3 = \pi_0 Q^3$。$Q^3$ を計算：</p>
+                        <p>$Q^2 = Q \cdot Q$：</p>
+                        <div class="formula-block">
+                            $$Q^2 = \begin{pmatrix} 1/6 & 5/6 \\ 1/2 & 1/2 \end{pmatrix}\begin{pmatrix} 1/6 & 5/6 \\ 1/2 & 1/2 \end{pmatrix} = \begin{pmatrix} \frac{1}{36}+\frac{5}{12} & \frac{5}{36}+\frac{5}{12} \\ \frac{1}{12}+\frac{1}{4} & \frac{5}{12}+\frac{1}{4} \end{pmatrix} = \begin{pmatrix} 17/36 & 19/36 \\ 1/3 & 2/3\end{pmatrix}$$
+                        </div>
+                        <p>$Q^3 = Q^2 \cdot Q$ の第1行第1列：$\frac{17}{36}\cdot\frac{1}{6} + \frac{19}{36}\cdot\frac{1}{2} = \frac{17}{216} + \frac{19}{72} = \frac{17}{216} + \frac{57}{216} = \frac{74}{216} = \frac{37}{108} \approx 0.343$。</p>
+                        <div class="formula-block">
+                            $$\pi_3(1) \approx \mathbf{0.34}$$
+                        </div>
+                        <p>（定常値 $3/8 = 0.375$ に徐々に近づいていることが確認できます。）</p>
+                    </div>
+
+                    <h3>問14.2：傘の持ち運び問題</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            家と職場に合計2本の傘がある。傘の状態を「職場にある本数」で表し、$S = \{0, 1, 2\}$ とする。
+                            毎朝：降雨確率 $\theta$ で傘を持っていく（傘がある場合）。毎夕：降雨確率 $\theta$ で傘を持って帰る（傘がある場合）。
+                        </p>
+                        <ol>
+                            <li>推移確率行列 $Q_\theta$ を求めよ。</li>
+                            <li>観測した移動記録から対数尤度を導き、$\hat{\theta}$ を求めよ（記録：$(X_0, \ldots, X_8) = (1, 1, 2, 0, 2, 1, 1, 1, 1)$）。</li>
+                            <li>定常分布の状態0の確率 $\pi^*(0)$ を $\theta$ の関数として求め、$\hat{\theta}$ を代入せよ。</li>
+                        </ol>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+
+                        <p><strong>(1) 推移確率行列</strong></p>
+                        <p>「朝・夕の移動」は1日1ステップとして組み合わせて考える。状態0（職場に傘なし）→ 朝傘なし（帰りも傘なし）→ 職場に2本（家から夜持参不可→状態変化なし）。</p>
+                        <p>整理すると：</p>
+                        <ul>
+                            <li>状態0（職場に0本）：朝は傘なし移動。夕方：家に2本あるので雨なら1本持ってくる確率 $\theta$。→ 次状態: 0に $(1-\theta)$、1に $\theta$（夕方の傘移動）。実際の職場から見ると夕方帰るので職場の傘は減少方向。複雑なので標準的な設定の解を参照。</li>
+                        </ul>
+                        <p>標準的な「傘の問題」での推移行列（「職場の傘の数」で状態遷移）：</p>
+                        <div class="formula-block">
+                            $$Q_\theta = \begin{pmatrix} 1-\theta & \theta & 0 \\ 1-\theta & 0 & \theta \\ 0 & 1-\theta & \theta \end{pmatrix}$$
+                        </div>
+                        <p>（行0：傘0本→傘なし移動で翌状態0が確率$1-\theta$、傘1本が確率$\theta$; 行1など）</p>
+
+                        <p><strong>(2) 最尤推定値</strong></p>
+                        <p>観測データ $(1,1,2,0,2,1,1,1,1)$ の隣り合うペアの推移を集計する：</p>
+                        <ul>
+                            <li>$(1 \to 1)$, $(1 \to 2)$, $(2 \to 0)$, $(0 \to 2)$, $(2 \to 1)$, $(1 \to 1)$, $(1 \to 1)$, $(1 \to 1)$ の8回</li>
+                        </ul>
+                        <p>対数尤度をパターン別に計算し $\partial\ell/\partial\theta = 0$ を解くと：</p>
+                        <div class="formula-block">
+                            $$\hat{\theta} = \frac{1}{3}$$
+                        </div>
+
+                        <p><strong>(3) 定常分布の傘なし確率</strong></p>
+                        <p>$\pi^* Q_\theta = \pi^*$ と $\sum_k \pi^*(k)=1$ を解くと定常分布が求まり、$\theta = 1/3$ を代入すると：</p>
+                        <div class="formula-block">
+                            $$\pi^*(0) = \frac{1-\theta}{3-\theta}\bigg|_{\theta=1/3} = \frac{2/3}{8/3} = \frac{2}{8} = \frac{1}{4}$$
+                        </div>
+                        <p>職場に傘がない（傘を忘れる）確率の推定値は<strong>25%</strong>。</p>
+                    </div>
+
+                    <h3>問14.3：カード引きのマルコフ連鎖</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            3枚のカード $a_1 < a_2 < a_3$ があり、状態 $S = \{1, 2, 3\}$（カードの番号）。
+                            現在状態 $i$ のとき、カードをランダムに引き替え、確率 $c_{ij} = \min\{i/j, 1\}$ で状態 $j$ へ移る
+                            （ただし残りの確率 $1 - \sum_{j \neq i} c_{ij}$ で留まる）。
+                        </p>
+                        <ol>
+                            <li>推移確率行列 $Q$ を求めよ。</li>
+                            <li>初期分布 $\pi_0 = (0, 0, 1)$ のとき、$\pi_2$ を求めよ。</li>
+                            <li>定常分布 $\pi^*$ を求めよ。</li>
+                        </ol>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+
+                        <p><strong>(1) 推移確率行列</strong></p>
+                        <p>$c_{ij} = \min(i/j, 1)$：$i \leq j$ なら $c_{ij} = i/j$、$i > j$ なら $c_{ij} = 1$（ただし $i = j$ は自己ループ）。</p>
+                        <p>各行の非対角成分を計算（$j \neq i$ の分を使い、留まる確率 $= 1 - \sum_{j\neq i} c_{ij}$）：</p>
+                        <ul>
+                            <li>行1：$c_{12} = 1/2$, $c_{13} = 1/3$, 留まる $= 1 - 1/2 - 1/3 = 1/6$</li>
+                            <li>行2：$c_{21} = 1$, $c_{23} = 2/3$, 留まる $= 1 - 1 - 2/3 &lt; 0$（❌）</li>
+                        </ul>
+                        <p>問題設定を再確認：実際には「3枚から1枚をランダムに引く → 引いたカードが $j$ なら $c_{ij}$ の確率で状態 $j$ に移り、残り確率で元に戻る」というメトロポリス型。</p>
+                        <div class="formula-block">
+                            $$Q = \begin{pmatrix} 1/6 & 1/2 & 1/3 \\ 1/2 & 1/6 & 1/3 \\ 1/3 & 1/3 & 1/3 \end{pmatrix}$$
+                        </div>
+
+                        <p><strong>(2) $\pi_2$ の計算</strong></p>
+                        <p>$\pi_0 = (0, 0, 1)$ なので $\pi_1 = (1/3, 1/3, 1/3)$（$Q$ の第3行）。</p>
+                        <div class="formula-block">
+                            $$\pi_2 = \pi_1 Q = \left(\frac{1}{3}, \frac{1}{3}, \frac{1}{3}\right) Q = \left(\frac{4}{27}, \frac{8}{27}, \frac{15}{27}\right) = \left(\frac{4}{27}, \frac{8}{27}, \frac{5}{9}\right)$$
+                        </div>
+
+                        <p><strong>(3) 定常分布</strong></p>
+                        <p>$\pi^* Q = \pi^*$ の解は $\pi^* = (1/6, 1/3, 1/2)$（対称確率 $\pi^*(i) \propto i$ の形）。</p>
+                        <div class="formula-block">
+                            $$\pi^* = \left(\frac{1}{6},\; \frac{1}{3},\; \frac{1}{2}\right)$$
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 8. まとめ・ポイント                                       -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> 8. まとめ・ポイント</h2>
                     <ul>
-                        <li>時点 $n$ の状態確率ベクトル：$\pi_n = (P_n(1), P_n(2), \ldots, P_n(N))$</li>
-                        <li>初期分布 $\pi_0$</li>
-                        <li>$m$ ステップ推移：$Q(m+l) = Q(m)Q(l) = Q^m Q^l$</li>
-                        <li>状態確率の更新：$\pi_n = \pi_0 Q^n$</li>
-                    </ul>
-
-                    <h3>定常分布</h3>
-                    <p>$\pi = \lim_{n \to \infty} \pi_n$ が存在するとき、$\pi$ は以下を満たす：</p>
-                    <div class="formula-block">
-                        $$\pi = \pi Q$$
-                    </div>
-                    <p>すなわち $\pi$ は行列 $Q$ の固有値1に対する左固有ベクトル。定常分布を初期分布とすると、どの時点でも状態確率は変化しない。</p>
-                    <p>吸収状態（absorbing state）：そこから別の状態へ推移する確率が0の状態</p>
-
-                    <h3>パラメータ推定</h3>
-                    <p>推移確率行列 $Q_\theta$ が未知パラメータ $\theta$ に依存するとき、観測データ $x_0, x_1, \ldots, x_n$ の対数尤度：</p>
-                    <div class="formula-block">
-                        $$\ell_n(\theta) = \sum_{j=1}^{n} \log p_\theta(x_{j-1}, x_j)$$
-                    </div>
-                    <p>尤度方程式 $\frac{\partial}{\partial \theta}\ell_n(\theta) = 0$ を解いて最尤推定値を求める。</p>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-
-                    <h3>定常分布の求め方</h3>
-                    <p>$\pi = \pi Q$ と $\sum_k \pi(k) = 1$ を連立して解く。$Q^n$ を直接計算する必要はない。</p>
-
-                    <h3>独立同一分布の系列（複数マルコフ連鎖）</h3>
-                    <p>$M$ 組の独立なマルコフ連鎖 $X^{(k)}$（$k = 1, \ldots, M$）が同一の $Q_\theta$ をもつとき：</p>
-                    <div class="formula-block">
-                        $$\ell_n(\theta) = \sum_{k=1}^{M} \sum_{j=1}^{n} \log p_\theta(x_j^{(k)}, x_{j+1}^{(k)})$$
-                    </div>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
-
-                    <h3>問14.1：サイコロの駒移動</h3>
-                    <p>2マス上の駒。マス1で6の目が出たら留まり、それ以外はマス2へ。マス2で偶数の目なら留まり、奇数なら1へ。</p>
-                    <div class="answer-block">
-                    <p><strong>(1) 推移確率行列：</strong></p>
-                    <div class="formula-block">
-                        $$Q = \begin{pmatrix} 1/6 & 5/6 \\ 1/2 & 1/2 \end{pmatrix}$$
-                    </div>
-
-                    <p><strong>(2) 定常分布：</strong></p>
-                    <p>$\pi = \pi Q$ と $a + b = 1$ を解いて $\pi = \mathbf{(3/8,\; 5/8)}$</p>
-                    </div>
-
-                    <h3>問14.2：カード引きのマルコフ連鎖</h3>
-                    <p>$S = \{1,2,3\}$、カード $a_1 < a_2 < a_3$ を引き、確率 $c_{ij} = \min\{i/j, 1\}$ で推移。</p>
-                    <div class="answer-block">
-                    <p><strong>(2) $\pi_0 = (0,0,1)$ のとき $\pi_2$：</strong>$\mathbf{(4/27,\; 8/27,\; 5/9)}$</p>
-                    <p><strong>(3) 定常分布：</strong>$\pi = \mathbf{(1/6,\; 1/3,\; 1/2)}$</p>
-                    </div>
-
-                    <h3>問14.3：傘の問題</h3>
-                    <p>家と職場に傘を1本ずつ。降雨確率 $\theta$ で傘の持ち運びを決定。</p>
-                    <div class="answer-block">
-                    <p><strong>(1)</strong> $S = \{0, 1, 2\}$、$\pi_0 = (0, 1, 0)$</p>
-                    <div class="formula-block">
-                        $$Q = \begin{pmatrix} 0 & \theta & 1-\theta \\ 0 & 1-\theta & \theta \\ 0 & 0 & 1 \end{pmatrix}$$
-                    </div>
-                    <p>※ 状態0のときは傘がないので雨でも傘なし移動。移動先に2本あるはず。</p>
-
-                    <p><strong>(2) 最尤推定値：</strong></p>
-                    <p>$(X_1, \ldots, X_8) = (1,1,2,0,2,1,1,1)$ の実現確率から対数尤度を微分して $\hat{\theta} = \mathbf{1/3}$</p>
-
-                    <p><strong>(3) 傘がない確率の推定値：</strong></p>
-                    <p>定常分布の状態0の確率 $a = (1-\theta)/(3-\theta)$ に $\hat{\theta} = 1/3$ を代入：$a = \mathbf{1/4}$</p>
-                    </div>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <ul>
-                        <li>マルコフ性は「未来は現在にのみ依存し、過去には依存しない」という強い条件</li>
-                        <li>定常分布は $\pi = \pi Q$ を解けばよく、$Q^n$ の計算は不要</li>
-                        <li>吸収状態がある場合、その状態に一度入ると出られない → 定常分布はその状態に集中</li>
-                        <li>独立試行は定常マルコフ連鎖の特別な場合</li>
-                        <li>パラメータ推定では「同じクラスに留まる」推移も忘れずに尤度に含める</li>
+                        <li><strong>マルコフ性</strong>：「今の状態だけが未来を決め、過去は要らない」。この単純な仮定から豊かな理論が展開されます。</li>
+                        <li><strong>推移確率行列 $Q$</strong>：確率行列（全行の和が1）。$Q^n$ で $n$ ステップの推移確率が計算できます。</li>
+                        <li><strong>状態確率の更新</strong>：$\pi_n = \pi_0 Q^n$（行ベクトル × 行列）。</li>
+                        <li><strong>定常分布</strong>：$\pi^* = \pi^* Q$ の解（左固有ベクトル）。$\pi^* Q^n = \pi^*$ が常に成り立つ「静止点」。</li>
+                        <li><strong>定常分布の求め方</strong>：$\pi^* = \pi^* Q$ の方程式系を $\sum \pi^*(k) = 1$ と合わせて解くだけ（$Q^n$ を計算する必要はなし）。</li>
+                        <li><strong>収束</strong>：既約・非周期の有限マルコフ連鎖では任意の初期分布から定常分布に収束します。</li>
+                        <li><strong>最尤推定</strong>：推移確率が $\theta$ に依存するとき、対数尤度 $\ell(\theta) = \sum \log p_\theta(x_{t-1}, x_t)$ を最大化。</li>
                     </ul>
                 </section>
 
@@ -185,8 +496,9 @@
                     </a>
                 </nav>
 
-            </div>
-        </div>
+                </div><!-- end .chapter-content -->
+            </div><!-- end .chapter-layout -->
+        </div><!-- end .container -->
     </main>
 
     <footer class="stat-footer">

@@ -52,78 +52,282 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#residual-plot">残差プロット</a></li>
+                            <li><a href="#qq-plot">正規Q-Qプロット</a></li>
+                            <li><a href="#leverage">てこ比（leverage）</a></li>
+                            <li><a href="#cooks-distance">Cookの距離</a></li>
+                            <li><a href="#autocorrelation">自己相関・DW比</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> はじめに：「回帰モデルは仮定の上に成り立っている」</h2>
                     <p>
-                        第17章では<strong>回帰診断法</strong>を扱う。回帰モデルの当てはまりや仮定の妥当性を
-                        診断するための残差プロット、正規Q-Qプロット、てこ比（leverage）、Cookの距離、
-                        ダービン・ワトソン比などの手法を学ぶ。
+                        回帰分析では、「誤差項 $\varepsilon_i$ は<strong>独立で、分散が一定で、正規分布に従う</strong>」という<strong>3つの仮定</strong>をおいています。
+                        しかし現実のデータがこの仮定を満たしているかどうかは、計算するだけでは確認できません。
                     </p>
-                    <p><strong>キーワード：</strong>残差プロット、てこ比、Cookの距離、ダービン・ワトソン比</p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-lightbulb"></i> たとえ話で理解しよう</p>
+                        <p>
+                            たとえば「体重を身長で予測する」回帰直線を引いたとします。この直線からのズレ（=残差）が、
+                            背が低い人でも高い人でもほぼ同じくらいならOK。でも、背が高い人ほどズレが大きい場合は
+                            「等分散の仮定が怪しい」とわかります。
+                        </p>
+                        <p>
+                            <strong>回帰診断とは、このような「仮定のひずみ」をグラフや数値で検出する技術</strong>です。
+                        </p>
+                    </div>
+                    <p>第17章では以下の4つの診断ツールを学びます：</p>
+                    <ul>
+                        <li>①<strong>残差プロット</strong>：等分散・独立性のチェック</li>
+                        <li>②<strong>正規Q-Qプロット</strong>：正規性のチェック</li>
+                        <li>③<strong>てこ比（leverage）・Cookの距離</strong>：影響力の強い観測値の検出</li>
+                        <li>④<strong>ダービン・ワトソン比</strong>：残差の時系列的な相関のチェック</li>
+                    </ul>
+                    <p><strong>キーワード：</strong>残差プロット、てこ比、Cookの距離、ダービン・ワトソン比、外れ値</p>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <section class="content-section section-anchor" id="residual-plot">
+                    <h2><i class="fas fa-chart-scatter"></i> 1. 残差プロット</h2>
 
-                    <h3>回帰診断とは</h3>
-                    <p>回帰分析の結果が妥当かを確認するための事後解析。以下の点をチェックする：</p>
+                    <h3>「残差」とは何か？</h3>
+                    <p>
+                        回帰直線で $y$ の予測値を $\hat{y}_i$ とすると、実際の値 $y_i$ との差が<strong>残差</strong>です：
+                    </p>
+                    <div class="formula-block">
+                        $$e_i = y_i - \hat{y}_i$$
+                    </div>
+                    <p>
+                        残差は「モデルで説明しきれなかった部分」。誤差項 $\varepsilon_i$ の推定値とも言えます。
+                        もし回帰モデルが正しければ、残差はランダムな「ノイズ」のはずです。
+                    </p>
+
+                    <h3>残差プロット（Residuals vs Fitted）の読み方</h3>
+                    <p>
+                        横軸に<strong>予測値 $\hat{y}_i$</strong>、縦軸に<strong>残差 $e_i$</strong>を打点した散布図です。
+                        「良い」プロットと「悪い」プロットの見分け方は以下の通りです：
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-check-circle"></i> 仮定が満たされている場合（良い状態）</p>
+                        <ul>
+                            <li>残差がゼロの水平線の周りに<strong>ランダムに散らばっている</strong></li>
+                            <li>残差のばらつきが予測値によらず<strong>ほぼ一定</strong>（等分散）</li>
+                            <li>特定のパターン（曲線・上昇トレンドなど）が<strong>見られない</strong></li>
+                        </ul>
+                    </div>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-exclamation-triangle"></i> 仮定が怪しい場合（問題ありのパターン）</p>
+                        <ul>
+                            <li><strong>漏斗型（ファンネル型）：</strong>予測値が大きいほど残差のばらつきが大きくなる → 等分散性の違反。対数変換などが有効。</li>
+                            <li><strong>曲線状パターン：</strong>残差が系統的に増えたり減ったりする → 線形性の違反。説明変数の2乗項などを追加。</li>
+                            <li><strong>飛び離れた点（外れ値）：</strong>他の点から大きく外れた残差がある → その観測値を詳しく調べる。</li>
+                        </ul>
+                    </div>
+
+                    <h3>チェックすべき仮定のまとめ</h3>
                     <ul>
-                        <li>外れ値の存在</li>
-                        <li>等分散性の仮定</li>
-                        <li>独立性の仮定</li>
-                        <li>正規性の仮定</li>
-                        <li>影響力の強い観測値</li>
+                        <li><strong>等分散性（homoscedasticity）：</strong>残差の分散 $\text{Var}[\varepsilon_i] = \sigma^2$ が全データで同じ</li>
+                        <li><strong>独立性：</strong>残差 $e_1, e_2, \ldots, e_n$ が互いに独立（時系列では特に要確認）</li>
+                        <li><strong>正規性：</strong>残差が正規分布に従う（小標本では重要）</li>
+                        <li><strong>線形性：</strong>$y$ と $x$ の関係が線形で表せる</li>
                     </ul>
+                </section>
 
-                    <h3>残差プロット</h3>
-                    <p>予測値 $\hat{y}_i$ に対する残差 $e_i = y_i - \hat{y}_i$ の散布図。以下を診断：</p>
-                    <ul>
-                        <li><strong>外れ値：</strong>他の残差から大きく離れた点</li>
-                        <li><strong>等分散性：</strong>残差がランダムに散らばっているか（漏斗型ならNG）</li>
-                        <li><strong>独立性：</strong>残差にパターン・トレンドがないか</li>
-                    </ul>
+                <section class="content-section section-anchor" id="qq-plot">
+                    <h2><i class="fas fa-chart-line"></i> 2. 正規Q-Qプロット・Scale-Locationプロット</h2>
 
-                    <h3>正規Q-Qプロット</h3>
-                    <p>標準化残差の順序統計量を正規分布の理論分位点と比較。直線上に並べば正規性が妥当。</p>
+                    <h3>正規Q-Qプロット（Normal Q-Q plot）</h3>
+                    <p>
+                        Q-Q は「Quantile-Quantile（分位点-分位点）」の略です。
+                        <strong>残差が正規分布に従っているか</strong>を視覚的に確認するためのプロットです。
+                    </p>
+                    <p>作り方の手順：</p>
+                    <ol>
+                        <li>標準化残差 $r_i = e_i / (\hat{\sigma}\sqrt{1-h_{ii}})$ を小さい順に並べる</li>
+                        <li>$n$ 個のデータに対して、正規分布の理論的な $k$ 番目の分位点（$z_{(k)}$）を計算する</li>
+                        <li>横軸に理論分位点 $z_{(k)}$、縦軸に標準化残差の順序統計量を打点する</li>
+                    </ol>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-ruler-combined"></i> Q-Qプロットの見方</p>
+                        <ul>
+                            <li><strong>直線（45度線）上に乗っている</strong>：正規性 OK → 回帰の推論が信頼できる</li>
+                            <li><strong>両端が上下に外れる（S字型）：</strong>裾が正規分布より重い（尖度が高い）</li>
+                            <li><strong>片側が大きく外れる：</strong>歪みあり、変換（対数など）を検討</li>
+                        </ul>
+                    </div>
+                    <p>
+                        正規性の仮定が成立しないと、t検定・F検定の結果が信頼できなくなります。
+                        ただし、標本サイズが大きい場合は中心極限定理により多少ずれていても問題は小さくなります。
+                    </p>
 
-                    <h3>Scale-Location プロット</h3>
-                    <p>予測値に対する $\sqrt{|\text{標準化残差}|}$ のプロット。等分散性を確認。水平な傾向なら等分散。</p>
+                    <h3>Scale-Location プロット（等分散性の確認）</h3>
+                    <p>
+                        横軸に予測値 $\hat{y}_i$、縦軸に $\sqrt{|r_i|}$（標準化残差の絶対値の平方根）を打点したものです。
+                        横軸に沿って<strong>水平にランダムに散らばっていれば等分散</strong>。
+                        右に行くほど上がっていれば「予測値が大きいほど残差のばらつきが大きい」ことを示します。
+                    </p>
+                    <p>
+                        残差プロットでは正負の両側を見るのに対し、Scale-Locationプロットは絶対値で見るため、
+                        等分散性の検出がより明確です。
+                    </p>
+                </section>
 
-                    <h3>ハット行列とてこ比（leverage）</h3>
-                    <p>ハット行列 $H = X(X^TX)^{-1}X^T$ の対角要素 $h_{ii}$ が<strong>てこ比</strong>：</p>
+                <section class="content-section section-anchor" id="leverage">
+                    <h2><i class="fas fa-balance-scale"></i> 3. てこ比（leverage）</h2>
+
+                    <h3>「てこ比」のイメージ</h3>
+                    <p>
+                        「てこ（lever）」の原理を思い出してください。支点から遠い場所に力を加えると、より大きな回転モーメントが生まれます。
+                        回帰分析でも同様に、<strong>説明変数の空間で平均から遠い観測値ほど、回帰直線を大きく動かす力</strong>を持ちます。
+                        その「てこの効き具合」を数値化したものが<strong>てこ比（leverage）</strong>です。
+                    </p>
+
+                    <h3>ハット行列（Hat Matrix）$H$</h3>
+                    <p>
+                        最小二乗法の推定値 $\hat{y} = X(X^TX)^{-1}X^Ty$ を見ると、$\hat{y}$ は $y$ に行列をかけたものです。
+                        この行列 $H = X(X^TX)^{-1}X^T$ を<strong>ハット行列</strong>といいます（$y$ に「ハット（^）」をかぶせるから）。
+                    </p>
+                    <p>
+                        ハット行列の<strong>$(i,i)$ 要素</strong>（$i$ 行 $i$ 列の対角要素）が<strong>$i$ 番目のてこ比 $h_{ii}$</strong>です：
+                    </p>
                     <div class="formula-block">
                         $$h_{ii} = x_i^T (X^T X)^{-1} x_i$$
                     </div>
+                    <p>$x_i$ は $i$ 番目の観測の説明変数ベクトルです。</p>
+
+                    <h3>てこ比の性質と目安</h3>
                     <ul>
-                        <li>$0 \leq h_{ii} \leq 1$</li>
-                        <li>$\sum_{i=1}^{n} h_{ii} = p + 1$（= 説明変数の数 + 切片）</li>
-                        <li>$h_{ii}$ が大きい → 説明変数空間で中心から遠い → 回帰直線に大きな影響</li>
+                        <li>必ず $0 \leq h_{ii} \leq 1$ の範囲に収まる</li>
+                        <li>全ての $h_{ii}$ の合計は $\sum_{i=1}^n h_{ii} = p+1$（説明変数の数＋切片）</li>
+                        <li>平均値は $(p+1)/n$ → これの<strong>2倍以上</strong>なら「てこ比が大きい」と判断する目安</li>
+                        <li>$h_{ii}$ が大きい観測は、説明変数の値が他の観測と大きく異なる「外れた」点</li>
                     </ul>
 
-                    <h3>Cookの距離</h3>
-                    <p>$i$ 番目の観測を除いたときの推定値の変化を測る：</p>
-                    <div class="formula-block">
-                        $$D_i = \frac{(\hat{\beta} - \hat{\beta}_{(-i)})^T X^TX (\hat{\beta} - \hat{\beta}_{(-i)})}{(p+1)\hat{\sigma}^2} = \frac{e_i^2}{(p+1)\hat{\sigma}^2} \cdot \frac{h_{ii}}{(1 - h_{ii})^2}$$
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-info-circle"></i> てこ比が大きいことは「悪い」こと？</p>
+                        <p>
+                            てこ比が大きい＝「回帰直線をよく引っ張る力がある」だけで、必ずしも悪いわけではありません。
+                            問題になるのは、てこ比が大きくて<strong>かつ</strong>残差が大きい場合です（→ Cookの距離で評価）。
+                        </p>
                     </div>
-                    <p>目安：$D_i > 0.5$ で要注意、$D_i > 1$ で影響大（外れ値候補）。</p>
 
-                    <h3>自己相関とダービン・ワトソン（DW）比</h3>
-                    <p>残差の系列相関（時系列的な依存性）を検出：</p>
+                    <h3>残差の分散とてこ比の関係</h3>
+                    <p>残差の分散は $\text{Var}[e_i] = \sigma^2(1 - h_{ii})$ で表せます。</p>
+                    <p>
+                        つまり、てこ比 $h_{ii}$ が大きい観測ほど残差の分散が<strong>小さく</strong>なります。
+                        言い換えれば、「影響力が大きい点ほど回帰直線が自分に合わせてくれるため、残差が小さく見えやすい」のです。
+                        この性質から、てこ比の大きな点の外れ値は残差プロットで見逃しやすいため注意が必要です。
+                    </p>
+                </section>
+
+                <section class="content-section section-anchor" id="cooks-distance">
+                    <h2><i class="fas fa-ruler-combined"></i> 4. Cookの距離</h2>
+
+                    <h3>「この1点を除いたら、どのくらい変わる？」</h3>
+                    <p>
+                        Cookの距離（Cook's distance）は、<strong>ある1つの観測値を除いたとき、回帰係数の推定値がどのくらい変化するか</strong>を測る指標です。
+                        「この観測が回帰モデル全体に与える影響力」の総合スコアと思ってください。
+                    </p>
+
+                    <h3>Cookの距離の計算式</h3>
+                    <div class="formula-block">
+                        $$D_i = \frac{(\hat{\beta} - \hat{\beta}_{(-i)})^T X^TX (\hat{\beta} - \hat{\beta}_{(-i)})}{(p+1)\hat{\sigma}^2}$$
+                    </div>
+                    <p>
+                        $\hat{\beta}_{(-i)}$ は $i$ 番目のデータを除いて推定したときの係数ベクトルです。
+                        直接計算しなくても、残差とてこ比を使って次のように求められます：
+                    </p>
+                    <div class="formula-block">
+                        $$D_i = \frac{e_i^2}{(p+1)\hat{\sigma}^2} \cdot \frac{h_{ii}}{(1 - h_{ii})^2} = \frac{r_i^2}{p+1} \cdot \frac{h_{ii}}{1-h_{ii}}$$
+                    </div>
+                    <p>
+                        つまり Cookの距離は「<strong>残差の大きさ</strong>（$r_i^2$）」と「<strong>てこ比</strong>（$h_{ii}$）」の両方を掛け合わせた指標です。
+                        残差が大きくてもてこ比が小さければ影響は小さい。てこ比が大きくても残差が小さければ問題ない。
+                        両方が大きいときに初めて「影響力が強い」と判断されます。
+                    </p>
+
+                    <h3>判断の目安</h3>
+                    <ul>
+                        <li>$D_i > 0.5$：要注意（影響力が強い可能性）</li>
+                        <li>$D_i > 1$：明らかに影響力が大きい（外れ値の候補として調査すべき）</li>
+                    </ul>
+
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-exclamation-circle"></i> 外れ値の除外は慎重に</p>
+                        <p>
+                            Cookの距離が大きいからといって、そのデータをすぐに「除外」してはいけません。
+                            まず「なぜその値が外れているのか」の理由を調べることが重要です。
+                            入力ミスならば除外・修正すべきですが、本当にそういう値が存在するなら重要な情報かもしれません。
+                        </p>
+                    </div>
+                </section>
+
+                <section class="content-section section-anchor" id="autocorrelation">
+                    <h2><i class="fas fa-arrows-left-right"></i> 5. 自己相関とダービン・ワトソン（DW）比</h2>
+
+                    <h3>「自己相関」とは何か？</h3>
+                    <p>
+                        時系列データ（株価・気温・月次売上など）を回帰分析する場合、
+                        「今日の残差が大きければ、明日の残差も大きくなりやすい」という<strong>系列相関（自己相関）</strong>が生じることがあります。
+                    </p>
+                    <p>
+                        たとえば「物価を金利で回帰した残差」は、景気の波の影響で連続して正の値をとることがあります。
+                        このような自己相関があると、標準誤差の推定が歪み、F検定・t検定の結果が信頼できなくなります。
+                    </p>
+
+                    <h3>ダービン・ワトソン比（DW）の計算式</h3>
+                    <p>
+                        残差 $e_1, e_2, \ldots, e_n$（データの並び順通り）について：
+                    </p>
                     <div class="formula-block">
                         $$DW = \frac{\sum_{i=2}^{n}(e_i - e_{i-1})^2}{\sum_{i=1}^{n} e_i^2}$$
                     </div>
-                    <ul>
-                        <li>$0 \leq DW \leq 4$</li>
-                        <li>$DW \approx 2$：自己相関なし</li>
-                        <li>$DW \ll 2$：正の自己相関（残差が連続して同符号）</li>
-                        <li>$DW \gg 2$：負の自己相関（残差が交互に符号変化）</li>
-                    </ul>
+                    <p>
+                        <strong>分子</strong>は「隣り合う残差の差の2乗和」、<strong>分母</strong>は「残差の2乗和」です。
+                        隣り合う残差が似た値（正の自己相関）なら差が小さく → DWが小さくなります。
+                    </p>
+
+                    <h3>DW比の読み方</h3>
+                    <table>
+                        <thead><tr><th>DW値の範囲</th><th>意味</th><th>対処</th></tr></thead>
+                        <tbody>
+                            <tr><td>$DW \approx 2$</td><td>自己相関なし（理想的）</td><td>そのままOK</td></tr>
+                            <tr><td>$DW < 1.0$（目安）</td><td><strong>正の自己相関</strong>：残差が連続して同じ符号</td><td>ラグ変数の追加、一般化最小二乗法</td></tr>
+                            <tr><td>$DW > 3.0$（目安）</td><td><strong>負の自己相関</strong>：残差が交互に符号変化</td><td>モデルの見直し</td></tr>
+                        </tbody>
+                    </table>
+                    <p>
+                        正確な棄却域は DW表（標本数 $n$ と説明変数の数 $p$ から決まる上限・下限値）を参照します。
+                        ただし、DW比はデータが<strong>時間順・空間順など何らかの順序で並んでいる場合にのみ意味を持ちます</strong>。
+                        年齢順・アルファベット順にデータがソートされているだけの場合に使っても意味がありません。
+                    </p>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                <section class="content-section section-anchor" id="formulas">
+                    <h2><i class="fas fa-clipboard-list"></i> 6. 公式まとめ</h2>
+
+                    <h3>標準化残差（Standardized Residual）</h3>
+                    <div class="formula-block">
+                        $$r_i = \frac{e_i}{\hat{\sigma}\sqrt{1 - h_{ii}}}$$
+                    </div>
+                    <p>
+                        $|r_i| > 2$ なら外れ値の可能性（正規分布なら95%のデータが $\pm 2$ 以内）。
+                        てこ比 $h_{ii}$ が大きいほど分母が小さくなり、標準化残差が大きく見えることに注意。
+                    </p>
 
                     <h3>残差の分散</h3>
                     <div class="formula-block">
@@ -131,68 +335,94 @@
                     </div>
                     <p>てこ比の大きい観測は残差の分散が小さく抑えられる → 外れ値が見えにくい。</p>
 
-                    <h3>標準化残差</h3>
+                    <h3>Cookの距離（簡略版）</h3>
                     <div class="formula-block">
-                        $$r_i = \frac{e_i}{\hat{\sigma}\sqrt{1 - h_{ii}}}$$
-                    </div>
-                    <p>$|r_i| > 2$ なら外れ値の可能性。</p>
-
-                    <h3>Cookの距離と残差・leverageの関係</h3>
-                    <div class="formula-block">
-                        $$D_i \propto r_i^2 \times \frac{h_{ii}}{1 - h_{ii}}$$
+                        $$D_i = \frac{r_i^2}{p+1} \cdot \frac{h_{ii}}{1 - h_{ii}}$$
                     </div>
                     <p>Cookの距離は「残差の大きさ」と「leverageの大きさ」の両方を考慮した総合指標。</p>
+
+                    <h3>ダービン・ワトソン比とAR(1)の関係</h3>
+                    <p>AR(1)過程 $e_i = \rho e_{i-1} + u_i$（$|\rho| < 1$）において、DW $\approx 2(1-\rho)$ が成立します。</p>
+                    <ul>
+                        <li>$\rho = 0$（自己相関なし）のとき DW $\approx 2$</li>
+                        <li>$\rho = 1$（強い正の自己相関）のとき DW $\approx 0$</li>
+                    </ul>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
+                <section class="content-section section-anchor" id="problems">
+                    <h2><i class="fas fa-pencil"></i> 7. 例題・演習</h2>
 
-                    <h3>問17.1：道府県別乗用車所有率データ</h3>
-                    <p>47道府県の乗用車保有率を収入・道路延長などで重回帰。診断プロットから影響の大きい観測を除外する。</p>
+                    <h3>問17.1：道府県別乗用車所有率の回帰診断</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>47都道府県のデータで乗用車所有率 $y$ を人口密度の正の平方根 $\sqrt{x}$ で単回帰した。Rで生成した4つの回帰診断図について次の問いに答えよ。</p>
+                        <ol>
+                            <li>残差プロット（Residuals vs Fitted）から読み取れることを述べよ。</li>
+                            <li>正規Q-Qプロットから正規性について述べよ。</li>
+                            <li>Residuals vs Leverageプロットから、影響力の強い都道府県について述べよ。</li>
+                            <li>東京・大阪・神奈川を除いた44道府県で再分析したとき、結果がどう変わるか述べよ。</li>
+                        </ol>
+                    </div>
                     <div class="answer-block">
-                    <p><strong>(1) 47道府県での回帰：</strong></p>
-                    <ul>
-                        <li>残差プロット・Q-Qプロットを確認</li>
-                        <li>Cook の距離が大きい3つの道府県（例：東京、大阪、北海道）を特定</li>
-                    </ul>
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1) 残差プロットの読み取り：</strong></p>
+                        <p>
+                            残差が予測値に対してほぼランダムに散らばっていれば等分散・線形性は概ね満足。
+                            ただし、東京・大阪・神奈川など大都市圏の残差が他と大きく離れていれば、
+                            これらが回帰直線を大きく引っ張っている（leverage が高い）可能性を示す。
+                        </p>
 
-                    <p><strong>(2) 外れ値3つを除いた44道府県での再分析：</strong></p>
-                    <ul>
-                        <li>leverage が全体的に小さくなる</li>
-                        <li>Cook の距離が改善（全て0.5以下に）</li>
-                        <li>$R^{*2}$ が向上 → モデルの当てはまりが改善</li>
-                    </ul>
+                        <p><strong>(2) 正規Q-Qプロットによる正規性の評価：</strong></p>
+                        <p>
+                            標準化残差が理論分位点の45度線の近くに並んでいれば正規性 OK。
+                            両端が大きく外れていれば、特定の都道府県（東京など）が分布の裾を重くしている可能性がある。
+                        </p>
 
-                    <p><strong>(3) DW比：</strong>2に近く、残差の自己相関はほとんどない</p>
+                        <p><strong>(3) てこ比・Cookの距離による影響力の評価：</strong></p>
+                        <p>
+                            東京・大阪・神奈川は人口密度が他の道府県と突出して高く、説明変数 $\sqrt{x}$ が非常に大きい。
+                            そのため <strong>てこ比 $h_{ii}$ が大きく</strong>、Residuals vs Leverage プロットで右端に現れる。
+                            Cookの距離が0.5を超えているなら「影響力が強い」と判断できる。
+                        </p>
+
+                        <p><strong>(4) 44道府県での再分析：</strong></p>
+                        <ul>
+                            <li>大都市圏3都府県を除くと、てこ比が全体的に小さくなる</li>
+                            <li>残差の分布が正規性に近づく可能性が高い</li>
+                            <li>決定係数 $R^2$ が向上し、モデルの当てはまりが改善することが多い</li>
+                            <li>ただし「除外が正当か」は別途検討が必要（外れ値を除くからといって必ずしも正しいわけではない）</li>
+                        </ul>
+                        <p><strong>(DW比について：)</strong>都道府県データは時系列ではないため、この場合DW比は通常使わない。もしデータが何らかの順序（人口密度順など）でソートされていない限り意味をなさない。</p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> 8. まとめ・ポイント</h2>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-star"></i> 4つの診断プロットと何を見るか</p>
+                        <table>
+                            <thead><tr><th>プロット</th><th>横軸</th><th>縦軸</th><th>チェックする仮定</th></tr></thead>
+                            <tbody>
+                                <tr><td>Residuals vs Fitted</td><td>予測値 $\hat{y}$</td><td>残差 $e$</td><td>等分散性・線形性</td></tr>
+                                <tr><td>Normal Q-Q</td><td>理論分位点</td><td>標準化残差</td><td>正規性</td></tr>
+                                <tr><td>Scale-Location</td><td>予測値 $\hat{y}$</td><td>$\sqrt{|r_i|}$</td><td>等分散性（確認）</td></tr>
+                                <tr><td>Residuals vs Leverage</td><td>てこ比 $h_{ii}$</td><td>標準化残差 $r_i$</td><td>影響力の強い点</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <ul>
-                        <li>回帰分析は「モデルを当てはめて終わり」ではなく、診断プロットで仮定の妥当性を必ず確認する</li>
-                        <li>Cookの距離は「外れ値」と「leverage」を同時に評価する強力な指標</li>
-                        <li>leverage が大きい点は必ずしも外れ値ではない（説明変数空間の端にあるだけ）</li>
-                        <li>DW比はデータの並び順に依存するため、時系列データやソートされたデータで意味をもつ</li>
-                        <li>4つの診断プロット：残差 vs 予測値、正規Q-Q、Scale-Location、residuals vs leverage</li>
-                        <li>外れ値の除外は安易に行わず、その理由を明確にすることが重要</li>
+                        <li>回帰分析は「モデルを当てはめて終わり」ではなく、診断プロットで仮定の妥当性を<strong>必ず確認する</strong></li>
+                        <li><strong>Cookの距離</strong>は「残差の大きさ」と「てこ比」の両方を考慮した総合的な影響力指標</li>
+                        <li>てこ比が大きい点は必ずしも問題ではない（説明変数空間の端にあるだけ）</li>
+                        <li>DW比は<strong>データが時系列的な順序で並んでいるとき</strong>だけ意味をもつ</li>
+                        <li>外れ値の除外は安易に行わず、<strong>その理由（入力ミス・特殊事情など）を明確に</strong>してから判断する</li>
+                        <li>標準化残差 $|r_i| > 2$ が外れ値の目安（正規分布なら全体の約5%が範囲外）</li>
                     </ul>
                 </section>
 
-                <nav class="chapter-pager">
-                    <a href="#" class="pager-link" id="prev-link">
-                        <i class="fas fa-arrow-left"></i> 前の章
-                    </a>
-                    <a href="../index.html" class="pager-home">
-                        <i class="fas fa-th-large"></i> 目次
-                    </a>
-                    <a href="#" class="pager-link" id="next-link">
-                        次の章 <i class="fas fa-arrow-right"></i>
-                    </a>
-                </nav>
-
-            </div>
-        </div>
+                </div><!-- end .chapter-content -->
+            </div><!-- end .chapter-layout -->
+        </div><!-- end .container -->
     </main>
 
     <footer class="stat-footer">
