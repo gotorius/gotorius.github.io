@@ -52,41 +52,112 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#single-factor">1因子モデル</a></li>
+                            <li><a href="#k-factor">K因子モデルと回転</a></li>
+                            <li><a href="#sem">構造方程式モデル</a></li>
+                            <li><a href="#graphical">グラフィカルモデル</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
 
                 <!-- ======================================================== -->
-                <!-- 0. イントロ                                               -->
+                <!-- 0. はじめに                                               -->
                 <!-- ======================================================== -->
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 因子分析とは？――見えない「背景の力」を探す</h2>
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> はじめに：「見えない背景にある力」を統計で探す</h2>
+
+                    <h3>動機：なぜ変数どうしが「なぜか似た動きをする」のか？</h3>
                     <p>
-                        突然ですが、こんな状況を想像してください。
-                        あるクラスで数学の試験を行い、「方程式」「微積分」「複素数」「三角関数」「図形」の5問を解かせました。
-                        成績データを眺めると、「方程式が得意な生徒は微積分も得意」「三角関数が得意な生徒は図形も得意」という傾向がありそうです。
+                        多変量データを分析していると、「なぜかたくさんの変数が一緒に動く」現象に出くわします。
+                        たとえば、あるクラスで数学の試験（「方程式」「微積分」「複素数」「三角関数」「図形」の5問）を行ったとしましょう。
+                        採点結果を眺めると、<strong>「方程式が得意な生徒は微積分や複素数も得意」「三角関数が得意な生徒は図形も得意」</strong>という
+                        一定のパターンが浮かび上がってきます。
                     </p>
                     <p>
-                        なぜこんなことが起きるのでしょうか？　答えは単純です――<strong>「解析が得意かどうか」「幾何が得意かどうか」という、
-                        直接測れない潜在的な能力が、各問題の点数を決めているから</strong>です。
+                        これは単なる偶然でしょうか？いいえ――背景には明快な理由があります。
+                        <strong>「解析的な数学能力（計算・論理）」と「幾何的な直感（図形・空間認識）」という、
+                        テストでは直接測れない2つの潜在的な能力が、各問題の点数を決めているから</strong>です。
                     </p>
                     <p>
-                        この「直接は見えないが背後で働いている共通の要因」を <strong>共通因子（common factor）</strong> といいます。
-                        <strong>因子分析（factor analysis）</strong> とは、多くの観測変数の背後に少数の共通因子を想定し、
-                        その因子の構造を推定する多変量解析手法です。
+                        つまり、5つの変数（各問題の得点）の背後に、2つの「見えない変数」（共通因子）が潜んでいると考えることができます。
+                        この構造を明らかにするのが <strong>因子分析（factor analysis）</strong> という手法です。
                     </p>
+
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-lightbulb"></i> 因子分析とは何か（一言定義）</p>
+                        <p>
+                            <strong>因子分析</strong>とは、$p$ 個の観測変数の変動を、
+                            <strong>少数の「共通因子（common factor）」と各変数に固有の「独自性因子（unique factor）」</strong>
+                            に分解・説明するための多変量解析手法です。
+                            「なぜ変数間に相関があるのか」という<em>生成メカニズム</em>をモデル化します。
+                        </p>
+                    </div>
+
+                    <h3>主成分分析（23章）との根本的な違い</h3>
+                    <p>
+                        23章で学んだ主成分分析（PCA）と因子分析はよく混同されますが、<strong>目的と考え方が根本的に異なります</strong>。
+                    </p>
+                    <table style="border-collapse:collapse; margin:1em auto; width:100%; font-size:0.95em;">
+                        <thead>
+                            <tr style="background:#e8f0fe;">
+                                <th style="border:1px solid #ccc; padding:8px 12px;">観点</th>
+                                <th style="border:1px solid #ccc; padding:8px 12px;">主成分分析（PCA）</th>
+                                <th style="border:1px solid #ccc; padding:8px 12px;">因子分析（FA）</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td style="border:1px solid #ccc; padding:6px 12px;">目的</td><td style="border:1px solid #ccc; padding:6px 12px;">分散を最大化する軸を求める（次元圧縮）</td><td style="border:1px solid #ccc; padding:6px 12px;">観測変数の背後の共通因子を推定（構造発見）</td></tr>
+                            <tr><td style="border:1px solid #ccc; padding:6px 12px;">モデルの仮定</td><td style="border:1px solid #ccc; padding:6px 12px;">不要（記述的・機械的な変換）</td><td style="border:1px solid #ccc; padding:6px 12px;">「因子が変数を生成する」という確率モデルを仮定</td></tr>
+                            <tr><td style="border:1px solid #ccc; padding:6px 12px;">独自性（誤差）</td><td style="border:1px solid #ccc; padding:6px 12px;">主成分で説明できない分も全部取り込む</td><td style="border:1px solid #ccc; padding:6px 12px;">各変数固有の「独自性因子」を明示的にモデル化</td></tr>
+                            <tr><td style="border:1px solid #ccc; padding:6px 12px;">解釈</td><td style="border:1px solid #ccc; padding:6px 12px;">第1主成分・第2主成分は「最大分散の方向」</td><td style="border:1px solid #ccc; padding:6px 12px;">因子は「解釈可能な共通の潜在概念」</td></tr>
+                            <tr><td style="border:1px solid #ccc; padding:6px 12px;">回転</td><td style="border:1px solid #ccc; padding:6px 12px;">通常行わない（固有ベクトルが一意）</td><td style="border:1px solid #ccc; padding:6px 12px;">解釈を容易にするため「回転」を行う（必須）</td></tr>
+                        </tbody>
+                    </table>
+                    <p>
+                        PCAは「変数の総変動を最もよく表す方向」を探す手法であり、因子の意味は定義しません。
+                        一方、因子分析では「なぜ変数間に相関があるのか」を<strong>潜在変数による生成メカニズム</strong>で説明しようとします。
+                    </p>
+
+                    <h3>因子分析が必要になる典型的な場面</h3>
+                    <p>因子分析は以下のような場面で特に力を発揮します：</p>
+                    <ul>
+                        <li><strong>心理・教育測定</strong>：IQテストの各問題が「言語能力」「空間認識」「計算能力」という潜在的な知性を反映しているとモデル化する</li>
+                        <li><strong>マーケティング調査</strong>：顧客満足度調査の多数の質問項目を「サービス品質」「価格満足」「ブランドイメージ」などの少数の因子にまとめる</li>
+                        <li><strong>経済・金融</strong>：多くの経済指標の共変動を「景気循環」「インフレ」などの共通マクロ因子で説明する</li>
+                        <li><strong>神経科学・医学</strong>：fMRIデータの多地点活動を少数の「機能的ネットワーク」として捉える</li>
+                    </ul>
+
+                    <h3>本章で学ぶ内容のロードマップ</h3>
+                    <p>本章はさらに範囲を広げて、因子分析に関連する2つの重要な発展的トピックも扱います。</p>
                     <div class="formula-block">
-                        <p>🔑 <strong>主成分分析との違い（23章と比較）</strong></p>
-                        <ul>
-                            <li><strong>主成分分析</strong>：数学的に分散を最大化する軸を求める。モデルの背景に仮定なし（記述的手法）。</li>
-                            <li><strong>因子分析</strong>：「潜在因子が観測変数を生成する」という確率モデルを仮定する（モデルベースの手法）。</li>
-                        </ul>
-                        <p>因子分析では「なぜ変数間が相関するのか」を潜在因子で説明しようとします。</p>
+                        <p><strong>本章の構成</strong></p>
+                        <ol>
+                            <li><strong>1因子モデル</strong>：最も基本的な因子分析モデル。共通性・独自性・因子スコアを理解する。</li>
+                            <li><strong>K因子モデルと回転</strong>：複数の因子を使うとき、解釈しやすい「回転解」を求める手順。</li>
+                            <li><strong>構造方程式モデル（SEM）</strong>：変数間の因果関係をパス図で表現し、操作変数法でパス係数を推定する。</li>
+                            <li><strong>グラフィカルモデル</strong>：「条件付き独立」を無向グラフで視覚化し、精度行列との関係を理解する。</li>
+                        </ol>
+                        <p>因子分析は SEM の特殊ケース（潜在変数 → 観測変数の有向グラフ）であり、SEM はさらにグラフィカルモデルの考え方へと繋がります。本章を通じて「潜在変数と条件付き独立」という統計学の深い概念を理解してください。</p>
                     </div>
                 </section>
 
                 <!-- ======================================================== -->
                 <!-- 1. 1因子モデル                                            -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="single-factor">
                     <h2><i class="fas fa-layer-group"></i> ① 1因子モデル――基本の仕組みを理解する</h2>
 
                     <h3>モデルの式</h3>
@@ -195,7 +266,7 @@
                 <!-- ======================================================== -->
                 <!-- 2. K因子モデルと回転                                      -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="k-factor">
                     <h2><i class="fas fa-rotate"></i> ② K因子モデルと回転――複数の因子を解釈する</h2>
 
                     <h3>K因子モデルへの拡張</h3>
@@ -317,7 +388,7 @@
                 <!-- ======================================================== -->
                 <!-- 3. 構造方程式モデル                                        -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="sem">
                     <h2><i class="fas fa-diagram-project"></i> ③ 構造方程式モデル――変数間の因果をパス図で表す</h2>
 
                     <h3>パス図とは何か？</h3>
@@ -414,7 +485,7 @@
                 <!-- ======================================================== -->
                 <!-- 4. グラフィカルモデル                                      -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="graphical">
                     <h2><i class="fas fa-project-diagram"></i> ④ グラフィカルモデル――「条件付き独立」を図で表す</h2>
 
                     <h3>「条件付き独立」とは何か？</h3>
@@ -527,7 +598,7 @@
                 <!-- ======================================================== -->
                 <!-- 5. 公式まとめ                                              -->
                 <!-- ======================================================== -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="formulas">
                     <h2><i class="fas fa-square-root-variable"></i> ⑤ 公式まとめ</h2>
                     <div class="formula-block">
                         <p><strong>1因子モデル</strong></p>
@@ -552,7 +623,7 @@
                     </div>
                 </section>
 
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
 
                     <p style="color:#555; font-style:italic;">以下の問題はすべて自作問題です。教科書の内容を参考にしながら、オリジナルの数値で構成しています。問題文をよく読んでから解答を確認してください。</p>
@@ -884,8 +955,8 @@
 
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
                     <ul>
                         <li>因子分析は主成分分析（23章）と異なり、背景にモデルを仮定する。共通因子による説明と独自性に分離するのが特徴</li>
                         <li>$K \geq 2$ の場合、初期解は解釈が困難なので回転が必要。バリマックス回転が代表的</li>
@@ -907,6 +978,7 @@
                     </a>
                 </nav>
 
+                </div>
             </div>
         </div>
     </main>

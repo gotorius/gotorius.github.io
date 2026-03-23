@@ -1,56 +1,11 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>統計学学習ノート</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body data-chapter="24">
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="../../index.html" class="nav-logo">R.Goto</a>
-            <ul class="nav-menu">
-                <li><a href="../../index.html">Home</a></li>
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
-                    <ul class="nav-dropdown-menu">
-                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
-                    </ul>
-                </li>
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
-                    <ul class="nav-dropdown-menu">
-                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <button class="nav-toggle" aria-label="メニュー">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+#!/usr/bin/env python3
+filepath = '/Users/gotou1/goto/statistics/chapters/chapter24.html'
+content = open(filepath, 'r').read()
 
-    <header class="chapter-hero">
-        <div class="container">
-            <div class="chapter-breadcrumb">
-                <a href="../../index.html">Portfolio</a>
-                <i class="fas fa-chevron-right"></i>
-                <a href="../index.html">統計学ノート</a>
-                <i class="fas fa-chevron-right"></i>
-                <span id="breadcrumb-chapter"></span>
-            </div>
-            <span class="chapter-label" id="chapter-label"></span>
-            <h1 id="chapter-title">読み込み中...</h1>
-        </div>
-    </header>
+main_start = content.find('<main class="chapter-body">')
+header = content[:main_start]
 
-    <main class="chapter-body">
+new_main = """<main class="chapter-body">
         <div class="container">
             <div class="chapter-layout">
 
@@ -117,36 +72,36 @@
 
                     <h3>ミンコフスキー距離</h3>
                     <p>
-                        $p$ 次元空間の2点 $\boldsymbol{x} = (x_1, \ldots, x_p)^T$、$\boldsymbol{y} = (y_1, \ldots, y_p)^T$ 間の
+                        $p$ 次元空間の2点 $\\boldsymbol{x} = (x_1, \\ldots, x_p)^T$、$\\boldsymbol{y} = (y_1, \\ldots, y_p)^T$ 間の
                         <strong>ミンコフスキー距離</strong>（次数 $m$）：
                     </p>
                     <div class="formula-block">
-                        $$d_m(\boldsymbol{x}, \boldsymbol{y}) = \left(\sum_{k=1}^{p} |x_k - y_k|^m\right)^{1/m}$$
+                        $$d_m(\\boldsymbol{x}, \\boldsymbol{y}) = \\left(\\sum_{k=1}^{p} |x_k - y_k|^m\\right)^{1/m}$$
                     </div>
                     <table>
                         <thead><tr><th>次数 $m$</th><th>名称</th><th>特徴</th></tr></thead>
                         <tbody>
                             <tr><td>$m=1$</td><td>マンハッタン距離（L1ノルム）</td><td>絶対値の和。外れ値に頑健</td></tr>
                             <tr><td>$m=2$</td><td>ユークリッド距離（L2ノルム）</td><td>直線距離。最も一般的</td></tr>
-                            <tr><td>$m=\infty$</td><td>チェビシェフ距離</td><td>最大成分差 $\max_k|x_k-y_k|$</td></tr>
+                            <tr><td>$m=\\infty$</td><td>チェビシェフ距離</td><td>最大成分差 $\\max_k|x_k-y_k|$</td></tr>
                         </tbody>
                     </table>
 
                     <h3>マハラノビス距離</h3>
                     <p>
-                        共分散行列 $\Sigma$ を考慮した、スケール不変・相関考慮の距離：
+                        共分散行列 $\\Sigma$ を考慮した、スケール不変・相関考慮の距離：
                     </p>
                     <div class="formula-block">
-                        $$d_M(\boldsymbol{x}, \boldsymbol{y}) = \sqrt{(\boldsymbol{x}-\boldsymbol{y})^T \Sigma^{-1} (\boldsymbol{x}-\boldsymbol{y})}$$
+                        $$d_M(\\boldsymbol{x}, \\boldsymbol{y}) = \\sqrt{(\\boldsymbol{x}-\\boldsymbol{y})^T \\Sigma^{-1} (\\boldsymbol{x}-\\boldsymbol{y})}$$
                     </div>
                     <p>
-                        $\Sigma = I$（単位行列）のときはユークリッド距離に一致する。
+                        $\\Sigma = I$（単位行列）のときはユークリッド距離に一致する。
                         変量間の相関や分散の違いを自動的に補正するため、異なる単位・スケールの変量が混在するデータに適している。
                     </p>
 
                     <h3>距離行列</h3>
                     <p>
-                        $n$ 個のサンプル全ての組み合わせの距離をまとめた $n \times n$ の対称行列。
+                        $n$ 個のサンプル全ての組み合わせの距離をまとめた $n \\times n$ の対称行列。
                         対角要素は0。これが階層的クラスタリングの入力になる。
                     </p>
 
@@ -200,29 +155,29 @@
 
                     <h3>5種類の連結法</h3>
                     <p>
-                        クラスター $C_A$（重心 $\bar{\boldsymbol{x}}_A$、サイズ $n_A$）と $C_B$（重心 $\bar{\boldsymbol{x}}_B$、サイズ $n_B$）の距離：
+                        クラスター $C_A$（重心 $\\bar{\\boldsymbol{x}}_A$、サイズ $n_A$）と $C_B$（重心 $\\bar{\\boldsymbol{x}}_B$、サイズ $n_B$）の距離：
                     </p>
                     <table>
                         <thead><tr><th>連結法</th><th>定義</th><th>特徴</th></tr></thead>
                         <tbody>
                             <tr>
                                 <td><strong>単連結（single linkage）</strong></td>
-                                <td>最近傍点間距離 $\min_{\boldsymbol{x}\in C_A,\boldsymbol{y}\in C_B} d(\boldsymbol{x},\boldsymbol{y})$</td>
+                                <td>最近傍点間距離 $\\min_{\\boldsymbol{x}\\in C_A,\\boldsymbol{y}\\in C_B} d(\\boldsymbol{x},\\boldsymbol{y})$</td>
                                 <td>鎖状に長く繋がるクラスター（chaining）が出やすい</td>
                             </tr>
                             <tr>
                                 <td><strong>完全連結（complete linkage）</strong></td>
-                                <td>最遠点間距離 $\max_{\boldsymbol{x}\in C_A,\boldsymbol{y}\in C_B} d(\boldsymbol{x},\boldsymbol{y})$</td>
+                                <td>最遠点間距離 $\\max_{\\boldsymbol{x}\\in C_A,\\boldsymbol{y}\\in C_B} d(\\boldsymbol{x},\\boldsymbol{y})$</td>
                                 <td>コンパクトで均一なクラスターが得られやすい</td>
                             </tr>
                             <tr>
                                 <td><strong>重心法（centroid linkage）</strong></td>
-                                <td>重心間距離 $d(\bar{\boldsymbol{x}}_A, \bar{\boldsymbol{x}}_B)$</td>
+                                <td>重心間距離 $d(\\bar{\\boldsymbol{x}}_A, \\bar{\\boldsymbol{x}}_B)$</td>
                                 <td>重心が逆転する「逆転現象」が起きることがある</td>
                             </tr>
                             <tr>
                                 <td><strong>群平均法（average linkage）</strong></td>
-                                <td>全点対の平均距離 $\dfrac{1}{n_A n_B}\sum_{\boldsymbol{x}\in A}\sum_{\boldsymbol{y}\in B}d(\boldsymbol{x},\boldsymbol{y})$</td>
+                                <td>全点対の平均距離 $\\dfrac{1}{n_A n_B}\\sum_{\\boldsymbol{x}\\in A}\\sum_{\\boldsymbol{y}\\in B}d(\\boldsymbol{x},\\boldsymbol{y})$</td>
                                 <td>単・完全連結の中間的性質。バランスよく使われる</td>
                             </tr>
                             <tr>
@@ -236,15 +191,15 @@
                     <h3>ウォード法の詳細</h3>
                     <p>
                         クラスター $C_k$ の<strong>群内平方和（within-cluster sum of squares）</strong>：
-                        $W_k = \sum_{\boldsymbol{x} \in C_k} \|\boldsymbol{x} - \bar{\boldsymbol{x}}_k\|^2$
+                        $W_k = \\sum_{\\boldsymbol{x} \\in C_k} \\|\\boldsymbol{x} - \\bar{\\boldsymbol{x}}_k\\|^2$
                     </p>
                     <p>
-                        2つのクラスター $C_A$、$C_B$ を統合したときの群内平方和の増加量 $\Delta W$：
+                        2つのクラスター $C_A$、$C_B$ を統合したときの群内平方和の増加量 $\\Delta W$：
                     </p>
                     <div class="formula-block">
-                        $$\Delta W = W_{A \cup B} - W_A - W_B = \frac{n_A n_B}{n_A + n_B}\|\bar{\boldsymbol{x}}_A - \bar{\boldsymbol{x}}_B\|^2$$
+                        $$\\Delta W = W_{A \\cup B} - W_A - W_B = \\frac{n_A n_B}{n_A + n_B}\\|\\bar{\\boldsymbol{x}}_A - \\bar{\\boldsymbol{x}}_B\\|^2$$
                     </div>
-                    <p>$\Delta W$ が最小となる組み合わせを統合していく。</p>
+                    <p>$\\Delta W$ が最小となる組み合わせを統合していく。</p>
                 </section>
 
                 <section class="content-section section-anchor" id="kmeans">
@@ -255,7 +210,7 @@
                         クラスター数 $k$ を事前に指定し、$k$ 個のクラスターに繰り返し割り当てる：
                     </p>
                     <ol>
-                        <li>$k$ 個の初期クラスター重心 $\boldsymbol{\mu}_1, \ldots, \boldsymbol{\mu}_k$ をランダムに選ぶ</li>
+                        <li>$k$ 個の初期クラスター重心 $\\boldsymbol{\\mu}_1, \\ldots, \\boldsymbol{\\mu}_k$ をランダムに選ぶ</li>
                         <li>各データ点を<strong>最近傍の重心</strong>のクラスターに割り当てる（割り当てステップ）</li>
                         <li>各クラスターの重心を所属データの平均で更新する（更新ステップ）</li>
                         <li>割り当てが変化しなくなるまで2・3を繰り返す</li>
@@ -263,7 +218,7 @@
 
                     <h3>目的関数（最小化）</h3>
                     <div class="formula-block">
-                        $$J = \sum_{k=1}^{K}\sum_{\boldsymbol{x}_i \in C_k} \|\boldsymbol{x}_i - \boldsymbol{\mu}_k\|^2$$
+                        $$J = \\sum_{k=1}^{K}\\sum_{\\boldsymbol{x}_i \\in C_k} \\|\\boldsymbol{x}_i - \\boldsymbol{\\mu}_k\\|^2$$
                     </div>
                     <p>
                         これは各クラスター内の点と重心の距離の平方和の総計。
@@ -282,7 +237,7 @@
 
                     <h3>エルボー法</h3>
                     <p>
-                        $k=1, 2, \ldots$ と変えながら $J$（群内平方和）をプロットし、
+                        $k=1, 2, \\ldots$ と変えながら $J$（群内平方和）をプロットし、
                         $J$ の減少率が急に鈍化する「肘（elbow）」の場所が最適 $k$ の候補となる。
                     </p>
                 </section>
@@ -300,42 +255,42 @@
                     <h3>混合正規分布モデル</h3>
                     <p>データが $K$ 個の正規分布の混合から生成されると仮定：</p>
                     <div class="formula-block">
-                        $$p(\boldsymbol{x}) = \sum_{k=1}^{K} \pi_k \, \mathcal{N}(\boldsymbol{x}; \boldsymbol{\mu}_k, \Sigma_k)$$
+                        $$p(\\boldsymbol{x}) = \\sum_{k=1}^{K} \\pi_k \\, \\mathcal{N}(\\boldsymbol{x}; \\boldsymbol{\\mu}_k, \\Sigma_k)$$
                     </div>
                     <p>
-                        $\pi_k$：混合比（$\sum_k \pi_k = 1$、$\pi_k \geq 0$）<br>
-                        $\mathcal{N}(\boldsymbol{x}; \boldsymbol{\mu}_k, \Sigma_k)$：平均 $\boldsymbol{\mu}_k$、分散共分散行列 $\Sigma_k$ の多変量正規分布
+                        $\\pi_k$：混合比（$\\sum_k \\pi_k = 1$、$\\pi_k \\geq 0$）<br>
+                        $\\mathcal{N}(\\boldsymbol{x}; \\boldsymbol{\\mu}_k, \\Sigma_k)$：平均 $\\boldsymbol{\\mu}_k$、分散共分散行列 $\\Sigma_k$ の多変量正規分布
                     </p>
 
                     <h3>EMアルゴリズム（期待値最大化法）</h3>
                     <p>
-                        対数尤度 $\log p(\boldsymbol{x}_1, \ldots, \boldsymbol{x}_n)$ を最大化するパラメータを反復的に推定：
+                        対数尤度 $\\log p(\\boldsymbol{x}_1, \\ldots, \\boldsymbol{x}_n)$ を最大化するパラメータを反復的に推定：
                     </p>
                     <div class="concept-box">
                         <p class="box-title"><i class="fas fa-sync-alt"></i> EMの2ステップ</p>
                         <p>
                             <strong>E-ステップ（期待値ステップ）：</strong>
-                            現在のパラメータ $\{\pi_k, \boldsymbol{\mu}_k, \Sigma_k\}$ を使って、
-                            各サンプル $\boldsymbol{x}_i$ がクラスター $k$ に属する事後確率（責任度）を計算：
+                            現在のパラメータ $\\{\\pi_k, \\boldsymbol{\\mu}_k, \\Sigma_k\\}$ を使って、
+                            各サンプル $\\boldsymbol{x}_i$ がクラスター $k$ に属する事後確率（責任度）を計算：
                         </p>
                         <div class="formula-block">
-                            $$r_{ik} = \frac{\pi_k \mathcal{N}(\boldsymbol{x}_i; \boldsymbol{\mu}_k, \Sigma_k)}{\sum_{j=1}^{K}\pi_j \mathcal{N}(\boldsymbol{x}_i; \boldsymbol{\mu}_j, \Sigma_j)}$$
+                            $$r_{ik} = \\frac{\\pi_k \\mathcal{N}(\\boldsymbol{x}_i; \\boldsymbol{\\mu}_k, \\Sigma_k)}{\\sum_{j=1}^{K}\\pi_j \\mathcal{N}(\\boldsymbol{x}_i; \\boldsymbol{\\mu}_j, \\Sigma_j)}$$
                         </div>
                         <p>
                             <strong>M-ステップ（最大化ステップ）：</strong>
                             責任度 $r_{ik}$ を使って、加重平均でパラメータを更新：
                         </p>
                         <div class="formula-block">
-                            $$\hat{\pi}_k = \frac{\sum_i r_{ik}}{n}, \quad
-                            \hat{\boldsymbol{\mu}}_k = \frac{\sum_i r_{ik}\boldsymbol{x}_i}{\sum_i r_{ik}}, \quad
-                            \hat{\Sigma}_k = \frac{\sum_i r_{ik}(\boldsymbol{x}_i-\hat{\boldsymbol{\mu}}_k)(\boldsymbol{x}_i-\hat{\boldsymbol{\mu}}_k)^T}{\sum_i r_{ik}}$$
+                            $$\\hat{\\pi}_k = \\frac{\\sum_i r_{ik}}{n}, \\quad
+                            \\hat{\\boldsymbol{\\mu}}_k = \\frac{\\sum_i r_{ik}\\boldsymbol{x}_i}{\\sum_i r_{ik}}, \\quad
+                            \\hat{\\Sigma}_k = \\frac{\\sum_i r_{ik}(\\boldsymbol{x}_i-\\hat{\\boldsymbol{\\mu}}_k)(\\boldsymbol{x}_i-\\hat{\\boldsymbol{\\mu}}_k)^T}{\\sum_i r_{ik}}$$
                         </div>
                         <p>E-M を繰り返すことで対数尤度は単調増加し、局所最大解に収束する。</p>
                     </div>
 
                     <h3>k-meansとEMの関係</h3>
                     <p>
-                        $\Sigma_k = \sigma^2 I$（等分散球形）かつ $r_{ik}$ を「最大の事後確率を持つクラスターに1、他は0」と
+                        $\\Sigma_k = \\sigma^2 I$（等分散球形）かつ $r_{ik}$ を「最大の事後確率を持つクラスターに1、他は0」と
                         ハード割り当てに近似したものが k-means と等価になる。
                         つまり k-means は GMM-EM の特殊ケースと見なせる。
                     </p>
@@ -346,27 +301,27 @@
 
                     <h3>ミンコフスキー距離</h3>
                     <div class="formula-block">
-                        $$d_m(\boldsymbol{x}, \boldsymbol{y}) = \left(\sum_{k=1}^{p}|x_k - y_k|^m\right)^{1/m}$$
+                        $$d_m(\\boldsymbol{x}, \\boldsymbol{y}) = \\left(\\sum_{k=1}^{p}|x_k - y_k|^m\\right)^{1/m}$$
                     </div>
 
                     <h3>マハラノビス距離</h3>
                     <div class="formula-block">
-                        $$d_M(\boldsymbol{x}, \boldsymbol{y}) = \sqrt{(\boldsymbol{x}-\boldsymbol{y})^T\Sigma^{-1}(\boldsymbol{x}-\boldsymbol{y})}$$
+                        $$d_M(\\boldsymbol{x}, \\boldsymbol{y}) = \\sqrt{(\\boldsymbol{x}-\\boldsymbol{y})^T\\Sigma^{-1}(\\boldsymbol{x}-\\boldsymbol{y})}$$
                     </div>
 
                     <h3>ウォード法の統合コスト</h3>
                     <div class="formula-block">
-                        $$\Delta W = \frac{n_A n_B}{n_A + n_B}\|\bar{\boldsymbol{x}}_A - \bar{\boldsymbol{x}}_B\|^2$$
+                        $$\\Delta W = \\frac{n_A n_B}{n_A + n_B}\\|\\bar{\\boldsymbol{x}}_A - \\bar{\\boldsymbol{x}}_B\\|^2$$
                     </div>
 
                     <h3>k-meansの目的関数</h3>
                     <div class="formula-block">
-                        $$J = \sum_{k=1}^{K}\sum_{\boldsymbol{x}_i \in C_k}\|\boldsymbol{x}_i - \boldsymbol{\mu}_k\|^2$$
+                        $$J = \\sum_{k=1}^{K}\\sum_{\\boldsymbol{x}_i \\in C_k}\\|\\boldsymbol{x}_i - \\boldsymbol{\\mu}_k\\|^2$$
                     </div>
 
                     <h3>混合正規分布の責任度（EMのEステップ）</h3>
                     <div class="formula-block">
-                        $$r_{ik} = \frac{\pi_k \mathcal{N}(\boldsymbol{x}_i; \boldsymbol{\mu}_k, \Sigma_k)}{\sum_j \pi_j \mathcal{N}(\boldsymbol{x}_i; \boldsymbol{\mu}_j, \Sigma_j)}$$
+                        $$r_{ik} = \\frac{\\pi_k \\mathcal{N}(\\boldsymbol{x}_i; \\boldsymbol{\\mu}_k, \\Sigma_k)}{\\sum_j \\pi_j \\mathcal{N}(\\boldsymbol{x}_i; \\boldsymbol{\\mu}_j, \\Sigma_j)}$$
                     </div>
                 </section>
 
@@ -388,11 +343,11 @@
                             <strong>単連結法：</strong>最小距離の組を統合 → A,B を統合（距離1）。
                             次に C,D を統合（距離1.5）。
                             次に {A,B} と C の最近傍距離を計算——単連結なので
-                            $d(\{A,B\}, C) = \min(d(A,C), d(B,C))$。
+                            $d(\\{A,B\\}, C) = \\min(d(A,C), d(B,C))$。
                         </p>
                         <p>
-                            <strong>ウォード法：</strong>統合コスト $\Delta W = \dfrac{n_A n_B}{n_A+n_B}\|...\|^2$ が最小の組を選ぶ。
-                            A,B の統合コスト $= \dfrac{1 \cdot 1}{2} \times 1^2 = 0.5$（最小）なので同じく A,B から統合。
+                            <strong>ウォード法：</strong>統合コスト $\\Delta W = \\dfrac{n_A n_B}{n_A+n_B}\\|...\\|^2$ が最小の組を選ぶ。
+                            A,B の統合コスト $= \\dfrac{1 \\cdot 1}{2} \\times 1^2 = 0.5$（最小）なので同じく A,B から統合。
                         </p>
                         <p>両手法とも第1統合は A,B だが、その後の統合順序はクラスター間距離の定義で異なる。</p>
                     </div>
@@ -401,8 +356,8 @@
                     <div class="example-block">
                         <span class="prob-badge badge-q">問題</span>
                         <p>
-                            1次元データ $\{1, 2, 8, 9, 25\}$ を $k=2$ でk-meansする。
-                            初期重心を $\mu_1=1, \mu_2=25$ とする。
+                            1次元データ $\\{1, 2, 8, 9, 25\\}$ を $k=2$ でk-meansする。
+                            初期重心を $\\mu_1=1, \\mu_2=25$ とする。
                             1回目の割り当てとその後の更新結果を示せ。
                         </p>
                     </div>
@@ -422,13 +377,13 @@
                             </tbody>
                         </table>
                         <p>
-                            <strong>重心更新：</strong>$\mu_1 = (1+2+8+9)/4 = 5$、$\mu_2 = 25$
+                            <strong>重心更新：</strong>$\\mu_1 = (1+2+8+9)/4 = 5$、$\\mu_2 = 25$
                         </p>
                         <p>
                             <strong>第2回割り当て：</strong>$|8-5|=3 &lt; |8-25|=17$ → $C_1$；$|9-5|=4 &lt; |9-25|=16$ → $C_1$。割り当て変化なし。
                         </p>
                         <p>
-                            <strong>収束</strong>：$C_1=\{1,2,8,9\}$（重心5）、$C_2=\{25\}$（重心25）。
+                            <strong>収束</strong>：$C_1=\\{1,2,8,9\\}$（重心5）、$C_2=\\{25\\}$（重心25）。
                         </p>
                     </div>
 
@@ -449,7 +404,7 @@
                         </ul>
                         <p><strong>解決策：</strong></p>
                         <ul>
-                            <li>各変量を標準化 $z = (x-\bar{x})/\sigma$ にしてからユークリッド距離を使う</li>
+                            <li>各変量を標準化 $z = (x-\\bar{x})/\\sigma$ にしてからユークリッド距離を使う</li>
                             <li>または標本共分散行列 $S$ を使ったマハラノビス距離を採用する（相関も補正できる）</li>
                         </ul>
                     </div>
@@ -499,4 +454,10 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
         onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 </body>
-</html>
+</html>"""
+
+new_content = header + new_main
+with open(filepath, 'w') as f:
+    f.write(new_content)
+lines = new_content.count('\n') + 1
+print('Done. Lines:', lines)

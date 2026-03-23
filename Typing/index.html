@@ -73,6 +73,24 @@
           </div>
           <span class="mode-card-badge">500問</span>
         </div>
+        <div class="mode-card" id="mode-card-yojijukugo">
+          <div class="mode-card-icon"><i class="fas fa-font"></i></div>
+          <div class="mode-card-body">
+            <h3>四字熟語モード</h3>
+            <p>日本の四字熟語<strong>88</strong>問をランダム出題。
+              四字熟語と意味の2フェーズで練習。</p>
+          </div>
+          <span class="mode-card-badge">88問</span>
+        </div>
+        <div class="mode-card" id="mode-card-idioms">
+          <div class="mode-card-icon"><i class="fas fa-comment-dots"></i></div>
+          <div class="mode-card-body">
+            <h3>慣用句モード</h3>
+            <p>日本語の慣用句<strong>75</strong>問をランダム出題。
+              慣用句と意味の2フェーズで練習。</p>
+          </div>
+          <span class="mode-card-badge">75問</span>
+        </div>
       </div>
 
       <div class="how-to">
@@ -83,6 +101,41 @@
           <li><span class="step-num">3</span>表示されたひらがなをローマ字で入力</li>
           <li><span class="step-num">4</span>10問終了後、速度・正確率の結果を確認</li>
         </ol>
+      </div>
+
+      <!-- サウンド設定 -->
+      <div class="sound-settings">
+        <h2><i class="fas fa-volume-up"></i> キー音設定</h2>
+        <div class="sound-type-grid" id="sound-type-grid">
+          <button class="sound-type-btn" data-type="click">
+            <span class="sound-type-icon">🖱️</span>
+            <span class="sound-type-name">クリック</span>
+          </button>
+          <button class="sound-type-btn" data-type="mechanical">
+            <span class="sound-type-icon">⌨️</span>
+            <span class="sound-type-name">メカニカル</span>
+          </button>
+          <button class="sound-type-btn" data-type="soft">
+            <span class="sound-type-icon">🔉</span>
+            <span class="sound-type-name">ソフト</span>
+          </button>
+          <button class="sound-type-btn" data-type="pop">
+            <span class="sound-type-icon">💧</span>
+            <span class="sound-type-name">ポップ</span>
+          </button>
+          <button class="sound-type-btn" data-type="piano">
+            <span class="sound-type-icon">🎹</span>
+            <span class="sound-type-name">ピアノ</span>
+          </button>
+          <button class="sound-type-btn" data-type="retro">
+            <span class="sound-type-icon">🕹️</span>
+            <span class="sound-type-name">レトロ</span>
+          </button>
+          <button class="sound-type-btn" data-type="off">
+            <span class="sound-type-icon">🔕</span>
+            <span class="sound-type-name">消音</span>
+          </button>
+        </div>
       </div>
     </section>
 
@@ -100,6 +153,7 @@
           <div id="progress-bar-fill" class="progress-bar-fill"></div>
         </div>
         <span id="progress-text" class="progress-text">1 / 10</span>
+        <button id="sound-indicator" class="sound-indicator" title="クリックで音を切り替え"></button>
       </div>
 
       <!-- スペースキー案内 -->

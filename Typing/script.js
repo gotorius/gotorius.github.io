@@ -27,6 +27,7 @@ const soundManager = new SoundManager();
 document.addEventListener("DOMContentLoaded", () => {
   renderKeyboard("keyboard-container");
   initTheme();
+  initSoundUI();
   showHome();
   setupEventListeners();
 });
@@ -57,6 +58,29 @@ function updateThemeIcon() {
     : '<i class="fas fa-sun"></i>';
 }
 
+// ===== サウンドUI管理 =====
+function initSoundUI() {
+  updateSoundUI();
+}
+
+function updateSoundUI() {
+  const current = soundManager.soundType;
+  const info = SOUND_TYPES.find(t => t.id === current) || SOUND_TYPES[0];
+
+  // ホーム画面のボタン
+  document.querySelectorAll(".sound-type-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.type === current);
+  });
+
+  // タイピング中インジケーター
+  const indicator = document.getElementById("sound-indicator");
+  if (indicator) {
+    indicator.textContent = `${info.icon} ${info.label}`;
+    indicator.title = `キー音: ${info.label}（クリックで切替）`;
+  }
+}
+
+
 function setupEventListeners() {
   // ハンバーガーメニュー
   const navToggle = document.querySelector('.nav-toggle');
@@ -79,6 +103,26 @@ function setupEventListeners() {
       const enabled = soundManager.toggle();
       soundToggle.innerHTML = enabled ? '<i class="fas fa-volume-up"></i> ON' : '<i class="fas fa-volume-mute"></i> OFF';
       soundToggle.classList.toggle("sound-off", !enabled);
+    });
+  }
+
+  // 音種ボタン（ホーム画面）
+  document.querySelectorAll(".sound-type-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      soundManager.setType(btn.dataset.type);
+      updateSoundUI();
+      // プレビュー再生（消音以外）
+      if (btn.dataset.type !== "off") soundManager.playCorrect();
+    });
+  });
+
+  // タイピング中音インジケーター（クリックで次の音種へ）
+  const soundIndicator = document.getElementById("sound-indicator");
+  if (soundIndicator) {
+    soundIndicator.addEventListener("click", () => {
+      const next = soundManager.cycleType();
+      updateSoundUI();
+      if (next.id !== "off") soundManager.playCorrect();
     });
   }
 
@@ -123,6 +167,12 @@ function setupEventListeners() {
   });
   document.getElementById("mode-card-quotes").addEventListener("click", () => {
     prepareGame("quotes");
+  });
+  document.getElementById("mode-card-yojijukugo").addEventListener("click", () => {
+    prepareGame("yojijukugo");
+  });
+  document.getElementById("mode-card-idioms").addEventListener("click", () => {
+    prepareGame("idioms");
   });
 
   // リトライボタン
@@ -245,7 +295,13 @@ function loadCurrentQuestion() {
   // モード別のラベル
   if (currentMode === "quotes") {
     document.getElementById("question-label").textContent =
-      isReading ? "💬 名言" : "💬 名言の意味";
+      isReading ? "💬 名言" : "💬 名言の人物";
+  } else if (currentMode === "yojijukugo") {
+    document.getElementById("question-label").textContent =
+      isReading ? "🈴 四字熟語" : "🈴 四字熟語の意味";
+  } else if (currentMode === "idioms") {
+    document.getElementById("question-label").textContent =
+      isReading ? "💡 慣用句" : "💡 慣用句の意味";
   } else {
     document.getElementById("question-label").textContent =
       isReading ? "📖 ことわざ" : "📖 ことわざの意味";

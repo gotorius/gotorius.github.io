@@ -52,75 +52,396 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
-
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
-                    <p>分割表（contingency table）は、複数の質的変量に関するデータの頻度を集計した表である。本章では、2×2分割表から一般の I×J 分割表、さらに3元分割表へと拡張しながら、オッズ比、適合度カイ二乗検定、尤度比検定、フィッシャー正確検定を学ぶ。</p>
-                    <p>さらに、対数線形モデル・階層モデル・グラフィカルモデルを用いた分割表の体系的なモデリング手法を扱う。グラフィカルモデルでは、無向グラフのクリーク構造から変数間の条件付き独立性を視覚的に読み取ることができる。</p>
-                </section>
-
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
-                    <div class="concept-list">
-                        <h3>2群比較と2×2分割表</h3>
-                        <ul>
-                            <li><strong>独立二項分布モデル</strong>：$X_i \sim \text{Bin}(n_i, \theta_i)$, $i=1,2$, $X_1$ と $X_2$ は独立</li>
-                            <li><strong>オッズ比</strong>（odds ratio）：$\psi = \frac{\theta_1/(1-\theta_1)}{\theta_2/(1-\theta_2)}$</li>
-                            <li><strong>相対リスク</strong>（relative risk）：$\theta_1/\theta_2$。希少事象では $\psi \approx \theta_1/\theta_2$</li>
-                            <li><strong>前向き研究</strong>（prospective study）と<strong>後向き研究</strong>（retrospective study）：オッズ比は両方で一致</li>
-                        </ul>
-                        <h3>検定手法</h3>
-                        <ul>
-                            <li><strong>適合度カイ二乗検定</strong>：$\chi^2 = \sum \frac{(x_{ij} - m_{ij})^2}{m_{ij}}$（漸近的に $\chi^2$ 分布）</li>
-                            <li><strong>尤度比検定</strong>（逸脱度）：$G^2 = 2\sum x_{ij}\log\frac{x_{ij}}{m_{ij}}$</li>
-                            <li><strong>フィッシャー正確検定</strong>：超幾何分布に基づく条件付き検定（漸近論を使わない）</li>
-                        </ul>
-                        <h3>対数線形モデルと3元分割表</h3>
-                        <ul>
-                            <li><strong>対数線形モデル</strong>：$\log\theta_{ij} = \mu + \alpha_i + \beta_j + \gamma_{ij}$</li>
-                            <li><strong>完全独立</strong> $A \perp B \perp C$：$\theta_{ijk} = \theta_{i..}\theta_{.j.}\theta_{..k}$</li>
-                            <li><strong>周辺独立</strong> $A \perp (B,C)$：$\theta_{ijk} = \theta_{i..}\theta_{.jk}$</li>
-                            <li><strong>条件付き独立</strong> $A \perp B | C$：$\theta_{ijk} = \theta_{i.k}\theta_{.jk}/\theta_{..k}$</li>
-                            <li><strong>階層モデル</strong>：交互作用を含むなら低次の項もすべて含む</li>
-                            <li><strong>生成集合</strong>：極大な交互作用の項で階層モデルを表記（例：AC/BC）</li>
-                        </ul>
-                        <h3>グラフィカルモデル</h3>
-                        <ul>
-                            <li><strong>クリーク</strong>（clique）：極大な完全部分グラフ</li>
-                            <li>クリークの集合が生成集合となる階層モデル</li>
-                            <li><strong>性質1</strong>：非連結 → 独立</li>
-                            <li><strong>性質2</strong>：辺なし → 他の全因子で条件付けて条件付き独立</li>
-                            <li><strong>性質3</strong>：$S$ で分離 → $S$ で条件付けて条件付き独立</li>
-                        </ul>
+            <div class="chapter-layout">
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i> 目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#2group">2群比較と2×2分割表</a></li>
+                            <li><a href="#oddsratio">オッズ比と研究デザイン</a></li>
+                            <li><a href="#tests">検定手法</a></li>
+                            <li><a href="#ij">I×J分割表と独立性</a></li>
+                            <li><a href="#loglinear">対数線形モデルと3元分割表</a></li>
+                            <li><a href="#graphical">グラフィカルモデル</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
                     </div>
+                </aside>
+                <div class="chapter-content">
+
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> はじめに</h2>
+
+                    <div class="concept-box">
+                        <h3><i class="fas fa-lightbulb"></i> この章で学ぶこと</h3>
+                        <p>これまでの章では、量的データ（連続値）に対する統計手法を学んできた。しかし現実には「病気あり／なし」「商品の好み（A, B, C）」「薬の効果（あり、なし）」のような<strong>質的データ（カテゴリカルデータ）</strong>も非常に多い。</p>
+                        <p>この章では、複数の質的変量のデータを<strong>分割表（contingency table）</strong>に集約し、変量間の関連を分析する手法を学ぶ。特に2×2分割表から出発し、一般のI×J分割表、3元分割表（3因子）へと拡張する。</p>
+                    </div>
+
+                    <h3>なぜ分割表が重要なのか</h3>
+                    <p>分割表の分析は、医学・疫学・社会科学など広い分野で不可欠なツールである。具体的な応用例を見てみよう：</p>
+
+                    <table style="width:100%; border-collapse:collapse; margin:1em 0;">
+                        <thead>
+                            <tr style="background:#f0f4ff;">
+                                <th style="border:1px solid #ccc; padding:8px;">分野</th>
+                                <th style="border:1px solid #ccc; padding:8px;">因子A（行）</th>
+                                <th style="border:1px solid #ccc; padding:8px;">因子B（列）</th>
+                                <th style="border:1px solid #ccc; padding:8px;">興味のある問い</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">医学</td>
+                                <td style="border:1px solid #ccc; padding:8px;">新薬 vs 従来薬</td>
+                                <td style="border:1px solid #ccc; padding:8px;">効果あり vs なし</td>
+                                <td style="border:1px solid #ccc; padding:8px;">薬の種類と治療効果は関連するか？</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">疫学</td>
+                                <td style="border:1px solid #ccc; padding:8px;">喫煙習慣</td>
+                                <td style="border:1px solid #ccc; padding:8px;">肺がん罹患</td>
+                                <td style="border:1px solid #ccc; padding:8px;">喫煙は肺がんリスクを高めるか？</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">マーケティング</td>
+                                <td style="border:1px solid #ccc; padding:8px;">年齢層</td>
+                                <td style="border:1px solid #ccc; padding:8px;">商品の選好</td>
+                                <td style="border:1px solid #ccc; padding:8px;">年齢層によって好む商品は異なるか？</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">社会学</td>
+                                <td style="border:1px solid #ccc; padding:8px;">学歴</td>
+                                <td style="border:1px solid #ccc; padding:8px;">政党支持</td>
+                                <td style="border:1px solid #ccc; padding:8px;">学歴と政治的選好は独立か？</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>この章の全体像</h3>
+                    <p>分割表の分析における主要なツールを整理すると、次のようになる：</p>
+
+                    <table style="width:100%; border-collapse:collapse; margin:1em 0;">
+                        <thead>
+                            <tr style="background:#f0f4ff;">
+                                <th style="border:1px solid #ccc; padding:8px;">トピック</th>
+                                <th style="border:1px solid #ccc; padding:8px;">概要</th>
+                                <th style="border:1px solid #ccc; padding:8px;">この章の節</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">2群比較モデル</td>
+                                <td style="border:1px solid #ccc; padding:8px;">独立二項分布、オッズ比の推定</td>
+                                <td style="border:1px solid #ccc; padding:8px;">§1〜§2</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">統計的検定</td>
+                                <td style="border:1px solid #ccc; padding:8px;">χ²検定、尤度比検定、フィッシャー正確検定</td>
+                                <td style="border:1px solid #ccc; padding:8px;">§3</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">一般のI×J表</td>
+                                <td style="border:1px solid #ccc; padding:8px;">多項分布、独立性検定</td>
+                                <td style="border:1px solid #ccc; padding:8px;">§4</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">対数線形モデル</td>
+                                <td style="border:1px solid #ccc; padding:8px;">3元分割表、条件付き独立</td>
+                                <td style="border:1px solid #ccc; padding:8px;">§5</td>
+                            </tr>
+                            <tr>
+                                <td style="border:1px solid #ccc; padding:8px;">グラフィカルモデル</td>
+                                <td style="border:1px solid #ccc; padding:8px;">無向グラフ、クリーク、分離</td>
+                                <td style="border:1px solid #ccc; padding:8px;">§6</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>分割表の基本的な構造</h3>
+                    <p>2つの質的変量（因子）A（$I$ 水準）と B（$J$ 水準）に対して、データを集計した表が<strong>分割表</strong>（contingency table）である。因子Aの第 $i$ 水準、因子Bの第 $j$ 水準に入る観測個数を $x_{ij}$ と書く。</p>
+
+                    <div class="formula-block">
+                        <p><strong>I×J分割表の記法</strong></p>
+                        <p>$x_{ij}$：第$(i,j)$セルの頻度、$x_{i.} = \sum_j x_{ij}$：行和、$x_{.j} = \sum_i x_{ij}$：列和、$x_{..} = \sum_{i,j} x_{ij}$：総度数</p>
+                    </div>
+
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                <section class="content-section section-anchor" id="2group">
+                    <h2><i class="fas fa-users"></i> 2群比較と2×2分割表</h2>
+
+                    <h3>2群比較の統計モデル</h3>
+                    <p>最も基本的な分割表の状況として、2つの群（A₁ vs A₂）での応答（B₁：有/ B₂：無）の比較を考える。</p>
+                    <p>たとえば新薬（A₁）と従来薬（A₂）の各群から、$n_1$人、$n_2$人の患者を観察し、改善（B₁）の人数 $X_1, X_2$ をカウントする。自然な統計モデルは：</p>
+
                     <div class="formula-block">
-                        <p><strong>当てはめ値（一様性・独立性の帰無仮説）</strong></p>
+                        <p><strong>独立二項分布モデル（2群比較）</strong></p>
+                        $$X_i \sim \text{Bin}(n_i, \theta_i), \quad i=1,2, \quad X_1 \perp X_2$$
+                        <p>$\theta_i = P(B_1 | A_i)$：群 $i$ での $B_1$ の確率（生起確率）</p>
+                        <p>パラメータ $\theta_i$ の最尤推定量（同時に不偏推定量）：</p>
+                        $$\hat{\theta}_i = \frac{X_i}{n_i} = \frac{x_i}{n_i}, \quad i=1,2$$
+                    </div>
+
+                    <p>2群比較の帰無仮説は $H_0: \theta_1 = \theta_2$（一様性の仮説）であり、対立仮説は $H_1: \theta_1 \neq \theta_2$（両側）または片側検定となる。</p>
+
+                    <h3>当てはめ値の計算</h3>
+                    <p>検定のためには帰無仮説のもとでの「当てはめ値」（fitted value）が必要である。$H_0: \theta_1 = \theta_2 = \theta$ のもとで最尤推定量は：</p>
+                    $$\hat{\theta} = \frac{x_1 + x_2}{n_1 + n_2} = \frac{x_{.1}}{x_{..}}$$
+                    <p>このとき当てはめ値は：</p>
+
+                    <div class="formula-block">
+                        <p><strong>独立性・一様性の帰無仮説のもとでの当てはめ値</strong></p>
+                        $$m_{ij} = \frac{x_{i.} \cdot x_{.j}}{x_{..}}$$
+                        <p>直感的な解釈：「行和 × 列和 ÷ 総度数」。この形は、多項分布モデルや独立ポアソン分布モデルなど、いずれの設定でも同じ形となる（重要）。</p>
+                    </div>
+
+                </section>
+
+                <section class="content-section section-anchor" id="oddsratio">
+                    <h2><i class="fas fa-balance-scale"></i> オッズ比と研究デザイン</h2>
+
+                    <h3>オッズとオッズ比</h3>
+                    <p>2群の差を測る指標として、$\theta_1 - \theta_2$（差）や $\theta_1/\theta_2$（相対リスク）もあるが、<strong>オッズ比</strong>が特に重要な理由がある。</p>
+
+                    <div class="formula-block">
+                        <p><strong>オッズとオッズ比</strong></p>
+                        <p><strong>オッズ</strong>（odds）：$\frac{\theta_i}{1-\theta_i}$（「起こる確率」対「起こらない確率」の比）</p>
+                        <p><strong>オッズ比</strong>（odds ratio, OR）：</p>
+                        $$\psi = \frac{\theta_1/(1-\theta_1)}{\theta_2/(1-\theta_2)}$$
+                        <p>$\psi = 1$：2群で差なし、$\psi > 1$：群1の方がリスク大、$\psi < 1$：群1の方がリスク小</p>
+                        <p>標本オッズ比（最尤推定量）：</p>
+                        $$\widehat{OR} = \frac{x_{11}x_{22}}{x_{12}x_{21}}$$
+                        <p>対数オッズ比の近似標準誤差：</p>
+                        $$\widehat{\text{se}}(\log\widehat{OR}) \approx \sqrt{\frac{1}{x_{11}}+\frac{1}{x_{12}}+\frac{1}{x_{21}}+\frac{1}{x_{22}}}$$
+                    </div>
+
+                    <h3>前向き研究と後向き研究</h3>
+                    <p>医学・疫学では、オッズ比を特に重要視する理由がある。それは<strong>研究デザインに依存しない</strong>という性質である。</p>
+
+                    <div class="concept-box">
+                        <h3><i class="fas fa-flask"></i> 2つの研究デザインの違い</h3>
+                        <table style="width:100%; border-collapse:collapse; margin:0.5em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="border:1px solid #ccc; padding:8px;">研究タイプ</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">方法</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">固定されるもの</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">推定できるもの</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:8px;"><strong>前向き研究</strong><br>（コホート研究）</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">喫煙者 $n_1$ 人、非喫煙者 $n_2$ 人を用意し、将来の罹患を追跡</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">行和（暴露群のサイズ）</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">$\theta_i = P(B_1|A_i)$（罹患確率）</td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:8px;"><strong>後向き研究</strong><br>（患者対照研究）</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">がん患者 $m_1$ 人、健常者 $m_2$ 人を集め、過去の喫煙歴を調査</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">列和（結果群のサイズ）</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">$\pi_i = P(A_1|B_i)$（喫煙率）</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>後向き研究では $\theta_i$ を直接推定できない。しかし、ベイズの定理を用いると、後向き研究のオッズ比は前向き研究のオッズ比と<strong>一致する</strong>：</p>
+                        $$\frac{\pi_1/(1-\pi_1)}{\pi_2/(1-\pi_2)} = \frac{\theta_1/(1-\theta_1)}{\theta_2/(1-\theta_2)} = \psi$$
+                        <p>つまり、後向き研究のデータからも、真に知りたいオッズ比 $\psi$ を推定できる。</p>
+                    </div>
+
+                    <h3>希少事象と相対リスク</h3>
+                    <p>がんのような希少な疾患（$\theta_1, \theta_2 \ll 1$）では、オッズ $\approx$ 確率 となるため：</p>
+                    $$\psi = \frac{\theta_1/(1-\theta_1)}{\theta_2/(1-\theta_2)} \approx \frac{\theta_1}{\theta_2} = \text{相対リスク（RR）}$$
+                    <p>したがって希少事象では、オッズ比は<strong>相対リスクの良い近似値</strong>として使える。</p>
+
+                </section>
+
+                <section class="content-section section-anchor" id="tests">
+                    <h2><i class="fas fa-vial"></i> 検定手法</h2>
+
+                    <h3>適合度カイ二乗検定（ピアソンカイ二乗検定）</h3>
+                    <p>帰無仮説 $H_0: \theta_1 = \theta_2$（一様性または独立性）のもとで、観測値 $x_{ij}$ と当てはめ値 $m_{ij}$ のずれを測る検定統計量：</p>
+
+                    <div class="formula-block">
+                        <p><strong>適合度カイ二乗統計量</strong></p>
+                        $$\chi^2 = \sum_{i}\sum_{j} \frac{(x_{ij} - m_{ij})^2}{m_{ij}}$$
+                        <p>帰無仮説のもとで漸近的に $\chi^2(1)$ 分布（2×2分割表の場合）に従う。</p>
+                        <p>2×2分割表については次の式変形も よく使われる：</p>
+                        $$\chi^2 = \frac{x_{..}(x_{11}x_{22} - x_{12}x_{21})^2}{x_{1.}x_{2.}x_{.1}x_{.2}}$$
+                    </div>
+
+                    <h3>尤度比検定（逸脱度）</h3>
+                    <p>第12章で学んだ対数尤度比検定をここでも適用できる。帰無仮説のもとと対立仮説のもとでの最尤推定量を代入した対数尤度の比の2倍が<strong>逸脱度</strong>（deviance）：</p>
+
+                    <div class="formula-block">
+                        <p><strong>逸脱度（尤度比検定統計量）</strong></p>
+                        $$G^2 = 2\log\Lambda = 2\sum_{i}\sum_{j} x_{ij}\log\frac{x_{ij}}{m_{ij}}$$
+                        <p>帰無仮説のもとで漸近的に $\chi^2(1)$ 分布に従う（2×2の場合）。$G^2$ は加法性を持つため、モデルの比較・分解が容易である。</p>
+                    </div>
+
+                    <h3>フィッシャーの正確検定</h3>
+                    <p>カイ二乗検定や尤度比検定は漸近分布を用いるため、サンプルサイズが小さいと正確でない。<strong>フィッシャーの正確検定</strong>は漸近論を使わず、超幾何分布に基づく。</p>
+
+                    <div class="formula-block">
+                        <p><strong>フィッシャーの正確検定</strong></p>
+                        <p>行和 $x_{1.}, x_{2.}$ と列和 $x_{.1}, x_{.2}$（すべての周辺和）を固定したとき、$X_{11}$ の条件付き分布は<strong>超幾何分布</strong>：</p>
+                        $$P(X_{11} = k) = \frac{\binom{x_{.1}}{k}\binom{x_{.2}}{x_{1.}-k}}{\binom{x_{..}}{x_{1.}}}$$
+                        <p>片側仮説 $H_1: \psi > 1$ に対するP値：$P(X_{11} \geq x_{11})$。この検定は、サンプルサイズが小さいときや、当てはめ値が5未満のセルがある場合に特に有用。</p>
+                    </div>
+
+                    <p>フィッシャー正確検定の重要な特徴は、2群比較・多項分布モデル・独立ポアソン分布モデルのいずれの設定でも、同じ検定式が得られることである（条件付き分布が一致する）。</p>
+
+                </section>
+
+                <section class="content-section section-anchor" id="ij">
+                    <h2><i class="fas fa-table"></i> I×J分割表と独立性</h2>
+
+                    <h3>一般のI×J分割表</h3>
+                    <p>2×2分割表を一般化すると、因子Aが $I$ 水準、因子Bが $J$ 水準のI×J分割表となる。</p>
+                    <p>自然な統計モデルは<strong>多項分布</strong>（multinomial distribution）：観測値 $(x_{11}, x_{12}, \ldots, x_{IJ})$ の同時分布が多項分布に従う。総度数 $x_{..} = n$ を固定したとき：</p>
+
+                    <div class="formula-block">
+                        <p><strong>独立性の仮説（I×J分割表）</strong></p>
+                        $$H_0: \theta_{ij} = \theta_{i.} \cdot \theta_{.j} \quad \text{（全ての } i,j \text{ に対して）}$$
+                        <p>当てはめ値：$m_{ij} = x_{i.}x_{.j}/x_{..}$（2×2と同じ形）</p>
+                        <p>カイ二乗統計量の自由度：$(I-1)(J-1)$</p>
+                        <p>逸脱度 $G^2$ も同じ自由度 $(I-1)(J-1)$ に従う。</p>
+                    </div>
+
+                </section>
+
+                <section class="content-section section-anchor" id="loglinear">
+                    <h2><i class="fas fa-project-diagram"></i> 対数線形モデルと3元分割表</h2>
+
+                    <h3>対数線形モデルとは</h3>
+                    <p>ポアソン分布モデルのもとで、2×2分割表の期待値を対数スケールでモデル化したものを<strong>対数線形モデル</strong>（log-linear model）という。</p>
+
+                    <div class="formula-block">
+                        <p><strong>2×2分割表の飽和対数線形モデル</strong></p>
+                        $$\log\theta_{ij} = \mu + \alpha_i + \beta_j + \gamma_{ij}, \quad \sum_i\alpha_i = \sum_j\beta_j = \sum_i\gamma_{ij} = \sum_j\gamma_{ij} = 0$$
+                        <p>$\mu$：全体平均効果、$\alpha_i$：因子Aの主効果、$\beta_j$：因子Bの主効果、$\gamma_{ij}$：A×B交互作用</p>
+                        <p>独立性仮説（交互作用なし）は $H_0: \gamma_{ij} = 0$（主効果モデル）と等価。</p>
+                    </div>
+
+                    <h3>3元分割表と独立性の種類</h3>
+                    <p>3つの因子A, B, Cがある場合、独立性の概念が複数ある。</p>
+
+                    <div class="concept-box">
+                        <h3><i class="fas fa-sitemap"></i> 3元分割表における独立性の種類</h3>
+                        <table style="width:100%; border-collapse:collapse; margin:0.5em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="border:1px solid #ccc; padding:8px;">名称</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">意味</th>
+                                    <th style="border:1px solid #ccc; padding:8px;">成立条件</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:8px;"><strong>完全独立</strong><br>$A \perp B \perp C$</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">3因子すべて独立</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">$\theta_{ijk} = \theta_{i..}\theta_{.j.}\theta_{..k}$</td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:8px;"><strong>周辺独立</strong><br>$A \perp (B,C)$</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">AとBC全体が独立</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">$\theta_{ijk} = \theta_{i..}\theta_{.jk}$</td>
+                                </tr>
+                                <tr>
+                                    <td style="border:1px solid #ccc; padding:8px;"><strong>条件付き独立</strong><br>$A \perp B | C$</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">Cを与えたとき、AとBが独立</td>
+                                    <td style="border:1px solid #ccc; padding:8px;">$\theta_{ijk} = \theta_{i.k}\theta_{.jk}/\theta_{..k}$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <p>条件付き独立は「見せかけの相関」を検出するうえで重要である。たとえば、A（喫煙）とB（がん）が強く相関していても、C（年齢）で条件付けると独立になるかもしれない（年齢が交絡因子の場合）。</p>
+
+                    <h3>階層モデルと生成集合</h3>
+                    <p>対数線形モデルで交互作用を含む場合、その低次の項もすべて含めるという制約を<strong>階層性</strong>という。階層モデルは<strong>生成集合</strong>（generators）で表す：</p>
+                    <ul>
+                        <li><strong>AB/BC</strong>：因子A×B交互作用とB×C交互作用を含む（自動的に主効果A, B, Cも含む）</li>
+                        <li><strong>ABC</strong>：3因子交互作用まで含む（飽和モデル）</li>
+                        <li><strong>A/B/C</strong>：交互作用なし（完全独立モデル）</li>
+                    </ul>
+
+                </section>
+
+                <section class="content-section section-anchor" id="graphical">
+                    <h2><i class="fas fa-share-alt"></i> グラフィカルモデル</h2>
+
+                    <h3>グラフィカルモデルとは</h3>
+                    <p>変数（因子）を頂点、関係（交互作用）を辺で表す<strong>無向グラフ</strong>を用いて統計モデルを視覚化したものが<strong>グラフィカルモデル</strong>（graphical model）である。25章で多変量正規分布のグラフィカルモデルを学んだが、ここでは分割表への応用を扱う。</p>
+
+                    <div class="concept-box">
+                        <h3><i class="fas fa-project-diagram"></i> グラフィカルモデルの基本性質</h3>
+                        <p>グラフ $G = (V, E)$（$V$：頂点集合＝因子、$E$：辺集合）について：</p>
+                        <ol>
+                            <li><strong>性質1 （非連結）</strong>：頂点 $A$ と $B$ の間にパスがない <br>→ $A \perp B$（A と B は独立）</li>
+                            <li><strong>性質2 （辺なし）</strong>：$A$-$B$ 間に辺がない <br>→ $A \perp B \mid V \setminus \{A,B\}$（他のすべての変数で条件付けると独立）</li>
+                            <li><strong>性質3 （分離）</strong>：頂点集合 $S$ を取り除くと $A$ と $B$ が非連結 <br>→ $A \perp B \mid S$（$S$ で条件付けると独立）</li>
+                        </ol>
+                    </div>
+
+                    <h3>クリークと生成集合の対応</h3>
+                    <p><strong>クリーク</strong>（clique）とは、グラフにおける<strong>極大な完全部分グラフ</strong>（全頂点間に辺がある部分グラフで、それ以上拡張できないもの）である。</p>
+                    <p>グラフィカルモデルに対応する階層モデルは、クリークを生成集合とするモデルである。</p>
+
+                    <p>例：4因子 {A, B, C, D} で辺が A-B, B-C, B-D, C-D の場合：</p>
+                    <ul>
+                        <li>クリーク：{B,C,D}（三角形），{A,B}</li>
+                        <li>生成集合表記：BCD/AB</li>
+                        <li>A-C 間に辺がない → $A \perp C \mid \{B, D\}$（性質2）</li>
+                        <li>B は A と C の間を分離する → $A \perp C \mid B$（性質3）</li>
+                    </ul>
+
+                    <p>グラフィカルモデルを使う利点は、変数の数が多い場合でも<strong>グラフの形（クリーク構造）</strong>から条件付き独立関係を一目で読み取れることである。これにより、実際のデータから変数間の依存関係の構造を探索するモデル選択が効率的に行える。</p>
+
+                </section>
+
+                <section class="content-section section-anchor" id="formulas">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
+
+                    <div class="formula-block">
+                        <p><strong>当てはめ値（独立性・一様性の帰無仮説）</strong></p>
                         $$m_{ij} = \frac{x_{i.} \cdot x_{.j}}{x_{..}}$$
                     </div>
                     <div class="formula-block">
-                        <p><strong>適合度カイ二乗統計量（2×2分割表）</strong></p>
+                        <p><strong>適合度カイ二乗統計量（一般）</strong></p>
+                        $$\chi^2 = \sum_{i}\sum_{j} \frac{(x_{ij} - m_{ij})^2}{m_{ij}} \sim \chi^2((I-1)(J-1)) \quad \text{（漸近的）}$$
+                        <p>2×2分割表の場合：</p>
                         $$\chi^2 = \frac{x_{..}(x_{11}x_{22} - x_{12}x_{21})^2}{x_{1.}x_{2.}x_{.1}x_{.2}}$$
                     </div>
                     <div class="formula-block">
                         <p><strong>逸脱度（尤度比検定統計量）</strong></p>
-                        $$G^2 = 2\sum_{i}\sum_{j} x_{ij}\log\frac{x_{ij}}{m_{ij}}$$
+                        $$G^2 = 2\sum_{i}\sum_{j} x_{ij}\log\frac{x_{ij}}{m_{ij}} \sim \chi^2((I-1)(J-1)) \quad \text{（漸近的）}$$
                     </div>
                     <div class="formula-block">
                         <p><strong>標本オッズ比と対数オッズ比の標準誤差</strong></p>
                         $$\widehat{OR} = \frac{x_{11}x_{22}}{x_{12}x_{21}}, \quad \widehat{\text{se}}(\log\widehat{OR}) \approx \sqrt{\frac{1}{x_{11}}+\frac{1}{x_{12}}+\frac{1}{x_{21}}+\frac{1}{x_{22}}}$$
+                        <p>OR の95%信頼区間：$\exp\!\left(\log\widehat{OR} \pm 1.96 \cdot \widehat{\text{se}}(\log\widehat{OR})\right)$</p>
                     </div>
                     <div class="formula-block">
                         <p><strong>フィッシャー正確検定（超幾何分布）</strong></p>
-                        $$P(X_{11} = x_{11}) = \frac{\binom{x_{.1}}{x_{11}}\binom{x_{.2}}{x_{1.}-x_{11}}}{\binom{x_{..}}{x_{1.}}}$$
+                        $$P(X_{11} = k) = \frac{\binom{x_{.1}}{k}\binom{x_{.2}}{x_{1.}-k}}{\binom{x_{..}}{x_{1.}}}, \quad \max(0, x_{1.}+x_{.1}-x_{..}) \leq k \leq \min(x_{1.}, x_{.1})$$
                     </div>
+                    <div class="formula-block">
+                        <p><strong>飽和対数線形モデル（2×2分割表）</strong></p>
+                        $$\log\theta_{ij} = \mu + \alpha_i + \beta_j + \gamma_{ij}, \quad \sum_i\alpha_i = \sum_j\beta_j = \sum_i\gamma_{ij} = \sum_j\gamma_{ij} = 0$$
+                    </div>
+                    <div class="formula-block">
+                        <p><strong>3元分割表の条件付き独立</strong></p>
+                        $$A \perp B \mid C \iff \theta_{ijk} = \frac{\theta_{i.k}\cdot\theta_{.jk}}{\theta_{..k}} \quad \text{（すべての } i,j,k \text{ に対して）}$$
+                    </div>
+
                 </section>
 
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
                     <div class="example-block">
                         <p><strong>問28.1</strong> 後向き研究（低出生体重児12名 vs コントロール36名）のオッズ比解釈</p>
@@ -151,15 +472,21 @@
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
-                    <ul>
-                        <li>オッズ比の重要な性質：前向き研究と後向き研究で一致。希少事象では相対リスクの近似値</li>
-                        <li>多項分布・独立ポアソン分布・行ごとの多項分布のいずれでも、当てはめ値 $m_{ij} = x_{i.}x_{.j}/x_{..}$ は同じ</li>
-                        <li>自由度は $(I-1)(J-1)$ でモデルの設定によらず一致</li>
-                        <li>階層モデルの中でグラフィカルモデルに絞ることで、因子数が多い場合のモデル選択が容易になる</li>
-                        <li>多変量正規分布のグラフィカルモデルは25章参照</li>
-                    </ul>
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
+                    <div class="concept-box">
+                        <h3><i class="fas fa-check-circle"></i> この章の重要ポイント</h3>
+                        <ul>
+                            <li><strong>当てはめ値の普遍性</strong>：2群比較（独立二項）・多項分布・独立ポアソンなど、どのモデル設定でも帰無仮説のもとで $m_{ij} = x_{i.}x_{.j}/x_{..}$ となる（重要!）</li>
+                            <li><strong>自由度</strong>：I×J分割表の独立性検定は $(I-1)(J-1)$</li>
+                            <li><strong>オッズ比の優越性</strong>：前向き・後向き研究の両方で一致する推定量。希少事象では相対リスクの近似としても使える</li>
+                            <li><strong>$\chi^2$ vs $G^2$</strong>：$\chi^2$（ピアソン）は計算が分かりやすく $G^2$（逸脱度）は加法性を持ちモデル比較に有利。大標本では両者は漸近的に等しくなる</li>
+                            <li><strong>フィッシャー検定の使いどころ</strong>：サンプルが少ない（セルに5未満の当てはめ値がある）場合に漸近論に頼らない正確検定として使う</li>
+                            <li><strong>条件付き独立の見方</strong>：交絡因子の影響を取り除いた関係を見るために必要。3元分割表で完全独立・周辺独立・条件付き独立を区別する</li>
+                            <li><strong>グラフィカルモデルの強み</strong>：変数間の依存構造を無向グラフで視覚化し、クリーク構造から条件付き独立を読み取れる</li>
+                            <li><strong>階層原則</strong>：対数線形モデルで交互作用を含む場合、それより低次の項も必ず含める（階層性）</li>
+                        </ul>
+                    </div>
                 </section>
 
                 <nav class="chapter-pager">
@@ -174,6 +501,7 @@
                     </a>
                 </nav>
 
+                </div>
             </div>
         </div>
     </main>

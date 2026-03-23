@@ -52,82 +52,282 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#covariance">共分散・相関行列</a></li>
+                            <li><a href="#eigenvalue">固有値問題と主成分</a></li>
+                            <li><a href="#contribution">寄与率・主成分得点</a></li>
+                            <li><a href="#loading">主成分負荷量</a></li>
+                            <li><a href="#svd">特異値分解・自己符号化器</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> はじめに：「高次元データをどう整理するか」</h2>
                     <p>
-                        第22章では<strong>主成分分析</strong>（PCA: Principal Component Analysis）を学ぶ。
-                        多変量データの持つ情報をできるだけ保持しつつ、少数の主成分に縮約する手法である。
-                        標本共分散行列（または相関行列）の固有値問題を解くことで主成分を求め、
-                        寄与率・累積寄与率により次元削減の程度を判断する。
+                        現代のデータ分析では、1人の患者について血圧・血糖・コレステロール・体重・年齢など
+                        何十もの変数を同時に測定したり、アンケートで数十〜数百の質問に回答してもらうことがあります。
+                        このような<strong>多変量（高次元）データ</strong>をそのまま扱うのは困難です。
+                        変数が多すぎると可視化できず、パターンも見えにくく、計算コストも膨大になります。
                     </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-question-circle"></i> なぜ「次元削減」が必要か</p>
+                        <p>
+                            100個の変数があっても、それらが完全にバラバラの情報を持っているわけではありません。
+                            たとえば国語・英語・社会は一緒に得意な人が多く（相関が高い）、
+                            数学・理科も一緒に得意な人が多い、という傾向があります。
+                        </p>
+                        <p>
+                            つまり、100個の変数の中には「本質的な変動方向」が少数個しかないことが多いのです。
+                            <strong>主成分分析</strong>はこの「本質的な変動方向」＝<strong>主成分</strong>を自動的に発見し、
+                            データを低次元に圧縮しながら情報をできるだけ保存する手法です。
+                        </p>
+                    </div>
+
+                    <h3>主成分分析の目標を視覚的に理解する</h3>
+                    <p>
+                        2次元のデータ（$x_1$軸, $x_2$軸）を想像してください。
+                        データ点の集まりが楕円状に広がっているとき、「楕円の長軸方向」が最もデータが散らばっている方向です。
+                        主成分分析はこの「最も分散が大きい方向」を第1主成分として求め、
+                        次に「それと直交する方向で最も分散が大きい方向」を第2主成分として求める、
+                        という作業を繰り返します。
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-compress-arrows-alt"></i> 主成分分析の2つの解釈</p>
+                        <ul>
+                            <li><strong>分散最大化の観点：</strong>主成分は「データの散らばりを最も大きく捉える方向」。第1主成分は全変数の線形結合の中で分散が最大になるもの</li>
+                            <li><strong>情報圧縮の観点：</strong>元の $p$ 次元データを $k$ 次元（$k \ll p$）に写像するとき、情報の損失（再構成誤差）が最小になる変換</li>
+                        </ul>
+                        <p>この2つは数学的に同値であり、いずれも<strong>共分散行列（または相関行列）の固有値問題</strong>として解けます。</p>
+                    </div>
+
+                    <h3>共分散行列を使うか相関行列を使うか</h3>
+                    <p>
+                        たとえば体重（kg）と身長（cm）では単位が異なり、スケールも違います。
+                        共分散行列をそのまま使うと、分散の大きい変数（単位が大きいなど）が主成分を支配してしまいます。
+                    </p>
+                    <ul>
+                        <li><strong>各変量のスケールが揃っている場合（例：すべて100点満点の科目）：</strong>共分散行列 $S$ を使っても相関行列 $R$ を使っても意味のある結果が得られる</li>
+                        <li><strong>変量のスケールが大きく異なる場合：</strong>相関行列 $R$（つまり標準化後の共分散）を使い、単位の影響を排除する</li>
+                    </ul>
+
+                    <h3>この章で学ぶこと</h3>
+                    <ol>
+                        <li><strong>標本共分散行列・相関行列：</strong>データの散らばりを行列で表す方法</li>
+                        <li><strong>固有値問題と主成分：</strong>実対称行列の直交対角化。主成分の求め方</li>
+                        <li><strong>寄与率と累積寄与率：</strong>何個の主成分を採用すればよいかの判断基準</li>
+                        <li><strong>主成分負荷量：</strong>各主成分と元の変量との関係（解釈の手がかり）</li>
+                        <li><strong>特異値分解と自己符号化器：</strong>PCAの別の定式化と非線形拡張</li>
+                    </ol>
                     <p><strong>キーワード：</strong>標本共分散行列、標本相関行列、固有値・固有ベクトル、主成分、寄与率、累積寄与率、主成分得点、主成分負荷量、特異値分解、自己符号化器</p>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <section class="content-section section-anchor" id="covariance">
+                    <h2><i class="fas fa-table"></i> 標本共分散行列と相関行列</h2>
 
-                    <h3>データの標準化と行列</h3>
-                    <ul>
-                        <li><strong>標本共分散行列 $S$：</strong>変量の単位やスケールがそのまま反映される</li>
-                        <li><strong>標本相関行列 $R$：</strong>各変量を標準化してからの共分散行列。単位の影響を排除</li>
-                    </ul>
-                    <p>一般に、変量のスケールが大きく異なる場合は相関行列 $R$ を用いる。</p>
+                    <h3>データの設定</h3>
+                    <p>
+                        $p$ 個の変数について $n$ 個の個体のデータを $n \times p$ 行列 $X = (x_{ij})$ でまとめる。
+                        変数 $j$ に対する標本平均：$\bar{x}_j = \dfrac{1}{n}\sum_{i=1}^{n}x_{ij}$
+                    </p>
 
-                    <h3>固有値問題と主成分の導出</h3>
+                    <h3>標本共分散行列 $S$</h3>
+                    <p>変数 $j$ の標本分散と変数 $j, k$ の標本共分散：</p>
                     <div class="formula-block">
-                        $$S\boldsymbol{u} = \lambda\boldsymbol{u} \quad \text{（共分散行列の場合）}$$
+                        $$s_{jj} = \frac{1}{n-1}\sum_{i=1}^{n}(x_{ij}-\bar{x}_j)^2, \quad s_{jk} = \frac{1}{n-1}\sum_{i=1}^{n}(x_{ij}-\bar{x}_j)(x_{ik}-\bar{x}_k)$$
+                    </div>
+                    <p>これらを並べた $p\times p$ 行列が<strong>標本分散共分散行列（標本共分散行列）$S$</strong>。$S$ は実対称行列（$s_{jk}=s_{kj}$）かつ半正定値。</p>
+                    <p>行列表記（平均偏差行列 $X_c = (I_n - \frac{1}{n}J_n)X$ を使う）：</p>
+                    <div class="formula-block">
+                        $$S = \frac{1}{n-1}X_c^TX_c$$
+                    </div>
+
+                    <h3>標本相関行列 $R$</h3>
+                    <p>変数 $j$ と $k$ の標本相関係数：$r_{jk} = \dfrac{s_{jk}}{\sqrt{s_{jj}s_{kk}}}$。これを並べた行列が $R$。対角成分は1（$r_{jj}=1$）。</p>
+                    <p>各変量を標準化（平均0・分散1にzスコア変換）したデータ行列 $Z$ の共分散行列が $R$ になるため、
+                    $R$ を使った主成分分析は「変量のスケールの影響をなくした」主成分分析に対応する。</p>
+
+                    <h3>数値例（6人・4科目のテスト）</h3>
+                    <table>
+                        <thead><tr><th>生徒</th><th>国語($x_1$)</th><th>数学($x_2$)</th><th>理科($x_3$)</th><th>社会($x_4$)</th></tr></thead>
+                        <tbody>
+                            <tr><td>1</td><td>2</td><td>1</td><td>2</td><td>9</td></tr>
+                            <tr><td>2</td><td>9</td><td>8</td><td>10</td><td>9</td></tr>
+                            <tr><td>3</td><td>8</td><td>3</td><td>2</td><td>2</td></tr>
+                            <tr><td>4</td><td>7</td><td>1</td><td>3</td><td>8</td></tr>
+                            <tr><td>5</td><td>2</td><td>9</td><td>8</td><td>2</td></tr>
+                            <tr><td>6</td><td>5</td><td>4</td><td>5</td><td>5</td></tr>
+                        </tbody>
+                    </table>
+                    <p>国語の平均 $\bar{x}_1 = 5.5$、分散 $s_{11} = 9.1$、国語と数学の共分散 $s_{12} = -0.7$。</p>
+                    <div class="formula-block">
+                        $$S \approx \begin{pmatrix}9.1&-0.7&0.7&9.6\\-0.7&10.7&9.5&-0.6\\0.7&9.5&10.2&1.3\\9.6&-0.6&1.3&10.7\end{pmatrix}, \quad R \approx \begin{pmatrix}1&-0.07&0.07&0.97\\-0.07&1&0.91&-0.06\\0.07&0.91&1&0.13\\0.97&-0.06&0.13&1\end{pmatrix}$$
+                    </div>
+                </section>
+
+                <section class="content-section section-anchor" id="eigenvalue">
+                    <h2><i class="fas fa-arrows-alt"></i> 固有値問題と主成分</h2>
+
+                    <h3>実対称行列の性質</h3>
+                    <p>実対称行列（$A = A^T$、全成分が実数）は次の性質を持つ：</p>
+                    <ul>
+                        <li>固有値はすべて<strong>実数</strong></li>
+                        <li>異なる固有値に対応する固有ベクトルは互いに<strong>直交</strong>する</li>
+                        <li><strong>直交行列による対角化が可能</strong>：適当な直交行列 $U = (\boldsymbol{u}_1, \ldots, \boldsymbol{u}_p)$ を用いると</li>
+                    </ul>
+                    <div class="formula-block">
+                        $$U^T S U = \text{diag}(\lambda_1, \ldots, \lambda_p), \quad \lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$$
+                    </div>
+                    <p>ここで $\lambda_j$ は $S$ の固有値、$\boldsymbol{u}_j$ は対応する正規化固有ベクトル（$\|\boldsymbol{u}_j\|=1$）。固有値問題：</p>
+                    <div class="formula-block">
+                        $$S\boldsymbol{u}_j = \lambda_j\boldsymbol{u}_j, \quad \boldsymbol{u}_j^T\boldsymbol{u}_k = \delta_{jk}$$
+                    </div>
+
+                    <h3>主成分の定義</h3>
+                    <p>
+                        データ $\boldsymbol{x}$ を平均引きした $\boldsymbol{x} - \bar{\boldsymbol{x}}$ を $\boldsymbol{u}_j$ に射影した値が
+                        <strong>第 $j$ 主成分スコア</strong>（個体ごとの値）：
+                    </p>
+                    <div class="formula-block">
+                        $$y_j = \boldsymbol{u}_j^T(\boldsymbol{x} - \bar{\boldsymbol{x}})$$
                     </div>
                     <ul>
-                        <li>$\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_p \geq 0$：固有値</li>
-                        <li>$\boldsymbol{u}_j$：固有値 $\lambda_j$ に対応する（正規化された）固有ベクトル</li>
-                        <li>第 $j$ 主成分：$y_j = \boldsymbol{u}_j^T(\boldsymbol{x} - \bar{\boldsymbol{x}})$</li>
+                        <li>第 $j$ 主成分の分散 $= \lambda_j$（固有値）</li>
+                        <li>異なる主成分間の共分散 $= 0$（無相関化・直交化）</li>
+                        <li>全分散の保存：$\sum_{j=1}^{p}\lambda_j = \text{tr}(S) = \sum_{k=1}^{p}s_{kk}$</li>
                     </ul>
-
-                    <h3>寄与率と累積寄与率</h3>
-                    <div class="formula-block">
-                        $$\text{第 $j$ 主成分の寄与率} = \frac{\lambda_j}{\sum_{k=1}^{p}\lambda_k}$$
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-lightbulb"></i> なぜ固有値問題になるのか</p>
+                        <p>
+                            「$\|\boldsymbol{u}\|=1$ という制約のもとで $V[\boldsymbol{u}^T\boldsymbol{x}] = \boldsymbol{u}^T S \boldsymbol{u}$ を最大化する $\boldsymbol{u}$ は？」という
+                            最適化問題をラグランジュ乗数法で解くと、$S\boldsymbol{u} = \lambda\boldsymbol{u}$ という固有値問題が現れます。
+                            最大固有値 $\lambda_1$ に対応する固有ベクトル $\boldsymbol{u}_1$ が第1主成分方向です。
+                        </p>
                     </div>
-                    <p>累積寄与率が 70〜80% を超えるところまでの主成分を採用するのが一般的。</p>
-                    <p>なお $\sum_{j=1}^{p}\lambda_j = \text{tr}(S)$（全分散）。</p>
+                </section>
 
-                    <h3>主成分得点と主成分負荷量</h3>
-                    <ul>
-                        <li><strong>主成分得点：</strong>各個体 $i$ の第 $j$ 主成分の値 $y_{ij} = \sum_{k=1}^{p} u_{kj}(x_{ik} - \bar{x}_k)$</li>
-                        <li><strong>主成分負荷量：</strong>第 $j$ 主成分と原変量 $x_k$ の相関係数</li>
-                    </ul>
+                <section class="content-section section-anchor" id="contribution">
+                    <h2><i class="fas fa-chart-pie"></i> 寄与率・累積寄与率・主成分得点</h2>
+
+                    <h3>寄与率（proportion of variance）</h3>
+                    <p>第 $j$ 主成分が全分散のうち何割を説明しているかの割合：</p>
+                    <div class="formula-block">
+                        $$\text{第 $j$ 主成分の寄与率} = \frac{\lambda_j}{\sum_{k=1}^{p}\lambda_k} = \frac{\lambda_j}{\text{tr}(S)}$$
+                    </div>
+                    <p>相関行列 $R$ を使う場合：$\text{tr}(R) = p$ なので、寄与率 $= \lambda_j/p$</p>
+
+                    <h3>累積寄与率</h3>
+                    <p>第1〜第 $m$ 主成分までの寄与率の合計：</p>
+                    <div class="formula-block">
+                        $$\text{累積寄与率} = \frac{\sum_{j=1}^{m}\lambda_j}{\sum_{k=1}^{p}\lambda_k}$$
+                    </div>
+                    <p>
+                        累積寄与率が<strong>70〜80%以上</strong>になるまでの主成分数 $m$ を採用するのが一般的。
+                        また相関行列を使う場合は「固有値 $\geq 1$ の主成分を採用する（カイザー基準）」という方針もある。
+                    </p>
+
+                    <h3>主成分得点</h3>
+                    <p>個体 $i$ の第 $j$ 主成分得点（主成分スコア）：</p>
+                    <div class="formula-block">
+                        $$y_{ij} = \boldsymbol{u}_j^T(\boldsymbol{x}_i - \bar{\boldsymbol{x}}) = \sum_{k=1}^{p}u_{kj}(x_{ik} - \bar{x}_k)$$
+                    </div>
+                    <p>
+                        第1・第2主成分得点を $x$・$y$ 軸にとった散布図（<strong>主成分得点散布図</strong>）は、
+                        多変量データの2次元可視化として非常によく使われる。
+                    </p>
+                </section>
+
+                <section class="content-section section-anchor" id="loading">
+                    <h2><i class="fas fa-link"></i> 主成分負荷量</h2>
+
+                    <h3>主成分負荷量とは</h3>
+                    <p>第 $j$ 主成分 $y_j$ と原変量 $x_k$ の相関係数を<strong>主成分負荷量（factor loading）</strong>という：</p>
                     <div class="formula-block">
                         $$r(y_j, x_k) = \frac{\sqrt{\lambda_j}\cdot u_{kj}}{\sqrt{s_{kk}}}$$
                     </div>
-                    <p>主成分負荷量の絶対値が大きい変量が、その主成分の解釈の手がかりとなる。</p>
-
-                    <h3>特異値分解（SVD）</h3>
-                    <div class="formula-block">
-                        $$X_c = \sum_{j=1}^{p} s_j\boldsymbol{v}_j\boldsymbol{u}_j^T$$
-                    </div>
                     <ul>
-                        <li>$X_c$：中心化データ行列（$n \times p$）</li>
-                        <li>$s_j$：特異値（$\lambda_j = s_j^2/(n-1)$）</li>
-                        <li>$\boldsymbol{v}_j$：左特異ベクトル、$\boldsymbol{u}_j$：右特異ベクトル</li>
+                        <li>$u_{kj}$：固有ベクトル $\boldsymbol{u}_j$ の第 $k$ 成分</li>
+                        <li>絶対値が大きい変数ほど、その主成分に強く関係している</li>
+                        <li>主成分負荷量を見ることで「第1主成分は理系科目の得意さを表す」などの<strong>解釈</strong>が可能になる</li>
                     </ul>
-                    <p>第 $j$ 主成分得点ベクトル $= s_j\boldsymbol{v}_j$</p>
-
-                    <h3>自己符号化器（Autoencoder）</h3>
-                    <p>ニューラルネットワークによる非線形次元削減手法。中間層が元の次元より少ないネットワークで入出力が等しくなるように学習する。線形活性化関数の場合、主成分分析と等価になる。</p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-book"></i> 負荷量と固有ベクトルの違い</p>
+                        <p>
+                            固有ベクトル $u_{kj}$ は「主成分を作る係数（重み）」、
+                            主成分負荷量は「主成分と元変量の相関係数」です。
+                            どちらも解釈に使えますが、単位が統一されている相関係数スケールの負荷量のほうが比較しやすいです。
+                        </p>
+                    </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
+                <section class="content-section section-anchor" id="svd">
+                    <h2><i class="fas fa-project-diagram"></i> 特異値分解と自己符号化器</h2>
 
-                    <h3>主成分の分散</h3>
+                    <h3>特異値分解（SVD）</h3>
+                    <p>
+                        中心化データ行列 $X_c$（$n \times p$）を直接分解する方法が<strong>特異値分解（Singular Value Decomposition）</strong>：
+                    </p>
                     <div class="formula-block">
-                        $$V[y_j] = \lambda_j$$
+                        $$X_c = U D V^T = \sum_{j=1}^{r} d_j \boldsymbol{u}_j \boldsymbol{v}_j^T$$
+                    </div>
+                    <ul>
+                        <li>$d_j$：特異値（$d_1 \geq d_2 \geq \cdots \geq 0$）</li>
+                        <li>$\boldsymbol{v}_j$：右特異ベクトル（$= $ 共分散行列の固有ベクトル $\boldsymbol{u}_j$ に対応）</li>
+                        <li>$\boldsymbol{u}_j$：左特異ベクトル</li>
+                        <li>固有値との関係：$\lambda_j = d_j^2 / (n-1)$</li>
+                        <li>第 $j$ 主成分得点ベクトル $= d_j \boldsymbol{u}_j$</li>
+                    </ul>
+                    <p>
+                        SVDを使うと、$p \times p$ の共分散行列を計算する必要がなく、$n \times p$ 行列を直接扱えるため
+                        $n \ll p$（サンプル数 $\ll$ 変数数）の高次元データで数値的に安定した計算ができる。
+                    </p>
+
+                    <h3>自己符号化器（Autoencoder）</h3>
+                    <p>
+                        ニューラルネットワークを使った非線形次元削減手法。
+                        「入力 → 中間層（圧縮） → 出力（入力の復元）」というネットワークを、
+                        入出力が等しくなるように学習する。
+                    </p>
+                    <ul>
+                        <li>中間層の次元 $k \ll p$ → 特徴の圧縮（次元削減）</li>
+                        <li>線形活性化関数・1層の場合 → 主成分分析と数学的に等価</li>
+                        <li>非線形活性化関数（ReLU、tanh等）を使うと、線形では捉えられない非線形な構造を学習できる</li>
+                    </ul>
+                </section>
+
+                <section class="content-section section-anchor" id="formulas">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
+
+                    <h3>固有値問題</h3>
+                    <div class="formula-block">
+                        $$S\boldsymbol{u}_j = \lambda_j\boldsymbol{u}_j, \quad U^TSU = \text{diag}(\lambda_1,\ldots,\lambda_p), \quad \lambda_1\geq\cdots\geq\lambda_p\geq 0$$
+                    </div>
+
+                    <h3>主成分スコアと分散</h3>
+                    <div class="formula-block">
+                        $$y_j = \boldsymbol{u}_j^T(\boldsymbol{x}-\bar{\boldsymbol{x}}), \quad V[y_j] = \lambda_j, \quad \text{Cov}(y_j, y_k) = 0\;(j\neq k)$$
                     </div>
 
                     <h3>全分散の保存</h3>
                     <div class="formula-block">
-                        $$\sum_{j=1}^{p}\lambda_j = \text{tr}(S) = \sum_{k=1}^{p} s_{kk}$$
+                        $$\sum_{j=1}^{p}\lambda_j = \text{tr}(S) = \sum_{k=1}^{p}s_{kk}$$
+                    </div>
+
+                    <h3>寄与率・累積寄与率</h3>
+                    <div class="formula-block">
+                        $$\text{寄与率}_j = \frac{\lambda_j}{\text{tr}(S)}, \quad \text{累積寄与率}_{(m)} = \frac{\sum_{j=1}^{m}\lambda_j}{\text{tr}(S)}$$
                     </div>
 
                     <h3>主成分負荷量</h3>
@@ -135,32 +335,23 @@
                         $$r(y_j, x_k) = \frac{\sqrt{\lambda_j}\cdot u_{kj}}{\sqrt{s_{kk}}}$$
                     </div>
 
-                    <h3>相関行列を使う場合の寄与率</h3>
+                    <h3>特異値との関係</h3>
                     <div class="formula-block">
-                        $$\text{寄与率} = \frac{\lambda_j}{p} \quad （\text{tr}(R)=p）$$
+                        $$\lambda_j = \frac{d_j^2}{n-1}, \quad X_c = UDV^T$$
                     </div>
                 </section>
 
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
 
-                    <h3>例1：小テストの共分散行列と相関行列</h3>
-                    <div class="answer-block">
-                        <p>4科目（数学・英語・物理・化学）の成績データから：</p>
-                        <p><strong>標本共分散行列 $S$：</strong></p>
-                        <div class="formula-block">
-                            $$S = \begin{pmatrix} 16 & 8 & 12 & 8 \\ 8 & 9 & 6 & 6 \\ 12 & 6 & 16 & 8 \\ 8 & 6 & 8 & 9 \end{pmatrix}$$
-                        </div>
-                        <p><strong>標本相関行列 $R$：</strong></p>
-                        <div class="formula-block">
-                            $$R = \begin{pmatrix} 1 & 0.667 & 0.75 & 0.667 \\ 0.667 & 1 & 0.500 & 0.667 \\ 0.75 & 0.500 & 1 & 0.667 \\ 0.667 & 0.667 & 0.667 & 1 \end{pmatrix}$$
-                        </div>
+                    <h3>例1：固有値と累積寄与率</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>ある4科目（各10点満点）のテストの標本共分散行列 $S$ が次の固有値を持つとする：$\lambda_1=20.2,\ \lambda_2=19.4,\ \lambda_3=0.85,\ \lambda_4=0.18$。各主成分の寄与率と累積寄与率を求めよ。</p>
                     </div>
-
-                    <h3>例2：固有値と累積寄与率</h3>
                     <div class="answer-block">
-                        <p>$S$ の固有値：$\lambda_1 = 20.2,\ \lambda_2 = 19.4,\ \lambda_3 = 0.85,\ \lambda_4 = 0.18$</p>
-                        <p>全分散 = $20.2+19.4+0.85+0.18 = 40.63$</p>
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>全分散 $= 20.2 + 19.4 + 0.85 + 0.18 = 40.63$</p>
                         <table>
                             <thead><tr><th>主成分</th><th>固有値</th><th>寄与率</th><th>累積寄与率</th></tr></thead>
                             <tbody>
@@ -170,39 +361,61 @@
                                 <tr><td>PC4</td><td>0.18</td><td>0.4%</td><td>100.0%</td></tr>
                             </tbody>
                         </table>
-                        <p>→ 第2主成分までで累積寄与率 97.5%（ほとんどの情報を2成分で説明可能）</p>
+                        <p>→ 第2主成分までの累積寄与率が97.5%。4次元 → 2次元にほぼ情報を保持できている。</p>
                     </div>
 
                     <h3>問22.1：ロンドン五輪 女子七種競技の主成分分析</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ロンドン五輪（2012年）女子七種競技の7種目（100mH, 走高跳, 砲丸投, 200m, 走幅跳, やり投, 800m）の成績データについて、
+                            相関行列 $R$ を使って主成分分析を行った。
+                            第1主成分の固有値 $\lambda_1=2.37$、固有ベクトル $\boldsymbol{u}_1=(-0.49, 0.18, \ldots)^T$、
+                            第2主成分の固有値 $\lambda_2=1.79$、固有ベクトル $\boldsymbol{u}_2=(0.07, 0.57, \ldots)^T$。
+                        </p>
+                        <p>(1) 第1主成分の100mHに対する負荷量 $r(y_1, x_1)$ を求めよ（相関行列なので $s_{11}=1$）。</p>
+                        <p>(2) 第1・第2主成分の意味を解釈せよ。</p>
+                    </div>
                     <div class="answer-block">
-                        <p><strong>(1) 相関行列の固有値問題からの主成分負荷量</strong></p>
-                        <p>第1主成分：$\lambda_1 = 2.37$、固有ベクトル $\boldsymbol{u}_1 = (-0.49, 0.18, -0.41, -0.24, -0.37, 0.41, -0.42)^T$</p>
-                        <p>第2主成分：$\lambda_2 = 1.79$、固有ベクトル $\boldsymbol{u}_2 = (0.07, 0.57, 0.12, 0.55, -0.42, -0.07, -0.41)^T$</p>
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1)</strong> $r(y_1, x_1) = \sqrt{\lambda_1}\cdot u_{11}/\sqrt{s_{11}} = \sqrt{2.37}\times(-0.49)/1 \approx 1.539\times(-0.49) \approx -0.75$</p>
+                        <p>符号が負なのは100mHの「タイム（小さいほど良い）」と主成分の「大きいほど良い」方向が逆のため。</p>
+                        <p><strong>(2)</strong></p>
                         <ul>
-                            <li>ア = 100mHの第1主成分負荷量：$\sqrt{2.37} \times (-0.49) = -0.75$</li>
-                            <li>イ = HJの第2主成分負荷量：$\sqrt{1.79} \times 0.18 \times (1/\sqrt{s_{22}})$（ただし相関行列なので $s_{22}=1$）$= \sqrt{1.79}\times 0.20 \approx 0.27$</li>
+                            <li><strong>第1主成分：</strong>100mH・200m・走幅跳・800mの負荷量が大きい → 「走・跳系の総合能力」を表す。得点が高いほど走力・跳躍力が優れている</li>
+                            <li><strong>第2主成分：</strong>走高跳・やり投の負荷量が大きい → 「高さ・投てき力（パワー系）」を表す</li>
                         </ul>
+                        <p>第1・第2主成分得点散布図で、第1主成分が最大かつ第2主成分もバランスよい選手が優勝者（ジェシカ・エニス）に対応する。</p>
+                    </div>
 
-                        <p><strong>(2) 主成分の解釈</strong></p>
-                        <ul>
-                            <li><strong>第1主成分：</strong>走力・跳躍力（100mH, 200m, LJ, 800mの負荷量が大きい）→ 総合走力・跳躍力</li>
-                            <li><strong>第2主成分：</strong>投てき能力（SP, JTの負荷量が大きい）→ 投てき・パワー系能力</li>
-                        </ul>
-
-                        <p><strong>(3) 主成分得点散布図の解釈</strong></p>
-                        <p>第1主成分が最大かつ第2主成分もバランスよい選手 → <strong>A が優勝者</strong>（ジェシカ・エニス）。走力・跳躍系で突出。</p>
+                    <h3>問22.2：共分散行列の計算</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>6人の生徒の国語・数学のテスト点数（上述の表）から国語と数学の共分散 $s_{12}$ と相関係数 $r_{12}$ を求めよ。</p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>国語の平均 $\bar{x}_1 = (2+9+8+7+2+5)/6 = 5.5$、数学の平均 $\bar{x}_2 = (1+8+3+1+9+4)/6 = 4.33$</p>
+                        <div class="formula-block">
+                            $$s_{12} = \frac{(2-5.5)(1-4.33)+(9-5.5)(8-4.33)+\cdots+(5-5.5)(4-4.33)}{6-1} = \frac{-3.5}{5} \approx -0.7$$
+                        </div>
+                        <p>$s_{11} = 9.1,\ s_{22} = 10.7$ なので：</p>
+                        <p>$r_{12} = -0.7/\sqrt{9.1 \times 10.7} \approx -0.7/9.87 \approx -0.071$</p>
+                        <p>→ 国語と数学には<strong>ほぼ無相関</strong>（$r \approx -0.07$）。</p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
                     <ul>
-                        <li>主成分分析は教師なし学習の代表的手法。変量の線形結合で新しい合成変量を作る</li>
-                        <li>共分散行列 vs 相関行列：変量のスケールが同程度なら $S$、大きく異なるなら $R$ を使う</li>
-                        <li>固有ベクトルの符号は任意（反転しても主成分の意味は変わらない）→ 解釈で符号を揃える</li>
+                        <li>主成分分析は<strong>教師なし学習</strong>の代表的手法。変量の線形結合で新しい合成変量を作る</li>
+                        <li>共分散行列 vs 相関行列：変量スケールが同程度なら $S$、大きく異なるなら $R$ を使う</li>
+                        <li>固有ベクトルの<strong>符号は任意</strong>（反転しても主成分の意味は変わらない）→ 解釈で符号を揃える</li>
+                        <li>累積寄与率70〜80%を目安に次元数を決める（カイザー基準：固有値1以上）</li>
+                        <li>主成分負荷量 $= \sqrt{\lambda_j} \times u_{kj}/\sqrt{s_{kk}}$（相関行列使用時は $\sqrt{\lambda_j} \times u_{kj}$）</li>
                         <li>バイプロット：主成分得点と主成分負荷量を同時にプロットする可視化手法</li>
-                        <li>特異値分解は直接データ行列から主成分を求められるため、大規模データに有用</li>
-                        <li>自己符号化器は非線形な次元削減が可能（PCAの非線形拡張とみなせる）</li>
+                        <li>特異値分解は直接データ行列から主成分を求め、高次元・大規模データに有用</li>
+                        <li>自己符号化器は非線形な次元削減が可能（PCAの非線形拡張）</li>
                     </ul>
                 </section>
 
@@ -218,6 +431,7 @@
                     </a>
                 </nav>
 
+                </div>
             </div>
         </div>
     </main>

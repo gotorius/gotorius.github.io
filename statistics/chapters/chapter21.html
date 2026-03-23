@@ -52,157 +52,370 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
 
-                <section class="content-section">
-                    <h2><i class="fas fa-book-open"></i> 概要</h2>
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>目次</h2>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#srs">単純無作為抽出法</a></li>
+                            <li><a href="#various">さまざまな抽出法</a></li>
+                            <li><a href="#stratified">層化抽出法</a></li>
+                            <li><a href="#allocation">標本配分法</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                            <li><a href="#notes">まとめ・ポイント</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <section class="content-section section-anchor" id="intro">
+                    <h2><i class="fas fa-book-open"></i> はじめに：なぜ「全数調査」ではなく「標本調査」なのか</h2>
                     <p>
-                        第21章では<strong>標本調査法</strong>を扱う。母集団から標本を抽出する方法として、
-                        単純無作為抽出法（非復元・復元）、集落抽出法、二段抽出法、層化抽出法、系統的抽出法を学び、
-                        層化抽出法における比例配分法・ネイマン配分法を理解する。
+                        統計学を学んでいると「母集団のパラメータ（平均・分散など）を知りたい」という目標が繰り返し登場します。
+                        では、なぜ全国民・全製品・全患者をすべて調べないのでしょうか？
+                        この問いへの答えが<strong>標本調査法</strong>の出発点です。
                     </p>
-                    <p><strong>キーワード：</strong>単純無作為抽出法、非復元抽出、復元抽出、有限母集団、有限修正、層化抽出法、二段抽出法、集落抽出法、比例配分法、ネイマン配分法</p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-exclamation-triangle"></i> 全数調査（悉皆調査）の限界</p>
+                        <ul>
+                            <li><strong>コストと時間：</strong>日本全国の有権者（約1億人）に調査票を送り、回収・集計するには莫大な費用と時間がかかります</li>
+                            <li><strong>破壊検査の問題：</strong>電球の寿命を調べるには点灯させて壊すしかなく、全製品を検査したら売る物がなくなります</li>
+                            <li><strong>動的母集団：</strong>調査中に新たに生まれる・死亡するなど、母集団が動き続ける場合は全数把握が不可能です</li>
+                        </ul>
+                        <p>
+                            したがって「母集団の一部（標本）を上手く取り出し、そこから母集団全体を推測する」
+                            <strong>標本調査（sample survey）</strong>が科学・行政・医療・工業のあらゆる場面で使われています。
+                        </p>
+                    </div>
+
+                    <h3>標本の「代表性」と無作為性</h3>
+                    <p>
+                        どんな方法で個体を選んでも良いわけではありません。
+                        「道を歩いていた人に声をかけた」「雑誌の読者アンケートの返信のみを集計した」という方法は
+                        母集団全体を代表していない可能性があります（<strong>標本の偏り＝バイアス</strong>）。
+                    </p>
+                    <p>
+                        有名な歴史的失敗例：1936年のアメリカ大統領選挙で、大手雑誌が240万通のアンケートを元に「ランドン勝利」と予測しましたが、
+                        実際にはルーズヴェルトが圧勝しました。雑誌購読者は富裕層に偏っており、母集団（全有権者）を代表していなかったのです。
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-random"></i> 無作為（ランダム）抽出の意義</p>
+                        <p>
+                            バイアスをなくすには、<strong>母集団のすべての個体に均等な「選ばれる確率」を与える</strong>必要があります。
+                            これが<strong>無作為抽出（random sampling）</strong>の基本的な考え方です。
+                            抽出に確率的なメカニズムを導入することで、区間推定・仮説検定の理論的根拠が得られます。
+                        </p>
+                        <p>
+                            一方、調査者の判断で「代表的」と思われる個体を選ぶ
+                            <strong>有意抽出法（purposive sampling）</strong>はバイアスが入りやすく、
+                            統計的推論の保証がありません。
+                        </p>
+                    </div>
+
+                    <h3>この章で学ぶこと</h3>
+                    <ol>
+                        <li><strong>単純無作為抽出法：</strong>最も基本的な抽出法。非復元の場合の標本平均の分散（有限修正）と必要サンプルサイズ</li>
+                        <li><strong>さまざまな抽出法：</strong>集落・二段・層化・系統的抽出法の特徴と違い</li>
+                        <li><strong>層化抽出法の詳細：</strong>各層から独立抽出する際の推定量と分散公式</li>
+                        <li><strong>標本配分法：</strong>各層に何人割り当てるか（比例・等・ネイマン配分）</li>
+                    </ol>
+                    <p><strong>キーワード：</strong>単純無作為抽出法、非復元抽出、復元抽出、有限修正、層化抽出法、二段抽出法、集落抽出法、系統的抽出法、比例配分法、ネイマン配分法</p>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-key"></i> 重要概念</h2>
+                <section class="content-section section-anchor" id="srs">
+                    <h2><i class="fas fa-dice"></i> 単純無作為抽出法</h2>
 
-                    <h3>単純無作為抽出法</h3>
-                    <p>母集団のすべての抽出単位に対して等しい選択確率を与える方法。</p>
+                    <h3>定義</h3>
+                    <p>
+                        大きさ $N$ の母集団から大きさ $n$ の標本を抽出するとき、
+                        すべての $\binom{N}{n}$ 通りの標本が同じ確率で選ばれる抽出方法を
+                        <strong>単純無作為抽出法（simple random sampling）</strong>という。
+                    </p>
                     <ul>
-                        <li><strong>非復元抽出：</strong>同じ単位を2回以上抽出しない</li>
-                        <li><strong>復元抽出：</strong>抽出した単位を母集団に戻してから次の抽出を行う</li>
-                        <li><strong>有意抽出法：</strong>主観や意図が入る方法（対比概念）</li>
+                        <li><strong>非復元抽出（without replacement）：</strong>一度選んだ個体を戻さず抽出。同一個体は1回しか選ばれない</li>
+                        <li><strong>復元抽出（with replacement）：</strong>選んだ個体を戻してから次を抽出。同一個体が複数回選ばれる可能性あり</li>
                     </ul>
 
-                    <h3>標本平均の分散（非復元単純無作為抽出）</h3>
+                    <h3>標本平均の分散（非復元抽出）</h3>
+                    <p>母平均 $\mu$、母分散 $\sigma^2$ の母集団から非復元抽出した $x_1, \ldots, x_n$ の標本平均 $\bar{x}$ について：</p>
                     <div class="formula-block">
-                        $$V[\bar{x}] = \frac{N-n}{N-1}\cdot\frac{\sigma^2}{n}$$
+                        $$E[\bar{x}] = \mu, \quad V[\bar{x}] = \frac{N-n}{N-1}\cdot\frac{\sigma^2}{n}$$
                     </div>
                     <ul>
-                        <li>$\frac{N-n}{N-1}$：<strong>有限修正</strong>（finite correction）項</li>
-                        <li>無限母集団 or 復元抽出の場合：$V[\bar{x}] = \sigma^2/n$</li>
+                        <li>$\frac{N-n}{N-1}$：<strong>有限修正（finite correction）</strong>項</li>
+                        <li>$n=N$（全数調査）のとき有限修正項＝0 → 分散もゼロ（確実に母平均と一致）</li>
+                        <li>復元抽出・無限母集団の場合：$V[\bar{x}] = \sigma^2/n$（有限修正なし）</li>
+                    </ul>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-lightbulb"></i> 有限修正の直感</p>
+                        <p>
+                            母集団10人から10人全員調べれば、標本平均は必ず母平均と一致し分散は0。
+                            母集団100万人から100人取っても0.01%しかカバーできず有限修正項は約1（ほぼ無視）。
+                            有限修正は $n/N > 0.1$ くらいから実質的な効果が出てくる。
+                        </p>
+                    </div>
+
+                    <h3>必要サンプルサイズ</h3>
+                    <p>$V[\bar{x}] \leq C$（許容誤差）を満たすには：</p>
+                    <div class="formula-block">
+                        $$n \geq \frac{N\sigma^2}{\sigma^2 + (N-1)C}$$
+                    </div>
+                    <p>
+                        $N \to \infty$ の極限では $n \geq \sigma^2/C$ となり、母集団の大きさによらない
+                        （超大規模調査でも必要標本サイズは変わらない）。
+                    </p>
+                </section>
+
+                <section class="content-section section-anchor" id="various">
+                    <h2><i class="fas fa-sitemap"></i> さまざまな標本抽出法</h2>
+
+                    <p>
+                        単純無作為抽出は理論的に明快ですが、母集団が大規模だと実施コストが高くなります。
+                        また推定精度をさらに上げたい・調査コストを下げたい場合には以下の方法が使われます。
+                    </p>
+
+                    <h3>①集落抽出法（cluster sampling）</h3>
+                    <p>
+                        母集団をあらかじめ<strong>集落（クラスター）</strong>というグループに分け、
+                        いくつかの集落を抽出して選ばれた集落の<strong>すべての調査単位</strong>を調査する。
+                    </p>
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-school"></i> 例：学校の全生徒調査</p>
+                        <p>
+                            ある県の全高校生から1000人を調査したいとき、各クラスを集落とし、無作為に10クラスを選んでクラス全員を調査する（1クラス100人と仮定）。
+                            → 調査する生徒がまとまっているため<strong>コスト削減</strong>。ただしどのクラスが選ばれるかで結果が大きく変わる可能性がある。
+                        </p>
+                    </div>
+
+                    <h3>②二段抽出法（two-stage sampling）</h3>
+                    <p>第1次抽出単位（グループ）を選び、その中からさらに一部の調査単位（第2次抽出単位）を選ぶ。</p>
+                    <ul>
+                        <li><strong>集落との違い：</strong>集落は「全員」調査するが、二段抽出はさらに「一部のみ」抽出</li>
+                        <li><strong>例：</strong>都市の世帯調査で、まず町丁目を抽出し（第1段）、各町丁目から一部の世帯を抽出（第2段）</li>
+                        <li>さらに第3・第4段まで繰り返す「多段抽出法（multistage sampling）」も大規模調査で使われる</li>
                     </ul>
 
-                    <h3>標本の大きさの決め方</h3>
-                    <p>$V[\bar{x}]$ を $C$ 以下に抑えるとき：</p>
+                    <h3>③層化抽出法（stratified sampling）</h3>
+                    <p>
+                        母集団をあらかじめ<strong>層（stratum）</strong>というグループに分け、
+                        <strong>すべての層から</strong>決められた大きさの標本を抽出する。
+                    </p>
+                    <ul>
+                        <li>集落・二段抽出と異なり<strong>母集団全体から満遍なく</strong>抽出できる</li>
+                        <li><strong>層の作り方の原則：</strong>層内はできるだけ均質に、異なる層はできるだけ異質に → 分散が小さくなり精度向上</li>
+                        <li><strong>例：</strong>有権者調査で小選挙区を層とし、各選挙区から一定数を抽出</li>
+                    </ul>
+
+                    <h3>④系統的抽出法（systematic sampling）</h3>
+                    <p>調査単位がリスト化されている場合、リスト上で<strong>等間隔</strong>に選ぶ。</p>
+                    <ul>
+                        <li><strong>例：</strong>名簿1万人から100人 → 乱数で1〜100の中から開始番号を決め（例：51番）、以後100番おきに151, 251, …と選ぶ</li>
+                        <li>乱数を何度も使わず実施が簡単。母集団全体からある程度満遍なく取れる</li>
+                        <li><strong>注意：</strong>リストが周期的に並んでいると偏りが生じる（例：曜日ごとの売上リストで7の倍数おきに抽出）</li>
+                    </ul>
+
+                    <h3>抽出法まとめ</h3>
+                    <table>
+                        <thead>
+                            <tr><th>抽出法</th><th>特徴</th><th>メリット</th><th>注意点</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>単純無作為</td><td>全員に等確率</td><td>理論が明快、バイアスなし</td><td>大規模では費用大</td></tr>
+                            <tr><td>集落抽出</td><td>クラスター丸ごと</td><td>調査コスト低</td><td>クラスター間差が大きいと精度低</td></tr>
+                            <tr><td>二段抽出</td><td>2段階に分けて抽出</td><td>柔軟、コスト適度</td><td>第1・第2段の設計が複雑</td></tr>
+                            <tr><td>層化抽出</td><td>全層から抽出</td><td>精度向上、代表性高</td><td>層の設定が重要</td></tr>
+                            <tr><td>系統的抽出</td><td>等間隔</td><td>実施が簡単</td><td>リストの周期性に注意</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="content-section section-anchor" id="stratified">
+                    <h2><i class="fas fa-layer-group"></i> 層化抽出法の詳細</h2>
+
+                    <h3>設定</h3>
+                    <p>
+                        大きさ $N$ の母集団が $L$ 個の層に分けられており、層 $h$ の大きさは $N_h$（$\sum_{h=1}^{L}N_h = N$）。
+                        層 $h$ から独立に大きさ $n_h$ の標本を非復元無作為抽出し、得られた値を $y_{hi}$（$i=1,\ldots,n_h$）とする。
+                    </p>
+
+                    <h3>推定量と分散</h3>
+                    <p>母平均の推定量として<strong>層化推定量</strong>を用いる：</p>
+                    <div class="formula-block">
+                        $$\bar{x}_{\text{st}} = \sum_{h=1}^{L}\frac{N_h}{N}\bar{y}_h, \quad \bar{y}_h = \frac{1}{n_h}\sum_{i=1}^{n_h}y_{hi}$$
+                    </div>
+                    <p>この推定量は不偏（$E[\bar{x}_{\text{st}}] = \mu$）であり、その分散は：</p>
+                    <div class="formula-block">
+                        $$V[\bar{x}_{\text{st}}] = \sum_{h=1}^{L}\left(\frac{N_h}{N}\right)^2\cdot\frac{N_h - n_h}{N_h - 1}\cdot\frac{\sigma_h^2}{n_h}$$
+                    </div>
+                    <p>ここで $\sigma_h^2$ は層 $h$ の母分散、$\frac{N_h-n_h}{N_h-1}$ は各層の有限修正項。</p>
+                </section>
+
+                <section class="content-section section-anchor" id="allocation">
+                    <h2><i class="fas fa-sliders-h"></i> 標本配分法</h2>
+
+                    <p>各層から何人抽出するか（$n_h$ の決め方）を<strong>標本配分法（sample allocation）</strong>という。合計 $n = \sum_{h=1}^{L}n_h$。</p>
+
+                    <h3>①比例配分法（proportional allocation）</h3>
+                    <p>各層の標本サイズを母集団での層の大きさに比例させる：</p>
+                    <div class="formula-block">
+                        $$n_h = \frac{N_h}{N} \times n$$
+                    </div>
+                    <p>自然で直感的な方法。有限修正を無視すると $V[\bar{x}_{\text{st}}] \leq V[\bar{x}]$ が保証される（単純無作為以上の精度）。</p>
+
+                    <h3>②等配分法（equal allocation）</h3>
+                    <div class="formula-block">
+                        $$n_h = \frac{n}{L}$$
+                    </div>
+                    <p>各層の推定精度を均等に保ちたい場合（例：各都道府県の推定値の精度を揃えたい）に有効。ただし層サイズが大きく異なると全体精度が低下することもある。</p>
+
+                    <h3>③ネイマン配分法（Neyman allocation）＝最適配分法</h3>
+                    <p>「大きい層からも、ばらつきの大きい層からも多く取る」→ $V[\bar{x}_{\text{st}}]$ を最小化：</p>
+                    <div class="formula-block">
+                        $$n_h = \frac{N_h\sigma_h}{\sum_{k=1}^{L}N_k\sigma_k} \times n$$
+                    </div>
+
+                    <div class="concept-box">
+                        <p class="box-title"><i class="fas fa-balance-scale"></i> 3つの配分法の比較</p>
+                        <table>
+                            <thead>
+                                <tr><th>配分法</th><th>$n_h$ の決め方</th><th>使いどころ</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>比例配分</td><td>$\propto N_h$</td><td>層のばらつきが均等な場合など一般的</td></tr>
+                                <tr><td>等配分</td><td>各層 $n/L$ 人</td><td>各層の推定精度を揃えたい場合</td></tr>
+                                <tr><td>ネイマン配分</td><td>$\propto N_h\sigma_h$</td><td>全体の推定精度最大（$\sigma_h$ が既知か推定できる場合）</td></tr>
+                            </tbody>
+                        </table>
+                        <p>ネイマン配分は分散最小だが、$\sigma_h$ が事前にわからないと使えない → 過去の調査値で代用することが多い。</p>
+                    </div>
+                </section>
+
+                <section class="content-section section-anchor" id="formulas">
+                    <h2><i class="fas fa-square-root-variable"></i> 公式まとめ</h2>
+
+                    <h3>非復元単純無作為抽出の標本平均</h3>
+                    <div class="formula-block">
+                        $$E[\bar{x}] = \mu, \quad V[\bar{x}] = \frac{N-n}{N-1}\cdot\frac{\sigma^2}{n}$$
+                    </div>
+
+                    <h3>必要サンプルサイズ（$V[\bar{x}] \leq C$）</h3>
                     <div class="formula-block">
                         $$n \geq \frac{N\sigma^2}{\sigma^2 + (N-1)C}$$
                     </div>
 
-                    <h3>さまざまな標本抽出法</h3>
-                    <table>
-                        <thead><tr><th>抽出法</th><th>説明</th></tr></thead>
-                        <tbody>
-                            <tr><td><strong>集落抽出法</strong></td><td>母集団をクラスターに分け、抽出したクラスター内の全単位を調査</td></tr>
-                            <tr><td><strong>二段抽出法</strong></td><td>第1次抽出単位を選び、その中から第2次抽出単位を抽出</td></tr>
-                            <tr><td><strong>層化抽出法</strong></td><td>母集団を層に分け、すべての層から決められた大きさの標本を抽出</td></tr>
-                            <tr><td><strong>系統的抽出法</strong></td><td>リスト上で等間隔に選ぶ（例：100番おき）</td></tr>
-                        </tbody>
-                    </table>
-                    <p>層化抽出法の原則：層内はできるだけ均質に、異なる層はできるだけ異質に。</p>
-
-                    <h3>層化無作為抽出法</h3>
-                    <p>$L$ 個の層に分け、各層 $h$ から大きさ $n_h$ の標本を非復元抽出。推定量 $\bar{x}_{\text{st}}$ の分散：</p>
+                    <h3>層化推定量と分散</h3>
                     <div class="formula-block">
-                        $$V[\bar{x}_{\text{st}}] = \sum_{h=1}^{L}\left(\frac{N_h}{N}\right)^2 \frac{N_h - n_h}{N_h - 1}\cdot\frac{\sigma_h^2}{n_h}$$
+                        $$\bar{x}_{\text{st}} = \sum_{h=1}^{L}\frac{N_h}{N}\bar{y}_h, \quad V[\bar{x}_{\text{st}}] = \sum_{h=1}^{L}\left(\frac{N_h}{N}\right)^2\frac{N_h-n_h}{N_h-1}\cdot\frac{\sigma_h^2}{n_h}$$
                     </div>
 
-                    <h3>標本配分法</h3>
+                    <h3>配分法まとめ</h3>
                     <table>
-                        <thead><tr><th>配分法</th><th>各層の標本サイズ $n_h$</th><th>特徴</th></tr></thead>
+                        <thead>
+                            <tr><th>配分法</th><th>$n_h$</th></tr>
+                        </thead>
                         <tbody>
-                            <tr><td><strong>比例配分法</strong></td><td>$n_h = \frac{N_h}{N} \times n$</td><td>自然な配分。$V[\bar{x}_{\text{st}}] \leq V[\bar{x}]$</td></tr>
-                            <tr><td><strong>等配分法</strong></td><td>$n_h = n/L$</td><td>各層の推定精度を均等にしたい場合</td></tr>
-                            <tr><td><strong>ネイマン配分法</strong></td><td>$n_h = \frac{N_h\sigma_h}{\sum N_k\sigma_k} \times n$</td><td>推定量の分散を最小化。最適配分法</td></tr>
+                            <tr><td>比例配分</td><td>$(N_h/N)\times n$</td></tr>
+                            <tr><td>等配分</td><td>$n/L$</td></tr>
+                            <tr><td>ネイマン配分</td><td>$\dfrac{N_h\sigma_h}{\sum_k N_k\sigma_k}\times n$</td></tr>
                         </tbody>
                     </table>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-square-root-variable"></i> 公式・定理</h2>
-
-                    <h3>非復元抽出の標本平均の分散</h3>
-                    <div class="formula-block">
-                        $$V[\bar{x}] = \frac{N-n}{N-1}\cdot\frac{\sigma^2}{n}$$
-                    </div>
-
-                    <h3>必要標本サイズ</h3>
-                    <div class="formula-block">
-                        $$n \geq \frac{N\sigma^2}{\sigma^2 + (N-1)C}$$
-                    </div>
-
-                    <h3>ネイマン配分法（有限修正あり）</h3>
-                    <div class="formula-block">
-                        $$n_h = \frac{N_h \sigma_h \sqrt{\frac{N_h}{N_h - 1}}}{\sum_{k=1}^{L} N_k \sigma_k \sqrt{\frac{N_k}{N_k - 1}}} \times n$$
-                    </div>
-                    <p>有限修正を無視する場合は $\sqrt{N_h/(N_h-1)}$ を除く。</p>
-
-                    <h3>層化抽出の総計値推定</h3>
-                    <div class="formula-block">
-                        $$\hat{Y} = \sum_{h=1}^{L} N_h \bar{y}_h, \quad \bar{y}_h = \frac{1}{n_h}\sum_{i=1}^{n_h} y_{hi}$$
-                    </div>
-                </section>
-
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil"></i> 例題・演習</h2>
 
                     <h3>問21.1：集落抽出法の識別</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>ある都市でいくつかの世帯を抽出して世帯主を調査したい。「集落抽出法」を説明している記述を①〜⑤から選べ。</p>
+                        <ol>
+                            <li>市内の世帯に連番を付け、コンピュータでランダムな番号を発生させ、その番号の世帯を抽出する。</li>
+                            <li>市内をいくつかのグループにまとめ、第一段階としてグループを抽出し、選ばれたグループに含まれる世帯を<strong>すべて</strong>調査する。</li>
+                            <li>属性（地域・家族構成・職業など）によりグループに分け、それぞれのグループから世帯を無作為に抽出する。</li>
+                            <li>市内の世帯の中で、役員経験のある世帯を抽出する。</li>
+                            <li>市内をいくつかのグループにまとめ、第一段階としてグループを抽出し、選ばれたグループの中からさらに世帯を抽出する。</li>
+                        </ol>
+                    </div>
                     <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
                         <p><strong>答：②</strong></p>
-                        <p>① 単純無作為抽出法、② 集落抽出法、③ 層化抽出法、④ 有意抽出法、⑤ 二段抽出法。</p>
-                        <p>②と⑤の違い：抽出されたグループの全世帯を調査するか（②集落）、さらに世帯を抽出するか（⑤二段）。</p>
-                    </div>
-
-                    <h3>問21.2：大豆収穫量の層化抽出</h3>
-                    <div class="answer-block">
-                        <p><strong>(1) 母平均の期待値：235</strong></p>
-                        <p>配分法によらず推定量 $\hat{Y}$ は母集団総計値の不偏推定量。$\hat{Y}/40$ の期待値は母平均に等しい。</p>
-
-                        <p><strong>(2) 推定量の分散が最小の配分：C</strong></p>
-                        <p>ネイマン配分法に最も近い：$n_1 \approx 1.02$, $n_2 \approx 1.84$, $n_3 \approx 4.03$, $n_4 \approx 1.11$ → Cが最も近い。</p>
-                        <p>分散の比較：$A: 1142004.75$, $B: 251396.99$, $C: 669184.03$</p>
-                        <p>※ 実際にはCが最小。</p>
-                    </div>
-
-                    <h3>問21.3：有限修正と標本配分</h3>
-                    <div class="answer-block">
-                        <p><strong>(1) 正しい記述：②, ③</strong></p>
                         <ul>
-                            <li>① 誤り：$n = N/2$ のとき $V[\bar{x}] = \frac{\sigma^2}{2(N-1)}$ で $N$ により変化</li>
-                            <li>② 正しい：有限修正項 $(N-n)/(N-1) \leq 1$ より $V[\bar{x}] \leq \sigma^2/n$</li>
-                            <li>③ 正しい：復元抽出の分散も $\sigma^2/n$（無限母集団と同じ）</li>
+                            <li>①→ 単純無作為抽出法</li>
+                            <li>②→ <strong>集落抽出法</strong>（グループ選択→全員調査）</li>
+                            <li>③→ 層化抽出法（属性で層化し各層から一部抽出）</li>
+                            <li>④→ 有意抽出法（主観的選択）</li>
+                            <li>⑤→ 二段抽出法（グループ選択→さらに一部抽出）</li>
                         </ul>
-
-                        <p><strong>(2) $V_1, V_2$ の計算（$N=9585, n=600, \sigma^2=420$）：</strong></p>
-                        <p>$V_1 = \frac{9585-600}{9585-1}\cdot\frac{420}{600} = \frac{8985}{9584}\cdot 0.7 = 0.65625$</p>
-                        <p>$V_2 = \frac{420}{600} = 0.7$</p>
+                        <p><strong>②と⑤の違い：</strong>②は選んだグループの<em>全員</em>を調査（集落）、⑤はさらに<em>一部のみ</em>抽出（二段）。</p>
                     </div>
 
                     <h3>例1：英語テストの標本設計</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>$N=1600$ 人の母集団から非復元単純無作為抽出で英語テストを受験させる。母分散 $\sigma^2=120$ と仮定する。</p>
+                        <ol>
+                            <li>$n=100$ 人を抽出するときの標本平均の分散を求めよ（小数第4位まで）。</li>
+                            <li>標本平均の分散を0.5以下にするには何人以上の抽出が必要か。</li>
+                        </ol>
+                    </div>
                     <div class="answer-block">
-                        <p>$N=1600$, $\sigma^2=120$, $n=100$ のとき：</p>
-                        <p>$V[\bar{x}] = \frac{1600-100}{1600-1}\cdot\frac{120}{100} = \frac{1500}{1599}\times 1.2 = 1.1257$</p>
-                        <p>$V[\bar{x}] \leq 0.5$ にするには：$n \geq \frac{1600 \times 120}{120 + 1599 \times 0.5} = 208.31\cdots$ → <strong>209人</strong>以上</p>
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>(1)</strong></p>
+                        <div class="formula-block">
+                            $$V[\bar{x}] = \frac{1600-100}{1600-1}\cdot\frac{120}{100} = \frac{1500}{1599}\times 1.2 \approx \mathbf{1.1257}$$
+                        </div>
+                        <p><strong>(2)</strong> $V[\bar{x}] \leq 0.5$ となるには：</p>
+                        <div class="formula-block">
+                            $$n \geq \frac{1600\times 120}{120 + (1600-1)\times 0.5} = \frac{192000}{919.5} \approx 208.8$$
+                        </div>
+                        <p>よって <strong>209人以上</strong>を抽出する必要がある。</p>
                     </div>
 
-                    <h3>例2：層化抽出の比例配分・ネイマン配分</h3>
+                    <h3>例2：層化抽出の比例・ネイマン配分</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>2つの層があり $N_1=500, N_2=500, \sigma_1=6, \sigma_2=18$。合計 $n=20$ を抽出したい。
+                        比例配分法とネイマン配分法でそれぞれの層から何人抽出するか求めよ。</p>
+                    </div>
                     <div class="answer-block">
-                        <p>$N_1=500, N_2=500, \sigma_1=6, \sigma_2=18$, 合計 $n=20$</p>
-                        <p><strong>比例配分：</strong>$n_1 = n_2 = (500/1000) \times 20 = 10$</p>
-                        <p><strong>ネイマン配分：</strong>$n_1 = 5, n_2 = 15$（散らばりの大きい層2から多く抽出）</p>
+                        <span class="prob-badge badge-a">解答</span>
+                        <p><strong>比例配分：</strong>$n_1 = \dfrac{500}{1000}\times 20 = 10, \quad n_2 = 10$</p>
+                        <p><strong>ネイマン配分（有限修正無視）：</strong></p>
+                        <div class="formula-block">
+                            $$n_1 = \frac{500\times 6}{500\times 6 + 500\times 18}\times 20 = \frac{3000}{12000}\times 20 = 5$$
+                        </div>
+                        <p>$n_2 = 20 - 5 = 15$</p>
+                        <p>層2のばらつきが層1の3倍（$\sigma_2/\sigma_1=3$）なので、ネイマン配分では層2から3倍多く取る。これにより $V[\bar{x}_{\text{st}}]$ が最小化される。</p>
+                    </div>
+
+                    <h3>問21.2：有限修正と分散の比較</h3>
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>$N=9585, n=600, \sigma^2=420$ のとき、非復元抽出の場合の標本平均の分散 $V_1$ と復元抽出（無限母集団）の場合の分散 $V_2$ を求めよ。</p>
+                    </div>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答</span>
+                        <p>$V_1 = \dfrac{9585-600}{9585-1}\cdot\dfrac{420}{600} = \dfrac{8985}{9584}\times 0.7 \approx \mathbf{0.6563}$</p>
+                        <p>$V_2 = \dfrac{420}{600} = \mathbf{0.7}$</p>
+                        <p>有限修正項 $\approx 0.9375$ → 非復元抽出の分散が復元抽出より約6.25%小さい。</p>
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2><i class="fas fa-sticky-note"></i> メモ</h2>
+                <section class="content-section section-anchor" id="notes">
+                    <h2><i class="fas fa-sticky-note"></i> まとめ・ポイント</h2>
                     <ul>
-                        <li>有限修正項：$N$ に比べて $n$ が小さい場合はほぼ1（影響なし）</li>
-                        <li>比例配分法は単純無作為抽出よりも推定精度が悪くなることはない</li>
-                        <li>ネイマン配分法は分散最小だが、母集団の標準偏差 $\sigma_h$ が未知の場合が多い → 過去の調査値で代用</li>
-                        <li>層化抽出法の原則「層内均質、層間異質」を守ることが精度向上の鍵</li>
-                        <li>集落抽出法は調査コストが低いが、どのクラスターが選ばれるかで結果が大きく変わりうる</li>
-                        <li>公的統計では層化二段抽出法が広く用いられる</li>
+                        <li>有限修正項：$n/N$ が小さいときはほぼ1（影響ほぼなし）。$n/N > 0.1$ くらいから効いてくる</li>
+                        <li>比例配分法は単純無作為抽出と比べて推定精度が悪化しない（$V_{\text{st}} \leq V_{\text{srs}}$）</li>
+                        <li>ネイマン配分法は<strong>分散最小</strong>だが $\sigma_h$ が既知でないと使えない → 過去の調査値で代用</li>
+                        <li>層化抽出の原則「<strong>層内均質・層間異質</strong>」を守るほど精度が上がる</li>
+                        <li>集落抽出法と二段抽出法の違い：集落は全員調査、二段はさらに一部抽出</li>
+                        <li>公的統計（国勢調査・家計調査等）では<strong>層化二段抽出法</strong>が広く使われる</li>
+                        <li>系統的抽出法：実施は簡単だがリストの周期性に注意</li>
                     </ul>
                 </section>
 
@@ -218,9 +431,11 @@
                     </a>
                 </nav>
 
+                </div>
             </div>
         </div>
     </main>
+
 
     <footer class="stat-footer">
         <div class="container">

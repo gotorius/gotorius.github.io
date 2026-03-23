@@ -61,11 +61,46 @@ function initChapter() {
     setText('breadcrumb-chapter', `第${chNum}章`);
 
     setupPager(chNum);
+    buildChapterNav(chNum);
 }
 
 function setText(id, text) {
     const el = document.getElementById(id);
     if (el) el.textContent = text;
+}
+
+function buildChapterNav(chNum) {
+    const sidebar = document.querySelector('.chapter-toc-sidebar');
+    if (!sidebar) return;
+
+    const nav = document.createElement('div');
+    nav.className = 'chapter-nav-box';
+
+    const title = document.createElement('h2');
+    title.innerHTML = '<i class="fas fa-book"></i>全章一覧';
+    nav.appendChild(title);
+
+    const list = document.createElement('ul');
+    CHAPTERS.forEach(ch => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `chapter${ch.num}.html`;
+        a.innerHTML = `<span class="cnav-num">${ch.num}</span><span class="cnav-title">${ch.title}</span>`;
+        if (ch.num === chNum) {
+            li.classList.add('cnav-current');
+            a.setAttribute('aria-current', 'page');
+        }
+        li.appendChild(a);
+        list.appendChild(li);
+    });
+    nav.appendChild(list);
+    sidebar.appendChild(nav);
+
+    // 現在章が見えるようにスクロール
+    const currentItem = list.querySelector('.cnav-current a');
+    if (currentItem) {
+        requestAnimationFrame(() => currentItem.scrollIntoView({ block: 'nearest' }));
+    }
 }
 
 function setupPager(chNum) {

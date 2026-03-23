@@ -1,56 +1,12 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>統計学学習ノート</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
-    <link rel="stylesheet" href="../style.css">
-</head>
-<body data-chapter="23">
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="../../index.html" class="nav-logo">R.Goto</a>
-            <ul class="nav-menu">
-                <li><a href="../../index.html">Home</a></li>
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
-                    <ul class="nav-dropdown-menu">
-                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
-                    </ul>
-                </li>
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
-                    <ul class="nav-dropdown-menu">
-                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <button class="nav-toggle" aria-label="メニュー">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+#!/usr/bin/env python3
+filepath = '/Users/gotou1/goto/statistics/chapters/chapter23.html'
+content = open(filepath, 'r').read()
 
-    <header class="chapter-hero">
-        <div class="container">
-            <div class="chapter-breadcrumb">
-                <a href="../../index.html">Portfolio</a>
-                <i class="fas fa-chevron-right"></i>
-                <a href="../index.html">統計学ノート</a>
-                <i class="fas fa-chevron-right"></i>
-                <span id="breadcrumb-chapter"></span>
-            </div>
-            <span class="chapter-label" id="chapter-label"></span>
-            <h1 id="chapter-title">読み込み中...</h1>
-        </div>
-    </header>
+# ヘッダー（navbar+header）を取得 - <main>の直前まで
+main_start = content.find('<main class="chapter-body">')
+header = content[:main_start]
 
-    <main class="chapter-body">
+new_main = """<main class="chapter-body">
         <div class="container">
             <div class="chapter-layout">
 
@@ -127,47 +83,47 @@
                     <h3>設定（2群の場合）</h3>
                     <p>
                         群 $G_1$（$n_1$ 個）と群 $G_2$（$n_2$ 個）が $p$ 次元特徴空間に存在する。
-                        $G_j$ のサンプル平均ベクトルを $\bar{\boldsymbol{x}}^{(j)}$、標本共分散行列を $S_j$（$j=1,2$）とする。
+                        $G_j$ のサンプル平均ベクトルを $\\bar{\\boldsymbol{x}}^{(j)}$、標本共分散行列を $S_j$（$j=1,2$）とする。
                     </p>
 
                     <h3>線形判別の基準：群間/群内分散比の最大化</h3>
                     <p>
-                        方向ベクトル $\boldsymbol{w}$ への射影 $z = \boldsymbol{w}^T\boldsymbol{x}$ を考えると：
+                        方向ベクトル $\\boldsymbol{w}$ への射影 $z = \\boldsymbol{w}^T\\boldsymbol{x}$ を考えると：
                     </p>
                     <ul>
                         <li>射影後の群間分散（大きいほど良い）：
-                            $(\bar{z}_1 - \bar{z}_2)^2 = \boldsymbol{w}^T(\bar{\boldsymbol{x}}^{(1)}-\bar{\boldsymbol{x}}^{(2)})(\bar{\boldsymbol{x}}^{(1)}-\bar{\boldsymbol{x}}^{(2)})^T\boldsymbol{w}$
+                            $(\\bar{z}_1 - \\bar{z}_2)^2 = \\boldsymbol{w}^T(\\bar{\\boldsymbol{x}}^{(1)}-\\bar{\\boldsymbol{x}}^{(2)})(\\bar{\\boldsymbol{x}}^{(1)}-\\bar{\\boldsymbol{x}}^{(2)})^T\\boldsymbol{w}$
                         </li>
                         <li>射影後の群内分散（小さいほど良い）：
-                            $\boldsymbol{w}^T S_W \boldsymbol{w}$。ここで $S_W = \dfrac{(n_1-1)S_1+(n_2-1)S_2}{n_1+n_2-2}$（プールド共分散行列）
+                            $\\boldsymbol{w}^T S_W \\boldsymbol{w}$。ここで $S_W = \\dfrac{(n_1-1)S_1+(n_2-1)S_2}{n_1+n_2-2}$（プールド共分散行列）
                         </li>
                     </ul>
                     <p>
-                        比 $J(\boldsymbol{w}) = \dfrac{\boldsymbol{w}^T(\bar{\boldsymbol{x}}^{(1)}-\bar{\boldsymbol{x}}^{(2)})(\bar{\boldsymbol{x}}^{(1)}-\bar{\boldsymbol{x}}^{(2)})^T\boldsymbol{w}}{\boldsymbol{w}^T S_W \boldsymbol{w}}$
-                        を最大化する $\boldsymbol{w}$ は：
+                        比 $J(\\boldsymbol{w}) = \\dfrac{\\boldsymbol{w}^T(\\bar{\\boldsymbol{x}}^{(1)}-\\bar{\\boldsymbol{x}}^{(2)})(\\bar{\\boldsymbol{x}}^{(1)}-\\bar{\\boldsymbol{x}}^{(2)})^T\\boldsymbol{w}}{\\boldsymbol{w}^T S_W \\boldsymbol{w}}$
+                        を最大化する $\\boldsymbol{w}$ は：
                     </p>
                     <div class="formula-block">
-                        $$\boldsymbol{w} = S_W^{-1}(\bar{\boldsymbol{x}}^{(1)} - \bar{\boldsymbol{x}}^{(2)})$$
+                        $$\\boldsymbol{w} = S_W^{-1}(\\bar{\\boldsymbol{x}}^{(1)} - \\bar{\\boldsymbol{x}}^{(2)})$$
                     </div>
 
                     <h3>フィッシャーの線形判別関数</h3>
                     <div class="formula-block">
-                        $$f(\boldsymbol{x}) = (\bar{\boldsymbol{x}}^{(1)}-\bar{\boldsymbol{x}}^{(2)})^T S_W^{-1}\left(\boldsymbol{x} - \frac{\bar{\boldsymbol{x}}^{(1)}+\bar{\boldsymbol{x}}^{(2)}}{2}\right)$$
+                        $$f(\\boldsymbol{x}) = (\\bar{\\boldsymbol{x}}^{(1)}-\\bar{\\boldsymbol{x}}^{(2)})^T S_W^{-1}\\left(\\boldsymbol{x} - \\frac{\\bar{\\boldsymbol{x}}^{(1)}+\\bar{\\boldsymbol{x}}^{(2)}}{2}\\right)$$
                     </div>
-                    <p>$f(\boldsymbol{x}) &gt; 0 \Rightarrow$ 群 $G_1$ に分類、$f(\boldsymbol{x}) &lt; 0 \Rightarrow$ 群 $G_2$ に分類。</p>
+                    <p>$f(\\boldsymbol{x}) &gt; 0 \\Rightarrow$ 群 $G_1$ に分類、$f(\\boldsymbol{x}) &lt; 0 \\Rightarrow$ 群 $G_2$ に分類。</p>
 
                     <h3>マハラノビス距離との関係</h3>
                     <p>
                         プールド共分散 $S_W$ を使ったマハラノビス距離：
-                        $D_j^2 = (\boldsymbol{x}-\bar{\boldsymbol{x}}^{(j)})^T S_W^{-1}(\boldsymbol{x}-\bar{\boldsymbol{x}}^{(j)})$
+                        $D_j^2 = (\\boldsymbol{x}-\\bar{\\boldsymbol{x}}^{(j)})^T S_W^{-1}(\\boldsymbol{x}-\\bar{\\boldsymbol{x}}^{(j)})$
                     </p>
-                    <p>$D_1^2 - D_2^2 = -2f(\boldsymbol{x})$ なので、「マハラノビス距離が短い方の群に分類」と等価。</p>
+                    <p>$D_1^2 - D_2^2 = -2f(\\boldsymbol{x})$ なので、「マハラノビス距離が短い方の群に分類」と等価。</p>
 
                     <div class="concept-box">
                         <p class="box-title"><i class="fas fa-ruler-combined"></i> マハラノビス距離 vs ユークリッド距離</p>
                         <p>
                             ユークリッド距離は変量のスケール・相関を無視します。
-                            マハラノビス距離は共分散行列 $\Sigma$ の逆行列を使うことで、
+                            マハラノビス距離は共分散行列 $\\Sigma$ の逆行列を使うことで、
                             「変量のスケール差を正規化し、相関を考慮した距離」になります。
                             たとえば変量1の分散が変量2の100倍であれば、変量2の1単位変化を変量1の10単位変化と同等に扱います。
                         </p>
@@ -179,20 +135,20 @@
 
                     <h3>各群で共分散行列が異なる場合</h3>
                     <p>
-                        線形判別は「2群の共分散行列が同じ」という仮定（$\Sigma_1 = \Sigma_2$）のもとで有効です。
+                        線形判別は「2群の共分散行列が同じ」という仮定（$\\Sigma_1 = \\Sigma_2$）のもとで有効です。
                         この仮定が成り立たない場合、各群の共分散行列 $S_1, S_2$ を別々に使う
                         <strong>2次判別分析（quadratic discriminant analysis, QDA）</strong>が必要です。
                     </p>
 
                     <h3>2次判別関数</h3>
-                    <p>各群へのマハラノビス距離（群ごとに $\Sigma_j$ を使う）を比較して分類：</p>
+                    <p>各群へのマハラノビス距離（群ごとに $\\Sigma_j$ を使う）を比較して分類：</p>
                     <div class="formula-block">
-                        $$g(\boldsymbol{x}) = D_2^2 - D_1^2$$
-                        $$= (\boldsymbol{x}-\bar{\boldsymbol{x}}^{(2)})^T S_2^{-1}(\boldsymbol{x}-\bar{\boldsymbol{x}}^{(2)}) - (\boldsymbol{x}-\bar{\boldsymbol{x}}^{(1)})^T S_1^{-1}(\boldsymbol{x}-\bar{\boldsymbol{x}}^{(1)})$$
+                        $$g(\\boldsymbol{x}) = D_2^2 - D_1^2$$
+                        $$= (\\boldsymbol{x}-\\bar{\\boldsymbol{x}}^{(2)})^T S_2^{-1}(\\boldsymbol{x}-\\bar{\\boldsymbol{x}}^{(2)}) - (\\boldsymbol{x}-\\bar{\\boldsymbol{x}}^{(1)})^T S_1^{-1}(\\boldsymbol{x}-\\bar{\\boldsymbol{x}}^{(1)})$$
                     </div>
-                    <p>$g(\boldsymbol{x}) &gt; 0 \Rightarrow G_1$（$D_1^2 &lt; D_2^2$）、$g(\boldsymbol{x}) &lt; 0 \Rightarrow G_2$。</p>
+                    <p>$g(\\boldsymbol{x}) &gt; 0 \\Rightarrow G_1$（$D_1^2 &lt; D_2^2$）、$g(\\boldsymbol{x}) &lt; 0 \\Rightarrow G_2$。</p>
                     <p>
-                        $g(\boldsymbol{x})$ は $\boldsymbol{x}$ の2次関数（行列 $S_1^{-1}-S_2^{-1}$ の2次形式を含む）なので、
+                        $g(\\boldsymbol{x})$ は $\\boldsymbol{x}$ の2次関数（行列 $S_1^{-1}-S_2^{-1}$ の2次形式を含む）なので、
                         判別境界が<strong>2次曲面</strong>（楕円・放物線・双曲線など）になる。
                     </p>
 
@@ -211,26 +167,26 @@
 
                     <h3>3群以上への拡張</h3>
                     <p>
-                        $g$ 個の群 $G_1, \ldots, G_g$ がある場合、フィッシャー判別を拡張した
+                        $g$ 個の群 $G_1, \\ldots, G_g$ がある場合、フィッシャー判別を拡張した
                         <strong>正準判別分析（canonical discriminant analysis）</strong>を使う。
                     </p>
 
                     <h3>群間・群内変動行列</h3>
-                    <p>全サンプル平均 $\bar{\boldsymbol{x}} = \dfrac{1}{N}\sum_{j=1}^{g}n_j\bar{\boldsymbol{x}}^{(j)}$（$N = \sum_j n_j$）として：</p>
+                    <p>全サンプル平均 $\\bar{\\boldsymbol{x}} = \\dfrac{1}{N}\\sum_{j=1}^{g}n_j\\bar{\\boldsymbol{x}}^{(j)}$（$N = \\sum_j n_j$）として：</p>
                     <div class="formula-block">
-                        $$S_B = \sum_{j=1}^{g} n_j(\bar{\boldsymbol{x}}^{(j)}-\bar{\boldsymbol{x}})(\bar{\boldsymbol{x}}^{(j)}-\bar{\boldsymbol{x}})^T \quad \text{（群間変動行列）}$$
+                        $$S_B = \\sum_{j=1}^{g} n_j(\\bar{\\boldsymbol{x}}^{(j)}-\\bar{\\boldsymbol{x}})(\\bar{\\boldsymbol{x}}^{(j)}-\\bar{\\boldsymbol{x}})^T \\quad \\text{（群間変動行列）}$$
                     </div>
                     <div class="formula-block">
-                        $$S_W = \sum_{j=1}^{g}(n_j-1)S_j \quad \text{（群内変動行列）}$$
+                        $$S_W = \\sum_{j=1}^{g}(n_j-1)S_j \\quad \\text{（群内変動行列）}$$
                     </div>
 
                     <h3>固有値問題</h3>
-                    <p>群間/群内分散比を最大化する正準判別関数の係数 $\boldsymbol{w}$ は：</p>
+                    <p>群間/群内分散比を最大化する正準判別関数の係数 $\\boldsymbol{w}$ は：</p>
                     <div class="formula-block">
-                        $$S_W^{-1}S_B\boldsymbol{w} = \lambda\boldsymbol{w}$$
+                        $$S_W^{-1}S_B\\boldsymbol{w} = \\lambda\\boldsymbol{w}$$
                     </div>
                     <p>
-                        固有値問題を解くと、最大 $d = \min(p, g-1)$ 個の正準判別関数が得られる。
+                        固有値問題を解くと、最大 $d = \\min(p, g-1)$ 個の正準判別関数が得られる。
                         （$S_B$ のランクが最大でも $g-1$ のため。）
                         得られた判別スコアで多次元の群の分布を可視化（2次元散布図）したり、
                         各サンプルを最近傍群の重心に分類できる。
@@ -242,8 +198,8 @@
 
                     <h3>マージン最大化の考え方</h3>
                     <p>
-                        2クラス（ラベル $y_i \in \{+1, -1\}$）の線形分離問題で、
-                        分離超平面 $\boldsymbol{w}^T\boldsymbol{x} + b = 0$ を「<strong>最も余裕を持って分離する</strong>」ように決める。
+                        2クラス（ラベル $y_i \\in \\{+1, -1\\}$）の線形分離問題で、
+                        分離超平面 $\\boldsymbol{w}^T\\boldsymbol{x} + b = 0$ を「<strong>最も余裕を持って分離する</strong>」ように決める。
                     </p>
                     <div class="concept-box">
                         <p class="box-title"><i class="fas fa-arrows-alt-h"></i> マージンとは</p>
@@ -256,14 +212,14 @@
 
                     <h3>ハードマージンSVM（線形分離可能な場合）</h3>
                     <div class="formula-block">
-                        $$\min_{\boldsymbol{w},b} \frac{1}{2}\|\boldsymbol{w}\|^2 \quad \text{s.t.}\quad y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b) \geq 1\; (\forall i)$$
+                        $$\\min_{\\boldsymbol{w},b} \\frac{1}{2}\\|\\boldsymbol{w}\\|^2 \\quad \\text{s.t.}\\quad y_i(\\boldsymbol{w}^T\\boldsymbol{x}_i + b) \\geq 1\\; (\\forall i)$$
                     </div>
-                    <p>マージン幅 $= 2/\|\boldsymbol{w}\|$。これを最大化するには $\|\boldsymbol{w}\|$ を最小化する。</p>
+                    <p>マージン幅 $= 2/\\|\\boldsymbol{w}\\|$。これを最大化するには $\\|\\boldsymbol{w}\\|$ を最小化する。</p>
 
                     <h3>ソフトマージンSVM（許容誤分類あり）</h3>
-                    <p>完全分離できない場合はスラック変数 $\xi_i \geq 0$（誤分類の程度）を導入：</p>
+                    <p>完全分離できない場合はスラック変数 $\\xi_i \\geq 0$（誤分類の程度）を導入：</p>
                     <div class="formula-block">
-                        $$\min_{\boldsymbol{w},b,\boldsymbol{\xi}} \frac{1}{2}\|\boldsymbol{w}\|^2 + C\sum_{i=1}^{n}\xi_i \quad \text{s.t.}\quad y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b) \geq 1-\xi_i,\;\xi_i \geq 0$$
+                        $$\\min_{\\boldsymbol{w},b,\\boldsymbol{\\xi}} \\frac{1}{2}\\|\\boldsymbol{w}\\|^2 + C\\sum_{i=1}^{n}\\xi_i \\quad \\text{s.t.}\\quad y_i(\\boldsymbol{w}^T\\boldsymbol{x}_i + b) \\geq 1-\\xi_i,\\;\\xi_i \\geq 0$$
                     </div>
                     <ul>
                         <li>$C$ が大きい → 誤分類を許容しない（過学習リスク↑）</li>
@@ -273,13 +229,13 @@
                     <h3>カーネル法（非線形SVM）</h3>
                     <p>
                         元のデータ空間で線形分離できない場合、
-                        高次元の特徴空間 $\phi: \boldsymbol{x} \mapsto \phi(\boldsymbol{x})$ に写像してから線形分離する。
-                        <strong>カーネルトリック</strong>を使うと $\phi(\boldsymbol{x})$ を直接計算せず
-                        カーネル関数 $K(\boldsymbol{x},\boldsymbol{y}) = \phi(\boldsymbol{x})^T\phi(\boldsymbol{y})$ だけで計算できる。
+                        高次元の特徴空間 $\\phi: \\boldsymbol{x} \\mapsto \\phi(\\boldsymbol{x})$ に写像してから線形分離する。
+                        <strong>カーネルトリック</strong>を使うと $\\phi(\\boldsymbol{x})$ を直接計算せず
+                        カーネル関数 $K(\\boldsymbol{x},\\boldsymbol{y}) = \\phi(\\boldsymbol{x})^T\\phi(\\boldsymbol{y})$ だけで計算できる。
                     </p>
                     <ul>
-                        <li>多項式カーネル：$K(\boldsymbol{x},\boldsymbol{y}) = (\boldsymbol{x}^T\boldsymbol{y} + c)^d$</li>
-                        <li>RBFカーネル（ガウスカーネル）：$K(\boldsymbol{x},\boldsymbol{y}) = \exp(-\gamma\|\boldsymbol{x}-\boldsymbol{y}\|^2)$</li>
+                        <li>多項式カーネル：$K(\\boldsymbol{x},\\boldsymbol{y}) = (\\boldsymbol{x}^T\\boldsymbol{y} + c)^d$</li>
+                        <li>RBFカーネル（ガウスカーネル）：$K(\\boldsymbol{x},\\boldsymbol{y}) = \\exp(-\\gamma\\|\\boldsymbol{x}-\\boldsymbol{y}\\|^2)$</li>
                     </ul>
                 </section>
 
@@ -305,7 +261,7 @@
                             <tr><td>感度（Sensitivity）＝再現率</td><td>$TP/(TP+FN)$</td><td>陽性を陽性と正しく予測できた割合</td></tr>
                             <tr><td>特異度（Specificity）</td><td>$TN/(TN+FP)$</td><td>陰性を陰性と正しく予測できた割合</td></tr>
                             <tr><td>適合率（Precision）</td><td>$TP/(TP+FP)$</td><td>陽性予測のうち実際に陽性の割合</td></tr>
-                            <tr><td>F値（F-measure）</td><td>$2\times\dfrac{P \times R}{P+R}$</td><td>適合率と再現率の調和平均</td></tr>
+                            <tr><td>F値（F-measure）</td><td>$2\\times\\dfrac{P \\times R}{P+R}$</td><td>適合率と再現率の調和平均</td></tr>
                         </tbody>
                     </table>
 
@@ -335,22 +291,22 @@
 
                     <h3>フィッシャーの線形判別係数</h3>
                     <div class="formula-block">
-                        $$\boldsymbol{w} = S_W^{-1}(\bar{\boldsymbol{x}}^{(1)} - \bar{\boldsymbol{x}}^{(2)}), \quad S_W = \frac{(n_1-1)S_1+(n_2-1)S_2}{n_1+n_2-2}$$
+                        $$\\boldsymbol{w} = S_W^{-1}(\\bar{\\boldsymbol{x}}^{(1)} - \\bar{\\boldsymbol{x}}^{(2)}), \\quad S_W = \\frac{(n_1-1)S_1+(n_2-1)S_2}{n_1+n_2-2}$$
                     </div>
 
                     <h3>マハラノビスの平方距離（群 $j$ まで）</h3>
                     <div class="formula-block">
-                        $$D_j^2 = (\boldsymbol{x}-\bar{\boldsymbol{x}}^{(j)})^T S_W^{-1}(\boldsymbol{x}-\bar{\boldsymbol{x}}^{(j)})$$
+                        $$D_j^2 = (\\boldsymbol{x}-\\bar{\\boldsymbol{x}}^{(j)})^T S_W^{-1}(\\boldsymbol{x}-\\bar{\\boldsymbol{x}}^{(j)})$$
                     </div>
 
                     <h3>正準判別の固有値問題</h3>
                     <div class="formula-block">
-                        $$S_W^{-1}S_B\boldsymbol{w} = \lambda\boldsymbol{w}, \quad d = \min(p,\, g-1) \text{ 個の判別関数}$$
+                        $$S_W^{-1}S_B\\boldsymbol{w} = \\lambda\\boldsymbol{w}, \\quad d = \\min(p,\\, g-1) \\text{ 個の判別関数}$$
                     </div>
 
                     <h3>SVMの目的関数（ソフトマージン）</h3>
                     <div class="formula-block">
-                        $$\min \frac{1}{2}\|\boldsymbol{w}\|^2 + C\sum_{i}\xi_i \quad \text{s.t.}\quad y_i(\boldsymbol{w}^T\boldsymbol{x}_i + b) \geq 1-\xi_i,\;\xi_i \geq 0$$
+                        $$\\min \\frac{1}{2}\\|\\boldsymbol{w}\\|^2 + C\\sum_{i}\\xi_i \\quad \\text{s.t.}\\quad y_i(\\boldsymbol{w}^T\\boldsymbol{x}_i + b) \\geq 1-\\xi_i,\\;\\xi_i \\geq 0$$
                     </div>
                 </section>
 
@@ -369,7 +325,7 @@
                             <li>訓練データへの<strong>過学習（overfitting）</strong>が起きやすい</li>
                             <li>決定境界が複雑になりすぎ、未知データへの<strong>汎化性能が低下</strong>する</li>
                         </ul>
-                        <p>適切な $C$ と $\gamma$（RBFの広がり幅）の組み合わせは交差検証で選択する。</p>
+                        <p>適切な $C$ と $\\gamma$（RBFの広がり幅）の組み合わせは交差検証で選択する。</p>
                     </div>
 
                     <h3>問23.2：正準判別分析の次元数</h3>
@@ -379,7 +335,7 @@
                     </div>
                     <div class="answer-block">
                         <span class="prob-badge badge-a">解答</span>
-                        <p>$d = \min(p, g-1) = \min(8, 2) = \mathbf{2}$ 個</p>
+                        <p>$d = \\min(p, g-1) = \\min(8, 2) = \\mathbf{2}$ 個</p>
                         <p>
                             第1正準判別：最も群を分離する方向（寄与率最大）<br>
                             第2正準判別：第1と直交し、残りの分離情報を最大化する方向
@@ -418,7 +374,7 @@
                         <li>フィッシャー判別は正規分布の仮定不要。群間/群内分散比の最大化がベース</li>
                         <li>線形判別は「共分散行列が2群で等しい」仮定。等しくない場合は2次判別を使う</li>
                         <li>2次判別はパラメータ数が多く、サンプルが少ない場合は不安定（過学習リスク）</li>
-                        <li>正準判別分析で得られる判別関数数は最大 $\min(p, g-1)$ 個</li>
+                        <li>正準判別分析で得られる判別関数数は最大 $\\min(p, g-1)$ 個</li>
                         <li>SVM は「マージン最大化」が原理。カーネル法で非線形判別へ拡張可能</li>
                         <li>$C$ パラメータ：大きい → 過学習、小さい → 汎化性能↑（交差検証で選択）</li>
                         <li>ROC-AUCはクラス不均衡でも安定した評価指標（正解率はクラス比に依存）</li>
@@ -455,4 +411,9 @@
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
         onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true},{left: '$', right: '$', display: false}]});"></script>
 </body>
-</html>
+</html>"""
+
+new_content = header + new_main
+with open(filepath, 'w') as f:
+    f.write(new_content)
+print('Done. Lines:', new_content.count('\\n')+1)

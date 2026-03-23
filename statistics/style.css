@@ -716,6 +716,94 @@ ul { list-style: none; }
     text-decoration: underline;
 }
 
+/* ===================================
+   Chapter Navigation Panel
+   =================================== */
+
+.chapter-nav-box {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-top: 12px;
+}
+
+.chapter-nav-box h2 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--gray-800);
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--primary-bg);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.chapter-nav-box h2 i {
+    color: var(--primary);
+}
+
+.chapter-nav-box ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.chapter-nav-box ul li a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 6px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background var(--transition), color var(--transition);
+    color: var(--gray-600);
+    font-size: 11.5px;
+    line-height: 1.4;
+}
+
+.chapter-nav-box ul li a:hover {
+    background: var(--primary-bg);
+    color: var(--primary-dark);
+}
+
+.chapter-nav-box ul li.cnav-current a {
+    background: var(--primary);
+    color: white;
+    font-weight: 700;
+}
+
+.cnav-num {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: var(--gray-100);
+    color: var(--gray-500);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.cnav-current a .cnav-num {
+    background: rgba(255,255,255,0.25);
+    color: white;
+}
+
+.cnav-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 /* Section anchor offset for fixed nav */
 .section-anchor {
     scroll-margin-top: 76px;
@@ -792,14 +880,16 @@ ul { list-style: none; }
 }
 
 /* Distribution summary table */
-.dist-table {
+.dist-table,
+.chapter-content table {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px;
     margin: 14px 0;
 }
 
-.dist-table th {
+.dist-table th,
+.chapter-content table th {
     background: var(--primary-bg);
     color: #1e40af;
     border: 1px solid #bfdbfe;
@@ -808,7 +898,8 @@ ul { list-style: none; }
     font-weight: 700;
 }
 
-.dist-table td {
+.dist-table td,
+.chapter-content table td {
     border: 1px solid var(--gray-200);
     padding: 8px 12px;
     text-align: center;
@@ -816,7 +907,8 @@ ul { list-style: none; }
     vertical-align: middle;
 }
 
-.dist-table tr:hover td {
+.dist-table tr:hover td,
+.chapter-content table tr:hover td {
     background: var(--gray-50);
 }
 

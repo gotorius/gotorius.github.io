@@ -52,10 +52,25 @@
 
     <main class="chapter-body">
         <div class="container">
-            <div class="chapter-content">
+            <div class="chapter-layout">
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <p class="toc-title"><i class="fas fa-list"></i> 目次</p>
+                        <ol>
+                            <li><a href="#intro">はじめに</a></li>
+                            <li><a href="#mds">多次元尺度法（MDS）</a></li>
+                            <li><a href="#cca">正準相関分析</a></li>
+                            <li><a href="#quantification">数量化法</a></li>
+                            <li><a href="#correspondence">対応分析</a></li>
+                            <li><a href="#formulas">公式まとめ</a></li>
+                            <li><a href="#problems">例題・演習</a></li>
+                        </ol>
+                    </div>
+                </aside>
+                <div class="chapter-content">
 
                 <!-- イントロ -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="intro">
                     <h2><i class="fas fa-compass"></i> イントロ：「その他」の多変量解析とは？</h2>
                     <p>
                         これまでの章では、主成分分析・因子分析・判別分析・クラスター分析を学んだ。本章では、それ以外の重要な多変量解析手法として以下の4つを扱う。
@@ -75,7 +90,7 @@
                 </section>
 
                 <!-- ① MDS -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="mds">
                     <h2><i class="fas fa-map-marked-alt"></i> ① 多次元尺度法（MDS）</h2>
 
                     <h3 style="margin-top:1.2rem;">問題設定：距離から地図を復元したい</h3>
@@ -149,7 +164,7 @@
                 </section>
 
                 <!-- ② 正準相関分析 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="cca">
                     <h2><i class="fas fa-project-diagram"></i> ② 正準相関分析</h2>
 
                     <h3 style="margin-top:1.2rem;">問題設定：2つの変数グループの関係を探る</h3>
@@ -217,7 +232,7 @@
                 </section>
 
                 <!-- ③ 数量化法 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="quantification">
                     <h2><i class="fas fa-tags"></i> ③ 数量化法（質的データの多変量解析）</h2>
 
                     <p>
@@ -257,7 +272,7 @@
                 </section>
 
                 <!-- ④ 対応分析 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="correspondence">
                     <h2><i class="fas fa-table"></i> ④ 対応分析（Correspondence Analysis）</h2>
 
                     <p>
@@ -290,7 +305,7 @@
                 </section>
 
                 <!-- ⑤ 公式まとめ -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="formulas">
                     <h2><i class="fas fa-clipboard-list"></i> ⑤ 公式まとめ</h2>
 
                     <div class="formula-block">
@@ -323,7 +338,7 @@
                 </section>
 
                 <!-- 例題・演習 -->
-                <section class="content-section">
+                <section class="content-section section-anchor" id="problems">
                     <h2><i class="fas fa-pencil-alt"></i> 例題・演習</h2>
                     <p style="color:#555; font-style:italic;">以下の問題はすべて自作問題です。問題と解答は分かれているので、まず自分で解いてから答え合わせをしてください。</p>
 
@@ -529,6 +544,7 @@
                     </a>
                 </nav>
 
+                </div>
             </div>
         </div>
     </main>

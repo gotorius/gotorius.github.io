@@ -470,6 +470,97 @@ body {
   flex-shrink: 0;
 }
 
+/* ===== サウンド設定 ===== */
+.sound-settings {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 32px;
+  box-shadow: var(--shadow-sm);
+  transition: background 0.3s, border-color 0.3s;
+}
+.sound-settings h2 {
+  font-size: 1rem;
+  color: var(--accent);
+  margin-bottom: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sound-type-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+}
+@media (max-width: 760px) {
+  .sound-type-grid { grid-template-columns: repeat(4, 1fr); }
+}
+@media (max-width: 480px) {
+  .sound-type-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+.sound-type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all .18s;
+  color: var(--text-secondary);
+  font-family: inherit;
+}
+.sound-type-btn:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+.sound-type-btn.active {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.sound-type-icon {
+  font-size: 1.4rem;
+  line-height: 1;
+}
+.sound-type-name {
+  font-size: 0.7rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* タイピング中の音インジケーター */
+.sound-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  transition: all .18s;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+.sound-indicator:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
 /* ===== カウントダウンオーバーレイ ===== */
 .countdown-overlay {
   position: fixed;
