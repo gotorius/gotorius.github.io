@@ -624,6 +624,39 @@ strong {
     background: var(--secondary);
 }
 
+.publication-badge.matsuo {
+    background: #7c3aed;
+}
+
+.publication-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.9rem;
+}
+
+.publication-table th,
+.publication-table td {
+    padding: 8px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.publication-table th {
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-tertiary);
+    font-size: 0.8rem;
+}
+
+.publication-table tbody tr:hover {
+    background: var(--gray-100);
+}
+
+.publication-table td {
+    color: var(--text-primary);
+}
+
 .publication-title {
     font-size: 1.05rem;
     font-weight: 600;
