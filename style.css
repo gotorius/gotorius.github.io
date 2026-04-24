@@ -348,11 +348,12 @@ strong {
 .profile-hero-links {
     display: flex;
     gap: 12px;
+    margin-top: 20px;
 }
 
 .profile-hero-links a {
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     border-radius: 8px;
     background: var(--bg-tertiary);
     display: flex;
@@ -363,9 +364,36 @@ strong {
     transition: all var(--transition);
 }
 
+.profile-hero-links a img {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
+.profile-hero-link-wide {
+    width: auto !important;
+    padding: 0 12px;
+    gap: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.profile-hero-link-wide span {
+    color: var(--text-secondary);
+    transition: color var(--transition);
+}
+
+.profile-hero-link-wide:hover span {
+    color: white;
+}
+
 .profile-hero-links a:hover {
     background: var(--primary);
     color: white;
+}
+
+.profile-hero-links a:hover img {
+    filter: brightness(0) invert(1);
 }
 
 .section {
