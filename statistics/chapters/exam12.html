@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第12章 章末問題解説 - 一般の分布に関する検定法</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第12章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 12 — 章末問題解説</span>
+            <h1>一般の分布に関する検定法<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter12.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第12章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q121">問12.1 曜日別問い合わせ数の一様性検定</a></li>
+                            <li><a href="#q122">問12.2 台風上陸数のポアソン分布適合度検定</a></li>
+                            <li><a href="#q123">問12.3 Instagram 利用率の男女差の検定</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問12.1                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q121">
+                    <h2><i class="fas fa-pencil"></i> 問12.1 — 曜日別問い合わせ数の一様性検定</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>次の表は，小売店Sへの「問い合わせ」の回数について，ある1週間の調査結果を示したものである．曜日によって「問い合わせ」の回数に差があるかどうかを考える．「曜日によって問い合わせの回数が異ならない」という帰無仮説を立て，一様性の検定を有意水準5%で行う．</p>
+                        <table style="width:auto;border-collapse:collapse;font-size:0.95em;margin:0.8em auto;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:6px 14px;">曜日</th>
+                                    <th style="padding:6px 14px;">月</th><th style="padding:6px 14px;">火</th>
+                                    <th style="padding:6px 14px;">水</th><th style="padding:6px 14px;">木</th>
+                                    <th style="padding:6px 14px;">金</th><th style="padding:6px 14px;">土</th>
+                                    <th style="padding:6px 14px;">日</th><th style="padding:6px 14px;">合計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:6px 14px;font-weight:bold;">回数</td>
+                                    <td style="padding:6px 14px;text-align:center;">7</td>
+                                    <td style="padding:6px 14px;text-align:center;">3</td>
+                                    <td style="padding:6px 14px;text-align:center;">5</td>
+                                    <td style="padding:6px 14px;text-align:center;">2</td>
+                                    <td style="padding:6px 14px;text-align:center;">7</td>
+                                    <td style="padding:6px 14px;text-align:center;">12</td>
+                                    <td style="padding:6px 14px;text-align:center;">13</td>
+                                    <td style="padding:6px 14px;text-align:center;font-weight:bold;">49</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <ol>
+                            <li>この検定を行うためのカイ二乗統計量の値を求めよ．</li>
+                            <li>カイ二乗分布表より棄却限界値を求め，この検定の結論を述べよ．</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 一様性検定（適合度検定）とは</div>
+                            <p>「全カテゴリで確率が等しい（一様分布に従う）」という帰無仮説を $\chi^2$ 検定で調べます。</p>
+                            <p>カテゴリ数を $I$，全観測度数の合計を $n$，$i$ 番目カテゴリの観測度数を $O_i$，期待度数を $E_i$ とすると，検定統計量は</p>
+                            <div class="formula-block">
+                                $$T = \sum_{i=1}^{I} \frac{(O_i - E_i)^2}{E_i}$$
+                            </div>
+                            <p>帰無仮説が正しいとき，$T$ は近似的に自由度 $I - 1$ の $\chi^2$ 分布に従います。</p>
+                        </div>
+
+                        <h4>[1] カイ二乗統計量の計算</h4>
+                        <p><strong>期待度数の設定：</strong>7曜日すべて等しいという帰無仮説なので，各曜日の期待度数は</p>
+                        $$E_i = \frac{49}{7} = 7 \quad (\text{回/曜日})$$
+                        <p><strong>各曜日の寄与（乖離度）を計算：</strong></p>
+                        <table style="width:100%;border-collapse:collapse;font-size:0.92em;margin:0.8em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:6px 10px;">曜日</th>
+                                    <th style="padding:6px 10px;">観測 $O_i$</th>
+                                    <th style="padding:6px 10px;">期待 $E_i$</th>
+                                    <th style="padding:6px 10px;">$O_i - E_i$</th>
+                                    <th style="padding:6px 10px;">$(O_i-E_i)^2$</th>
+                                    <th style="padding:6px 10px;">$\dfrac{(O_i-E_i)^2}{E_i}$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="text-align:center;padding:5px 10px;">月</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">0</td><td style="text-align:center;padding:5px 10px;">0</td><td style="text-align:center;padding:5px 10px;">0/7 = 0</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:5px 10px;">火</td><td style="text-align:center;padding:5px 10px;">3</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">−4</td><td style="text-align:center;padding:5px 10px;">16</td><td style="text-align:center;padding:5px 10px;">16/7</td></tr>
+                                <tr><td style="text-align:center;padding:5px 10px;">水</td><td style="text-align:center;padding:5px 10px;">5</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">−2</td><td style="text-align:center;padding:5px 10px;">4</td><td style="text-align:center;padding:5px 10px;">4/7</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:5px 10px;">木</td><td style="text-align:center;padding:5px 10px;">2</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">−5</td><td style="text-align:center;padding:5px 10px;">25</td><td style="text-align:center;padding:5px 10px;">25/7</td></tr>
+                                <tr><td style="text-align:center;padding:5px 10px;">金</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">0</td><td style="text-align:center;padding:5px 10px;">0</td><td style="text-align:center;padding:5px 10px;">0/7 = 0</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:5px 10px;">土</td><td style="text-align:center;padding:5px 10px;">12</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">+5</td><td style="text-align:center;padding:5px 10px;">25</td><td style="text-align:center;padding:5px 10px;">25/7</td></tr>
+                                <tr><td style="text-align:center;padding:5px 10px;">日</td><td style="text-align:center;padding:5px 10px;">13</td><td style="text-align:center;padding:5px 10px;">7</td><td style="text-align:center;padding:5px 10px;">+6</td><td style="text-align:center;padding:5px 10px;">36</td><td style="text-align:center;padding:5px 10px;">36/7</td></tr>
+                                <tr style="font-weight:bold;background:#e8f0fe;">
+                                    <td style="padding:5px 10px;text-align:center;">合計</td>
+                                    <td style="padding:5px 10px;text-align:center;">49</td>
+                                    <td style="padding:5px 10px;text-align:center;">49</td>
+                                    <td style="padding:5px 10px;text-align:center;">—</td>
+                                    <td style="padding:5px 10px;text-align:center;">106</td>
+                                    <td style="padding:5px 10px;text-align:center;">106/7</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        $$T = \frac{0 + 16 + 4 + 25 + 0 + 25 + 36}{7} = \frac{106}{7} \approx 15.14$$
+                        <div class="formula-block">
+                            $$\boxed{T \approx 15.14}$$
+                        </div>
+
+                        <h4 style="margin-top:1.5em;">[2] 棄却限界値と検定の結論</h4>
+                        <div class="memo-box">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>自由度の求め方</strong>：カテゴリ数 $I = 7$（月〜日）なので，自由度は $I - 1 = 6$ です。<br>
+                                「なぜ $I-1$?」：7つの期待度数の合計は観測総数 49 に固定されているため，7つ目は残り6つが決まれば自動的に決まります。独立に動けるカテゴリは6つ，つまり自由度6です。
+                            </div>
+                        </div>
+                        <p>自由度6の $\chi^2$ 分布の上側5%点：</p>
+                        $$\chi^2_{0.05}(6) = 12.59$$
+                        <p>棄却域：$T > 12.59$</p>
+                        <div class="formula-block">
+                            $$T = 15.14 > 12.59 = \chi^2_{0.05}(6)$$
+                        </div>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 結論</div>
+                            <p>検定統計量 $T \approx 15.14$ が棄却限界値 $12.59$ を上回るため，帰無仮説を<strong>棄却</strong>します。</p>
+                            <p>すなわち，<strong>有意水準5%で「曜日によって問い合わせ回数が異なる」</strong>といえます。</p>
+                            <p>特に土曜（12回）・日曜（13回）が期待値7回を大きく上回っており，週末に問い合わせが集中している傾向が示されています。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問12.2                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q122">
+                    <h2><i class="fas fa-pencil"></i> 問12.2 — 台風上陸数のポアソン分布適合度検定</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>AさんとBさんは，台風が来たときの備えのため，1年間にどの程度の数の台風が上陸するかを考えることにした。次の表は，1951年から2019年までの69年間の年ごとの台風の日本本土への上陸数（回）をまとめたものである。この表から求めた69年間の上陸数の平均は2.99（回），標準偏差は1.70（回）である。</p>
+                        <table style="width:100%;border-collapse:collapse;font-size:0.9em;margin:0.8em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:5px 8px;">上陸数（回）</th>
+                                    <th style="padding:5px 8px;">0</th><th style="padding:5px 8px;">1</th><th style="padding:5px 8px;">2</th>
+                                    <th style="padding:5px 8px;">3</th><th style="padding:5px 8px;">4</th><th style="padding:5px 8px;">5</th>
+                                    <th style="padding:5px 8px;">6</th><th style="padding:5px 8px;">7</th><th style="padding:5px 8px;">8</th>
+                                    <th style="padding:5px 8px;">9</th><th style="padding:5px 8px;">10以上</th><th style="padding:5px 8px;">計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:5px 8px;font-weight:bold;">観測度数（年）</td>
+                                    <td style="padding:5px 8px;text-align:center;">4</td><td style="padding:5px 8px;text-align:center;">7</td>
+                                    <td style="padding:5px 8px;text-align:center;">17</td><td style="padding:5px 8px;text-align:center;">18</td>
+                                    <td style="padding:5px 8px;text-align:center;">12</td><td style="padding:5px 8px;text-align:center;">7</td>
+                                    <td style="padding:5px 8px;text-align:center;">3</td><td style="padding:5px 8px;text-align:center;">0</td>
+                                    <td style="padding:5px 8px;text-align:center;">0</td><td style="padding:5px 8px;text-align:center;">0</td>
+                                    <td style="padding:5px 8px;text-align:center;">1</td><td style="padding:5px 8px;text-align:center;font-weight:bold;">69</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>（資料：気象庁「台風の上陸数」）</p>
+                        <p>Bさんは，この表をもとに，1年間の台風上陸数がポアソン分布に従うかどうかを吟味したいうえで，1年間に7回以上上陸する確率を求めるほうがよいのではないかと提案した。また，平均と標準偏差の値からもポアソン分布に従うのではないかという意見を述べた。Bさんの考えをもとに，1年間の台風の上陸数がポアソン分布に従うかどうかの適合度検定によって考察する。なお，パラメータ $\lambda$ のポアソン分布の確率関数は次のとおりである。</p>
+                        $$p(x) = \frac{\lambda^x}{x!} e^{-\lambda} \quad (x = 0, 1, 2, \ldots)$$
+                        <ol>
+                            <li>Bさんが述べた「平均が2.99（回），標準偏差が1.70（回）であることからもポアソン分布に従うのではないか」という意見が意味するところを示せ。</li>
+                            <li>次の表は，1年間の上陸数がパラメータ $\lambda = 2.99$ のポアソン分布に従うと仮定したとき，69年間の上陸数の期待度数（年）を求めたものである。この表の求め方を説明せよ。
+                            <table style="width:100%;border-collapse:collapse;font-size:0.88em;margin:0.6em 0;">
+                                <thead>
+                                    <tr style="background:#f0f4ff;">
+                                        <th style="padding:4px 7px;">上陸数</th>
+                                        <th style="padding:4px 7px;">0</th><th style="padding:4px 7px;">1</th><th style="padding:4px 7px;">2</th>
+                                        <th style="padding:4px 7px;">3</th><th style="padding:4px 7px;">4</th><th style="padding:4px 7px;">5</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:4px 7px;font-weight:bold;">期待度数</td>
+                                        <td style="padding:4px 7px;text-align:center;">3.47</td><td style="padding:4px 7px;text-align:center;">10.37</td>
+                                        <td style="padding:4px 7px;text-align:center;">15.51</td><td style="padding:4px 7px;text-align:center;">15.46</td>
+                                        <td style="padding:4px 7px;text-align:center;">11.56</td><td style="padding:4px 7px;text-align:center;">6.91</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <table style="width:100%;border-collapse:collapse;font-size:0.88em;margin:0.2em 0 0.6em 0;">
+                                <thead>
+                                    <tr style="background:#f0f4ff;">
+                                        <th style="padding:4px 7px;">上陸数</th>
+                                        <th style="padding:4px 7px;">6</th><th style="padding:4px 7px;">7</th><th style="padding:4px 7px;">8</th>
+                                        <th style="padding:4px 7px;">9</th><th style="padding:4px 7px;">10以上</th><th style="padding:4px 7px;">計</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:4px 7px;font-weight:bold;">期待度数</td>
+                                        <td style="padding:4px 7px;text-align:center;">3.44</td><td style="padding:4px 7px;text-align:center;">1.47</td>
+                                        <td style="padding:4px 7px;text-align:center;">0.55</td><td style="padding:4px 7px;text-align:center;">0.18</td>
+                                        <td style="padding:4px 7px;text-align:center;">0.07</td><td style="padding:4px 7px;text-align:center;font-weight:bold;">69.00</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </li>
+                            <li>カイ二乗統計量を求めたところ16.37であった。適合度検定を有意水準5%で行ったときの棄却域の設定に必要となる数値を示し述べよ。また，統計量の値を大きくしている原因について考察せよ。</li>
+                            <li>Bさんは，1年間に上陸数6回以上の期待度数が小さいので，これらを「上陸数6回以上」とまとめたほうがよいのではないかと提案した。上陸数6回以上をまとめたときの検定の結果と上陸数6回以上をまとめないときの結果を比較し，あてはまりのよさについて述べよ。</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>[1] ポアソン分布の平均＝分散という性質</h4>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> ポアソン分布の特徴</div>
+                            <p>パラメータ $\lambda$ のポアソン分布 $\mathrm{Po}(\lambda)$ では，</p>
+                            <div class="formula-block">
+                                $$\text{平均} = \lambda, \quad \text{分散} = \lambda$$
+                            </div>
+                            <p>つまり<strong>平均と分散が等しい</strong>という特徴があります。</p>
+                        </div>
+                        <p>与えられたデータでは：</p>
+                        <ul>
+                            <li>平均 $= 2.99$（回）</li>
+                            <li>標準偏差 $= 1.70$（回） → 分散 $= 1.70^2 = 2.89$（回²）</li>
+                        </ul>
+                        <p>$2.99 \approx 2.89$ と平均と分散がほぼ等しいことから，ポアソン分布に近い可能性が示唆されます。これがBさんの意見の根拠です。</p>
+
+                        <h4 style="margin-top:1.5em;">[2] 期待度数の求め方</h4>
+                        <p>上陸数 $x$ 回の期待度数は次の手順で求めます：</p>
+                        <div class="formula-block">
+                            $$E_x = n \cdot p(x) = 69 \times \frac{2.99^x}{x!} e^{-2.99}$$
+                        </div>
+                        <p>ここで $n = 69$（観測年数），$p(x)$ は $\lambda = 2.99$ のポアソン分布の確率関数です。</p>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>「10以上」の期待度数の扱い</strong>：上陸数9回以下の期待度数を全て合計し，69から引くことで求めます（確率の合計が1になるため）。具体的には：
+                                $$E_{10+} = 69 - (3.47 + 10.37 + \cdots + 0.18) = 0.07$$
+                                この「差し引きで求める」際に丸め誤差に注意が必要です。
+                            </div>
+                        </div>
+                        <p>例として $x = 0$ の場合を計算で確認します：</p>
+                        $$E_0 = 69 \times \frac{2.99^0}{0!} e^{-2.99} = 69 \times e^{-2.99} = 69 \times 0.0502 \approx 3.47 \checkmark$$
+
+                        <h4 style="margin-top:1.5em;">[3] 棄却域の設定と統計量が大きくなる原因</h4>
+                        <div class="memo-box">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>自由度の求め方（ポアソン適合度検定）</strong>：カテゴリ数 $I$ に対して，パラメータ $\lambda$ を標本平均で推定しているため自由度が1つ減ります。
+                                $$d = (I - 1) - 1 = I - 2$$
+                                カテゴリ数は 0, 1, 2, …, 9, 10以上 の $I = 11$ なので，自由度 $d = 11 - 2 = 9$ です。
+                            </div>
+                        </div>
+                        <p>自由度9の $\chi^2$ 分布の上側5%点：</p>
+                        $$\chi^2_{0.05}(9) = 16.92$$
+                        <p>棄却域：$T > 16.92$</p>
+                        <div class="formula-block">
+                            $$T = 16.37 < 16.92 = \chi^2_{0.05}(9)$$
+                        </div>
+                        <p>検定統計量 $T = 16.37$ が棄却限界値 $16.92$ より小さいため，帰無仮説は<strong>棄却されません</strong>（ただし棄却限界値にほぼ近い値です）。</p>
+
+                        <p><strong>統計量が大きくなる原因：</strong></p>
+                        <p>「10以上」のカテゴリの期待度数が $E_{10+} = 0.07$ と極めて小さいのに，観測度数が $O_{10+} = 1$ です。このカテゴリの寄与は：</p>
+                        $$\frac{(1 - 0.07)^2}{0.07} = \frac{0.93^2}{0.07} = \frac{0.8649}{0.07} \approx 12.36$$
+                        <div class="memo-box">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <div>
+                                <strong>期待度数が小さいカテゴリの問題</strong>：$\chi^2$ 検定は「期待度数が5以上」という目安があります。期待度数が極めて小さい（例：0.07）場合，観測度数との比 $(O-E)^2/E$ が爆発的に大きくなり，統計量全体を歪める原因となります。
+                            </div>
+                        </div>
+                        <p>この「10以上」カテゴリ一つで $T = 16.37$ のうち約 $12.36$（75%以上）を占めており，統計量を大きく押し上げています。これが，統計量が大きくなる主因です。</p>
+
+                        <h4 style="margin-top:1.5em;">[4] 6回以上をまとめた場合との比較</h4>
+                        <p><strong>6回以上をまとめた場合の期待度数：</strong></p>
+                        $$E_{6+} = 3.44 + 1.47 + 0.55 + 0.18 + 0.07 = 5.71$$
+                        <p><strong>6回以上をまとめた場合の観測度数：</strong></p>
+                        $$O_{6+} = 3 + 0 + 0 + 0 + 1 = 4$$
+                        <p><strong>まとめた場合のカイ二乗統計量：</strong></p>
+                        <table style="width:100%;border-collapse:collapse;font-size:0.9em;margin:0.6em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:5px 8px;">カテゴリ</th>
+                                    <th style="padding:5px 8px;">観測 $O_i$</th>
+                                    <th style="padding:5px 8px;">期待 $E_i$</th>
+                                    <th style="padding:5px 8px;">$(O_i-E_i)^2/E_i$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="text-align:center;padding:4px 8px;">0回</td><td style="text-align:center;padding:4px 8px;">4</td><td style="text-align:center;padding:4px 8px;">3.47</td><td style="text-align:center;padding:4px 8px;">$(4-3.47)^2/3.47 \approx 0.081$</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:4px 8px;">1回</td><td style="text-align:center;padding:4px 8px;">7</td><td style="text-align:center;padding:4px 8px;">10.37</td><td style="text-align:center;padding:4px 8px;">$(7-10.37)^2/10.37 \approx 1.095$</td></tr>
+                                <tr><td style="text-align:center;padding:4px 8px;">2回</td><td style="text-align:center;padding:4px 8px;">17</td><td style="text-align:center;padding:4px 8px;">15.51</td><td style="text-align:center;padding:4px 8px;">$(17-15.51)^2/15.51 \approx 0.143$</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:4px 8px;">3回</td><td style="text-align:center;padding:4px 8px;">18</td><td style="text-align:center;padding:4px 8px;">15.46</td><td style="text-align:center;padding:4px 8px;">$(18-15.46)^2/15.46 \approx 0.418$</td></tr>
+                                <tr><td style="text-align:center;padding:4px 8px;">4回</td><td style="text-align:center;padding:4px 8px;">12</td><td style="text-align:center;padding:4px 8px;">11.56</td><td style="text-align:center;padding:4px 8px;">$(12-11.56)^2/11.56 \approx 0.017$</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:4px 8px;">5回</td><td style="text-align:center;padding:4px 8px;">7</td><td style="text-align:center;padding:4px 8px;">6.91</td><td style="text-align:center;padding:4px 8px;">$(7-6.91)^2/6.91 \approx 0.001$</td></tr>
+                                <tr><td style="text-align:center;padding:4px 8px;font-weight:bold;">6回以上</td><td style="text-align:center;padding:4px 8px;font-weight:bold;">4</td><td style="text-align:center;padding:4px 8px;font-weight:bold;">5.71</td><td style="text-align:center;padding:4px 8px;font-weight:bold;">$(4-5.71)^2/5.71 \approx 0.512$</td></tr>
+                                <tr style="font-weight:bold;background:#e8f0fe;"><td colspan="3" style="text-align:right;padding:5px 8px;">合計 $T$</td><td style="text-align:center;padding:5px 8px;">≈ 2.27</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="memo-box">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>まとめた場合の自由度</strong>：カテゴリ数は 0, 1, 2, 3, 4, 5, 6以上 の $I = 7$，パラメータ $\lambda$ を推定しているので自由度 $d = 7 - 2 = 5$。自由度5の $\chi^2$ の上側10%点は $9.24$，同5%点は $11.07$。
+                            </div>
+                        </div>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-balance-scale"></i> まとめた場合 vs まとめない場合の比較</div>
+                            <table style="width:100%;border-collapse:collapse;font-size:0.92em;margin:0.6em 0;">
+                                <thead>
+                                    <tr style="background:#f0f4ff;">
+                                        <th style="padding:6px 10px;"></th>
+                                        <th style="padding:6px 10px;">まとめない（11カテゴリ）</th>
+                                        <th style="padding:6px 10px;">まとめる（7カテゴリ）</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td style="padding:6px 10px;">カテゴリ数 $I$</td><td style="text-align:center;padding:6px 10px;">11</td><td style="text-align:center;padding:6px 10px;">7</td></tr>
+                                    <tr style="background:#f8f9fa;"><td style="padding:6px 10px;">自由度 $d$</td><td style="text-align:center;padding:6px 10px;">9</td><td style="text-align:center;padding:6px 10px;">5</td></tr>
+                                    <tr><td style="padding:6px 10px;">カイ二乗統計量 $T$</td><td style="text-align:center;padding:6px 10px;">16.37</td><td style="text-align:center;padding:6px 10px;">2.27</td></tr>
+                                    <tr style="background:#f8f9fa;"><td style="padding:6px 10px;">上側10%点</td><td style="text-align:center;padding:6px 10px;">$\chi^2_{0.10}(9) = 14.68$</td><td style="text-align:center;padding:6px 10px;">$\chi^2_{0.10}(5) = 9.24$</td></tr>
+                                    <tr><td style="padding:6px 10px;">$T$ と上側10%点の比較</td><td style="text-align:center;padding:6px 10px;">$16.37 > 14.68$（棄却域内）</td><td style="text-align:center;padding:6px 10px;">$2.27 < 9.24$（棄却域外）</td></tr>
+                                    <tr style="font-weight:bold;background:#e8f0fe;"><td style="padding:6px 10px;">結論</td><td style="text-align:center;padding:6px 10px;color:#c0392b;">あてはまりが悪い</td><td style="text-align:center;padding:6px 10px;color:green;">あてはまりが良い</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;">P値で比較すると，6回以上をまとめた場合（$T = 2.27$，自由度5）のほうがはるかに大きなP値（≫10%）となり，<strong>ポアソン分布へのあてはまりがよい</strong>といえます。期待度数が極めて小さいカテゴリは統計量を歪めるため，まとめることで適切な評価ができます。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問12.3                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q123">
+                    <h2><i class="fas fa-pencil"></i> 問12.3 — Instagram 利用率の男女差の検定</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>次の表は，ソーシャルネットワークサービス「Instagram」の20代男女の利用者数を整理したクロス集計表である。</p>
+                        <table style="width:auto;border-collapse:collapse;font-size:0.95em;margin:0.8em auto;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:6px 14px;"></th>
+                                    <th style="padding:6px 14px;">利用している</th>
+                                    <th style="padding:6px 14px;">利用していない</th>
+                                    <th style="padding:6px 14px;">計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:6px 14px;font-weight:bold;">20代男</td>
+                                    <td style="padding:6px 14px;text-align:center;">40</td>
+                                    <td style="padding:6px 14px;text-align:center;">74</td>
+                                    <td style="padding:6px 14px;text-align:center;">114</td>
+                                </tr>
+                                <tr style="background:#f8f9fa;">
+                                    <td style="padding:6px 14px;font-weight:bold;">20代女</td>
+                                    <td style="padding:6px 14px;text-align:center;">62</td>
+                                    <td style="padding:6px 14px;text-align:center;">45</td>
+                                    <td style="padding:6px 14px;text-align:center;">107</td>
+                                </tr>
+                                <tr style="font-weight:bold;background:#e8f0fe;">
+                                    <td style="padding:6px 14px;">計</td>
+                                    <td style="padding:6px 14px;text-align:center;">102</td>
+                                    <td style="padding:6px 14px;text-align:center;">119</td>
+                                    <td style="padding:6px 14px;text-align:center;">221</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>Instagramの利用率に男女差があるかどうかを調べるために，検定統計量 $Z$ を用いて，利用率に男女差がないという帰無仮説に対する有意水準 $\alpha$ の両側検定を行うことにした。</p>
+                        $$|Z| \geq z_{\alpha/2} \Rightarrow \text{利用率に男女差がある}$$
+                        <p>ただし $z_{\alpha/2}$ は標準正規分布の上側 $100\alpha/2$% 点である。検定統計量 $Z$ として適切なものを求めよ。</p>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 2標本の母比率の差の検定</div>
+                            <p>2つの母集団の比率 $\theta_1, \theta_2$ を比較する検定です。</p>
+                            <p>帰無仮説 $H_0: \theta_1 = \theta_2$ のもとで，次の検定統計量を使います：</p>
+                            <div class="formula-block">
+                                $$Z = \frac{\hat{\theta}_1 - \hat{\theta}_2}{\sqrt{\hat{\theta}_* (1 - \hat{\theta}_*)\left(\dfrac{1}{n_1} + \dfrac{1}{n_2}\right)}}$$
+                            </div>
+                            <p>ここで</p>
+                            <ul>
+                                <li>$\hat{\theta}_1 = $ 男性の標本比率，$\hat{\theta}_2 = $ 女性の標本比率</li>
+                                <li>$n_1 = $ 男性サンプルサイズ，$n_2 = $ 女性サンプルサイズ</li>
+                                <li>$\hat{\theta}_* = \dfrac{n_1 \hat{\theta}_1 + n_2 \hat{\theta}_2}{n_1 + n_2}$：2群を合わせたプール推定量（$H_0$ のもとで共通の比率を推定）</li>
+                            </ul>
+                        </div>
+
+                        <p><strong>各値を代入します：</strong></p>
+                        <ul>
+                            <li>$\hat{\theta}_1 = \dfrac{40}{114}$（男性の利用率）</li>
+                            <li>$\hat{\theta}_2 = \dfrac{62}{107}$（女性の利用率）</li>
+                            <li>$n_1 = 114$，$n_2 = 107$</li>
+                            <li>$\hat{\theta}_* = \dfrac{40 + 62}{114 + 107} = \dfrac{102}{221}$（全体の利用率）</li>
+                            <li>$1 - \hat{\theta}_* = \dfrac{119}{221}$</li>
+                        </ul>
+
+                        <div class="formula-block">
+                            $$Z = \frac{\dfrac{40}{114} - \dfrac{62}{107}}{\sqrt{\left(\dfrac{1}{114} + \dfrac{1}{107}\right) \times \dfrac{102}{221} \times \dfrac{119}{221}}}$$
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>なぜ「プール推定量」$\hat{\theta}_*$ を使うのか？</strong><br>
+                                帰無仮説 $H_0: \theta_1 = \theta_2 = \theta$（共通）のもとで標準誤差を計算するとき，$\theta$ の推定には2群を合わせたプール推定量 $\hat{\theta}_* = \frac{n_1\hat{\theta}_1 + n_2\hat{\theta}_2}{n_1+n_2}$ を使うのが最も効率的です。全体のデータを使って $\theta$ を推定することで，標準誤差の精度が上がります。
+                            </div>
+                        </div>
+
+                        <p><strong>数値を確認：</strong></p>
+                        <ul>
+                            <li>$\hat{\theta}_1 = 40/114 \approx 0.351$（男性利用率 35.1%）</li>
+                            <li>$\hat{\theta}_2 = 62/107 \approx 0.579$（女性利用率 57.9%）</li>
+                            <li>差 $= 40/114 - 62/107 \approx 0.351 - 0.579 = -0.228$（女性のほうが高い）</li>
+                            <li>$\hat{\theta}_* = 102/221 \approx 0.462$</li>
+                        </ul>
+                        <p>$|Z|$ は大きな値になることが予想され，有意差があると判定されます（20代女性のほうがInstagram利用率が有意に高い）。</p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答：検定統計量 $Z$</div>
+                            <div class="formula-block">
+                                $$Z = \frac{\dfrac{40}{114} - \dfrac{62}{107}}{\sqrt{\left(\dfrac{1}{114} + \dfrac{1}{107}\right) \times \dfrac{102}{221} \times \dfrac{119}{221}}}$$
+                            </div>
+                            <p>これは母比率の差の検定（式(12.4)）に $\hat{\theta}_1 = 40/114$，$\hat{\theta}_2 = 62/107$，$n_1 = 114$，$n_2 = 107$，$\hat{\theta}_* = 102/221$ を代入したものです。式(12.2)（等分散を仮定しない式）を用いても誤りではありません。</p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

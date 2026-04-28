@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第13章 章末問題解説 - ノンパラメトリック法</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第13章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 13 — 章末問題解説</span>
+            <h1>ノンパラメトリック法<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter13.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第13章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q131-1">問13.1 [1] ウィルコクソン順位和検定（片側P値）</a></li>
+                            <li><a href="#q131-2">問13.1 [2] P値 &lt; 3% の最低人数</a></li>
+                            <li><a href="#q131-3">問13.1 [3] 符号付き順位検定（片側P値）</a></li>
+                            <li><a href="#q131-4">問13.1 [4] P値 &lt; 5% の最低人数</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問題文                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section" style="background:#f8f9fa;border-left:4px solid var(--primary,#4f8ef7);padding:1.2em 1.5em;margin-bottom:2em;border-radius:0 8px 8px 0;">
+                    <h2 style="margin-top:0;"><i class="fas fa-book"></i> 問13.1 — 問題文</h2>
+                    <p>高血圧の治療のために，血圧を下げる効果のある治療薬（A薬）を開発した。A薬の効果を従来薬（B薬）と比較する。いま，2種類の治療薬の効果が等しいという帰無仮説と，<strong>A薬のほうが効果が高い（血圧をより下げる）</strong>という片側対立仮説を考える。</p>
+                    <ol>
+                        <li>血圧がほぼ等しい高血圧患者6人をランダムに3人ずつに分け，それぞれ，A薬とB薬のいずれかを投与した。薬の投与後の血圧測定の結果が次のようになった（単位：mmHg）。ウィルコクソンの順位和検定を用いて検定するとき，片側P値はいくらか。
+                            <table style="width:auto;border-collapse:collapse;font-size:0.95em;margin:0.6em 0;">
+                                <thead><tr style="background:#e8f0fe;"><th style="padding:6px 14px;">群</th><th style="padding:6px 14px;" colspan="3">投与後血圧（mmHg）</th></tr></thead>
+                                <tbody>
+                                    <tr><td style="padding:6px 14px;font-weight:bold;">A薬</td><td style="padding:6px 14px;text-align:center;">135</td><td style="padding:6px 14px;text-align:center;">127</td><td style="padding:6px 14px;text-align:center;">131</td></tr>
+                                    <tr style="background:#f8f9fa;"><td style="padding:6px 14px;font-weight:bold;">B薬</td><td style="padding:6px 14px;text-align:center;">132</td><td style="padding:6px 14px;text-align:center;">144</td><td style="padding:6px 14px;text-align:center;">138</td></tr>
+                                </tbody>
+                            </table>
+                        </li>
+                        <li>別の患者のデータを用いて，同様の仮説に対するウィルコクソンの順位和検定を行ったところ，片側P値が3%未満になった。このとき，最低でも何人以上の患者がいたか。</li>
+                        <li>血圧がほぼ等しい高血圧患者3人にA薬とB薬を互いの効果が影響しないよう時間をおいて投与した。薬の投与後の血圧測定の結果の差（B薬 − A薬）は，$-3, 17, 7$ となった。符号付き順位検定を用いて検定するとき，片側P値はいくらか。</li>
+                        <li>別の患者のデータを用いて，同様の仮説に対する符号付き順位検定を行ったところ，片側P値が5%未満になった。このとき，最低でも何人以上の患者がいたか。</li>
+                    </ol>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問13.1 [1]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q131-1">
+                    <h2><i class="fas fa-pencil"></i> 問13.1 [1] — ウィルコクソンの順位和検定（片側P値）</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答：0.1</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> ウィルコクソンの順位和検定とは</div>
+                            <p>2群のデータを<strong>一緒にして小さい順に順位を付け</strong>，一方の群の順位の合計（＝順位和 $W$）を検定統計量とします。</p>
+                            <p>帰無仮説「2群の分布は同じ」が正しければ，$m+n$ 個の順位の中から $m$ 個をA群に割り当てる $\binom{m+n}{m}$ 通りはすべて等確率で起こります。</p>
+                        </div>
+
+                        <h4>ステップ1：6人のデータを合わせて小さい順に並べ，順位を付ける</h4>
+                        <table style="width:100%;border-collapse:collapse;font-size:0.93em;margin:0.6em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:6px 10px;">血圧値</th>
+                                    <th style="padding:6px 10px;">127</th><th style="padding:6px 10px;">131</th>
+                                    <th style="padding:6px 10px;">132</th><th style="padding:6px 10px;">135</th>
+                                    <th style="padding:6px 10px;">138</th><th style="padding:6px 10px;">144</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:6px 10px;font-weight:bold;">全体の順位</td>
+                                    <td style="padding:6px 10px;text-align:center;">1</td><td style="padding:6px 10px;text-align:center;">2</td>
+                                    <td style="padding:6px 10px;text-align:center;">3</td><td style="padding:6px 10px;text-align:center;">4</td>
+                                    <td style="padding:6px 10px;text-align:center;">5</td><td style="padding:6px 10px;text-align:center;">6</td>
+                                </tr>
+                                <tr style="background:#f8f9fa;">
+                                    <td style="padding:6px 10px;font-weight:bold;">所属群</td>
+                                    <td style="padding:6px 10px;text-align:center;color:#4f8ef7;font-weight:bold;">A</td>
+                                    <td style="padding:6px 10px;text-align:center;color:#4f8ef7;font-weight:bold;">A</td>
+                                    <td style="padding:6px 10px;text-align:center;color:#e74c3c;font-weight:bold;">B</td>
+                                    <td style="padding:6px 10px;text-align:center;color:#4f8ef7;font-weight:bold;">A</td>
+                                    <td style="padding:6px 10px;text-align:center;color:#e74c3c;font-weight:bold;">B</td>
+                                    <td style="padding:6px 10px;text-align:center;color:#e74c3c;font-weight:bold;">B</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>ステップ2：A群の順位和を計算する</h4>
+                        $$W_A = 1 + 2 + 4 = 7, \quad W_B = 3 + 5 + 6 = 14$$
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>なぜA群の順位和が小さいと対立仮説を支持するのか？</strong><br>
+                                対立仮説「A薬のほうが血圧を下げる効果が高い」は，A薬群の血圧値がB薬群より<em>低い傾向</em>があることを意味します。血圧が低い＝順位が小さい（1位が最低値）ので，A群の順位が小さく集まるほど対立仮説を支持します。したがって $W_A$ が小さいほど証拠が強くなります。
+                            </div>
+                        </div>
+
+                        <h4>ステップ3：P値を計算する</h4>
+                        <p>6人から3人（A群）を選ぶ組合せは：</p>
+                        $$\binom{6}{3} = \frac{6!}{3! \cdot 3!} = 20 \text{ 通り}$$
+                        <p>帰無仮説のもとで，これら20通りはすべて等確率（各確率 $1/20$）です。</p>
+                        <p>$W_A \leq 7$ となる場合を全て列挙します：</p>
+                        <table style="width:auto;border-collapse:collapse;font-size:0.92em;margin:0.6em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:5px 12px;">A群の順位の組</th>
+                                    <th style="padding:5px 12px;">$W_A$</th>
+                                    <th style="padding:5px 12px;">$W_A \leq 7$ ?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="padding:5px 12px;">{1, 2, 3}</td><td style="text-align:center;padding:5px 12px;">6</td><td style="text-align:center;padding:5px 12px;color:green;font-weight:bold;">✓</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="padding:5px 12px;">{1, 2, 4}</td><td style="text-align:center;padding:5px 12px;">7</td><td style="text-align:center;padding:5px 12px;color:green;font-weight:bold;">✓（実測値）</td></tr>
+                                <tr><td style="padding:5px 12px;">{1, 2, 5}</td><td style="text-align:center;padding:5px 12px;">8</td><td style="text-align:center;padding:5px 12px;">✗</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="padding:5px 12px;">…（以下すべて ≥ 8）</td><td style="text-align:center;padding:5px 12px;">≥ 8</td><td style="text-align:center;padding:5px 12px;">✗</td></tr>
+                            </tbody>
+                        </table>
+                        <p>$W_A \leq 7$ となるのは $\{1,2,3\}$（$W_A = 6$）と $\{1,2,4\}$（$W_A = 7$）の<strong>2通り</strong>です。</p>
+                        <div class="formula-block">
+                            $$\boxed{P\text{値（片側）} = \frac{2}{20} = 0.1}$$
+                        </div>
+                        <p>有意水準5%では $0.1 > 0.05$ のため帰無仮説を棄却できません。A薬の効果が高いとは断言できません。</p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> A群・B群の順位和の検算</div>
+                            <p>$n$ 人全員の順位の合計は $1+2+\cdots+6 = 21$ です。$W_A + W_B = 7 + 14 = 21$ ✓（矛盾なし）</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問13.1 [2]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q131-2">
+                    <h2><i class="fas fa-pencil"></i> 問13.1 [2] — P値 &lt; 3% の最低人数</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答：7人</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 考え方：最小P値の議論</div>
+                            <p>「P値が3%未満になった」ということは，何らかのデータで実際にP値 &lt; 3% が達成できた，ということです。</p>
+                            <p>ウィルコクソン検定で達成できるP値の<strong>最小値</strong>は，A群の順位和が最小のとき（A群が最も低い順位を独占したとき）に得られます：</p>
+                            $$P_{\min} = \frac{1}{\binom{m+n}{m}}$$
+                            <p>この $P_{\min}$ が $0.03$ 未満になる最小の総人数 $m+n$ を探します。</p>
+                        </div>
+
+                        <h4>各人数での最小P値を調べる</h4>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>[1] では A群3人，B群3人（計6人）</strong>でした。このとき $P_{\min} = 1/20 = 5\%$ で，3%未満には届きませんでした。人数を増やして考えます。
+                            </div>
+                        </div>
+                        <table style="width:100%;border-collapse:collapse;font-size:0.93em;margin:0.6em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:6px 10px;">総人数</th>
+                                    <th style="padding:6px 10px;">A群 $m$</th>
+                                    <th style="padding:6px 10px;">B群 $n$</th>
+                                    <th style="padding:6px 10px;">$\binom{m+n}{m}$</th>
+                                    <th style="padding:6px 10px;">最小P値</th>
+                                    <th style="padding:6px 10px;">&lt; 3% ?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:center;padding:6px 10px;">6</td>
+                                    <td style="text-align:center;padding:6px 10px;">3</td>
+                                    <td style="text-align:center;padding:6px 10px;">3</td>
+                                    <td style="text-align:center;padding:6px 10px;">$\binom{6}{3} = 20$</td>
+                                    <td style="text-align:center;padding:6px 10px;">$1/20 = 5.0\%$</td>
+                                    <td style="text-align:center;padding:6px 10px;color:#e74c3c;font-weight:bold;">✗</td>
+                                </tr>
+                                <tr style="background:#e8ffe8;">
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">7</td>
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">3</td>
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">4</td>
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">$\binom{7}{3} = 35$</td>
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">$1/35 \approx 2.86\%$</td>
+                                    <td style="text-align:center;padding:6px 10px;color:green;font-weight:bold;">✓</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="memo-box">
+                            <i class="fas fa-question-circle"></i>
+                            <div>
+                                <strong>なぜ A群3人・B群4人（7人）なのか？</strong><br>
+                                [1] と同じ状況（A群3人）を維持しながらB群だけ1人増やして7人にした場合，$\binom{7}{3} = 35$ 通りとなり，最小P値が $1/35 \approx 0.0286 < 0.03$ となります。<br>
+                                実際，6人のとき最小P値 $= 1/20 = 0.05$，$\binom{6}{2} = 15$，$\binom{6}{1} = 6$ であることから，患者6人の場合の順位和の最小P値は $1/20 = 0.05$ です。<br>
+                                患者7人（A群3人，B群4人）において，順位和が最小の6のとき，P値は $1/35 \approx 0.0286 < 0.03$ となります。
+                            </div>
+                        </div>
+
+                        <div class="formula-block">
+                            $$\boxed{\text{最低でも 7 人以上}}$$
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問13.1 [3]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q131-3">
+                    <h2><i class="fas fa-pencil"></i> 問13.1 [3] — 符号付き順位検定（片側P値）</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答：0.25</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 符号付き順位検定（ウィルコクソンの符号付き順位検定）</div>
+                            <p>対応のある2測定の差 $d_i$（例：B薬 − A薬）に対して行う検定です。</p>
+                            <ul>
+                                <li>帰無仮説 $H_0$：$d$ の分布の中央値 $= 0$（A薬とB薬の効果は等しい）</li>
+                                <li>対立仮説 $H_1$：$d$ の分布の中央値 $> 0$（B薬のほうが血圧が高い → A薬のほうが効果大）</li>
+                                <li>前提：$d$ の分布が $0$ のまわりで対称であること</li>
+                            </ul>
+                        </div>
+
+                        <h4>ステップ1：データの整理</h4>
+                        <p>差 $d = $ B薬 − A薬 $= \{-3, 17, 7\}$（3人ともゼロでないので $n' = 3$）</p>
+
+                        <h4>ステップ2：絶対値の小さい順に並べ，符号付き順位を割り当てる</h4>
+                        <table style="width:100%;border-collapse:collapse;font-size:0.93em;margin:0.6em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:6px 10px;">患者</th>
+                                    <th style="padding:6px 10px;">差 $d$</th>
+                                    <th style="padding:6px 10px;">$|d|$</th>
+                                    <th style="padding:6px 10px;">$|d|$ の順位</th>
+                                    <th style="padding:6px 10px;">符号</th>
+                                    <th style="padding:6px 10px;">符号付き順位</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:center;padding:6px 10px;">1</td>
+                                    <td style="text-align:center;padding:6px 10px;">−3</td>
+                                    <td style="text-align:center;padding:6px 10px;">3</td>
+                                    <td style="text-align:center;padding:6px 10px;">1（最小）</td>
+                                    <td style="text-align:center;padding:6px 10px;color:#e74c3c;">−</td>
+                                    <td style="text-align:center;padding:6px 10px;color:#e74c3c;font-weight:bold;">−1</td>
+                                </tr>
+                                <tr style="background:#f8f9fa;">
+                                    <td style="text-align:center;padding:6px 10px;">3</td>
+                                    <td style="text-align:center;padding:6px 10px;">+7</td>
+                                    <td style="text-align:center;padding:6px 10px;">7</td>
+                                    <td style="text-align:center;padding:6px 10px;">2（中間）</td>
+                                    <td style="text-align:center;padding:6px 10px;color:green;">+</td>
+                                    <td style="text-align:center;padding:6px 10px;color:green;font-weight:bold;">+2</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:center;padding:6px 10px;">2</td>
+                                    <td style="text-align:center;padding:6px 10px;">+17</td>
+                                    <td style="text-align:center;padding:6px 10px;">17</td>
+                                    <td style="text-align:center;padding:6px 10px;">3（最大）</td>
+                                    <td style="text-align:center;padding:6px 10px;color:green;">+</td>
+                                    <td style="text-align:center;padding:6px 10px;color:green;font-weight:bold;">+3</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>ステップ3：正の順位の合計 $T^+$ を計算する</h4>
+                        $$T^+ = 2 + 3 = 5$$
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>対立仮説の方向とP値の向き</strong><br>
+                                対立仮説「A薬のほうが血圧を下げる効果が高い」は「差 $d = $ B薬 − A薬 が正に大きい」ことを意味します。正の差が多い・大きい → $T^+$ が大きい → 対立仮説を支持。<br>
+                                したがって，P値 $= P(T^+ \geq 5)$ を求めます。
+                            </div>
+                        </div>
+
+                        <h4>ステップ4：$2^{n'} = 2^3 = 8$ 通りの符号の組合せを全列挙</h4>
+                        <table style="width:100%;border-collapse:collapse;font-size:0.92em;margin:0.6em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:5px 10px;">符号の組（順位1,2,3）</th>
+                                    <th style="padding:5px 10px;">$T^+$の計算</th>
+                                    <th style="padding:5px 10px;">$T^+$</th>
+                                    <th style="padding:5px 10px;">$T^+ \geq 5$ ?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background:#e8ffe8;">
+                                    <td style="padding:5px 10px;">(+1, +2, +3)</td>
+                                    <td style="padding:5px 10px;">1+2+3</td>
+                                    <td style="text-align:center;padding:5px 10px;">6</td>
+                                    <td style="text-align:center;padding:5px 10px;color:green;font-weight:bold;">✓</td>
+                                </tr>
+                                <tr style="background:#e8ffe8;">
+                                    <td style="padding:5px 10px;">(−1, +2, +3)</td>
+                                    <td style="padding:5px 10px;">2+3</td>
+                                    <td style="text-align:center;padding:5px 10px;">5</td>
+                                    <td style="text-align:center;padding:5px 10px;color:green;font-weight:bold;">✓（実測値）</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:5px 10px;">(+1, −2, +3)</td>
+                                    <td style="padding:5px 10px;">1+3</td>
+                                    <td style="text-align:center;padding:5px 10px;">4</td>
+                                    <td style="text-align:center;padding:5px 10px;">✗</td>
+                                </tr>
+                                <tr style="background:#f8f9fa;">
+                                    <td style="padding:5px 10px;">(+1, +2, −3)</td>
+                                    <td style="padding:5px 10px;">1+2</td>
+                                    <td style="text-align:center;padding:5px 10px;">3</td>
+                                    <td style="text-align:center;padding:5px 10px;">✗</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:5px 10px;">(−1, −2, +3)</td>
+                                    <td style="padding:5px 10px;">3</td>
+                                    <td style="text-align:center;padding:5px 10px;">3</td>
+                                    <td style="text-align:center;padding:5px 10px;">✗</td>
+                                </tr>
+                                <tr style="background:#f8f9fa;">
+                                    <td style="padding:5px 10px;">(−1, +2, −3)</td>
+                                    <td style="padding:5px 10px;">2</td>
+                                    <td style="text-align:center;padding:5px 10px;">2</td>
+                                    <td style="text-align:center;padding:5px 10px;">✗</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:5px 10px;">(+1, −2, −3)</td>
+                                    <td style="padding:5px 10px;">1</td>
+                                    <td style="text-align:center;padding:5px 10px;">1</td>
+                                    <td style="text-align:center;padding:5px 10px;">✗</td>
+                                </tr>
+                                <tr style="background:#f8f9fa;">
+                                    <td style="padding:5px 10px;">(−1, −2, −3)</td>
+                                    <td style="padding:5px 10px;">（なし）</td>
+                                    <td style="text-align:center;padding:5px 10px;">0</td>
+                                    <td style="text-align:center;padding:5px 10px;">✗</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>$T^+ \geq 5$ となるのは，$(+1,+2,+3)$ と $(−1,+2,+3)$ の<strong>2通り</strong>です。</p>
+                        <div class="formula-block">
+                            $$\boxed{P\text{値（片側）} = \frac{2}{8} = 0.25}$$
+                        </div>
+                        <p>$0.25 > 0.05$ のため，有意水準5%でも帰無仮説を棄却できません。</p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 解答の確認（テキストと照合）</div>
+                            <p>3人の効果の差が $-3, 17, 7$ であることから，符号付き順位を付加すると $-1, 3, 2$ となり，正値の合計は $T^+ = 2 + 3 = 5$ です。$2^3 = 8$ 種類の符号と順位の組合せのなかで，正値が5以上の値となるのは $(1,2,3)$ と $(-1,2,3)$ の2種類なので，P値は $2/8 = 0.25$ です。</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問13.1 [4]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q131-4">
+                    <h2><i class="fas fa-pencil"></i> 問13.1 [4] — P値 &lt; 5% の最低人数</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答：5人</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 考え方：最小P値の議論（符号付き順位検定版）</div>
+                            <p>$n'$ 人の場合，$2^{n'}$ 通りの符号の組合せがあります。</p>
+                            <p>P値が最小になるのは，全員の符号が正（$T^+ = 1+2+\cdots+n' = n'(n'+1)/2$）の場合で，このときのP値は：</p>
+                            <div class="formula-block">
+                                $$P_{\min} = \frac{1}{2^{n'}}$$
+                            </div>
+                            <p>この $P_{\min}$ が $0.05$ 未満になる最小の $n'$ を求めます。</p>
+                        </div>
+
+                        <table style="width:100%;border-collapse:collapse;font-size:0.93em;margin:0.6em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:6px 10px;">人数 $n'$</th>
+                                    <th style="padding:6px 10px;">$2^{n'}$（組合せ数）</th>
+                                    <th style="padding:6px 10px;">最小P値 $= 1/2^{n'}$</th>
+                                    <th style="padding:6px 10px;">&lt; 5% ?</th>
+                                    <th style="padding:6px 10px;">判断</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:center;padding:6px 10px;">3</td>
+                                    <td style="text-align:center;padding:6px 10px;">$2^3 = 8$</td>
+                                    <td style="text-align:center;padding:6px 10px;">$1/8 = 12.5\%$</td>
+                                    <td style="text-align:center;padding:6px 10px;color:#e74c3c;font-weight:bold;">✗</td>
+                                    <td style="text-align:center;padding:6px 10px;">P値は5%未満にならない</td>
+                                </tr>
+                                <tr style="background:#f8f9fa;">
+                                    <td style="text-align:center;padding:6px 10px;">4</td>
+                                    <td style="text-align:center;padding:6px 10px;">$2^4 = 16$</td>
+                                    <td style="text-align:center;padding:6px 10px;">$1/16 = 6.25\%$</td>
+                                    <td style="text-align:center;padding:6px 10px;color:#e74c3c;font-weight:bold;">✗</td>
+                                    <td style="text-align:center;padding:6px 10px;">P値は5%未満にならない</td>
+                                </tr>
+                                <tr style="background:#e8ffe8;">
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">5</td>
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">$2^5 = 32$</td>
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">$1/32 = 3.125\%$</td>
+                                    <td style="text-align:center;padding:6px 10px;color:green;font-weight:bold;">✓</td>
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">P値 &lt; 5% が達成可能！</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>なぜ全員正の場合（$T^+ = n'(n'+1)/2$）が最小P値になるのか？</strong><br>
+                                $T^+ \geq t^+_{\text{obs}}$ の確率（片側P値）を考えます。$T^+$ が最大（全員正）のとき，「$T^+ \geq T^+_{\max}$」を満たすのはその1通りだけです。つまり $P = 1/2^{n'}$ となり，これが達成可能な最小P値です。どんなデータでも，このケースより小さいP値にはなりません。
+                            </div>
+                        </div>
+
+                        <div class="formula-block">
+                            $$\boxed{\text{最低でも 5 人以上}}$$
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 解答の確認</div>
+                            <p>患者が $n'$ 人において，$2^{n'}$ 種類の符号と順位の組合せのなかで，正値の合計が最大になる場合を考えればよい。</p>
+                            <ul>
+                                <li>$n' = 3$ の場合：$1/8 > 0.05$ → 5%未満にならない</li>
+                                <li>$n' = 4$ の場合：$1/16 > 0.05$ → 5%未満にならない</li>
+                                <li>$n' = 5$ の場合：$1/32 < 0.05$ → 5%未満になる ✓</li>
+                            </ul>
+                            <p>これより，最低でも<strong>5人</strong>いたことになる。</p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

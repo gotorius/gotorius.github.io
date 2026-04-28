@@ -78,25 +78,31 @@
                 <!-- 0. はじめに                                                -->
                 <!-- ======================================================== -->
                 <section class="content-section section-anchor" id="intro">
-                    <h2><i class="fas fa-book-open"></i> 一般の分布に関する検定法</h2>
+                    <h2><i class="fas fa-book-open"></i> 一般の分布に関する検定法――正規分布の外へ</h2>
                     <p>
-                        第11章では母集団が正規分布に従うという仮定のもとで検定を行いました。
-                        本章では<strong>分布の仮定を正規分布に限定せず</strong>、より広いクラスの検定法を学びます。
+                        第11章では「母集団が正規分布に従う」という仮定のもとで $t$ 検定・$F$ 検定などを学びました。
+                        しかし現実のデータには、正規分布に従わないものがたくさんあります。
                     </p>
+                    <ul>
+                        <li>コイン投げや選挙の支持率 → <strong>二項分布</strong></li>
+                        <li>台風の上陸回数や交通事故の件数 → <strong>ポアソン分布</strong></li>
+                        <li>アンケートの回答カテゴリ（賛成・反対・どちらでもない）→ <strong>多項分布</strong></li>
+                    </ul>
                     <p>
-                        扱う題材は大きく4つです：
+                        本章では、こうした「正規分布以外の分布」に対して仮説検定を行う手法を学びます。
+                        すべての手法に共通するのが「<strong>大標本のもとで漸近的にカイ二乗分布または標準正規分布に従う</strong>」統計量を利用するという考え方です。
                     </p>
                     <div class="formula-block">
+                        <p>🔑 <strong>この章で学ぶこと</strong></p>
                         <ol>
-                            <li><strong>母比率の検定</strong>（二項分布ベース）</li>
-                            <li><strong>ポアソン分布に関する検定</strong></li>
-                            <li><strong>適合度検定</strong>――観測度数と期待度数の乖離をカイ二乗統計量で測る</li>
-                            <li><strong>尤度比検定</strong>――汎用的な検定構成法</li>
+                            <li><strong>母比率の検定</strong>（二項分布ベース）：コインの偏りや支持率の検定</li>
+                            <li><strong>母比率の差の検定</strong>：2群の比率を比較する（Instagram男女差など）</li>
+                            <li><strong>ポアソン分布に関する検定</strong>：稀な事象の発生頻度を検定する</li>
+                            <li><strong>適合度検定</strong>：観測データがある確率分布に「あてはまる」かを検定する</li>
+                            <li><strong>分割表の独立性検定</strong>：2つのカテゴリ変数が独立かを検定する</li>
+                            <li><strong>尤度比検定</strong>：上記すべての背後にある汎用的な検定構成の原理</li>
                         </ol>
                     </div>
-                    <p>
-                        これらはいずれも、大標本のもとで<strong>漸近的にカイ二乗分布や標準正規分布</strong>に従う統計量を用いた近似検定です。
-                    </p>
                 </section>
 
                 <!-- ======================================================== -->
@@ -106,36 +112,68 @@
                     <h2><i class="fas fa-percent"></i> 1. 母比率の検定</h2>
 
                     <p>
-                        試行回数 $n$、成功確率 $\theta$ の二項分布に従う確率変数 $X$（$X \sim B(n,\theta)$）を観測する。
-                        既知の比率 $\theta_0$ を帰無仮説の値として検定します。
+                        試行回数 $n$、成功確率 $\theta$ の二項分布に従う確率変数 $X$（$X \sim B(n,\theta)$）を観測する状況を考えます。
+                        「コインの表が出る確率は本当に $1/2$ か」「新薬の治癒率は50%を超えるか」といった問いに答えるのが<strong>母比率の検定</strong>です。
+                    </p>
+
+                    <h3>なぜ正規近似が使えるのか</h3>
+                    <p>
+                        二項分布 $B(n, \theta)$ は、$n$ が大きくなると中心極限定理より正規分布に近づきます。
+                        最尤推定量 $\hat{\theta} = X/n$ の性質を整理すると：
+                    </p>
+                    <div class="formula-block">
+                        $$E[\hat{\theta}] = \theta, \quad V[\hat{\theta}] = \frac{\theta(1-\theta)}{n}$$
+                        $$\Rightarrow \frac{\hat{\theta} - \theta}{\sqrt{\theta(1-\theta)/n}} \xrightarrow{d} N(0,1) \quad (n \to \infty)$$
+                    </div>
+                    <p>
+                        帰無仮説 $H_0: \theta = \theta_0$ のもとでは、分母の $\theta$ に $\theta_0$ を代入して：
                     </p>
 
                     <div class="concept-box">
-                        <div class="box-title"><i class="fas fa-bookmark"></i> 母比率の検定（漸近正規性）</div>
-                        <p>$\hat{\theta} = X/n$ とすると、$H_0: \theta = \theta_0$ のもとで</p>
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 母比率の検定（漸近正規性による近似検定）</div>
+                        <p>$\hat{\theta} = X/n$（標本比率）として、$H_0: \theta = \theta_0$ のもとで</p>
                         <div class="formula-block">
-                            $$Z = \frac{\sqrt{n}(\hat{\theta} - \theta_0)}{\sqrt{\theta_0(1-\theta_0)}} \xrightarrow{d} N(0,1)$$
+                            $$Z = \frac{\sqrt{n}(\hat{\theta} - \theta_0)}{\sqrt{\theta_0(1-\theta_0)}} \xrightarrow{d} N(0,1) \quad \cdots (12.1)$$
                         </div>
                         <table style="width:100%; border-collapse:collapse; margin:0.5em 0;">
                             <thead><tr style="background:var(--light-bg);">
                                 <th style="padding:0.5em;">対立仮説</th>
                                 <th style="padding:0.5em;">棄却域（有意水準 $\alpha$）</th>
+                                <th style="padding:0.5em;">意味</th>
                             </tr></thead>
                             <tbody>
-                                <tr style="border-top:1px solid #ddd;"><td style="padding:0.4em;">$H_1: \theta > \theta_0$</td><td style="padding:0.4em;">$Z \geq z_\alpha$</td></tr>
-                                <tr style="border-top:1px solid #ddd;"><td style="padding:0.4em;">$H_1: \theta &lt; \theta_0$</td><td style="padding:0.4em;">$Z \leq -z_\alpha$</td></tr>
-                                <tr style="border-top:1px solid #ddd;"><td style="padding:0.4em;">$H_1: \theta \neq \theta_0$</td><td style="padding:0.4em;">$|Z| \geq z_{\alpha/2}$</td></tr>
+                                <tr style="border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;">$H_1: \theta > \theta_0$（右片側）</td>
+                                    <td style="padding:0.4em;">$Z \geq z_\alpha$</td>
+                                    <td style="padding:0.4em;">大きすぎる場合のみ棄却</td>
+                                </tr>
+                                <tr style="border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;">$H_1: \theta < \theta_0$（左片側）</td>
+                                    <td style="padding:0.4em;">$Z \leq -z_\alpha$</td>
+                                    <td style="padding:0.4em;">小さすぎる場合のみ棄却</td>
+                                </tr>
+                                <tr style="border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;">$H_1: \theta \neq \theta_0$（両側）</td>
+                                    <td style="padding:0.4em;">$|Z| \geq z_{\alpha/2}$</td>
+                                    <td style="padding:0.4em;">どちらに外れても棄却</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
 
                     <div class="memo-box">
-                        <div class="box-title">💡 分母の $\theta_0(1-\theta_0)$ について</div>
+                        <div class="box-title">💡 「検定」と「信頼区間」で分母が違う理由</div>
                         <p>
-                            帰無仮説のもとで $\hat{\theta}$ の分散は $\theta_0(1-\theta_0)/n$ です。
-                            信頼区間を作る際は（仮説値 $\theta_0$ が未知なので）$\hat{\theta}(1-\hat{\theta})$ で置き換えます。
-                            これが「検定」と「信頼区間」で分母の表記が異なる理由です。
+                            <strong>検定の場合：</strong>帰無仮説 $\theta = \theta_0$ のもとで確率を計算するので、
+                            分母（標準偏差）に仮説値 $\theta_0$ を使います。
                         </p>
+                        <p>
+                            <strong>信頼区間の場合：</strong>「$\theta_0$ を決めていない」ので、
+                            未知の $\theta$ の代わりに推定値 $\hat{\theta}$ で置き換えます。
+                        </p>
+                        <div class="formula-block">
+                            $$\text{$\theta$ の信頼係数 $1-\alpha$ の信頼区間：} \quad \hat{\theta} \pm z_{\alpha/2}\sqrt{\frac{\hat{\theta}(1-\hat{\theta})}{n}}$$
+                        </div>
                     </div>
                 </section>
 
@@ -145,6 +183,10 @@
                 <section class="content-section section-anchor" id="two-proportion">
                     <h2><i class="fas fa-arrows-left-right"></i> 2. 母比率の差の検定</h2>
 
+                    <p>
+                        「男性と女性でSNSの利用率は異なるか」「薬Aと薬Bで治癒率に差はあるか」のように、
+                        <strong>2群の母比率を比較する</strong>問題です。
+                    </p>
                     <p>
                         2群の比率を比較します：群1（$n_1$回試行、成功数 $X_1$）と群2（$n_2$回試行、成功数 $X_2$）。
                         帰無仮説 $H_0: \theta_1 = \theta_2$（共通比率は未知）を検定します。
@@ -176,21 +218,57 @@
                     <h2><i class="fas fa-wave-square"></i> 3. ポアソン分布に関する検定</h2>
 
                     <p>
-                        確率変数 $X \sim \text{Poisson}(\lambda)$（$\lambda$ は未知）。
+                        「年間の台風上陸数」「1日あたりの交通事故件数」「放射線崩壊の回数」のように、
+                        <strong>稀な事象の発生回数</strong>はポアソン分布 $\text{Poi}(\lambda)$ でモデル化されることが多いです。
+                    </p>
+                    <p>
+                        確率変数 $X \sim \text{Poisson}(\lambda)$（$\lambda$ は未知）が観測されたとき、
                         帰無仮説 $H_0: \lambda = \lambda_0$ を検定します。
                     </p>
 
                     <div class="concept-box">
-                        <div class="box-title"><i class="fas fa-bookmark"></i> ポアソン分布の検定</div>
-                        <p>$\hat{\lambda} = X$ を最尤推定量として、$\lambda$ が十分大きいとき</p>
+                        <div class="box-title"><i class="fas fa-bookmark"></i> ポアソン分布の検定（漸近正規近似）</div>
+                        <p>
+                            $\hat{\lambda} = X$（最尤推定量、ポアソン分布の平均はそのまま観測値）として、
+                            $\lambda$ が十分大きいとき（ポアソン分布の再生性と中心極限定理より）：
+                        </p>
                         <div class="formula-block">
-                            $$Z = \frac{X - \lambda_0}{\sqrt{\lambda_0}} \xrightarrow{d} N(0,1)$$
+                            $$Z = \frac{X - \lambda_0}{\sqrt{\lambda_0}} \xrightarrow{d} N(0,1) \quad \cdots (12.5)$$
+                        </div>
+                        <table style="width:100%; border-collapse:collapse; margin:0.5em 0;">
+                            <thead><tr style="background:var(--light-bg);">
+                                <th style="padding:0.5em;">対立仮説</th>
+                                <th style="padding:0.5em;">棄却域</th>
+                            </tr></thead>
+                            <tbody>
+                                <tr style="border-top:1px solid #ddd;"><td style="padding:0.4em;">$H_1: \lambda > \lambda_0$</td><td style="padding:0.4em;">$Z \geq z_\alpha$</td></tr>
+                                <tr style="border-top:1px solid #ddd;"><td style="padding:0.4em;">$H_1: \lambda < \lambda_0$</td><td style="padding:0.4em;">$Z \leq -z_\alpha$</td></tr>
+                                <tr style="border-top:1px solid #ddd;"><td style="padding:0.4em;">$H_1: \lambda \neq \lambda_0$</td><td style="padding:0.4em;">$|Z| \geq z_{\alpha/2}$</td></tr>
+                            </tbody>
+                        </table>
+                        <p>$\lambda$ の信頼係数 $1-\alpha$ の近似信頼区間：$X \pm z_{\alpha/2}\sqrt{X}$</p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 なぜ分母が $\sqrt{\lambda_0}$ なのか</div>
+                        <p>
+                            ポアソン分布の重要な性質：<strong>平均と分散が等しい</strong>（$E[X] = V[X] = \lambda$）。
+                            帰無仮説のもとでは $V[X] = \lambda_0$ なので、標準化の分母は $\sqrt{\lambda_0}$ になります。
+                            この「平均＝分散」という特徴は、ポアソン分布を他の分布から区別する重要な指標でもあります。
+                        </p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 $Z^2$ は適合度検定の特殊ケース</div>
+                        <p>
+                            式 (12.5) の $Z$ を2乗すると：
+                        </p>
+                        <div class="formula-block">
+                            $$Z^2 = \frac{(X - \lambda_0)^2}{\lambda_0} \xrightarrow{d} \chi^2(1)$$
                         </div>
                         <p>
-                            （ポアソン分布の再生性と中心極限定理より。）検定統計量 $Z$ を2乗したものは
-                            自由度1のカイ二乗分布に従い、適合度検定の特殊ケースとして解釈できます。
+                            これは「成功（$X$ 回）」と「失敗（$n - X$ 回相当）」の2カテゴリーの適合度検定と解釈できます。
                         </p>
-                        <p>$\lambda$ の信頼係数 $1-\alpha$ の近似信頼区間：$X \pm z_{\alpha/2}\sqrt{X}$</p>
                     </div>
                 </section>
 
@@ -201,41 +279,63 @@
                     <h2><i class="fas fa-chart-bar"></i> 4. 適合度検定（ピアソンのカイ二乗統計量）</h2>
 
                     <p>
-                        カテゴリカルデータの観測度数が、ある確率分布（帰無仮説）と矛盾しないかを検定します。
-                        カテゴリ数を $l$、カテゴリ $i$ の観測度数 $n_i$、総度数 $n$、
+                        「このサイコロは本当に公平か」「台風の上陸数はポアソン分布に従うか」のように、
+                        <strong>観測データがある特定の分布にあてはまるか</strong>を検定するのが<strong>適合度検定</strong>（goodness of fit test）です。
+                    </p>
+                    <p>
+                        カテゴリ数を $l$、カテゴリ $i$ の観測度数 $n_i$、総度数 $n$（$\sum n_i = n$）、
                         帰無仮説のもとで確率 $p_i$ の最尤推定量を $\hat{p}_i$ とします。
                     </p>
 
                     <div class="concept-box">
-                        <div class="box-title"><i class="fas fa-bookmark"></i> ピアソンのカイ二乗適合度検定</div>
+                        <div class="box-title"><i class="fas fa-bookmark"></i> ピアソンのカイ二乗適合度検定統計量（式 12.6）</div>
                         <div class="formula-block">
-                            $$T = \sum_{i=1}^{l} \frac{(n_i - n\hat{p}_i)^2}{n\hat{p}_i}$$
+                            $$T = \sum_{i=1}^{l} \frac{(n_i - n\hat{p}_i)^2}{n\hat{p}_i} \quad \cdots (12.6)$$
                         </div>
                         <p>
-                            $n\hat{p}_i$ は<strong>期待度数</strong>。$T$ は帰無仮説のもとで近似的に
-                            $\chi^2(d)$ に従います。ここで自由度は：
+                            $n\hat{p}_i$ は<strong>期待度数</strong>（帰無仮説が正しければ期待される観測数）です。
+                        </p>
+                        <p>
+                            $T$ は帰無仮説のもとで近似的に $\chi^2(d)$ に従います。自由度：
                         </p>
                         <div class="formula-block">
-                            $$d = (l - 1) - k$$
+                            $$d = \underbrace{(l - 1)}_{\text{制約前の自由度}} - \underbrace{k}_{\text{推定パラメータ数}}$$
                         </div>
                         <p>
-                            $k$ は帰無仮説のもとで推定したパラメータ数（単純帰無仮説なら $k=0$）。
+                            $k$ は帰無仮説のもとで<strong>データから推定したパラメータ数</strong>（単純帰無仮説なら $k=0$、
+                            ポアソン分布の $\lambda$ を推定したなら $k=1$）。
                             棄却域：$T \geq \chi^2_\alpha(d)$（有意水準 $\alpha$）。
                         </p>
+                    </div>
+
+                    <div class="concept-box" style="margin-top:1em;">
+                        <div class="box-title"><i class="fas fa-lightbulb"></i> カイ二乗統計量の直感的な意味</div>
+                        <p>
+                            各項 $\dfrac{(n_i - n\hat{p}_i)^2}{n\hat{p}_i}$ は「観測度数と期待度数のずれ²を期待度数で割ったもの」です。
+                        </p>
+                        <ul>
+                            <li>観測と期待が完全に一致 → 各項は 0 → $T = 0$（帰無仮説に完全に合致）</li>
+                            <li>あるカテゴリで観測と期待が大きくずれる → 対応する項が大きい → $T$ が大きくなり棄却へ</li>
+                            <li>期待度数 $n\hat{p}_i$ が小さいセルは、わずかなずれでも項が大きくなりやすい（問12.2[3]の注意点）</li>
+                        </ul>
                     </div>
 
                     <div class="memo-box">
                         <div class="box-title">💡 イエーツの補正（Yates' correction）</div>
                         <p>
-                            期待度数が小さい（目安として $n\hat{p}_i &lt; 5$）場合には、
+                            期待度数が小さい（目安として $n\hat{p}_i < 5$）場合には、
                             連続修正として<strong>イエーツの補正</strong>が使われることがあります：
                         </p>
                         <div class="formula-block">
                             $$T_Y = \sum_{i=1}^{l} \frac{(|n_i - n\hat{p}_i| - 0.5)^2}{n\hat{p}_i}$$
                         </div>
                         <p>
-                            分子の $(n_i - n\hat{p}_i)^2$ を $(|n_i - n\hat{p}_i| - 0.5)^2$ に置き換えます。
-                            ただし大標本では補正の効果は小さいです。
+                            分子 $(n_i - n\hat{p}_i)^2$ を $(|n_i - n\hat{p}_i| - 0.5)^2$ に置き換えることで、
+                            離散分布を連続分布（$\chi^2$ 分布）で近似する際の誤差を補正します。
+                        </p>
+                        <p>
+                            ただし大標本（すべてのセルで期待度数が5以上）では補正の効果は小さく、
+                            より根本的な対処法としては<strong>セルの結合</strong>が推奨されます（問12.2[4]参照）。
                         </p>
                     </div>
                 </section>
@@ -247,24 +347,53 @@
                     <h2><i class="fas fa-table"></i> 5. 分割表の独立性検定</h2>
 
                     <p>
-                        2つのカテゴリカル変数（行の $I$ カテゴリ × 列の $J$ カテゴリ）の2元分割表において、
-                        2変数の<strong>独立性</strong>を検定します。
+                        「性別と政党支持は独立か」「喫煙と肺がんの関係はあるか」のように、
+                        2つのカテゴリカル変数の間に<strong>関連があるかどうか</strong>を検定するのが独立性検定です。
+                        行の $I$ カテゴリ × 列の $J$ カテゴリの2元分割表を考えます。
                     </p>
 
                     <div class="concept-box">
                         <div class="box-title"><i class="fas fa-bookmark"></i> $I \times J$ 分割表の独立性検定</div>
-                        <p>独立性の帰無仮説：$p_{ij} = \alpha_i \beta_j$（$i=1,\ldots,I$、$j=1,\ldots,J$）</p>
-                        <p>$n_{ij}$ を$(i,j)$セルの観測度数、$n_{i\cdot}$、$n_{\cdot j}$ を周辺度数合計とすると、
-                        期待度数は $\hat{E}_{ij} = n_{i\cdot} n_{\cdot j}/n$。検定統計量：</p>
+                        <p>
+                            独立性の帰無仮説：「行と列の変数は独立」
+                        </p>
                         <div class="formula-block">
-                            $$T = \sum_{i=1}^{I}\sum_{j=1}^{J} \frac{(n_{ij} - \hat{E}_{ij})^2}{\hat{E}_{ij}}$$
+                            $$H_0:\, p_{ij} = \alpha_i \beta_j \quad (i=1,\ldots,I,\; j=1,\ldots,J)$$
+                        </div>
+                        <p>
+                            $n_{ij}$：$(i,j)$ セルの観測度数、$n_{i\cdot} = \sum_j n_{ij}$（行の合計）、
+                            $n_{\cdot j} = \sum_i n_{ij}$（列の合計）、$n$：総度数。
+                        </p>
+                        <p>
+                            帰無仮説のもとでの期待度数：
+                        </p>
+                        <div class="formula-block">
+                            $$\hat{E}_{ij} = \frac{n_{i\cdot} \cdot n_{\cdot j}}{n}$$
+                        </div>
+                        <p>検定統計量（ピアソンのカイ二乗統計量）：</p>
+                        <div class="formula-block">
+                            $$T = \sum_{i=1}^{I}\sum_{j=1}^{J} \frac{(n_{ij} - \hat{E}_{ij})^2}{\hat{E}_{ij}} \xrightarrow{d} \chi^2(d)$$
                         </div>
                         <p>
                             自由度：$d = (I-1)(J-1)$
                         </p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 自由度 $(I-1)(J-1)$ の導き方</div>
                         <p>
-                            （フルモデルの自由パラメータ数 $IJ-1$ から、帰無仮説で推定したパラメータ数
-                            $(\alpha_1,\ldots,\alpha_{I-1})$ と $(\beta_1,\ldots,\beta_{J-1})$ の合計 $(I-1)+(J-1)$ を引く。）
+                            フルモデル（どんな $p_{ij}$ も許す）で自由に動けるパラメータ数：$IJ - 1$（和が1という制約）。
+                        </p>
+                        <p>
+                            帰無仮説（独立性モデル）で自由に動けるパラメータ数：
+                            $\alpha_1, \ldots, \alpha_{I-1}$ の $I-1$ 個と $\beta_1, \ldots, \beta_{J-1}$ の $J-1$ 個 → 合計 $(I-1) + (J-1)$。
+                        </p>
+                        <div class="formula-block">
+                            $$d = (IJ - 1) - [(I-1) + (J-1)] = IJ - I - J + 1 = (I-1)(J-1)$$
+                        </div>
+                        <p>
+                            例：$2 \times 2$ 分割表（男女 × 利用有無）なら $d = (2-1)(2-1) = 1$。
+                            独立性検定の統計量は $\chi^2(1)$ に従い、$Z^2$（母比率の差の検定統計量の2乗）と一致します。
                         </p>
                     </div>
                 </section>
@@ -276,33 +405,68 @@
                     <h2><i class="fas fa-magnifying-glass-chart"></i> 6. 尤度比検定</h2>
 
                     <p>
-                        パラメトリックモデルに対して汎用的に適用できる検定構成法です。
-                        $\theta = (\theta_1, \theta_2)$（$\theta_1$：$p$ 次元、$\theta_2$：$q$ 次元）として、
-                        帰無仮説 $H_0: \theta_1 = \theta_{10}$ を検定します。
+                        上で見た各検定は、それぞれ独立に導出したように見えますが、実は<strong>尤度比検定</strong>という
+                        汎用的な枠組みの特殊ケースとして統一的に理解できます。
+                    </p>
+                    <p>
+                        パラメータ $\theta = (\theta_1, \theta_2)$（$\theta_1$：制約対象で $p$ 次元、$\theta_2$：局外パラメータで $q$ 次元）として、
+                        帰無仮説 $H_0: \theta_1 = \theta_{10}$（$\theta_1$ を固定）を検定します。
                     </p>
 
                     <div class="concept-box">
-                        <div class="box-title"><i class="fas fa-bookmark"></i> 尤度比検定統計量</div>
-                        <p>尤度比 $\Lambda_n$ を次で定義します：</p>
+                        <div class="box-title"><i class="fas fa-bookmark"></i> 尤度比と検定統計量</div>
+                        <p>大きさ $n$ の標本の尤度を $f_n(x_n;\, \theta_1, \theta_2)$ とする。尤度比を</p>
                         <div class="formula-block">
-                            $$\Lambda_n = \frac{\max_{\theta_2} f_n(x_n;\, \theta_{10},\, \theta_2)}{\max_{\theta_1,\theta_2} f_n(x_n;\, \theta_1,\, \theta_2)}$$
-                        </div>
-                        <p>$0 \leq \Lambda_n \leq 1$。$\Lambda_n$ が小さいほど $H_0$ に矛盾しています。<strong>検定統計量</strong>：</p>
-                        <div class="formula-block">
-                            $$W_n = -2\log \Lambda_n = 2(\ell(\hat{\theta}) - \ell(\hat{\theta}_{\text{restricted}}))$$
+                            $$\Lambda_n = \frac{\max_{\theta_2} f_n(x_n;\, \theta_{10},\, \theta_2)}{\max_{\theta_1,\theta_2} f_n(x_n;\, \theta_1,\, \theta_2)} \in [0, 1]$$
                         </div>
                         <p>
-                            $H_0$ のもとで $n \to \infty$ のとき $W_n \xrightarrow{d} \chi^2(p)$（ウィルクスの定理）。
-                            棄却域：$W_n \geq \chi^2_\alpha(p)$。
+                            分子：$H_0$ が正しいという制約のもとでの最大尤度。
+                            分母：制約なし（$H_1$ を含む）での最大尤度。
+                        </p>
+                        <p>
+                            $\Lambda_n$ が $1$ に近い → $H_0$ の制約があってもなくても尤度が変わらない → $H_0$ が支持される。<br>
+                            $\Lambda_n$ が $0$ に近い → $H_0$ の制約のもとでは尤度が著しく低下 → $H_0$ が疑わしい。
+                        </p>
+                        <p>検定統計量：</p>
+                        <div class="formula-block">
+                            $$W_n = -2\log \Lambda_n = 2[\ell(\hat{\theta}) - \ell(\hat{\theta}_{\text{H}_0})] \geq 0$$
+                        </div>
+                        <p>
+                            ここで $\ell(\cdot)$ は対数尤度。$H_0$ のもとで $n \to \infty$ のとき
+                        </p>
+                        <div class="formula-block">
+                            $$W_n \xrightarrow{d} \chi^2(p) \quad \text{（ウィルクスの定理）}$$
+                        </div>
+                        <p>棄却域：$W_n \geq \chi^2_\alpha(p)$。</p>
+                    </div>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 ワルド検定・スコア検定との関係</div>
+                        <p>
+                            パラメトリックモデルの仮説検定には3つの代表的な方法があります：
+                        </p>
+                        <ol>
+                            <li><strong>尤度比検定</strong>：$W_n = -2\log\Lambda_n$（制約ありと制約なしの対数尤度の差）</li>
+                            <li><strong>ワルド検定</strong>：最尤推定値が帰無仮説の値からどれだけ離れているか</li>
+                            <li><strong>スコア検定（ラオ検定）</strong>：帰無仮説の値での対数尤度の勾配（スコア）がゼロに近いかどうか</li>
+                        </ol>
+                        <p>
+                            これら3つは、すべて帰無仮説のもとで漸近的に $\chi^2(p)$ に従い、<strong>漸近等価</strong>です。
+                            計算のしやすさや有限標本での性質に応じて使い分けます。
                         </p>
                     </div>
 
                     <div class="memo-box">
-                        <div class="box-title">💡 スコア検定・ワルド検定との比較</div>
+                        <div class="box-title">💡 母比率の尤度比検定は適合度検定の特殊ケース</div>
                         <p>
-                            一般的な仮説検定の構成法として、尤度比検定・スコア検定・ワルド検定の3つが知られており、
-                            すべて漸近的に$\chi^2(p)$分布に収束します（漸近等価）。
-                            計算のしやすさや有限標本での性質によって使い分けます。
+                            コインを $n$ 回投げて表が $X$ 回出た場合の尤度比検定統計量：
+                        </p>
+                        <div class="formula-block">
+                            $$W_n = 2n\left[\hat{\theta}\log\frac{\hat{\theta}}{\theta_0} + (1-\hat{\theta})\log\frac{1-\hat{\theta}}{1-\theta_0}\right]$$
+                        </div>
+                        <p>
+                            これはカテゴリー数2の適合度検定（ピアソンのカイ二乗統計量）と漸近等価です。
+                            さらに、漸近正規検定の統計量 $Z$ の2乗ともほぼ等しくなります。
                         </p>
                     </div>
                 </section>
@@ -311,152 +475,654 @@
                 <!-- 7. 例題・演習                                              -->
                 <!-- ======================================================== -->
                 <section class="content-section section-anchor" id="problems">
-                    <h2><i class="fas fa-pencil"></i> 7. 例題・演習</h2>
+                    <h2><i class="fas fa-pencil"></i> 7. 教科書例題・演習問題</h2>
 
-                    <h3>問12.1（コイン）：母比率の両側検定</h3>
+                    <!-- ────────────────────────────────────────── -->
+                    <!-- 教科書例題（導入）                          -->
+                    <!-- ────────────────────────────────────────── -->
+                    <h3>教科書例題：コインの母比率検定（適合度検定との関係）</h3>
                     <div class="example-block">
-                        <span class="prob-badge badge-q">問題</span>
-                    <p>
-                        表の出る確率が $\theta$ のコインを $n = 30$ 回投げたところ、表が $X = 12$ 回出た。
-                        帰無仮説 $H_0: \theta = 0.5$、対立仮説 $H_1: \theta \neq 0.5$ として有意水準5%の検定を実行せよ。
-                        あわせて尤度比検定の統計量も計算せよ。
-                        （標準正規分布の上側2.5%点 $z_{0.025} = 1.96$、自由度1のカイ二乗の上側5%点 = 3.84）
-                    </p>
+                        <span class="prob-badge badge-q">例題</span>
+                        <p>
+                            表の出る確率が $\theta$ のコインを $n = 30$ 回投げたところ、表が $X = 12$ 回出た。
+                            帰無仮説 $H_0: \theta = 0.5$、対立仮説 $H_1: \theta \neq 0.5$ として有意水準5%の検定を実行せよ。
+                            あわせて尤度比検定の統計量も計算せよ。
+                        </p>
+                        <p>（標準正規分布の上側2.5%点 $z_{0.025} = 1.96$、自由度1のカイ二乗分布の上側5%点 $= 3.84$）</p>
                     </div>
                     <div class="answer-block">
-                        <span class="prob-badge badge-a">解答</span>
-                        <p><strong>（方法1）漸近正規性による検定：</strong></p>
-                        <div class="formula-block">
-                            $$Z = \frac{\sqrt{n}(\hat{\theta} - \theta_0)}{\sqrt{\theta_0(1-\theta_0)}} = \frac{\sqrt{30}(12/30 - 0.5)}{\sqrt{0.5 \times 0.5}} = \frac{\sqrt{30} \times (-0.1)}{0.5} = -1.095$$
-                        </div>
-                        <p>$|Z| = 1.095 &lt; z_{0.025} = 1.96$ → 帰無仮説は<strong>棄却されない</strong>。</p>
+                        <span class="prob-badge badge-a">解説</span>
 
-                        <p><strong>（方法2）尤度比検定：</strong></p>
-                        <p>$\hat{\theta} = 0.4$（最尤推定値）として</p>
+                        <p><strong>【解法1】漸近正規性に基づく検定</strong></p>
+                        <p>
+                            $n=30$、$\hat{\theta} = 12/30 = 0.4$、帰無仮説のもとでの期待値 $\theta_0 = 0.5$ です。
+                            大標本では $\hat{\theta}$ は正規分布で近似できます。
+                        </p>
                         <div class="formula-block">
-                            $$W_n = 2n\left[\hat{\theta}\log\frac{\hat{\theta}}{\theta_0} + (1-\hat{\theta})\log\frac{1-\hat{\theta}}{1-\theta_0}\right]$$
-                            $$= 2 \times 30\left[0.4\log\frac{0.4}{0.5} + 0.6\log\frac{0.6}{0.5}\right] \approx 1.21$$
+                            $$Z = \frac{\sqrt{n}(\hat{\theta} - \theta_0)}{\sqrt{\theta_0(1-\theta_0)}}
+                              = \frac{\sqrt{30}(0.4 - 0.5)}{\sqrt{0.5 \times 0.5}}
+                              = \frac{5.477 \times (-0.1)}{0.5}
+                              = -1.095$$
                         </div>
-                        <p>$W_n = 1.21 &lt; 3.84$ → やはり棄却されない（2つの方法は漸近等価）。</p>
+                        <p>
+                            $|Z| = 1.095 < z_{0.025} = 1.96$ → 帰無仮説は<strong>棄却されない</strong>。
+                        </p>
+                        <p>
+                            コインを30回投げて12回表が出たとしても、「表の確率は0.5でない」とは統計的に言えない。
+                        </p>
+
+                        <p><strong>【解法2】尤度比検定</strong></p>
+                        <p>
+                            最尤推定値 $\hat{\theta} = 0.4$ を使います。帰無仮説のもとでは $\theta = 0.5$ に固定。
+                        </p>
+                        <div class="formula-block">
+                            $$W_n = 2n\left[\hat{\theta}\log\frac{\hat{\theta}}{\theta_0} + (1-\hat{\theta})\log\frac{1-\hat{\theta}}{1-\theta_0}\right]
+                              = 2 \times 30\left[0.4\log\frac{0.4}{0.5} + 0.6\log\frac{0.6}{0.5}\right]$$
+                            $$= 60\bigl[0.4 \times (-0.2231) + 0.6 \times 0.1823\bigr]
+                              = 60\bigl[-0.08924 + 0.10938\bigr]
+                              = 60 \times 0.02014
+                              \approx 1.21$$
+                        </div>
+                        <p>$W_n = 1.21 < 3.84$ → やはり棄却されない。</p>
+
+                        <div class="memo-box">
+                            <div class="box-title">💡 2つの方法はなぜ漸近等価なのか</div>
+                            <p>
+                                解法1の $Z^2 \approx 1.20$（$\approx 1.21$）で、これが解法2の $W_n$ にほぼ等しくなっています。
+                                実は一般に、母比率の検定統計量 $Z^2$ は尤度比検定統計量 $W_n$ と漸近等価であることが知られています。
+                                これは「適合度検定（カテゴリー数2）の特殊ケース」として解釈でき、
+                                帰無仮説のもとでどちらも漸近的に $\chi^2(1)$ に従います。
+                            </p>
+                        </div>
                     </div>
 
-                    <h3>問12.2：曜日別問い合わせ数の一様性の検定</h3>
+                    <!-- ────────────────────────────────────────── -->
+                    <!-- 問12.1                                       -->
+                    <!-- ────────────────────────────────────────── -->
+                    <h3 style="margin-top:2em;">問12.1：曜日別問い合わせ数の一様性の検定</h3>
                     <div class="example-block">
                         <span class="prob-badge badge-q">問題</span>
-                    <p>
-                        小売店Sへの「問い合わせ」の回数について、ある1週間の調査結果は以下の通りである。
-                        曜日によって問い合わせの回数に差があるかを有意水準5%で検定せよ。
-                    </p>
-                    <table style="width:100%; border-collapse:collapse; margin:0.8em 0;">
-                        <thead><tr style="background:var(--light-bg);">
-                            <th style="padding:0.5em; text-align:center;">月</th>
-                            <th style="padding:0.5em; text-align:center;">火</th>
-                            <th style="padding:0.5em; text-align:center;">水</th>
-                            <th style="padding:0.5em; text-align:center;">木</th>
-                            <th style="padding:0.5em; text-align:center;">金</th>
-                            <th style="padding:0.5em; text-align:center;">土</th>
-                            <th style="padding:0.5em; text-align:center;">日</th>
-                            <th style="padding:0.5em; text-align:center;">合計</th>
-                        </tr></thead>
-                        <tbody>
-                            <tr style="text-align:center; border-top:1px solid #ddd;">
-                                <td style="padding:0.5em;">7</td>
-                                <td style="padding:0.5em;">3</td>
-                                <td style="padding:0.5em;">5</td>
-                                <td style="padding:0.5em;">2</td>
-                                <td style="padding:0.5em;">7</td>
-                                <td style="padding:0.5em;">12</td>
-                                <td style="padding:0.5em;">13</td>
-                                <td style="padding:0.5em;">49</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p>（カイ二乗分布の上側5%点：$\chi^2_{0.05}(6) = 12.59$）</p>
-                    </div>
-                    <div class="answer-block">
-                        <span class="prob-badge badge-a">解答</span>
-                        <p><strong>帰無仮説:</strong> 各曜日の問い合わせ数は一様（確率 $p_i = 1/7$）。</p>
-                        <p>期待度数 $n\hat{p}_i = 49/7 = 7$（全曜日共通）。</p>
-                        <div class="formula-block">
-                            $$T = \sum_{i=1}^{7} \frac{(n_i - 7)^2}{7} = \frac{(7-7)^2 + (3-7)^2 + (5-7)^2 + (2-7)^2 + (7-7)^2 + (12-7)^2 + (13-7)^2}{7}$$
-                            $$= \frac{0 + 16 + 4 + 25 + 0 + 25 + 36}{7} = \frac{106}{7} \approx \mathbf{15.14}$$
-                        </div>
-                        <p>自由度 $d = l - 1 = 7 - 1 = 6$（単純帰無仮説なので $k=0$）</p>
-                        <p>$T = 15.14 > \chi^2_{0.05}(6) = 12.59$ → 帰無仮説を<strong>棄却する</strong>。</p>
-                        <p>「曜日によって問い合わせ数には統計的に有意な差がある（有意水準5%）。土日の問い合わせが特に多い。」</p>
+                        <p>
+                            次の表は、小売店Sへの「問い合わせ」の回数について、ある1週間の調査結果を示したものである。
+                            曜日によって「問い合わせ」の回数に差があるか否かを考える。
+                            「曜日によって問い合わせの回数が異ならない」という帰無仮説を立て、
+                            <strong>一様性の検定</strong>を有意水準5%で行う。
+                        </p>
+                        <table style="width:100%; border-collapse:collapse; margin:0.8em 0;">
+                            <thead>
+                                <tr style="background:var(--light-bg);">
+                                    <th style="padding:0.5em; text-align:center;">曜日</th>
+                                    <th style="padding:0.5em; text-align:center;">月</th>
+                                    <th style="padding:0.5em; text-align:center;">火</th>
+                                    <th style="padding:0.5em; text-align:center;">水</th>
+                                    <th style="padding:0.5em; text-align:center;">木</th>
+                                    <th style="padding:0.5em; text-align:center;">金</th>
+                                    <th style="padding:0.5em; text-align:center;">土</th>
+                                    <th style="padding:0.5em; text-align:center;">日</th>
+                                    <th style="padding:0.5em; text-align:center;">合計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.5em;"><strong>回数</strong></td>
+                                    <td style="padding:0.5em;">7</td>
+                                    <td style="padding:0.5em;">3</td>
+                                    <td style="padding:0.5em;">5</td>
+                                    <td style="padding:0.5em;">2</td>
+                                    <td style="padding:0.5em;">7</td>
+                                    <td style="padding:0.5em;">12</td>
+                                    <td style="padding:0.5em;">13</td>
+                                    <td style="padding:0.5em;">49</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            〔1〕 この検定を行うためのカイ二乗統計量の値を求めよ。<br>
+                            〔2〕 カイ二乗分布表より棄却限界値を求め、この検定の結論を述べよ。
+                        </p>
+                        <p>（カイ二乗分布の上側5%点：$\chi^2_{0.05}(6) = 12.59$）</p>
                     </div>
 
-                    <h3>問12.3：台風上陸数のポアソン適合度検定</h3>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>【前提の確認】何を検定しているのか</strong></p>
+                        <p>
+                            「曜日によらず問い合わせ数が同じ」という帰無仮説は、
+                            7つの曜日それぞれの問い合わせが起きる確率が等しい（$p_i = 1/7$）という「一様性の検定」です。
+                            全49件が7曜日に均等に分散するなら、各曜日の期待回数は $49/7 = 7$ 件のはずです。
+                        </p>
+
+                        <p><strong>〔1〕 カイ二乗統計量の計算</strong></p>
+                        <p>
+                            各曜日の期待度数：$e_i = 49 \times \dfrac{1}{7} = 7$（$i = 1,2,\ldots,7$）
+                        </p>
+                        <p>カイ二乗統計量の公式に代入します：</p>
+                        <div class="formula-block">
+                            $$T = \sum_{i=1}^{7} \frac{(n_i - e_i)^2}{e_i}$$
+                        </div>
+                        <p>各曜日の乖離度 $(n_i - 7)^2 / 7$ を計算します：</p>
+                        <table style="width:100%; border-collapse:collapse; margin:0.8em 0; font-size:0.93em;">
+                            <thead>
+                                <tr style="background:var(--light-bg);">
+                                    <th style="padding:0.4em; text-align:center;">曜日</th>
+                                    <th style="padding:0.4em; text-align:center;">月</th>
+                                    <th style="padding:0.4em; text-align:center;">火</th>
+                                    <th style="padding:0.4em; text-align:center;">水</th>
+                                    <th style="padding:0.4em; text-align:center;">木</th>
+                                    <th style="padding:0.4em; text-align:center;">金</th>
+                                    <th style="padding:0.4em; text-align:center;">土</th>
+                                    <th style="padding:0.4em; text-align:center;">日</th>
+                                    <th style="padding:0.4em; text-align:center;">合計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;">回数 $n_i$</td>
+                                    <td>7</td><td>3</td><td>5</td><td>2</td><td>7</td><td>12</td><td>13</td><td>49</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;">期待回数 $e_i$</td>
+                                    <td>7</td><td>7</td><td>7</td><td>7</td><td>7</td><td>7</td><td>7</td><td>49</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;">$n_i - e_i$</td>
+                                    <td>0</td><td>−4</td><td>−2</td><td>−5</td><td>0</td><td>5</td><td>6</td><td>0</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;">$(n_i-e_i)^2$</td>
+                                    <td>0</td><td>16</td><td>4</td><td>25</td><td>0</td><td>25</td><td>36</td><td>106</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd; background:var(--light-bg);">
+                                    <td style="padding:0.4em;"><strong>乖離度</strong></td>
+                                    <td>0</td>
+                                    <td>$\frac{16}{7}$</td>
+                                    <td>$\frac{4}{7}$</td>
+                                    <td>$\frac{25}{7}$</td>
+                                    <td>0</td>
+                                    <td>$\frac{25}{7}$</td>
+                                    <td>$\frac{36}{7}$</td>
+                                    <td>$\frac{106}{7}$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="formula-block">
+                            $$T = \frac{0 + 16 + 4 + 25 + 0 + 25 + 36}{7} = \frac{106}{7} \approx \mathbf{15.14}$$
+                        </div>
+
+                        <p><strong>〔2〕 棄却限界値と結論</strong></p>
+                        <p>
+                            <strong>自由度の決定：</strong>カテゴリー数は $l = 7$（曜日が7種類）。
+                            帰無仮説はすべての確率が $1/7$ であるという「単純帰無仮説」なので、
+                            推定したパラメータ数は $k = 0$。
+                        </p>
+                        <div class="formula-block">
+                            $$d = (l - 1) - k = (7 - 1) - 0 = 6$$
+                        </div>
+                        <div class="memo-box">
+                            <div class="box-title">💡 なぜ自由度が $l-1$ なのか</div>
+                            <p>
+                                確率の合計は必ず $\sum p_i = 1$ でなければなりません。
+                                これにより7つの確率のうち6つを決めれば残りの1つは自動的に決まります。
+                                この「1つの制約」により、自由に動けるパラメータ数が $l = 7$ ではなく $l-1 = 6$ になるのです。
+                            </p>
+                        </div>
+                        <p>
+                            自由度6のカイ二乗分布の上側5%点は $\chi^2_{0.05}(6) = 12.59$ です。
+                        </p>
+                        <div class="formula-block">
+                            $$T = 15.14 > 12.59 = \chi^2_{0.05}(6)$$
+                        </div>
+                        <p>
+                            → <strong>帰無仮説を棄却する</strong>（有意水準5%）。
+                        </p>
+                        <p>
+                            <strong>結論：</strong>曜日によって問い合わせの回数が異なると言える。
+                            表を見ると特に土・日の回数（12、13）が多く、月〜金の平日と比べて週末に問い合わせが集中していることが読み取れます。
+                        </p>
+                    </div>
+
+                    <!-- ────────────────────────────────────────── -->
+                    <!-- 問12.2                                       -->
+                    <!-- ────────────────────────────────────────── -->
+                    <h3 style="margin-top:2em;">問12.2：台風上陸数のポアソン適合度検定</h3>
                     <div class="example-block">
                         <span class="prob-badge badge-q">問題</span>
-                    <p>
-                        1951年から2019年までの69年間の台風の日本本土への年間上陸数データについて、
-                        ポアソン分布への適合性を有意水準5%で検定せよ。
-                        69年間の平均は $\bar{\lambda} = 2.99$（回）である。
-                        以下の表は観測度数をまとめたものです（10回以上を合算）。
-                    </p>
-                    <table style="width:100%; border-collapse:collapse; margin:0.8em 0;">
-                        <thead><tr style="background:var(--light-bg);">
-                            <th style="padding:0.5em; text-align:center;">上陸数（回）</th>
-                            <th style="padding:0.5em; text-align:center;">0</th>
-                            <th style="padding:0.5em; text-align:center;">1</th>
-                            <th style="padding:0.5em; text-align:center;">2</th>
-                            <th style="padding:0.5em; text-align:center;">3</th>
-                            <th style="padding:0.5em; text-align:center;">4</th>
-                            <th style="padding:0.5em; text-align:center;">5</th>
-                            <th style="padding:0.5em; text-align:center;">6</th>
-                            <th style="padding:0.5em; text-align:center;">7</th>
-                            <th style="padding:0.5em; text-align:center;">8</th>
-                            <th style="padding:0.5em; text-align:center;">9</th>
-                            <th style="padding:0.5em; text-align:center;">10+</th>
-                        </tr></thead>
-                        <tbody>
-                            <tr style="text-align:center; border-top:1px solid #ddd;">
-                                <td style="padding:0.5em;"><strong>観測度数（年）</strong></td>
-                                <td>4</td><td>7</td><td>17</td><td>17</td><td>9</td><td>6</td><td>5</td><td>2</td><td>1</td><td>0</td><td>1</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <p>（カイ二乗分布の上側5%点：$\chi^2_{0.05}(9) = 16.92$。$\hat{\lambda} = 2.99$ は推定値なので $k=1$。）</p>
-                    </div>
-                    <div class="answer-block">
-                        <span class="prob-badge badge-a">解答</span>
-                        <p><strong>期待度数の計算：</strong>$P(X=x) = e^{-2.99} \cdot 2.99^x / x!$ を69倍</p>
-                        <p>（例：$P(X=0) = e^{-2.99} \approx 0.0502$、期待度数 $= 69 \times 0.0502 \approx 3.46$）</p>
-                        <p>各セルの $(n_i - e_i)^2/e_i$ を合計するとカイ二乗統計量 $T \approx 16.37$。</p>
-                        <p>自由度：$d = (11 - 1) - 1 = 9$（クラス数11、推定パラメータ1つ）</p>
-                        <p>$T = 16.37 &lt; \chi^2_{0.05}(9) = 16.92$ → 帰無仮説は<strong>棄却されない</strong>（わずかに）。</p>
-                        <p>「台風の年間上陸数はポアソン分布 $\text{Poi}(2.99)$ に適合していると言える（有意水準5%）。」</p>
+                        <p>
+                            AさんとBさんは、台風が来たときの備えのため、1年間にどの程度の数の台風が上陸するかを考えることにした。
+                            次の表は、1951年から2019年までの69年間の年ごとの台風の日本本土への上陸数（回）をまとめたものであり、
+                            この表から求めた69年間の上陸数の平均は <strong>2.99（回）</strong>、標準偏差は <strong>1.70（回）</strong> である。
+                        </p>
+                        <table style="width:100%; border-collapse:collapse; margin:0.8em 0; font-size:0.93em;">
+                            <thead>
+                                <tr style="background:var(--light-bg);">
+                                    <th style="padding:0.4em; text-align:center;">上陸数（回）</th>
+                                    <th style="padding:0.4em; text-align:center;">0</th>
+                                    <th style="padding:0.4em; text-align:center;">1</th>
+                                    <th style="padding:0.4em; text-align:center;">2</th>
+                                    <th style="padding:0.4em; text-align:center;">3</th>
+                                    <th style="padding:0.4em; text-align:center;">4</th>
+                                    <th style="padding:0.4em; text-align:center;">5</th>
+                                    <th style="padding:0.4em; text-align:center;">6</th>
+                                    <th style="padding:0.4em; text-align:center;">7</th>
+                                    <th style="padding:0.4em; text-align:center;">8</th>
+                                    <th style="padding:0.4em; text-align:center;">9</th>
+                                    <th style="padding:0.4em; text-align:center;">10以上</th>
+                                    <th style="padding:0.4em; text-align:center;">計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;"><strong>観測度数（年）</strong></td>
+                                    <td>4</td><td>7</td><td>17</td><td>18</td><td>12</td><td>7</td><td>3</td><td>0</td><td>0</td><td>0</td><td>1</td><td>69</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="font-size:0.85em; color:#777;">資料：気象庁「台風の上陸数」</p>
+                        <p>
+                            Aさんは、この表から7回以上上陸した年は69年中1年なので $1/69 \approx 0.015$ から
+                            2%以下であり、1年間に6回の上陸に対して備えれば98%以上は対応できると考えた。<br>
+                            Bさんは、平均と標準偏差の値からもポアソン分布に従うのではないかという意見を述べた。
+                        </p>
+                        <p>
+                            Bさんの考えをもとに、1年間の台風の上陸数がポアソン分布に従うかどうかの
+                            <strong>適合度検定</strong>について考察する。
+                            なお、パラメータ $\lambda$ のポアソン分布の確率関数は次のとおりである：
+                        </p>
+                        <div class="formula-block">
+                            $$p(x) = \frac{\lambda^x}{x!}e^{-\lambda} \quad (x = 0, 1, 2, \ldots)$$
+                        </div>
+                        <p>
+                            以下の表は、1年間の台風の上陸数がパラメータ $\lambda = 2.99$ のポアソン分布に従うと仮定したときの、
+                            69年間の上陸数の期待度数（年）である。
+                        </p>
+                        <table style="width:100%; border-collapse:collapse; margin:0.8em 0; font-size:0.93em;">
+                            <thead>
+                                <tr style="background:var(--light-bg);">
+                                    <th style="padding:0.4em; text-align:center;">上陸数（回）</th>
+                                    <th style="padding:0.4em; text-align:center;">0</th>
+                                    <th style="padding:0.4em; text-align:center;">1</th>
+                                    <th style="padding:0.4em; text-align:center;">2</th>
+                                    <th style="padding:0.4em; text-align:center;">3</th>
+                                    <th style="padding:0.4em; text-align:center;">4</th>
+                                    <th style="padding:0.4em; text-align:center;">5</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;"><strong>期待度数（年）</strong></td>
+                                    <td>3.47</td><td>10.37</td><td>15.51</td><td>15.46</td><td>11.56</td><td>6.91</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table style="width:100%; border-collapse:collapse; margin:0.8em 0; font-size:0.93em;">
+                            <thead>
+                                <tr style="background:var(--light-bg);">
+                                    <th style="padding:0.4em; text-align:center;">上陸数（回）</th>
+                                    <th style="padding:0.4em; text-align:center;">6</th>
+                                    <th style="padding:0.4em; text-align:center;">7</th>
+                                    <th style="padding:0.4em; text-align:center;">8</th>
+                                    <th style="padding:0.4em; text-align:center;">9</th>
+                                    <th style="padding:0.4em; text-align:center;">10以上</th>
+                                    <th style="padding:0.4em; text-align:center;">計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.4em;"><strong>期待度数（年）</strong></td>
+                                    <td>3.44</td><td>1.47</td><td>0.55</td><td>0.18</td><td>0.07</td><td>69.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>
+                            〔1〕 Bさんが述べた「平均が2.99（回）、標準偏差が1.70（回）であることからもポアソン分布に従うのではないか」という意見の意味するところを示せ。<br>
+                            〔2〕 上の表（期待度数表）の求め方を説明せよ。<br>
+                            〔3〕 カイ二乗統計量を求めたところ16.37であった。適合度検定を有意水準5%で行ったときの検定の結果について、棄却域の設定に必要となる数値を示し論ぜよ。また、統計量の値を大きくしている原因について考察せよ。<br>
+                            〔4〕 Bさんは、上陸数6回以上の期待度数が小さいので、これらを「上陸数6回以上」とまとめるとよいのではないかと考えた。上陸数6回以上をまとめたときの検定の結果と上陸数6回以上をまとめないときの結果を比較し、あてはまりのよさについて論ぜよ。
+                        </p>
                     </div>
 
-                    <h3>問12.4（オリジナル）：SNS利用率の男女差の検定</h3>
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>〔1〕 ポアソン分布の「平均＝分散」という特徴</strong></p>
+                        <div class="concept-box" style="margin:0.5em 0;">
+                            <div class="box-title"><i class="fas fa-bookmark"></i> ポアソン分布の重要な性質</div>
+                            <p>
+                                パラメータ $\lambda$ のポアソン分布では、
+                            </p>
+                            <div class="formula-block">
+                                $$E[X] = \lambda, \quad V[X] = \lambda$$
+                            </div>
+                            <p>
+                                すなわち<strong>平均と分散が等しい</strong>という唯一無二の性質があります。
+                                （正規分布や二項分布などでは平均と分散は独立に変化しますが、ポアソン分布では連動しています。）
+                            </p>
+                        </div>
+                        <p>
+                            今回のデータでは：
+                        </p>
+                        <div class="formula-block">
+                            $$\text{平均} = 2.99, \quad \text{分散} = 1.70^2 = 2.89$$
+                        </div>
+                        <p>
+                            $2.99 \approx 2.89$ と両者は非常に近い値です。
+                            ポアソン分布ならば平均 = 分散となるはずなので、この一致は「ポアソン分布に従うかもしれない」という状況証拠になります。
+                            ただし、これはあくまで状況証拠であり、正式な検定（適合度検定）で確認する必要があります。
+                        </p>
+
+                        <p style="margin-top:1.2em;"><strong>〔2〕 期待度数の求め方</strong></p>
+                        <p>
+                            パラメータ $\lambda = 2.99$ のポアソン分布の確率を利用します。
+                            上陸数 $x = 0, 1, 2, \ldots, 9$ に対して：
+                        </p>
+                        <div class="formula-block">
+                            $$e_x = n \cdot p(x) = 69 \times \frac{2.99^x}{x!}e^{-2.99}$$
+                        </div>
+                        <p>具体的に計算すると（$e^{-2.99} \approx 0.05023$）：</p>
+                        <table style="width:100%; border-collapse:collapse; margin:0.8em 0; font-size:0.9em;">
+                            <thead>
+                                <tr style="background:var(--light-bg);">
+                                    <th style="padding:0.4em; text-align:center;">$x$</th>
+                                    <th style="padding:0.4em; text-align:center;">計算式</th>
+                                    <th style="padding:0.4em; text-align:center;">$p(x)$</th>
+                                    <th style="padding:0.4em; text-align:center;">期待度数 $69 \times p(x)$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>0</td><td>$e^{-2.99}$</td><td>0.05023</td><td>3.47</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>1</td><td>$e^{-2.99} \times 2.99$</td><td>0.15018</td><td>10.37</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>2</td><td>$e^{-2.99} \times 2.99^2/2$</td><td>0.22452</td><td>15.51</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>3</td><td>$e^{-2.99} \times 2.99^3/6$</td><td>0.22385</td><td>15.46</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>4</td><td>$e^{-2.99} \times 2.99^4/24$</td><td>0.16733</td><td>11.56</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>5</td><td>$e^{-2.99} \times 2.99^5/120$</td><td>0.10012</td><td>6.91</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>6</td><td>$e^{-2.99} \times 2.99^6/720$</td><td>0.04986</td><td>3.44</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>7</td><td>$e^{-2.99} \times 2.99^7/5040$</td><td>0.02130</td><td>1.47</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>8</td><td>$e^{-2.99} \times 2.99^8/40320$</td><td>0.00797</td><td>0.55</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>9</td><td>$e^{-2.99} \times 2.99^9/362880$</td><td>0.00264</td><td>0.18</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd; background:#f9f9f9;">
+                                    <td>10以上</td><td colspan="2">$1 - \sum_{x=0}^{9}p(x)$ から算出 → $69$ から合計を引く</td><td>0.07</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="memo-box">
+                            <div class="box-title">💡「10以上」の期待度数の求め方</div>
+                            <p>
+                                $x = 0$ から $9$ までの期待度数の合計は $3.47 + 10.37 + \cdots + 0.18 = 68.93$ です。
+                                全体の期待度数合計は必ず $n = 69$ でなければならないので、
+                                「10以上」の期待度数は $69 - 68.93 = 0.07$ となります。
+                                丸め誤差に注意しながら計算することが大切です。
+                            </p>
+                        </div>
+
+                        <p style="margin-top:1.2em;"><strong>〔3〕 適合度検定の実行と統計量が大きい原因の考察</strong></p>
+                        <p><strong>（a）自由度の決定</strong></p>
+                        <p>
+                            カテゴリー数は $l = 11$（上陸数 $0, 1, 2, \ldots, 9$, 10以上の11区分）。
+                            帰無仮説のもとでは $\lambda$ を最尤推定値 $\hat{\lambda} = 2.99$ で推定しているので、
+                            推定パラメータ数は $k = 1$。
+                        </p>
+                        <div class="formula-block">
+                            $$d = (l - 1) - k = (11 - 1) - 1 = \mathbf{9}$$
+                        </div>
+                        <p><strong>（b）棄却限界値の確認</strong></p>
+                        <p>
+                            自由度9のカイ二乗分布の上側5%点は $\chi^2_{0.05}(9) = 16.92$ です。
+                        </p>
+                        <div class="formula-block">
+                            $$T = 16.37 \quad \text{vs} \quad \chi^2_{0.05}(9) = 16.92$$
+                        </div>
+                        <p>
+                            $T = 16.37 < 16.92$ なので、帰無仮説は<strong>棄却されない</strong>。
+                            「台風の年間上陸数はポアソン分布 $\text{Poi}(2.99)$ に適合している」といえる（有意水準5%）。
+                        </p>
+                        <p>
+                            ただし、統計量の値 $16.37$ は棄却限界値 $16.92$ にきわめて近い値であり、
+                            P値は5%をわずかに上回る程度です。
+                        </p>
+
+                        <p><strong>（c）統計量が大きくなった原因</strong></p>
+                        <p>
+                            「10以上」のカテゴリーに注目します：
+                        </p>
+                        <div class="formula-block">
+                            $$\frac{(n_{10+} - e_{10+})^2}{e_{10+}} = \frac{(1 - 0.07)^2}{0.07} = \frac{0.93^2}{0.07} = \frac{0.8649}{0.07} \approx \mathbf{12.36}$$
+                        </div>
+                        <p>
+                            全体の統計量 $16.37$ のうち、このカテゴリーだけで $12.36$ を占めています（約75%！）。
+                        </p>
+                        <div class="memo-box">
+                            <div class="box-title">💡 期待度数が極めて小さいセルの問題点</div>
+                            <p>
+                                「10以上」のカテゴリーは、ポアソン分布 $\text{Poi}(2.99)$ のもとでは $e_{10+} = 0.07$ 年しか起きないと予測されます。
+                                ところが実際には1年観測されたため、$(n_i - e_i)^2/e_i$ の計算において分母が非常に小さくなり、
+                                乖離度が異常に大きくなってしまいます。
+                            </p>
+                            <p>
+                                このように期待度数が5未満（特に1未満）のセルがあると、
+                                カイ二乗統計量の漸近的なカイ二乗近似の精度が著しく低下します。
+                                こうした場合には、関連するカテゴリーを<strong>結合（統合）</strong>することが推奨されます。
+                            </p>
+                        </div>
+
+                        <p style="margin-top:1.2em;"><strong>〔4〕 「6回以上」をまとめた場合との比較</strong></p>
+                        <p>
+                            Bさんの提案：上陸数 $6, 7, 8, 9$, 10以上を「6回以上」として1カテゴリーにまとめる。
+                        </p>
+
+                        <p><strong>（a）結合後の観測度数と期待度数</strong></p>
+                        <div class="formula-block">
+                            $$n_{6+} = 3 + 0 + 0 + 0 + 1 = 4$$
+                            $$e_{6+} = 3.44 + 1.47 + 0.55 + 0.18 + 0.07 = \mathbf{5.71}$$
+                        </div>
+
+                        <p><strong>（b）結合後のカイ二乗統計量の計算</strong></p>
+                        <p>カテゴリーは「0, 1, 2, 3, 4, 5, 6以上」の7区分：</p>
+                        <table style="width:100%; border-collapse:collapse; margin:0.8em 0; font-size:0.9em;">
+                            <thead>
+                                <tr style="background:var(--light-bg);">
+                                    <th style="padding:0.4em; text-align:center;">上陸数</th>
+                                    <th style="padding:0.4em; text-align:center;">観測 $n_i$</th>
+                                    <th style="padding:0.4em; text-align:center;">期待 $e_i$</th>
+                                    <th style="padding:0.4em; text-align:center;">$(n_i-e_i)^2/e_i$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;"><td>0</td><td>4</td><td>3.47</td><td>$0.53^2/3.47 \approx 0.081$</td></tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;"><td>1</td><td>7</td><td>10.37</td><td>$(-3.37)^2/10.37 \approx 1.095$</td></tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;"><td>2</td><td>17</td><td>15.51</td><td>$1.49^2/15.51 \approx 0.143$</td></tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;"><td>3</td><td>18</td><td>15.46</td><td>$2.54^2/15.46 \approx 0.417$</td></tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;"><td>4</td><td>12</td><td>11.56</td><td>$0.44^2/11.56 \approx 0.017$</td></tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;"><td>5</td><td>7</td><td>6.91</td><td>$0.09^2/6.91 \approx 0.001$</td></tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd; background:#f9f9f9;"><td><strong>6以上</strong></td><td><strong>4</strong></td><td><strong>5.71</strong></td><td>$(-1.71)^2/5.71 \approx 0.512$</td></tr>
+                                <tr style="text-align:center; border-top:2px solid #999; font-weight:bold;"><td>合計</td><td>69</td><td>69.00</td><td>$\approx \mathbf{2.27}$</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p><strong>（c）結果の比較</strong></p>
+                        <table style="width:100%; border-collapse:collapse; margin:0.8em 0;">
+                            <thead>
+                                <tr style="background:var(--primary); color:white;">
+                                    <th style="padding:0.5em;">方法</th>
+                                    <th style="padding:0.5em;">カテゴリー数</th>
+                                    <th style="padding:0.5em;">自由度 $d$</th>
+                                    <th style="padding:0.5em;">統計量 $T$</th>
+                                    <th style="padding:0.5em;">棄却限界値（10%点）</th>
+                                    <th style="padding:0.5em;">判定</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td>まとめない（元の11区分）</td><td>11</td><td>9</td>
+                                    <td>16.37</td><td>$\chi^2_{0.10}(9) = 14.68$</td>
+                                    <td style="color:red;">棄却（10%水準）</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd; background:#f9f9f9;">
+                                    <td>6以上をまとめる（7区分）</td><td>7</td><td>5</td>
+                                    <td>2.27</td><td>$\chi^2_{0.10}(5) = 9.24$</td>
+                                    <td style="color:green;">棄却されない</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            P値で比較すると、まとめた方が統計量の値が小さく（2.27 vs 16.37）、
+                            棄却限界値に対するマージンも大きいため、ポアソン分布への<strong>あてはまりが格段によい</strong>。
+                        </p>
+                        <p>
+                            まとめない場合は、期待度数が極端に小さいカテゴリー（「10以上」の0.07）が
+                            カイ二乗統計量を不当に膨らませており、適合度検定の精度が損なわれていました。
+                            Bさんの提案（小さい期待度数のカテゴリーを結合する）は統計的に正しい対処法です。
+                        </p>
+                    </div>
+
+                    <!-- ────────────────────────────────────────── -->
+                    <!-- 問12.3                                       -->
+                    <!-- ────────────────────────────────────────── -->
+                    <h3 style="margin-top:2em;">問12.3：Instagramの利用率に関する母比率の差の検定</h3>
                     <div class="example-block">
                         <span class="prob-badge badge-q">問題</span>
-                    <p>
-                        Instagram の利用率について調査した。ある大学の学生から無作為に選んで調査したところ、
-                        男性 114 人中 40 人が利用しており、女性 107 人中 62 人が利用していた。
-                        男性と女性の Instagram 利用率に差があるかを有意水準5%の両側検定で確認せよ。
-                        （標準正規分布の上側2.5%点 $z_{0.025} = 1.96$）
-                    </p>
+                        <p>
+                            次の表は、ソーシャルネットワークサービス「Instagram」の20代男女の利用者数を整理したクロス集計表である。
+                        </p>
+                        <table style="width:auto; border-collapse:collapse; margin:0.8em auto;">
+                            <thead>
+                                <tr style="background:var(--light-bg);">
+                                    <th style="padding:0.5em; text-align:center;"></th>
+                                    <th style="padding:0.5em; text-align:center;">利用している</th>
+                                    <th style="padding:0.5em; text-align:center;">利用していない</th>
+                                    <th style="padding:0.5em; text-align:center;">計</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.5em; text-align:left;">20代男</td>
+                                    <td>40</td><td>74</td><td>114</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd;">
+                                    <td style="padding:0.5em; text-align:left;">20代女</td>
+                                    <td>62</td><td>45</td><td>107</td>
+                                </tr>
+                                <tr style="text-align:center; border-top:1px solid #ddd; background:var(--light-bg);">
+                                    <td style="padding:0.5em; text-align:left;"><strong>計</strong></td>
+                                    <td><strong>102</strong></td><td><strong>119</strong></td><td><strong>221</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            Instagramの利用率に男女差があるかどうかを調べるために、検定統計量 $Z$ を用いて、
+                            利用率に男女差がないという帰無仮説に対する有意水準 $\alpha$ の両側検定
+                        </p>
+                        <div class="formula-block">
+                            $$|Z| \geq z_{\alpha/2} \Rightarrow \text{利用率に男女差がある}$$
+                        </div>
+                        <p>
+                            を行うことにした。ただし $z_{\alpha/2}$ は標準正規分布の上側 $100\alpha/2\%$ 点である。
+                            検定統計量 $Z$ として適切なものを求めよ。
+                        </p>
                     </div>
+
                     <div class="answer-block">
-                        <span class="prob-badge badge-a">解答</span>
-                        <p><strong>各群の標本比率と共通推定量：</strong></p>
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>【問題の設定を整理する】</strong></p>
+                        <p>
+                            これは<strong>母比率の差の検定</strong>（2標本問題）です。
+                        </p>
+                        <ul>
+                            <li>群1（20代男）：$n_1 = 114$ 人、利用者 $X_1 = 40$ 人 → 標本比率 $\hat{\theta}_1 = 40/114$</li>
+                            <li>群2（20代女）：$n_2 = 107$ 人、利用者 $X_2 = 62$ 人 → 標本比率 $\hat{\theta}_2 = 62/107$</li>
+                            <li>帰無仮説：$H_0:\, \theta_1 = \theta_2$（男女の利用率は等しい）</li>
+                            <li>対立仮説：$H_1:\, \theta_1 \neq \theta_2$（男女の利用率は異なる）</li>
+                        </ul>
+
+                        <p><strong>【検定統計量の導出】</strong></p>
+                        <p>
+                            帰無仮説 $H_0$ のもとでは $\theta_1 = \theta_2 = \theta^*$（共通の比率）と仮定します。
+                            この共通比率の最尤推定量は、2群を合わせた全体の比率：
+                        </p>
                         <div class="formula-block">
-                            $$\hat{\theta}_1 = \frac{40}{114} \approx 0.351, \quad \hat{\theta}_2 = \frac{62}{107} \approx 0.579$$
+                            $$\hat{\theta}^* = \frac{X_1 + X_2}{n_1 + n_2} = \frac{40 + 62}{114 + 107} = \frac{102}{221}$$
                         </div>
+                        <p>
+                            $\hat{\theta}_1 - \hat{\theta}_2$ の漸近分散は $\theta_1(1-\theta_1)/n_1 + \theta_2(1-\theta_2)/n_2$ ですが、
+                            帰無仮説 $\theta_1 = \theta_2 = \theta^*$ のもとでこれを推定すると：
+                        </p>
                         <div class="formula-block">
-                            $$\hat{\theta}^* = \frac{40 + 62}{114 + 107} = \frac{102}{221} \approx 0.462$$
+                            $$\widehat{V[\hat{\theta}_1 - \hat{\theta}_2]} = \hat{\theta}^*(1-\hat{\theta}^*)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)$$
+                        </div>
+                        <p>よって検定統計量は：</p>
+                        <div class="formula-block">
+                            $$\boxed{Z = \frac{\hat{\theta}_1 - \hat{\theta}_2}{\sqrt{\hat{\theta}^*(1-\hat{\theta}^*)\left(\dfrac{1}{n_1} + \dfrac{1}{n_2}\right)}}
+                              = \frac{\dfrac{40}{114} - \dfrac{62}{107}}{\sqrt{\dfrac{1}{114} + \dfrac{1}{107}} \times \dfrac{102}{221} \times \dfrac{119}{221}}}$$
                         </div>
 
-                        <p><strong>検定統計量（共通推定量式）：</strong></p>
+                        <p><strong>【数値計算】</strong></p>
                         <div class="formula-block">
-                            $$Z = \frac{\hat{\theta}_1 - \hat{\theta}_2}{\sqrt{\hat{\theta}^*(1-\hat{\theta}^*)(1/n_1 + 1/n_2)}} = \frac{0.351 - 0.579}{\sqrt{0.462 \times 0.538 \times (1/114 + 1/107)}}$$
-                            $$= \frac{-0.228}{\sqrt{0.2486 \times 0.01816}} = \frac{-0.228}{\sqrt{0.004514}} = \frac{-0.228}{0.0672} \approx -3.39$$
+                            $$\hat{\theta}_1 = \frac{40}{114} \approx 0.3509, \quad \hat{\theta}_2 = \frac{62}{107} \approx 0.5794$$
+                        </div>
+                        <div class="formula-block">
+                            $$\hat{\theta}^* = \frac{102}{221} \approx 0.4615, \quad 1 - \hat{\theta}^* = \frac{119}{221} \approx 0.5385$$
+                        </div>
+                        <div class="formula-block">
+                            $$\frac{1}{n_1} + \frac{1}{n_2} = \frac{1}{114} + \frac{1}{107} \approx 0.00877 + 0.00935 = 0.01812$$
+                        </div>
+                        <div class="formula-block">
+                            $$\hat{\theta}^*(1-\hat{\theta}^*)\left(\frac{1}{n_1} + \frac{1}{n_2}\right)
+                              \approx 0.4615 \times 0.5385 \times 0.01812
+                              \approx 0.2486 \times 0.01812
+                              \approx 0.004505$$
+                        </div>
+                        <div class="formula-block">
+                            $$Z = \frac{0.3509 - 0.5794}{\sqrt{0.004505}} = \frac{-0.2285}{0.0671} \approx -3.40$$
                         </div>
 
-                        <p>$|Z| = 3.39 > 1.96$ → 帰無仮説を<strong>棄却する</strong>。</p>
-                        <p>「女性の Instagram 利用率は男性より統計的に有意に高い（有意水準5%）。」</p>
+                        <p><strong>【検定の結論（$\alpha = 0.05$ の場合）】</strong></p>
+                        <p>
+                            両側検定で $z_{0.025} = 1.96$ のとき、棄却域は $|Z| \geq 1.96$。
+                        </p>
+                        <div class="formula-block">
+                            $$|Z| = 3.40 > 1.96$$
+                        </div>
+                        <p>
+                            → <strong>帰無仮説を棄却する</strong>。
+                            20代男性と20代女性のInstagram利用率に統計的に有意な差があると言える（有意水準5%）。
+                            標本比率から見ると女性の方が利用率が高い（$\hat{\theta}_2 \approx 0.58 > \hat{\theta}_1 \approx 0.35$）。
+                        </p>
+
+                        <div class="memo-box">
+                            <div class="box-title">💡 式 (12.2) との違い</div>
+                            <p>
+                                分母に各群の標本比率 $\hat{\theta}_1, \hat{\theta}_2$ を使う方法（式12.2）もあります：
+                            </p>
+                            <div class="formula-block" style="font-size:0.9em;">
+                                $$Z_{(12.2)} = \frac{\hat{\theta}_1 - \hat{\theta}_2}{\sqrt{\dfrac{\hat{\theta}_1(1-\hat{\theta}_1)}{n_1} + \dfrac{\hat{\theta}_2(1-\hat{\theta}_2)}{n_2}}}$$
+                            </div>
+                            <p>
+                                どちらも漸近的に等価ですが、仮説検定では帰無仮説のもとで推定した共通比率 $\hat{\theta}^*$ を使う方法（上の式12.4）が
+                                理論的に望ましく、また信頼区間を求める際は式 (12.2) 型の分母を使います。
+                            </p>
+                        </div>
                     </div>
                 </section>
 
@@ -465,14 +1131,109 @@
                 <!-- ======================================================== -->
                 <section class="content-section section-anchor" id="notes">
                     <h2><i class="fas fa-sticky-note"></i> 8. まとめ・ポイント</h2>
+
+                    <h3>検定統計量クイックリファレンス</h3>
+                    <table style="width:100%; border-collapse:collapse; margin:0.8em 0; font-size:0.93em;">
+                        <thead>
+                            <tr style="background:var(--primary); color:white;">
+                                <th style="padding:0.5em;">検定の種類</th>
+                                <th style="padding:0.5em;">統計量</th>
+                                <th style="padding:0.5em;">帰無分布</th>
+                                <th style="padding:0.5em;">自由度</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom:1px solid #ddd;">
+                                <td style="padding:0.5em;">母比率（1標本）</td>
+                                <td style="padding:0.5em;">$Z = \dfrac{\sqrt{n}(\hat{\theta}-\theta_0)}{\sqrt{\theta_0(1-\theta_0)}}$</td>
+                                <td style="padding:0.5em;">$N(0,1)$</td>
+                                <td style="padding:0.5em;">—</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #ddd; background:#f9f9f9;">
+                                <td style="padding:0.5em;">母比率の差（2標本）</td>
+                                <td style="padding:0.5em;">$Z = \dfrac{\hat{\theta}_1-\hat{\theta}_2}{\sqrt{\hat{\theta}^*(1-\hat{\theta}^*)(1/n_1+1/n_2)}}$</td>
+                                <td style="padding:0.5em;">$N(0,1)$</td>
+                                <td style="padding:0.5em;">—</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #ddd;">
+                                <td style="padding:0.5em;">適合度検定</td>
+                                <td style="padding:0.5em;">$T = \displaystyle\sum_i \dfrac{(n_i - n\hat{p}_i)^2}{n\hat{p}_i}$</td>
+                                <td style="padding:0.5em;">$\chi^2(d)$</td>
+                                <td style="padding:0.5em;">$(l-1) - k$</td>
+                            </tr>
+                            <tr style="border-bottom:1px solid #ddd; background:#f9f9f9;">
+                                <td style="padding:0.5em;">分割表の独立性検定</td>
+                                <td style="padding:0.5em;">$T = \displaystyle\sum_{i,j} \dfrac{(n_{ij} - \hat{E}_{ij})^2}{\hat{E}_{ij}}$</td>
+                                <td style="padding:0.5em;">$\chi^2(d)$</td>
+                                <td style="padding:0.5em;">$(I-1)(J-1)$</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.5em;">尤度比検定</td>
+                                <td style="padding:0.5em;">$W_n = -2\log\Lambda_n$</td>
+                                <td style="padding:0.5em;">$\chi^2(p)$</td>
+                                <td style="padding:0.5em;">制約数 $p$</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>重要ポイント一覧</h3>
                     <ul>
-                        <li><strong>母比率の検定は大標本近似（$N(0,1)$）</strong>：分母に仮説値 $\theta_0$ を使うのが原則。信頼区間では $\hat{\theta}$ を使う。</li>
-                        <li><strong>2群比率の検定では共通推定量 $\hat{\theta}^*$ を分母に使う</strong>：これが尤度に基づくスコア検定と一致し、信頼区間の式とは異なる。</li>
-                        <li><strong>適合度検定の自由度 $d = (l-1) - k$</strong>：カテゴリ数 $l$、推定パラメータ数 $k$（単純帰無仮説なら $k=0$）。</li>
-                        <li><strong>分割表の独立性検定の自由度は $(I-1)(J-1)$</strong>：周辺度数から期待度数を計算する。</li>
-                        <li><strong>尤度比検定統計量は $W_n = -2\log\Lambda_n \sim \chi^2(p)$</strong>（ウィルクスの定理）：正規分布を仮定しない汎用的な手法。</li>
-                        <li><strong>期待度数が小さいときは注意</strong>：期待度数が5未満のセルが多い場合、漸近近似の精度が下がる。セルを結合するかイエーツ補正を検討する。</li>
+                        <li>
+                            <strong>母比率の検定と信頼区間で分母が異なる</strong>：
+                            検定では帰無仮説の値 $\theta_0$ を分母に使い（$\theta_0$ が既知）、
+                            信頼区間では $\theta_0$ が未知なので推定値 $\hat{\theta}$ で代替します。
+                        </li>
+                        <li>
+                            <strong>2群比率の検定では共通推定量 $\hat{\theta}^*$ を使う</strong>：
+                            帰無仮説のもとでは「2群の真の比率は等しい」という制約があるので、
+                            2群を合わせた比率 $\hat{\theta}^* = (X_1+X_2)/(n_1+n_2)$ で分母を構成します。
+                            信頼区間を作る際は逆に各群の推定値を使います。
+                        </li>
+                        <li>
+                            <strong>適合度検定の自由度 $d = (l-1) - k$</strong>：
+                            「$l-1$」は確率の合計が1という制約による消費分、「$k$」は帰無仮説のもとで推定したパラメータの数です。
+                            単純帰無仮説（すべての確率が固定値）なら $k=0$、ポアソン分布を当てはめる場合は $k=1$（$\lambda$ を推定）。
+                        </li>
+                        <li>
+                            <strong>期待度数が小さいセルへの対処</strong>：
+                            期待度数が5未満（特に1未満）のセルがあると、カイ二乗近似の精度が著しく低下します。
+                            対処法は「（a）隣接カテゴリーと結合する」「（b）イエーツの補正を使う」「（c）フィッシャーの正確検定を使う」のいずれかです。
+                        </li>
+                        <li>
+                            <strong>ポアソン分布の平均＝分散という特徴を確認の目安に</strong>：
+                            データの平均と分散が近ければポアソン分布の可能性あり。ただし必ず適合度検定で確認すること。
+                        </li>
+                        <li>
+                            <strong>分割表の独立性検定の自由度は $(I-1)(J-1)$</strong>：
+                            $I \times J$ 分割表では $I$（行）の確率に $I-1$ パラメータ、$J$（列）の確率に $J-1$ パラメータを推定するため。
+                        </li>
+                        <li>
+                            <strong>尤度比検定は汎用的</strong>：
+                            正規分布の仮定なしに任意のパラメトリックモデルに適用でき、
+                            帰無仮説の制約の次元 $p$ に対応した $\chi^2(p)$ に漸近収束します（ウィルクスの定理）。
+                        </li>
+                        <li>
+                            <strong>カイ二乗検定はすべて「大標本近似」</strong>：
+                            正確分布ではなく漸近分布を使っているので、サンプルサイズが小さいときは注意が必要です。
+                        </li>
                     </ul>
+
+                    <div class="memo-box">
+                        <div class="box-title">💡 第12章のつながりを整理する</div>
+                        <p>
+                            この章で扱った手法は、すべて「<strong>ピアソンのカイ二乗統計量</strong>」か「<strong>標準正規統計量</strong>」のいずれかに帰着します。
+                        </p>
+                        <ul>
+                            <li>母比率の検定 → $Z \sim N(0,1)$（あるいは $Z^2 \sim \chi^2(1)$）</li>
+                            <li>適合度検定 → $T \sim \chi^2(d)$</li>
+                            <li>独立性検定 → 同上（$d = (I-1)(J-1)$）</li>
+                            <li>尤度比検定 → $-2\log\Lambda_n \sim \chi^2(p)$</li>
+                        </ul>
+                        <p>
+                            これらはいずれも「観測と期待のずれ」や「制約なしモデルと制約ありモデルの対数尤度差」を
+                            正規近似・カイ二乗近似で定量化するという共通の発想に基づいています。
+                        </p>
+                    </div>
                 </section>
 
                 <nav class="chapter-pager">
