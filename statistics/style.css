@@ -299,6 +299,100 @@ ul { list-style: none; }
     padding: 40px 0 80px;
 }
 
+/* モード切り替えトグル */
+.mode-toggle-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 28px;
+    background: var(--gray-100);
+    padding: 5px;
+    border-radius: 12px;
+    width: fit-content;
+}
+
+.mode-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 22px;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: inherit;
+    color: var(--gray-500);
+    background: transparent;
+    border: none;
+    border-radius: 9px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.mode-btn:hover {
+    color: var(--primary);
+    background: rgba(37, 99, 235, 0.06);
+}
+
+.mode-btn.active {
+    color: var(--primary);
+    background: white;
+    box-shadow: var(--shadow);
+}
+
+/* 章末問題グリッド */
+.exam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 16px;
+}
+
+.exam-card {
+    background: white;
+    border: 1px solid var(--gray-200);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeInUp 0.4s ease forwards;
+    cursor: default;
+}
+
+.exam-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gray-400);
+    background: var(--gray-100);
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+.exam-badge--ready {
+    color: #15803d;
+    background: #dcfce7;
+}
+
+.exam-card--ready {
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition);
+}
+
+.exam-card--ready:hover {
+    border-color: var(--primary-light);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.exam-card--ready:hover .chapter-card-arrow {
+    color: var(--primary);
+    transform: translateX(4px);
+}
+
 .chapter-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));

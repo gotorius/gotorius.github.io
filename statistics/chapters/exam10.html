@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第10章 章末問題解説 - 検定の基礎と検定法の導出</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第10章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 10 — 例題解説</span>
+            <h1>検定の基礎と検定法の導出<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter10.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第10章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q101">問10.1 支持率検定の検出力とサンプルサイズ</a></li>
+                            <li><a href="#q102">問10.2 分散の信頼区間とF検定</a></li>
+                            <li><a href="#q103">問10.3 二項分布と生産者・消費者危険</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問10.1                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q101">
+                    <h2><i class="fas fa-pencil"></i> 問10.1 — 支持率検定の検出力とサンプルサイズ</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある政党に対する支持率調査を行ったところ、先月の支持率は0.45であった。
+                            この政党の党首は「今月は先月よりも支持率5ポイントが上がり0.50である」という主張をしている。
+                            なお、支持率調査において、全国の有権者より無作為に抽出された $n$ 人から有効な回答を得ることができるとする。
+                        </p>
+                        <ol>
+                            <li>
+                                帰無仮説 $H_0: p_0 = 0.45$ に対する対立仮説 $H_1: p_1 = 0.50$ の一標本の両側検定を考える。
+                                有意水準5%として、$n = 600$ のとき、この検定の検出力はいくらか。
+                            </li>
+                            <li>検出力を80%以上とするために必要なサンプルサイズを求めよ。</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>問題の設定の整理</strong></p>
+                        <p>
+                            検出力（検定力）とは、「対立仮説が真であるときに帰無仮説を正しく棄却できる確率（$1 - \beta$）」のことです。
+                            ここでは $p_1 = 0.50$ が真の値のとき、$H_0: p_0 = 0.45$ を棄却できる確率を求めます。
+                        </p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 検出力の考え方</div>
+                            <p>
+                                有意水準 $\alpha$ の両側検定では、帰無仮説のもとで $|Z_0| > z_{\alpha/2} = 1.96$ のとき棄却します。
+                                対立仮説が真（$p = p_1$）のとき、検定統計量は $H_0$ のもとでの正規分布からズレます。
+                                このズレの大きさ（非心度）が検出力を決めます。
+                            </p>
+                        </div>
+
+                        <p><strong>(1) $n = 600$ のときの検出力</strong></p>
+                        <div class="formula-block">
+                            <p>答：$0.6915$</p>
+                        </div>
+
+                        <p>
+                            帰無仮説 $H_0: p_0 = 0.45$ のもとで、検定統計量は：
+                        </p>
+                        <div class="formula-block">
+                            $$Z_0 = \frac{\hat{p} - 0.45}{\sqrt{0.45 \times 0.55 / n}}$$
+                        </div>
+                        <p>
+                            有意水準5%の両側検定なので、棄却域は $|Z_0| > z_{0.025} = 1.96$ です。
+                        </p>
+                        <p>
+                            <strong>検出力の計算</strong>：対立仮説 $p_1 = 0.50$ が真であるとき、
+                            $\hat{p}$ は近似的に $N(0.50,\ 0.50 \times 0.50 / n)$ に従います。
+                            棄却される確率（検出力）は：
+                        </p>
+                        <div class="formula-block">
+                            $$1 - \beta = P\!\left(|Z_0| > 1.96 \mid p = 0.50\right)$$
+                        </div>
+                        <p>
+                            検出力の計算に用いる公式：両側検定の検出力の近似式として、
+                            非心パラメータを用いた次の式が使えます。
+                            $z_{\alpha/2}$ と $z_\beta$ の間には次の関係があります：
+                        </p>
+                        <div class="formula-block">
+                            $$z_{\alpha/2} + z_\beta = \frac{|p_1 - p_0|}{\sqrt{p_0(1-p_0)/n}}$$
+                        </div>
+                        <p>$n = 600$、$p_0 = 0.45$、$p_1 = 0.50$、$z_{\alpha/2} = 1.96$ を代入します：</p>
+                        <div class="formula-block">
+                            $$z_{\alpha/2} + z_\beta = \frac{0.50 - 0.45}{\sqrt{0.45 \times 0.55 / 600}}
+                              = \frac{0.05}{\sqrt{0.2475/600}}
+                              = \frac{0.05}{\sqrt{0.0004125}}
+                              = \frac{0.05}{0.02031} = 2.4618$$
+                        </div>
+                        <div class="formula-block">
+                            $$z_\beta = 2.4618 - 1.96 = 0.5018$$
+                        </div>
+                        <p>
+                            $z_\beta = 0.5018$ は「$\beta$（第2種の過誤の確率）に対応する標準正規分布の上側確率の点」です。
+                            $\Phi(0.50) = 0.6915$（標準正規分布の累積分布関数）より：
+                        </p>
+                        <div class="formula-block">
+                            $$\beta = P(Z > 0.5018) \approx 1 - \Phi(0.50) = 1 - 0.6915 = 0.3085$$
+                        </div>
+                        <div class="formula-block">
+                            $$\text{検出力} = 1 - \beta = 1 - 0.3085 = \mathbf{0.6915}$$
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 標準正規分布表の使い方</div>
+                            <p>
+                                $z_\beta = 0.50$ に対し、$P(Z \leq 0.50) = \Phi(0.50) = 0.6915$ を標準正規分布表から読み取ります。
+                                $\beta = P(Z > z_\beta) = 1 - \Phi(z_\beta)$ なので、
+                                検出力 $1 - \beta = \Phi(z_\beta) = \Phi(0.50) = 0.6915$ となります。
+                            </p>
+                        </div>
+
+                        <p><strong>(2) 検出力80%以上に必要なサンプルサイズ</strong></p>
+                        <div class="formula-block">
+                            <p>答：$n = 777$</p>
+                        </div>
+
+                        <p>
+                            検出力 $1 - \beta \geq 0.80$ とするには $z_\beta \geq z_{0.20}$ が必要です。
+                            $z_{0.20} = 0.84$（標準正規分布で上側20%点）。
+                        </p>
+                        <p>先ほどの関係式 $z_{\alpha/2} + z_\beta = |p_1 - p_0| / \sqrt{p_0(1-p_0)/n}$ より：</p>
+                        <div class="formula-block">
+                            $$z_{\alpha/2} + z_\beta = \frac{0.50 - 0.45}{\sqrt{0.45 \times 0.55/n}} = 1.96 + 0.84 = 2.80$$
+                        </div>
+                        <p>$n$ について解きます：</p>
+                        <div class="formula-block">
+                            $$\sqrt{\frac{0.45 \times 0.55}{n}} = \frac{0.05}{2.80}$$
+            $$\frac{0.45 \times 0.55}{n} = \left(\frac{0.05}{2.80}\right)^2$$
+                            $$n = \frac{(z_{\alpha/2} + z_\beta)^2 \times p_0(1-p_0)}{(p_1 - p_0)^2}
+                              = \frac{(1.96 + 0.84)^2 \times 0.45 \times 0.55}{(0.50-0.45)^2}$$
+                            $$= \frac{2.80^2 \times 0.2475}{0.0025}
+                              = \frac{7.84 \times 0.2475}{0.0025}
+                              = \frac{1.9404}{0.0025} = 776.16$$
+                        </div>
+                        <p>
+                            小数点以下を切り上げて $n = \mathbf{777}$ となります。
+                        </p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> サンプルサイズ設計の重要性</div>
+                            <p>
+                                検出力が低い（例：69%）ということは、真の効果（支持率の変化）が存在していても見逃す確率が31%もあることを意味します。
+                                研究や調査を設計する段階で必要サンプルサイズを求めておくことが重要です。
+                                医学研究などでは検出力80〜90%が標準とされています。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問10.2                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q102">
+                    <h2><i class="fas fa-pencil"></i> 問10.2 — 分散の信頼区間とF検定（等分散検定）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            あるメーカーは既製品Aに対して、新製品Bを開発した。開発の目的は、既製品Aより重さの分散を小さくすることである。
+                            ここで、既製品A、新製品Bの重さはそれぞれ独立に正規分布 $N(\mu_A,\, \sigma_A^2)$、$N(\mu_B,\, \sigma_B^2)$ に従うとする。
+                            このメーカーが、既製品A、新製品Bを16個ずつ無作為に選んで重さを測定したところ、
+                            標本平均からの偏差平方和はそれぞれ、$T_A^2 = 300$、$T_B^2 = 100$ であった。
+                        </p>
+                        <ol>
+                            <li>新製品Bの母分散 $\sigma_B^2$ の95%信頼区間を求めよ。</li>
+                            <li>
+                                このメーカーは、既製品Aの重さの分散 $\sigma_A^2$ より新製品Bの重さの分散 $\sigma_B^2$ のほうが小さいと主張している。
+                                この主張を有意水準5%で片側検定することにした。次の文章の <strong>ア</strong>・<strong>イ</strong> について選択肢から適切な項目を選択せよ。
+                                <blockquote style="background:var(--gray-50);border-left:4px solid var(--gray-300);padding:12px 16px;margin:12px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:0.92em;color:var(--gray-600);">
+                                    「この片側検定の帰無仮説は $H_0: \sigma_A^2 = \sigma_B^2$、対立仮説は $H_1: \sigma_A^2 > \sigma_B^2$ である。
+                                    検定統計量 $F = T_A^2/T_B^2$ とおくと、帰無仮説が正しい場合、$F$ は自由度
+                                    （<strong>ア</strong>、<strong>ア</strong>）のF分布に従う。測定の結果より統計量の値は $F = 3.0$ となる。自由度
+                                    （<strong>ア</strong>、<strong>ア</strong>）のF分布の上側5%点と比較すると、帰無仮説は <strong>イ</strong>。」
+                                </blockquote>
+                                <p>選択肢 — ア：15、16、30　　イ：棄却できる、棄却できない、どちらともいえない</p>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>(1) 新製品Bの母分散 $\sigma_B^2$ の95%信頼区間</strong></p>
+                        <div class="formula-block">
+                            <p>答：$(3.64,\ 15.97)$（正確には $(100/27.49,\ 100/6.26) \approx (3.64,\ 15.97)$）</p>
+                        </div>
+
+                        <p>
+                            正規分布 $N(\mu_B, \sigma_B^2)$ からの標本サイズ $n = 16$ の標本で、標本平均からの偏差平方和が $T_B^2 = 100$ のとき、次の統計量がカイ二乗分布に従うことを使います：
+                        </p>
+                        <div class="formula-block">
+                            $$\frac{T_B^2}{\sigma_B^2} = \frac{\sum_{i=1}^{n}(X_i - \bar{X})^2}{\sigma_B^2} \;\sim\; \chi^2(n-1) = \chi^2(15)$$
+                        </div>
+                        <p>
+                            自由度15のカイ二乗分布の上側2.5%点と下側2.5%点を使います。
+                            問題文より $\chi^2_{0.025}(15) = 27.49$、$\chi^2_{0.975}(15) = 6.26$ です。
+                        </p>
+                        <p>信頼区間の導出：</p>
+                        <div class="formula-block">
+                            $$P\!\left(\chi^2_{0.975}(15) \leq \frac{T_B^2}{\sigma_B^2} \leq \chi^2_{0.025}(15)\right) = 0.95$$
+                            $$P\!\left(6.26 \leq \frac{100}{\sigma_B^2} \leq 27.49\right) = 0.95$$
+            $$P\!\left(\frac{100}{27.49} \leq \sigma_B^2 \leq \frac{100}{6.26}\right) = 0.95$$
+                        </div>
+                        <div class="formula-block">
+                            $$\frac{100}{27.49} \approx 3.638, \quad \frac{100}{6.26} \approx 15.974$$
+                        </div>
+                        <p>したがって $\sigma_B^2$ の95%信頼区間は <strong>$(3.64,\ 15.97)$</strong> です。</p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> なぜカイ二乗分布を使うのか</div>
+                            <p>
+                                正規分布から得た $n$ 個の標本について、偏差平方和 $\sum(X_i - \bar{X})^2 = (n-1)S^2$ を $\sigma^2$ で割ると自由度 $n-1$ のカイ二乗分布に従います。
+                                これは不偏分散 $S^2 = T^2/(n-1)$ を使うと $T^2/\sigma^2 \sim \chi^2(n-1)$ と書けます（$n-1 = 15$）。
+                            </p>
+                        </div>
+
+                        <p><strong>(2) ア・イの選択</strong></p>
+                        <div class="formula-block">
+                            <p>答：ア = <strong>15</strong>、イ = <strong>棄却できる</strong></p>
+                        </div>
+
+                        <p><strong>ア の解説（自由度の決定）</strong></p>
+                        <p>
+                            等分散検定のF統計量 $F = T_A^2/T_B^2$ の分布を求めます。
+                            帰無仮説 $H_0: \sigma_A^2 = \sigma_B^2 = \sigma^2$ のもとで：
+                        </p>
+                        <div class="formula-block">
+                            $$\frac{T_A^2}{\sigma^2} \sim \chi^2(n_A - 1) = \chi^2(15), \quad
+                              \frac{T_B^2}{\sigma^2} \sim \chi^2(n_B - 1) = \chi^2(15)$$
+                        </div>
+                        <p>
+                            F分布の定義は「独立な2つのカイ二乗変数の比をそれぞれの自由度で割ったもの」：
+                        </p>
+                        <div class="formula-block">
+                            $$F = \frac{T_A^2/T_B^2 \cdot \sigma^2/\sigma^2}{1} = \frac{T_A^2/(n_A-1)}{T_B^2/(n_B-1)} \cdot \frac{n_B-1}{n_A-1}$$
+                        </div>
+                        <p>
+                            より正確には、$F = (T_A^2/15) / (T_B^2/15)$ はF分布 $F(n_A-1,\ n_B-1) = F(15,\ 15)$ に従います。
+                            よって <strong>ア = 15</strong> です。
+                        </p>
+
+                        <p><strong>F統計量の値の確認</strong></p>
+                        <div class="formula-block">
+                            $$F = \frac{T_A^2/15}{T_B^2/15} = \frac{300/15}{100/15} = \frac{20}{100/15} = \frac{300}{100} = 3.0$$
+                        </div>
+
+                        <p><strong>イ の解説（棄却判定）</strong></p>
+                        <p>
+                            有意水準5%の片側検定（$H_1: \sigma_A^2 > \sigma_B^2$、すなわち $F$ が大きいほうを棄却）なので、
+                            棄却域は $F > F_{0.05}(15, 15)$ です。
+                        </p>
+                        <p>
+                            $F(15, 15)$ の上側5%点（問題より）は $F_{0.05}(15, 15) = 2.40$ 程度です
+                            （教科書付表では約2.40）。
+                        </p>
+                        <div class="formula-block">
+                            $$F = 3.0 > F_{0.05}(15, 15) \approx 2.40$$
+                        </div>
+                        <p>
+                            検定統計量 $F = 3.0$ は上側5%点を超えているため、帰無仮説は <strong>棄却できる</strong>。
+                            すなわち「新製品Bの分散は既製品Aの分散より有意に小さい」という主張が有意水準5%で支持されます。
+                        </p>
+
+                        <table>
+                            <thead>
+                                <tr><th>項目</th><th>内容</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>帰無仮説 $H_0$</td><td>$\sigma_A^2 = \sigma_B^2$</td></tr>
+                                <tr><td>対立仮説 $H_1$</td><td>$\sigma_A^2 > \sigma_B^2$（片側）</td></tr>
+                                <tr><td>検定統計量</td><td>$F = T_A^2/T_B^2 = 3.0$（自由度 $(15, 15)$）</td></tr>
+                                <tr><td>棄却域</td><td>$F > F_{0.05}(15, 15) \approx 2.40$</td></tr>
+                                <tr><td>判定</td><td>$3.0 > 2.40$ ∴ 棄却できる</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問10.3                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q103">
+                    <h2><i class="fas fa-pencil"></i> 問10.3 — 二項分布と生産者危険・消費者危険</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            箱のなかから5個の商品を抜き取り、そのなかの2個以上が不良品ならその箱の商品をすべて不合格とする抜取調査について考える。
+                            次の表は、不良品率が $p$ のとき、商品を5個抜き取り、不良品が $r$ 個発見される確率である。
+                            たとえば、$r = 1$、$p = 0.2$ に対応するセルの値 $0.41$ は、不良品率が0.2のとき、5個抜き取った商品のなかで不良品が1個発見される確率である。
+                            ただしここでは、小数点以下第3位を四捨五入している。
+                        </p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>$p = 0.1$</th>
+                                    <th>$p = 0.2$</th>
+                                    <th>$p = 0.3$</th>
+                                    <th>$p = 0.4$</th>
+                                    <th>$p = 0.5$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$r = 0$</td><td>0.59</td><td>0.33</td><td><strong>ア</strong></td><td>0.08</td><td>0.03</td></tr>
+                                <tr><td>$r = 1$</td><td>0.33</td><td>0.41</td><td><strong>イ</strong></td><td>0.26</td><td>0.16</td></tr>
+                                <tr><td>$r = 2$</td><td>0.07</td><td>0.20</td><td><strong>ウ</strong></td><td>0.35</td><td>0.31</td></tr>
+                                <tr><td>$r = 3$</td><td>0.01</td><td>0.05</td><td>0.13</td><td>0.23</td><td>0.31</td></tr>
+                                <tr><td>$r = 4$</td><td>0.00</td><td>0.01</td><td>0.03</td><td>0.08</td><td>0.16</td></tr>
+                                <tr><td>$r = 5$</td><td>0.00</td><td>0.00</td><td>0.00</td><td>0.01</td><td>0.03</td></tr>
+                            </tbody>
+                        </table>
+
+                        <ol>
+                            <li>空欄 <strong>ア</strong>〜<strong>ウ</strong> を埋めよ。</li>
+                            <li>
+                                ある箱の不良品率が0.1以下であればその箱を合格とし、そうでない場合は不合格とする消費者がいる。
+                                不良品率が0.1以下であるにもかかわらず、抜き取ったなかの不良品が2個以上であったために不合格となる確率を「生産者危険」といい、
+                                不良品率が0.1を超えるにもかかわらず、抜き取ったなかの不良品が1個以下であったため合格となる確率を「消費者危険」という。
+                                不良品率が0.1のときの「生産者危険」と、不良品率が0.2のときの「消費者危険」を求めよ。
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>(1) 空欄ア〜ウの計算</strong></p>
+                        <div class="formula-block">
+                            <p>答：ア = $0.17$、イ = $0.36$、ウ = $0.31$</p>
+                        </div>
+
+                        <p>
+                            不良品率 $p$ のとき、5個の商品を抜き取って不良品が $r$ 個見つかる確率は、
+                            二項分布 $\mathrm{Bin}(5, p)$ に従います：
+                        </p>
+                        <div class="formula-block">
+                            $$P(X = r \mid p) = \binom{5}{r} p^r (1-p)^{5-r}, \quad r = 0, 1, \ldots, 5$$
+                        </div>
+
+                        <p>$p = 0.3$ のとき、各 $r$ の確率を計算します（小数点以下第3位を四捨五入）：</p>
+
+                        <p><strong>ア：$P(X = 0 \mid p=0.3)$</strong></p>
+                        <div class="formula-block">
+                            $$P(X=0) = \binom{5}{0}(0.3)^0(0.7)^5 = 1 \times 1 \times 0.7^5 = 0.16807 \approx \mathbf{0.17}$$
+                        </div>
+
+                        <p><strong>イ：$P(X = 1 \mid p=0.3)$</strong></p>
+                        <div class="formula-block">
+                            $$P(X=1) = \binom{5}{1}(0.3)^1(0.7)^4 = 5 \times 0.3 \times 0.2401 = 0.36015 \approx \mathbf{0.36}$$
+                        </div>
+
+                        <p><strong>ウ：$P(X = 2 \mid p=0.3)$</strong></p>
+                        <div class="formula-block">
+                            $$P(X=2) = \binom{5}{2}(0.3)^2(0.7)^3 = 10 \times 0.09 \times 0.343 = 0.3087 \approx \mathbf{0.31}$$
+                        </div>
+
+                        <p>確認として確率の合計が1に近いことを確かめます：</p>
+                        <div class="formula-block">
+                            $$0.17 + 0.36 + 0.31 + 0.13 + 0.03 + 0.00 = 1.00 \checkmark$$
+                        </div>
+
+                        <p><strong>(2) 生産者危険と消費者危険</strong></p>
+                        <div class="formula-block">
+                            <p>答：生産者危険（$p = 0.1$）= $0.08$、消費者危険（$p = 0.2$）= $0.74$</p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 生産者危険・消費者危険とは</div>
+                            <p>
+                                抜取検査における2種類の誤りです。検定の文脈では、第1種・第2種の過誤に対応します。
+                            </p>
+                            <table>
+                                <thead>
+                                    <tr><th>名称</th><th>真の状態</th><th>判定</th><th>対応する検定の誤り</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>生産者危険</td><td>良品（合格品）</td><td>不合格と判定</td><td>第1種の過誤（$\alpha$）</td></tr>
+                                    <tr><td>消費者危険</td><td>不良品（不合格品）</td><td>合格と判定</td><td>第2種の過誤（$\beta$）</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p><strong>生産者危険（$p = 0.1$ のとき）</strong></p>
+                        <p>
+                            不良品率 $p = 0.1$ の箱は本来「合格」ですが、5個中2個以上が不良品だった場合に誤って「不合格」とされます。
+                        </p>
+                        <div class="formula-block">
+                            $$\text{生産者危険} = P(X \geq 2 \mid p = 0.1) = P(X=2) + P(X=3) + P(X=4) + P(X=5)$$
+                            $$= 0.07 + 0.01 + 0.00 + 0.00 = \mathbf{0.08}$$
+                        </div>
+
+                        <p><strong>消費者危険（$p = 0.2$ のとき）</strong></p>
+                        <p>
+                            不良品率 $p = 0.2$ の箱は本来「不合格」ですが、5個中1個以下しか不良品が見つからなかった場合に誤って「合格」とされます。
+                        </p>
+                        <div class="formula-block">
+                            $$\text{消費者危険} = P(X \leq 1 \mid p = 0.2) = P(X=0) + P(X=1)$$
+                            $$= 0.33 + 0.41 = \mathbf{0.74}$$
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 生産者・消費者危険のトレードオフ</div>
+                            <p>
+                                判定基準を厳しくする（例：「1個以上不良品で不合格」）と生産者危険は増えますが消費者危険は減ります。
+                                基準を緩める（例：「3個以上不良品で不合格」）と生産者危険は減りますが消費者危険が増えます。
+                                この関係は検定の第1種・第2種の過誤のトレードオフと全く同じ構造です。
+                                サンプルサイズ（今回は5個）を増やすことが、両方の危険を同時に小さくする唯一の方法です。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            // ナビバー ハンバーガーメニュー
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

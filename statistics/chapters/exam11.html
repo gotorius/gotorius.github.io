@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第11章 章末問題解説 - 正規分布に関する検定</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第11章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 11 — 例題解説</span>
+            <h1>正規分布に関する検定<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter11.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第11章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q111">問11.1 ポテト重さの一標本 $t$ 検定</a></li>
+                            <li><a href="#q112">問11.2 大阪・東京の二標本 $t$ 検定（等分散）</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問11.1                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q111">
+                    <h2><i class="fas fa-pencil"></i> 問11.1 — ポテト重さの一標本 $t$ 検定</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            あるハンバーガーショップは，東京と大阪に店舗を展開している．この店舗のフライドポテト（以下，ポテト）の
+                            M サイズは 120g とされている．ところが「大阪の店舗のポテトは 120g よりも多い」という噂が広まった．
+                            そこで，大阪の店舗のポテトをランダムに 10 個選んで，その重さを量ったところ，
+                            平均は 125g で，標準偏差（分散の不偏推定量の平方根）は 10.0g であった．
+                            ポテトの重さは互いに独立に平均 $\mu$，分散 $\sigma^2$ の正規分布に従うとする．
+                            得られたデータから，帰無仮説 $H_0: \mu = 120$ に対して対立仮説 $H_1: \mu > 120$ の $t$ 検定を行う．
+                        </p>
+                        <ol>
+                            <li>検定統計量の値を求めよ．</li>
+                            <li>有意水準を 2.5%（片側）とする．棄却限界値を求めよ．</li>
+                            <li>帰無仮説が棄却されるかどうか判定せよ．</li>
+                            <li>
+                                有意水準 2.5%（片側）で帰無仮説が棄却される最小の標本サイズ $n$ を求めよ．
+                                ただし，$n$ によらず，平均は 125g で標準偏差は 10.0g であるとする．
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 一標本 $t$ 検定とは</div>
+                            <p>
+                                母分散 $\sigma^2$ が未知のとき，正規母集団の母平均 $\mu$ についての検定に使うのが <strong>$t$ 検定</strong>です．
+                                標本平均 $\bar{X}$ と不偏標準偏差 $S$（$= \sqrt{\frac{1}{n-1}\sum(X_i-\bar{X})^2}$）を用いた検定統計量：
+                            </p>
+                            <div class="formula-block">
+                                $$T = \frac{\bar{X} - \mu_0}{S/\sqrt{n}}$$
+                            </div>
+                            <p>
+                                は，帰無仮説 $H_0: \mu = \mu_0$ が真のとき自由度 $n-1$ の $t$ 分布に従います．
+                                正規分布ではなく $t$ 分布を使うのは，$\sigma^2$ の代わりに推定量 $S^2$ を使うことで生じる不確かさを
+                                考慮しているためです．
+                            </p>
+                        </div>
+
+                        <p><strong>問題の設定の整理</strong></p>
+                        <table>
+                            <thead>
+                                <tr><th>項目</th><th>値</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>標本サイズ</td><td>$n = 10$</td></tr>
+                                <tr><td>標本平均</td><td>$\bar{X} = 125\,\text{g}$</td></tr>
+                                <tr><td>不偏標準偏差</td><td>$S = 10.0\,\text{g}$</td></tr>
+                                <tr><td>帰無仮説の母平均</td><td>$\mu_0 = 120\,\text{g}$</td></tr>
+                                <tr><td>対立仮説</td><td>$H_1: \mu > 120$（右片側）</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p><strong>[1] 検定統計量の値</strong></p>
+                        <div class="formula-block">
+                            <p>答：$1.581$</p>
+                        </div>
+                        <p>$t$ 検定の検定統計量の定義式に数値を代入します：</p>
+                        <div class="formula-block">
+                            $$T = \frac{\bar{X} - \mu_0}{S/\sqrt{n}}
+                              = \frac{125 - 120}{10/\sqrt{10}}
+                              = \frac{5}{10/\sqrt{10}}
+                              = \frac{5\sqrt{10}}{10}
+                              = \frac{\sqrt{10}}{2}
+                              \approx \frac{3.1623}{2}
+                              \approx \mathbf{1.581}$$
+                        </div>
+
+                        <p><strong>[2] 棄却限界値（有意水準 2.5% 片側）</strong></p>
+                        <div class="formula-block">
+                            <p>答：$t_{0.025}(9) \approx 2.262$</p>
+                        </div>
+                        <p>
+                            検定統計量 $T$ は帰無仮説のもとで自由度 $n - 1 = 9$ の $t$ 分布に従います．
+                            右片側検定なので，棄却域は $T > t_{0.025}(9)$ です．
+                            $t$ 分布表より：
+                        </p>
+                        <div class="formula-block">
+                            $$t_{0.025}(9) \approx \mathbf{2.262}$$
+                        </div>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 「片側 2.5%」と「両側 5%」の関係</div>
+                            <p>
+                                $t$ 分布表は「上側確率 $\alpha$ に対する点 $t_\alpha(\nu)$」として記載されていることが多いです．
+                                片側検定で有意水準 2.5% のとき，棄却限界値は上側確率 2.5% の点 $t_{0.025}(\nu)$ を用います．
+                                これは両側検定で有意水準 5% のときの棄却限界値と同じ値です（$t$ 分布は対称なため）．
+                            </p>
+                        </div>
+
+                        <p><strong>[3] 帰無仮説の棄却判定</strong></p>
+                        <div class="formula-block">
+                            <p>答：帰無仮説 $H_0$ は<strong>棄却されない</strong></p>
+                        </div>
+                        <p>
+                            検定統計量の値 $T = 1.581$ を棄却限界値 $2.262$ と比較します：
+                        </p>
+                        <div class="formula-block">
+                            $$T = 1.581 < 2.262 = t_{0.025}(9)$$
+                        </div>
+                        <p>
+                            検定統計量が棄却域に入っていないため，有意水準 2.5% では帰無仮説 $H_0: \mu = 120$ を棄却できません．
+                            「大阪店舗のポテトは 120g より多い」という噂を統計的に支持する証拠が不十分です．
+                        </p>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 「棄却されない」≠「帰無仮説が正しい」</div>
+                            <p>
+                                棄却されなかったということは「帰無仮説を否定するのに十分な証拠がなかった」ことを意味します．
+                                「母平均が 120g である」と証明したわけではありません（特に $n = 10$ は小さな標本）．
+                                標本サイズを増やせば棄却できる可能性もあります（次の [4] 参照）．
+                            </p>
+                        </div>
+
+                        <p><strong>[4] 帰無仮説が棄却される最小サンプルサイズ $n$</strong></p>
+                        <div class="formula-block">
+                            <p>答：$n = 18$</p>
+                        </div>
+                        <p>
+                            帰無仮説が棄却されるとは，検定統計量が棄却域に入ること，すなわち：
+                        </p>
+                        <div class="formula-block">
+                            $$T = \frac{125 - 120}{10/\sqrt{n}} = \frac{5\sqrt{n}}{10} = \frac{\sqrt{n}}{2} \geq t_{0.025}(n-1)$$
+                        </div>
+                        <p>両辺を二乗して $n$ について整理します：</p>
+                        <div class="formula-block">
+                            $$\frac{n}{4} \geq \bigl[t_{0.025}(n-1)\bigr]^2
+              \quad\Longleftrightarrow\quad
+              n \geq 4\cdot\bigl[t_{0.025}(n-1)\bigr]^2$$
+                        </div>
+                        <p>
+                            右辺にも $n$ が含まれているため，この不等式を代数的に直接解くことはできません．
+                            そこで，$n$ に具体的な値を代入しながら反復的に確認します（反復法）．
+                        </p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>$n$</th>
+                                    <th>自由度 $n-1$</th>
+                                    <th>$t_{0.025}(n-1)$</th>
+                                    <th>$4\cdot[t_{0.025}(n-1)]^2$</th>
+                                    <th>$n \geq 4t^2$？</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>10</td><td>9</td><td>2.262</td><td>$4 \times 5.117 = 20.47$</td><td>$10 < 20.47$ ✗</td></tr>
+                                <tr><td>15</td><td>14</td><td>2.145</td><td>$4 \times 4.601 = 18.40$</td><td>$15 < 18.40$ ✗</td></tr>
+                                <tr><td>17</td><td>16</td><td>2.120</td><td>$4 \times 4.494 = 17.98$</td><td>$17 < 17.98$ ✗</td></tr>
+                                <tr style="background:var(--primary-bg);"><td><strong>18</strong></td><td><strong>17</strong></td><td><strong>2.110</strong></td><td>$4 \times 4.452 = 17.81$</td><td>$18 \geq 17.81$ ✓</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>
+                            $n = 18$ のとき初めて条件が満たされるため，最小サンプルサイズは $\mathbf{n = 18}$ です．
+                        </p>
+                        <p>確認（$n = 18$ のときの検定統計量）：</p>
+                        <div class="formula-block">
+                            $$T = \frac{\sqrt{18}}{2} = \frac{3\sqrt{2}}{2} \approx \frac{4.2426}{2} \approx 2.121 > 2.110 = t_{0.025}(17) \quad \checkmark$$
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問11.2                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q112">
+                    <h2><i class="fas fa-pencil"></i> 問11.2 — 大阪・東京の二標本 $t$ 検定（等分散）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            問11.1 の続きを考える．さらに「東京と大阪の店舗では，ポテトの量が異なる」という噂が広まった．
+                            そこで，東京の店舗からもポテトをランダムに 10 個選んで，その重さを量ったところ，
+                            平均は 115g で，標準偏差は 8.0g であった．
+                            大阪と東京の店舗のポテトの重量はそれぞれ互いに独立に平均 $\mu_A$ と $\mu_B$ の正規分布に従うとし，
+                            その分散はともに $\sigma^2$ とする．
+                            大阪と東京の店舗のデータから，帰無仮説 $H_0: \mu_A = \mu_B$ に対して
+                            対立仮説 $H_1: \mu_A \neq \mu_B$ の $t$ 検定を行う．
+                        </p>
+                        <ol>
+                            <li>大阪と東京の店舗のデータをプールしたもとでの標本分散（分散の不偏推定値）を求めよ．</li>
+                            <li>検定統計量の値を求めよ．</li>
+                            <li>有意水準を 5%（両側）とする．棄却限界値を求めよ．</li>
+                            <li>帰無仮説が棄却されるかどうか判定せよ．</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 等分散を仮定した二標本 $t$ 検定（プールド $t$ 検定）</div>
+                            <p>
+                                2つの正規母集団の平均の差を検定するとき，母分散が等しい（$\sigma_A^2 = \sigma_B^2 = \sigma^2$）と
+                                仮定できる場合は，両グループの情報をまとめて（プールして）$\sigma^2$ を推定します．
+                                こうすることで自由度が増え，検定の精度が上がります．
+                            </p>
+                        </div>
+
+                        <p><strong>問題の設定の整理</strong></p>
+                        <table>
+                            <thead>
+                                <tr><th>項目</th><th>大阪（A）</th><th>東京（B）</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>標本サイズ</td><td>$n_A = 10$</td><td>$n_B = 10$</td></tr>
+                                <tr><td>標本平均</td><td>$\bar{X}_A = 125\,\text{g}$</td><td>$\bar{X}_B = 115\,\text{g}$</td></tr>
+                                <tr><td>不偏標準偏差</td><td>$S_A = 10.0\,\text{g}$</td><td>$S_B = 8.0\,\text{g}$</td></tr>
+                                <tr><td>不偏分散</td><td>$S_A^2 = 100$</td><td>$S_B^2 = 64$</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p><strong>[1] プールした分散の不偏推定値</strong></p>
+                        <div class="formula-block">
+                            <p>答：$S_p^2 = 82$</p>
+                        </div>
+                        <p>
+                            2つの標本から $\sigma^2$ をプールして推定する式は，各グループの偏差平方和
+                            $T_A^2 = (n_A-1)S_A^2$，$T_B^2 = (n_B-1)S_B^2$ を合わせて自由度の合計で割ります：
+                        </p>
+                        <div class="formula-block">
+                            $$S_p^2 = \frac{(n_A - 1)S_A^2 + (n_B - 1)S_B^2}{n_A + n_B - 2}$$
+                        </div>
+                        <p>数値を代入します：</p>
+                        <div class="formula-block">
+                            $$S_p^2 = \frac{(10-1)\times 10^2 + (10-1)\times 8^2}{10 + 10 - 2}
+                              = \frac{9 \times 100 + 9 \times 64}{18}
+                              = \frac{900 + 576}{18}
+                              = \frac{1476}{18}
+                              = \mathbf{82}$$
+                        </div>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> プールの意味</div>
+                            <p>
+                                大阪の不偏分散は 100，東京は 64 と異なりますが，両者は同じ $\sigma^2$ から来ている（等分散仮定）と
+                                考えます．そのため，2つの推定量を自由度で重みづけして平均した $S_p^2 = 82$ が，
+                                $\sigma^2$ のより良い（自由度が大きい）推定量になります．
+                                自由度は $n_A - 1 = 9$ と $n_B - 1 = 9$ を合わせた $18$ になります．
+                            </p>
+                        </div>
+
+                        <p><strong>[2] 検定統計量の値</strong></p>
+                        <div class="formula-block">
+                            <p>答：$T \approx 2.469$</p>
+                        </div>
+                        <p>
+                            等分散を仮定した二標本 $t$ 検定の検定統計量は：
+                        </p>
+                        <div class="formula-block">
+                            $$T = \frac{\bar{X}_A - \bar{X}_B}{S_p\sqrt{\dfrac{1}{n_A} + \dfrac{1}{n_B}}}$$
+                        </div>
+                        <p>
+                            $S_p = \sqrt{82}$ なので，分母を計算します：
+                        </p>
+                        <div class="formula-block">
+                            $$S_p\sqrt{\frac{1}{n_A}+\frac{1}{n_B}}
+                              = \sqrt{82}\times\sqrt{\frac{1}{10}+\frac{1}{10}}
+                              = \sqrt{82 \times \frac{2}{10}}
+                              = \sqrt{82 \times 0.2}
+                              = \sqrt{16.4}
+                              \approx 4.050$$
+                        </div>
+                        <div class="formula-block">
+                            $$T = \frac{125 - 115}{\sqrt{16.4}} = \frac{10}{4.050} \approx \mathbf{2.469}$$
+                        </div>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 検定統計量の分母の導出</div>
+                            <p>
+                                なぜ分母が $S_p\sqrt{1/n_A + 1/n_B}$ になるかを確認しましょう．
+                                $\bar{X}_A - \bar{X}_B$ の分散は：
+                            </p>
+                            <div class="formula-block">
+                                $$\mathrm{Var}(\bar{X}_A - \bar{X}_B)
+                                  = \frac{\sigma^2}{n_A} + \frac{\sigma^2}{n_B}
+                                  = \sigma^2\!\left(\frac{1}{n_A}+\frac{1}{n_B}\right)$$
+                            </div>
+                            <p>
+                                $\sigma^2$ を $S_p^2$ で推定したものが分母の二乗です．
+                                $T$ は帰無仮説 $H_0: \mu_A = \mu_B$ のもとで自由度 $n_A + n_B - 2 = 18$ の $t$ 分布に従います．
+                            </p>
+                        </div>
+
+                        <p><strong>[3] 棄却限界値（有意水準 5% 両側）</strong></p>
+                        <div class="formula-block">
+                            <p>答：$t_{0.025}(18) \approx 2.101$</p>
+                        </div>
+                        <p>
+                            両側検定なので，棄却域は $|T| > t_{0.025}(18)$ です．
+                            自由度 18 の $t$ 分布の上側 2.5% 点を $t$ 分布表から読み取ります：
+                        </p>
+                        <div class="formula-block">
+                            $$t_{0.025}(18) \approx \mathbf{2.101}$$
+                        </div>
+                        <p>
+                            自由度が大きいほど $t_{0.025}$ は正規分布の $z_{0.025} = 1.96$ に近づきます．
+                            自由度 9 では 2.262，自由度 18 では 2.101 と，
+                            プールによって自由度が増えた分だけ棄却限界値が小さくなっていることがわかります．
+                        </p>
+
+                        <p><strong>[4] 帰無仮説の棄却判定</strong></p>
+                        <div class="formula-block">
+                            <p>答：帰無仮説 $H_0$ は<strong>棄却される</strong></p>
+                        </div>
+                        <p>
+                            検定統計量の値 $|T| = 2.469$ を棄却限界値 $2.101$ と比較します：
+                        </p>
+                        <div class="formula-block">
+                            $$|T| = 2.469 > 2.101 = t_{0.025}(18)$$
+                        </div>
+                        <p>
+                            検定統計量が棄却域に入るため，有意水準 5% で帰無仮説 $H_0: \mu_A = \mu_B$ を棄却します．
+                            すなわち「大阪と東京の店舗でポテトの量は異なる」という結論が，統計的に有意に支持されます．
+                        </p>
+
+                        <table>
+                            <thead>
+                                <tr><th>項目</th><th>内容</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>帰無仮説 $H_0$</td><td>$\mu_A = \mu_B$（大阪と東京の平均は等しい）</td></tr>
+                                <tr><td>対立仮説 $H_1$</td><td>$\mu_A \neq \mu_B$（両側）</td></tr>
+                                <tr><td>プール分散</td><td>$S_p^2 = 82$（自由度 18）</td></tr>
+                                <tr><td>検定統計量</td><td>$T \approx 2.469$</td></tr>
+                                <tr><td>棄却限界値</td><td>$t_{0.025}(18) \approx 2.101$</td></tr>
+                                <tr><td>判定</td><td>$2.469 > 2.101$ ∴ 棄却される（有意水準5%）</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 問11.1 との比較：標本サイズの効果</div>
+                            <p>
+                                問11.1 では大阪単体で $n=10$ の片側検定を行い，検定統計量 $1.581$ は棄却限界値 $2.262$ を下回り棄却できませんでした．
+                                問11.2 では東京（$n=10$）のデータを加えることで，プールにより自由度が 9 → 18 に増え棄却限界値が $2.262 \to 2.101$ に下がりました．
+                                また，平均の差（125 vs 115）が明確であったことも棄却につながりました．
+                                「データを増やす」ことが検定の精度（検出力）向上に直結することが確認できます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

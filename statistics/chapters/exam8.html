@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第8章 章末問題解説 - 統計的推定の基礎</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第8章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 8 — 例題解説</span>
+            <h1>統計的推定の基礎<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter8.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第8章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q81">問8.1 統計量と推定量の性質</a></li>
+                            <li><a href="#q82">問8.2 ポアソン分布のMLE</a></li>
+                            <li><a href="#q83">問8.3 バイアス補正とジャックナイフ</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問8.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q81">
+                    <h2><i class="fas fa-pencil"></i> 問8.1 — 統計量と推定量に関する正誤問題</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            未知の平均 $\mu$、分散 $\sigma^2$ をもつ正規分布 $N(\mu, \sigma^2)$ から独立同一に得られた標本を
+                            $X_1, \ldots, X_n$ とし、その標本平均を $\bar{X}$ と書く。
+                            以下の①から⑤の文章のうち正しいもののみをすべて選べ。（複数回答あり）
+                        </p>
+                        <ol>
+                            <li>$\displaystyle\sum_{i=1}^{n}(X_i - \bar{X})^2$ は統計量であるが、$\displaystyle\sum_{i=1}^{n}(X_i - \mu)^2$ は統計量ではない。</li>
+                            <li>順序統計量を並べたベクトル $(X_{(1)}, \ldots, X_{(n)})$ はパラメータ $\mu$ および $\sigma^2$ の十分統計量である。</li>
+                            <li>標本分散 $\dfrac{1}{n}\displaystyle\sum_{i=1}^{n}(X_i - \bar{X})^2$ は $\sigma^2$ の不偏推定量である。</li>
+                            <li>標本分散の平方根 $\left(\dfrac{1}{n}\displaystyle\sum_{i=1}^{n}(X_i - \bar{X})^2\right)^{1/2}$ は標準偏差 $\sigma$ の最尤推定量である。</li>
+                            <li>標本分散は分散 $\sigma^2$ の一致推定量であるが、漸近有効推定量ではない。</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+                        <div class="formula-block">
+                            <p>正しいのは <strong>①・②・④</strong></p>
+                        </div>
+                        <ul>
+                            <li>
+                                <strong>① 正しい（統計量の定義）</strong>：
+                                <strong>統計量</strong>とは「データの関数のうち未知パラメータを含まないもの」です。
+                                $\sum(X_i-\bar{X})^2$ は $\bar{X}=\frac{1}{n}\sum X_i$ で計算できるので統計量。
+                                一方 $\sum(X_i-\mu)^2$ は未知の $\mu$ を必要とするため統計量ではありません。
+                            </li>
+                            <li>
+                                <strong>② 正しい（順序統計量の十分性）</strong>：
+                                i.i.d. 標本の尤度 $L(\mu,\sigma^2)=\prod f(X_i;\mu,\sigma^2)$ は積なので順序に依存しません。
+                                昇順に並べた $(X_{(1)},\ldots,X_{(n)})$ でも同じ尤度が書けるため、観測の並び順という余分な情報は推測に不要です。したがって順序統計量は $(\mu,\sigma^2)$ の十分統計量です。
+                            </li>
+                            <li>
+                                <strong>③ 誤り（標本分散の不偏性）</strong>：
+                                $\frac{1}{n}\sum(X_i-\bar{X})^2$ の期待値は $\frac{n-1}{n}\sigma^2 \neq \sigma^2$ なので不偏推定量ではありません。$\frac{1}{n-1}$ で割った不偏分散が $\sigma^2$ の不偏推定量です。偏差 $X_i-\bar{X}$ は $\sum(X_i-\bar{X})=0$ という制約で1自由度失われることが原因です。
+                                <div class="formula-block">
+                                    $$E\!\left[\sum_{i=1}^{n}(X_i-\bar{X})^2\right]
+                                      = n\sigma^2 - n\cdot\frac{\sigma^2}{n} = (n-1)\sigma^2
+                                      \;\Rightarrow\; E\!\left[\frac{1}{n}\sum(X_i-\bar{X})^2\right] = \frac{n-1}{n}\sigma^2$$
+                                </div>
+                            </li>
+                            <li>
+                                <strong>④ 正しい（最尤推定量の不変性）</strong>：
+                                正規分布の最尤推定量は $\hat{\mu}=\bar{X}$、$\hat{\sigma}^2=\frac{1}{n}\sum(X_i-\bar{X})^2$ です。
+                                <strong>最尤推定量の不変性</strong>（$\hat{\theta}$ が $\theta$ の MLE ならば $g(\hat{\theta})$ は $g(\theta)$ の MLE）により、
+                                その平方根 $\hat{\sigma}=(\frac{1}{n}\sum(X_i-\bar{X})^2)^{1/2}$ は $\sigma$ の最尤推定量です。
+                            </li>
+                            <li>
+                                <strong>⑤ 誤り（漸近有効性）</strong>：
+                                正規分布は漸近論の正則条件を満たすため、最尤推定量である標本分散は一致性・漸近正規性・漸近有効性（漸近分散がクラーメル・ラオ下限 $I(\theta)^{-1}$ と一致）をすべて満たします。
+                            </li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問8.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q82">
+                    <h2><i class="fas fa-pencil"></i> 問8.2 — ポアソン分布のMLE・フィッシャー情報量・有効性</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            平均 $\lambda > 0$ のポアソン分布から独立同一に標本 $X_1, \ldots, X_n$ が得られているとする。
+                            ただし、ポアソン分布の確率関数は $f(x) = e^{-\lambda}\lambda^x / x!$（$x = 0, 1, \ldots$）である。
+                        </p>
+                        <ol>
+                            <li>パラメータ $\lambda$ の最尤推定量を求めよ。</li>
+                            <li>$\lambda$ に関するフィッシャー情報量 $J_n(\lambda)$ を求めよ。</li>
+                            <li>$\lambda$ の最尤推定量は有効推定量であることを示せ。</li>
+                            <li>$\lambda$ の最尤推定量の漸近正規性および漸近有効性を、中心極限定理を用いて示せ。</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>(1) 最尤推定量の導出</strong></p>
+                        <p>$n$ 個の観測値が独立なので尤度関数は積になります。対数をとります：</p>
+                        <div class="formula-block">
+                            $$L(\lambda) = \prod_{i=1}^{n}\frac{e^{-\lambda}\lambda^{x_i}}{x_i!}
+                              = e^{-n\lambda}\cdot\lambda^{\sum x_i}\cdot\prod\frac{1}{x_i!}$$
+                            $$\ell(\lambda) = -n\lambda + \left(\sum_{i=1}^n x_i\right)\log\lambda - \sum_{i=1}^n\log(x_i!)$$
+                        </div>
+                        <p>$\lambda$ で微分してゼロとおきます（最後の項は $\lambda$ に無関係）：</p>
+                        <div class="formula-block">
+                            $$\frac{\partial\ell}{\partial\lambda} = -n + \frac{\sum_{i=1}^n x_i}{\lambda} = 0
+                              \quad\Rightarrow\quad \hat{\lambda} = \frac{1}{n}\sum_{i=1}^n x_i = \bar{X}$$
+                        </div>
+                        <p>2次微分 $\partial^2\ell/\partial\lambda^2 = -\sum x_i/\lambda^2 \leq 0$ なので確かに最大点です。</p>
+
+                        <p><strong>(2) フィッシャー情報量</strong></p>
+                        <p>2次微分版の定義式を使います：</p>
+                        <div class="formula-block">
+                            $$J_n(\lambda) = -E\!\left[\frac{\partial^2\ell}{\partial\lambda^2}\right]
+                              = \frac{1}{\lambda^2}\,E\!\left[\sum_{i=1}^n X_i\right]
+                              = \frac{n\lambda}{\lambda^2} = \frac{n}{\lambda}$$
+                        </div>
+                        <p>スコアの分散でも確認できます（$V[\sum X_i] = n\lambda$ を利用）：</p>
+                        <div class="formula-block">
+                            $$J_n(\lambda) = V\!\left[\frac{\partial\ell}{\partial\lambda}\right]
+                              = V\!\left[\frac{\sum X_i}{\lambda}\right]
+                              = \frac{n\lambda}{\lambda^2} = \frac{n}{\lambda}$$
+                        </div>
+
+                        <p><strong>(3) 有効推定量であることの証明</strong></p>
+                        <p><em>不偏性の確認</em>：$E[\hat{\lambda}] = E[\bar{X}] = \lambda$（ポアソン分布の期待値 $=\lambda$ より）。</p>
+                        <p><em>分散の計算</em>：$V[X_i]=\lambda$ と独立性より：</p>
+                        <div class="formula-block">
+                            $$V[\hat{\lambda}] = V[\bar{X}] = \frac{\lambda}{n}$$
+                        </div>
+                        <p><em>クラーメル・ラオ下限との比較</em>：</p>
+                        <div class="formula-block">
+                            $$J_n(\lambda)^{-1} = \frac{\lambda}{n}
+                              \quad\Rightarrow\quad V[\hat{\lambda}] = \frac{\lambda}{n} = J_n(\lambda)^{-1}$$
+                        </div>
+                        <p>分散がクラーメル・ラオ下限にぴったり一致するため、$\hat{\lambda}=\bar{X}$ は有効推定量（最小分散不偏推定量）です。</p>
+
+                        <p><strong>(4) 漸近正規性と漸近有効性</strong></p>
+                        <p>$X_i \sim \mathrm{Po}(\lambda)$ は $E[X_i]=V[X_i]=\lambda$ なので中心極限定理を適用します：</p>
+                        <div class="formula-block">
+                            $$\sqrt{n}(\bar{X}-\lambda) \;\xrightarrow{d}\; N(0,\,\lambda) = N\!\left(0,\, J_1(\lambda)^{-1}\right)$$
+                        </div>
+                        <p>漸近分散 $\lambda$ が1標本フィッシャー情報量の逆数 $J_1(\lambda)^{-1}=\lambda$ と一致するため、漸近有効性も成立しています。</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問8.3                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q83">
+                    <h2><i class="fas fa-pencil"></i> 問8.3 — バイアス・バイアス補正・ジャックナイフ推定・デルタ法</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            コインを製造する工場で5つの円形のコインを試作し、その半径 $r$ を測ったところ
+                            以下のようなデータが得られた（単位：mm）：
+                        </p>
+                        <div class="formula-block">
+                            $$8.4,\quad 9.0,\quad 8.2,\quad 10.4,\quad 9.2$$
+                        </div>
+                        <p>以下の問いに答えよ。ただし、円周率 $\pi$ は $3.14$ として計算せよ。</p>
+                        <ol>
+                            <li>
+                                平均 $\mu > 0$、分散 $\sigma^2$ の確率分布から独立同一に標本 $X_1, \ldots, X_n$ が得られており、その標本平均を $\bar{X}$ とする。
+                                $\mu^2$ の二種類の推定量 $T_1 := \bar{X}^2,\ T_2 := \frac{1}{n}\sum_{i=1}^{n}X_i^2$
+                                に対し、$T_1$ のバイアス $b_1(\mu,\sigma^2)$ および $T_2$ のバイアス $b_2(\mu,\sigma^2)$ を求めよ。
+                            </li>
+                            <li>コインの面積 $\pi r^2$ の推定値として、5つのコインの各面積の平均値を用いることの問題点を、[1] の結果をもとに説明せよ。</li>
+                            <li>[1] の設定で、$\tilde{T}_1 := \bar{X}^2 - b_1(\bar{X},U)$ というバイアス補正推定量を用いて、コインの面積 $\pi r^2$ のバイアス補正推定値を計算せよ。</li>
+                            <li>[1] の設定で、$T_1 = \bar{X}^2$ に対するジャックナイフ推定量を用いて、コインの面積 $\pi r^2$ のバイアス補正推定値を求めよ。</li>
+                            <li>[1] の設定で、デルタ法を用いて $T_1 = \bar{X}^2$ の漸近正規性を示せ。漸近分散を求めよ。</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>基本量の計算</strong></p>
+                        <div class="formula-block">
+                            $$\bar{X} = \frac{8.4+9.0+8.2+10.4+9.2}{5} = \frac{45.2}{5} = 9.04\text{ mm}$$
+                        </div>
+                        <div class="formula-block">
+                            $$U = \frac{1}{4}\!\left(\sum X_i^2 - 5\bar{X}^2\right)
+                              = \frac{411.60 - 408.608}{4} = \frac{2.992}{4} = 0.748\text{ mm}^2$$
+                        </div>
+
+                        <p><strong>(1) バイアスの計算</strong></p>
+                        <p>バイアス $= E[\hat{\theta}] - \theta$。$V[\bar{X}]=\sigma^2/n$ と $E[X_i^2]=\mu^2+\sigma^2$ を使います：</p>
+                        <div class="formula-block">
+                            $$E[T_1] = V[\bar{X}] + (E[\bar{X}])^2 = \frac{\sigma^2}{n} + \mu^2
+                              \;\Rightarrow\; b_1(\mu,\sigma^2) = \frac{\sigma^2}{n}$$
+                            $$E[T_2] = \frac{1}{n}\sum E[X_i^2] = \mu^2+\sigma^2
+                              \;\Rightarrow\; b_2(\mu,\sigma^2) = \sigma^2$$
+                        </div>
+                        <p>$T_1$ のバイアスは $n\to\infty$ でゼロに収束しますが、$T_2$ のバイアス $\sigma^2$ は $n$ に無関係に残ります。</p>
+
+                        <table>
+                            <thead>
+                                <tr><th>推定量</th><th>期待値</th><th>バイアス</th><th>特徴</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$T_1 = \bar{X}^2$</td>
+                                    <td>$\mu^2 + \dfrac{\sigma^2}{n}$</td>
+                                    <td>$\dfrac{\sigma^2}{n}$</td>
+                                    <td>$n\to\infty$ でバイアス→0</td>
+                                </tr>
+                                <tr>
+                                    <td>$T_2 = \frac{1}{n}\sum X_i^2$</td>
+                                    <td>$\mu^2 + \sigma^2$</td>
+                                    <td>$\sigma^2$</td>
+                                    <td>$n$ に無関係なバイアスが残る</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p><strong>(2) 面積計算法の問題点</strong></p>
+                        <p>「各コインの面積 $\pi X_i^2$ の平均 $\pi\overline{X^2}=\pi T_2$」を使う方法のバイアスを確認します：</p>
+                        <div class="formula-block">
+                            $$E[\pi T_2] = \pi(\mu^2+\sigma^2) = \pi\mu^2 + \pi\sigma^2$$
+                        </div>
+                        <p>
+                            バイアスは $\pi\sigma^2$ であり、標本サイズ $n$ に無関係です。何枚測定しても系統的に真の面積 $\pi\mu^2$ を過大評価してしまいます。
+                            これは $r^2$ が $r$ の非線形関数であること（イェンセンの不等式 $E[X^2]>(E[X])^2$）に起因します。
+                        </p>
+
+                        <p><strong>(3) バイアス補正推定値</strong></p>
+                        <p>$b_1=\sigma^2/n$ の $\sigma^2$ に不偏分散 $U$ を代入します：</p>
+                        <div class="formula-block">
+                            $$\tilde{T}_1 = \bar{X}^2 - \frac{U}{n} = 9.04^2 - \frac{0.748}{5} = 81.7216 - 0.1496 = 81.572$$
+                            $$\pi\tilde{T}_1 = 3.14 \times 81.572 \approx \mathbf{256.1\text{ mm}^2}$$
+                        </div>
+
+                        <p><strong>(4) ジャックナイフ推定値</strong></p>
+                        <p><strong>ジャックナイフ法</strong>は「1つずつデータを取り除いた部分標本での推定量」を用いてバイアスを補正する汎用的なリサンプリング手法です。$i$ 番目を除いた残り4個の標本平均の2乗 $T_{1(i)}$ を計算します：</p>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>除外データ</th>
+                                    <th>残り4個の和</th>
+                                    <th>残り4個の平均</th>
+                                    <th>$T_{1(i)}$（平均の2乗）</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$X_1=8.4$</td><td>$36.8$</td><td>$9.20$</td><td>$84.64$</td></tr>
+                                <tr><td>$X_2=9.0$</td><td>$36.2$</td><td>$9.05$</td><td>$81.9025$</td></tr>
+                                <tr><td>$X_3=8.2$</td><td>$37.0$</td><td>$9.25$</td><td>$85.5625$</td></tr>
+                                <tr><td>$X_4=10.4$</td><td>$34.8$</td><td>$8.70$</td><td>$75.69$</td></tr>
+                                <tr><td>$X_5=9.2$</td><td>$36.0$</td><td>$9.00$</td><td>$81.00$</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="formula-block">
+                            $$T_{1(\cdot)} = \frac{84.64+81.9025+85.5625+75.69+81.00}{5} = \frac{408.795}{5} = 81.759$$
+                        </div>
+                        <p>ジャックナイフ推定量の公式 $T_{\text{jack}} = nT_1 - (n-1)T_{1(\cdot)}$ を使います：</p>
+                        <div class="formula-block">
+                            $$T_{\text{jack}} = 5\times81.7216 - 4\times81.759 = 408.608 - 327.036 = 81.572$$
+                            $$\pi T_{\text{jack}} = 3.14 \times 81.572 \approx \mathbf{256.1\text{ mm}^2}$$
+                        </div>
+                        <p>$T_1=\bar{X}^2$ という特定の形の場合、ジャックナイフ推定量と理論的バイアス補正推定量は一致します（一般の推定量では一致しません）。</p>
+
+                        <p><strong>(5) デルタ法による漸近正規性</strong></p>
+                        <p><strong>デルタ法</strong>は $\bar{X}$ の漸近分布から $g(\bar{X})$ の漸近分布を導く方法です。$g(x)=x^2$ とおくと $g'(\mu)=2\mu$。</p>
+                        <p>中心極限定理より $\sqrt{n}(\bar{X}-\mu)\xrightarrow{d}N(0,\sigma^2)$ なので：</p>
+                        <div class="formula-block">
+                            $$\sqrt{n}(\bar{X}^2-\mu^2) \;\xrightarrow{d}\; N\!\left(0,\;\sigma^2\cdot[g'(\mu)]^2\right)
+                              = N(0,\;4\mu^2\sigma^2)$$
+                        </div>
+                        <p>漸近分散は $4\mu^2\sigma^2$ です。これは「$g$ の傾き $g'(\mu)=2\mu$ が $\bar{X}$ のゆらぎを $2\mu$ 倍して $\bar{X}^2$ のゆらぎに伝える」という直感に対応します。</p>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            // ナビバー ハンバーガーメニュー
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

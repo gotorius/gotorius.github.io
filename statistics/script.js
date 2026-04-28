@@ -41,6 +41,44 @@ function initHub() {
             <span class="chapter-card-arrow"><i class="fas fa-arrow-right"></i></span>
         </a>`
     ).join('');
+
+    const examGrid = document.getElementById('exam-grid');
+    examGrid.innerHTML = CHAPTERS.map((ch, i) => {
+        const hasPage = [8, 9, 10, 11].includes(ch.num); // 解説ページが存在する章番号
+        if (hasPage) {
+            return `
+        <a href="chapters/exam${ch.num}.html"
+           class="exam-card exam-card--ready"
+           style="animation-delay: ${i * 0.03}s">
+            <div class="chapter-card-header">
+                <span class="chapter-num">第${ch.num}章</span>
+                <span class="exam-badge exam-badge--ready"><i class="fas fa-circle-check"></i> 解説あり</span>
+            </div>
+            <h3 class="chapter-card-title">${ch.title}</h3>
+            <span class="chapter-card-arrow"><i class="fas fa-arrow-right"></i></span>
+        </a>`;
+        }
+        return `
+        <div class="exam-card"
+             style="animation-delay: ${i * 0.03}s">
+            <div class="chapter-card-header">
+                <span class="chapter-num">第${ch.num}章</span>
+                <span class="exam-badge"><i class="fas fa-clock"></i> 準備中</span>
+            </div>
+            <h3 class="chapter-card-title">${ch.title}</h3>
+        </div>`;
+    }).join('');
+
+    // モード切り替え
+    document.querySelectorAll('.mode-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const mode = btn.dataset.mode;
+            grid.style.display = mode === 'study' ? '' : 'none';
+            examGrid.style.display = mode === 'exam' ? '' : 'none';
+        });
+    });
 }
 
 /* ===================================

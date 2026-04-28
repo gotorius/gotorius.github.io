@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第9章 章末問題解説 - 区間推定</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第9章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 9 — 例題解説</span>
+            <h1>区間推定<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter9.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第9章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q91">問9.1 内閣支持率の信頼区間・必要サンプルサイズ</a></li>
+                            <li><a href="#q92">問9.2 スポーツ選手支持率の信頼区間</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問9.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q91">
+                    <h2><i class="fas fa-pencil"></i> 問9.1 — NHK内閣支持率調査における信頼区間</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            2020年3月のNHKによる政治意識月例調査では、全国の18歳以上の男女に対し電話法（RDD追跡法）により調査を行い、
+                            調査対象の2222人の55.8%にあたる1240人から回答を得た。その調査での内閣支持率は43%であった。
+                        </p>
+                        <ol>
+                            <li>母集団の内閣支持率の信頼係数95%の信頼区間を構成したい。調査への回答者を母集団からの単純無作為抽出であるとみなしたときの95%信頼区間を求めよ。</li>
+                            <li>内閣支持率は40%前後であると想定できるとき、内閣支持率の95%信頼区間の区間幅が2%となるために必要とされるサンプルサイズを求めよ。</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>(1) 内閣支持率の95%信頼区間</strong></p>
+                        <div class="formula-block">
+                            <p>答：$(0.403,\ 0.457)$</p>
+                        </div>
+
+                        <p>
+                            <strong>考え方</strong>：母比率 $p$ を推定するために標本比率 $\bar{p}$ を使います。
+                            サンプルサイズ $n$ が大きいとき、二項分布の正規近似により標本比率 $\bar{p}$ は近似的に正規分布に従います：
+                        </p>
+                        <div class="formula-block">
+                            $$\bar{p} \;\dot{\sim}\; N\!\left(p,\; \frac{p(1-p)}{n}\right)$$
+                        </div>
+                        <p>
+                            真の $p$ は未知なので、標準誤差中の $p$ を $\bar{p}$ で置き換えます。
+                            標準正規分布の上側2.5%点 $z_{0.025} = 1.96$ を用いると、母比率 $p$ の近似的な95%信頼区間は：
+                        </p>
+                        <div class="formula-block">
+                            $$\bar{p} \pm 1.96\sqrt{\frac{\bar{p}(1-\bar{p})}{n}}$$
+                        </div>
+                        <p><strong>数値の代入</strong>：$\bar{p} = 0.43$、$n = 1240$</p>
+                        <div class="formula-block">
+                            $$\sqrt{\frac{0.43 \times 0.57}{1240}} = \sqrt{\frac{0.2451}{1240}} = \sqrt{0.0001977} \approx 0.01406$$
+                        </div>
+                        <div class="formula-block">
+                            $$0.43 \pm 1.96 \times 0.01406 = 0.43 \pm 0.02756 \approx 0.43 \pm 0.02744$$
+                            $$= (0.403,\ 0.457)$$
+                        </div>
+                        <p>
+                            したがって、母集団の内閣支持率の95%信頼区間は <strong>$(0.403,\ 0.457)$</strong> となります。
+                        </p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 95%信頼区間の意味</div>
+                            <p>
+                                「この区間が真の母比率 $p$ を含む確率が95%」という意味ではなく、
+                                「同じ手順で繰り返し区間を作ると、その100回のうち約95回は真の $p$ を含む区間が得られる」
+                                という頻度論的な意味です。
+                            </p>
+                        </div>
+
+                        <p><strong>(2) 区間幅が2%となるサンプルサイズ</strong></p>
+                        <div class="formula-block">
+                            <p>答：$n = 9220$</p>
+                        </div>
+
+                        <p>
+                            信頼区間の半幅（マージン・オブ・エラー）は $1.96\sqrt{p(1-p)/n}$ です。
+                            「区間幅が2%」とは半幅が1%（= 0.01）であることを意味します。
+                        </p>
+                        <p>$p = 0.4$ と想定して、区間幅 $= 2 \times 1.96\sqrt{p(1-p)/n} = 0.02$ とおきます：</p>
+                        <div class="formula-block">
+                            $$2 \times 1.96\sqrt{\frac{0.4 \times 0.6}{n}} = 0.02$$
+                        </div>
+                        <p>両辺を整理します。両辺を $2$ で割ってから二乗すると：</p>
+                        <div class="formula-block">
+                            $$1.96\sqrt{\frac{0.4 \times 0.6}{n}} = 0.01$$
+                            $$1.96^2 \times \frac{0.4 \times 0.6}{n} = 0.01^2 = 0.0001$$
+                            $$n = \frac{1.96^2 \times 0.4 \times 0.6}{0.0001} = \frac{3.8416 \times 0.24}{0.0001} = \frac{0.921984}{0.0001} = 9219.84$$
+                        </div>
+                        <p>
+                            サンプルサイズは整数かつ「以上」でなければならないので、小数点以下を切り上げて
+                            $n = \mathbf{9220}$ となります。
+                        </p>
+                        <p>別の計算方法として式を変形しておくと便利です：</p>
+                        <div class="formula-block">
+                            $$n = \left(\frac{2 \times 1.96}{0.02}\right)^2 \times 0.4 \times 0.6
+                              = 196^2 \times 0.24 = 38416 \times 0.24 = 9219.84$$
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> なぜ $p = 0.4$ を使うのか</div>
+                            <p>
+                                $p(1-p)$ は $p = 0.5$ のとき最大値 $0.25$ をとります。
+                                問題文では「40%前後と想定できる」とあるので、真の $p$ に近い $p = 0.4$ を使います。
+                                もし $p$ が全く未知の場合は最悪ケース $p = 0.5$ を使うと、必要なサンプルサイズを安全側に見積もれます。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問9.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q92">
+                    <h2><i class="fas fa-pencil"></i> 問9.2 — スポーツ選手支持率の信頼区間（単純比率・比率の差）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            次の記事は、「人気スポーツ」調査における「最も好きなスポーツ選手」の調査結果（2019年6月）の抜粋（一部改変・要約）である。
+                            以下の問題においては、この調査で使われた抽出方法を単純無作為抽出とみなして答えよ。
+                        </p>
+                        <blockquote style="background:var(--gray-50);border-left:4px solid var(--gray-300);padding:12px 16px;margin:12px 0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;font-size:0.92em;color:var(--gray-600);">
+                            4月5日から14日にかけて、「人気スポーツ」に関する全国意識調査を実施しました。
+                            調査は、無作為に選んだ全国の20歳以上の男女個人を対象に個別面接聴取法で行いました
+                            （回答者数1227人、有効回答数917人）。
+                        </blockquote>
+                        <p><strong>1. 最も好きなスポーツ選手</strong>（上位5名、有効回答数917人中）</p>
+                        <table>
+                            <thead>
+                                <tr><th>順位</th><th>選手名</th><th>競技</th><th>人数</th><th>割合</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1位</td><td>イチロー</td><td>野球</td><td>240人</td><td>26.2%</td></tr>
+                                <tr><td>2位</td><td>羽生結弦</td><td>フィギュアスケート</td><td>73人</td><td>8.0%</td></tr>
+                                <tr><td>3位</td><td>大谷翔平</td><td>野球</td><td>59人</td><td>6.4%</td></tr>
+                                <tr><td>4位</td><td>錦織圭</td><td>テニス</td><td>45人</td><td>4.9%</td></tr>
+                                <tr><td>5位</td><td>長嶋茂雄</td><td>野球</td><td>37人</td><td>4.0%</td></tr>
+                            </tbody>
+                        </table>
+                        <p style="font-size:0.85em;color:var(--gray-500);margin-top:4px;">資料：一般社団法人中央調査社「第27回『人気スポーツ』調査」</p>
+                        <ol>
+                            <li>母集団でイチロー選手が最も好きな人の割合の95%信頼区間を求めよ。</li>
+                            <li>母集団でイチロー選手が最も好きな人の割合と羽生結弦が最も好きな人の割合の差の95%信頼区間を求めよ。</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p><strong>基本量の整理</strong></p>
+                        <p>
+                            サンプルサイズは<strong>有効回答数 $n = 917$</strong> を使います。
+                            26.2%という割合は有効回答数917人を分母とした標本比率です。
+                        </p>
+                        <div class="formula-block">
+                            $$\hat{p}_1 = \frac{240}{917} \approx 0.262 \quad\text{（イチロー）}$$
+                            $$\hat{p}_2 = \frac{73}{917} \approx 0.0796 \approx 0.080 \quad\text{（羽生結弦）}$$
+                        </div>
+
+                        <p><strong>(1) イチロー選手の支持率の95%信頼区間</strong></p>
+                        <div class="formula-block">
+                            <p>答：$(0.2335,\ 0.2905)$</p>
+                        </div>
+
+                        <p>
+                            母比率の信頼区間の公式（問9.1と同じ手順）：
+                        </p>
+                        <div class="formula-block">
+                            $$\hat{p}_1 \pm 1.96\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n}}$$
+                        </div>
+                        <p>標準誤差の計算：</p>
+                        <div class="formula-block">
+                            $$\sqrt{\frac{0.262 \times 0.738}{917}} = \sqrt{\frac{0.193356}{917}} = \sqrt{0.00021086} \approx 0.01452$$
+                        </div>
+                        <div class="formula-block">
+                            $$0.262 \pm 1.96 \times 0.01452 = 0.262 \pm 0.02846 \approx 0.262 \pm 0.0285$$
+                            $$= (0.2335,\ 0.2905)$$
+                        </div>
+                        <p>したがって、母集団でイチロー選手が最も好きな人の割合の95%信頼区間は <strong>$(0.2335,\ 0.2905)$</strong> です。</p>
+
+                        <p><strong>(2) イチローと羽生の支持率の差の95%信頼区間</strong></p>
+                        <div class="formula-block">
+                            <p>答：$(0.1460,\ 0.2180)$</p>
+                        </div>
+
+                        <p>
+                            今回は「1人の回答者がどちらの選手を最も好きか」を答えるアンケートで、
+                            1人が「イチローを選ぶ」か「羽生を選ぶ」か「どちらでもない」かの3択になります。
+                            これは<strong>多項分布</strong>（二項分布の多変数拡張）に従う状況です。
+                            二項分布では独立な2標本を仮定しますが、多項分布では1つの標本から複数の割合が同時に得られます。
+                        </p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> なぜ多項分布の公式が必要か</div>
+                            <p>
+                                もし「イチローを好き」と「羽生を好き」が独立な2つの調査だったなら、差の分散は
+                                $\hat{p}_1(1-\hat{p}_1)/n + \hat{p}_2(1-\hat{p}_2)/n$
+                                と計算できます。しかし同じ人に「最も好きな選手は？」と1問だけ聞いているので、
+                                「イチロー」を選んだ人は「羽生」を選べません。
+                                この<strong>負の相関</strong>（同じ調査内の割合どうしが排反）を補正するため、
+                                共分散項 $+2\hat{p}_1\hat{p}_2/n$ が加わります。
+                            </p>
+                        </div>
+
+                        <p><strong>多項分布における割合の差の信頼区間の公式</strong>：</p>
+                        <div class="formula-block">
+                            $$(\hat{p}_1 - \hat{p}_2) \pm 1.96\sqrt{\frac{\hat{p}_1(1-\hat{p}_1)}{n} + \frac{\hat{p}_2(1-\hat{p}_2)}{n} + \frac{2\hat{p}_1\hat{p}_2}{n}}$$
+                        </div>
+
+                        <p><strong>根号内の分散項を計算します</strong>（$\hat{p}_1 = 0.262$、$\hat{p}_2 = 0.080$、$n = 917$）：</p>
+                        <table>
+                            <thead>
+                                <tr><th>項</th><th>計算式</th><th>数値</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$\hat{p}_1(1-\hat{p}_1)/n$</td>
+                                    <td>$0.262 \times 0.738 / 917$</td>
+                                    <td>$0.19336 / 917 \approx 0.00021086$</td>
+                                </tr>
+                                <tr>
+                                    <td>$\hat{p}_2(1-\hat{p}_2)/n$</td>
+                                    <td>$0.080 \times 0.920 / 917$</td>
+                                    <td>$0.07360 / 917 \approx 0.00008026$</td>
+                                </tr>
+                                <tr>
+                                    <td>$2\hat{p}_1\hat{p}_2/n$</td>
+                                    <td>$2 \times 0.262 \times 0.080 / 917$</td>
+                                    <td>$0.04192 / 917 \approx 0.00004572$</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>合計</strong></td>
+                                    <td></td>
+                                    <td>$\approx 0.00033684$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="formula-block">
+                            $$\sqrt{0.00033684} \approx 0.01835$$
+                        </div>
+                        <p>点推定量（差）：$\hat{p}_1 - \hat{p}_2 = 0.262 - 0.080 = 0.182$</p>
+                        <div class="formula-block">
+                            $$0.182 \pm 1.96 \times 0.01835 = 0.182 \pm 0.03597 \approx 0.182 \pm 0.0360$$
+                            $$= (0.1460,\ 0.2180)$$
+                        </div>
+                        <p>母集団でイチロー選手が最も好きな人の割合と羽生結弦が最も好きな人の割合の差の95%信頼区間は <strong>$(0.1460,\ 0.2180)$</strong> です。</p>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 公式の導出：多項分布の共分散</div>
+                            <p>
+                                $n$ 回の試行で各回に「カテゴリ1（確率 $p_1$）」「カテゴリ2（確率 $p_2$）」「その他（確率 $1-p_1-p_2$）」のいずれかに分類されるとき、
+                                カテゴリ1に入る回数 $Y_1$ とカテゴリ2に入る回数 $Y_2$ の共分散は：
+                            </p>
+                            <div class="formula-block">
+                                $$\mathrm{Cov}(Y_1, Y_2) = -np_1p_2$$
+                            </div>
+                            <p>
+                                したがって標本比率の差 $\hat{p}_1 - \hat{p}_2 = (Y_1 - Y_2)/n$ の分散は：
+                            </p>
+                            <div class="formula-block">
+                                $$V[\hat{p}_1 - \hat{p}_2] = \frac{V[Y_1] + V[Y_2] - 2\,\mathrm{Cov}(Y_1,Y_2)}{n^2}$$
+                                $$= \frac{np_1(1-p_1) + np_2(1-p_2) + 2np_1p_2}{n^2}$$
+                                $$= \frac{p_1(1-p_1) + p_2(1-p_2) + 2p_1p_2}{n}$$
+                            </div>
+                            <p>
+                                ここで $V[Y_i] = np_i(1-p_i)$（二項分布の分散）、$\mathrm{Cov}(Y_1,Y_2) = -np_1p_2$（多項分布の共分散）を使いました。
+                                $p_i$ を $\hat{p}_i$ で推定すると、公式中の根号内の式が得られます。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            // ナビバー ハンバーガーメニュー
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

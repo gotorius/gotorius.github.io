@@ -1,0 +1,30 @@
+/* ===================================
+   章末問題解説ページ 専用スタイル
+   (statistics/exam-chapter.css)
+   =================================== */
+
+/* ---------- ヘッダーリンクボタン ---------- */
+.ec-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--primary);
+    color: #fff;
+    border-radius: 8px;
+    transition: background var(--transition), transform var(--transition);
+}
+.ec-link-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-1px);
+}
+.ec-link-btn--ghost {
+    background: white;
+    color: var(--primary);
+    border: 1.5px solid var(--primary);
+}
+.ec-link-btn--ghost:hover {
+    background: var(--primary-bg);
+}
