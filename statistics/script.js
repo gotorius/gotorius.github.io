@@ -44,7 +44,7 @@ function initHub() {
 
     const examGrid = document.getElementById('exam-grid');
     examGrid.innerHTML = CHAPTERS.map((ch, i) => {
-        const hasPage = [8, 9, 10, 11, 12, 13, 14, 15].includes(ch.num); // 解説ページが存在する章番号
+        const hasPage = [8, 9, 10, 11, 12, 13, 14, 15, 16].includes(ch.num); // 解説ページが存在する章番号
         if (hasPage) {
             return `
         <a href="chapters/exam${ch.num}.html"

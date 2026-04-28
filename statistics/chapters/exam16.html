@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第16章 章末問題解説 - 重回帰分析</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        /* R出力ブロック */
+        .r-output {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.84em;
+            line-height: 1.6;
+            padding: 1em 1.2em;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 0.8em 0;
+            white-space: pre;
+        }
+        .r-output .kw  { color: #89b4fa; }
+        .r-output .sig { color: #a6e3a1; font-weight: bold; }
+        .r-output .sep { color: #f38ba8; }
+
+        /* データ表 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em 0;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 4px 10px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* SVGグラフコンテナ */
+        .chart-container {
+            background: #fff;
+            border: 1px solid #d0d8ef;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 0.8em 0;
+            text-align: center;
+        }
+        .chart-title {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 6px;
+        }
+        /* モデル区切り */
+        .model-divider {
+            border: none;
+            border-top: 2px solid #e0e6f0;
+            margin: 1.2em 0 0.6em;
+        }
+        .model-label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.05em;
+            margin: 0.8em 0 0.3em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第16章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 16 — 章末問題解説</span>
+            <h1>重回帰分析<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter16.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第16章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q161">問16.1 — アミトリプチリン心電データの重回帰</a></li>
+                            <li><a href="#q161-1">問16.1 [1] 自由度調整済み決定係数によるモデル選択</a></li>
+                            <li><a href="#q161-2">問16.1 [2] モデル3の有意な変数の選択</a></li>
+                            <li><a href="#q162">問16.2 — airqualityデータの重回帰・AIC</a></li>
+                            <li><a href="#q162-1">問16.2 [1] Day の係数推定値と有意性</a></li>
+                            <li><a href="#q162-2">問16.2 [2] 予測誤差の観点からのモデル選択</a></li>
+                            <li><a href="#q163">問16.3 — Elastic-Net正則化回帰</a></li>
+                            <li><a href="#q163-1">問16.3 [1] 予測誤差最小の正則化パラメータ $\lambda$</a></li>
+                            <li><a href="#q163-2">問16.3 [2] 図(a)(b)(c)(d)と $(\lambda, \alpha)$ の対応</a></li>
+                            <li><a href="#q163-3">問16.3 [3] 図(a)(b)(c)と $\alpha$ の対応</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問16.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q161">
+                    <h2><i class="fas fa-pencil"></i> 問16.1 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>アミトリプチリン (Amitriptyline) は三環系抗鬱薬 (TCAD) の一種である．アミトリプチリンの過剰摂取による心電への影響を調べた以下のデータを解析する．データサイズは 17 で，AMI は過剰摂取後の血中アミトリプチリン量，GEN は性別（男 $=0$，女 $=1$），AMT は過剰摂取したアミトリプチリンの量，PR は心電における PR 間隔，DIAP は最低血圧，QRS は心電図の QRS 間隔を表す．</p>
+
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>患者番号</th><th>AMI</th><th>GEN</th><th>AMT</th><th>PR</th><th>DIAP</th><th>QRS</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>3149</td><td>1</td><td>7500</td><td>220</td><td>0</td><td>140</td></tr>
+                                <tr><td>2</td><td>653</td><td>1</td><td>1975</td><td>200</td><td>0</td><td>100</td></tr>
+                                <tr><td>3</td><td>810</td><td>0</td><td>3600</td><td>205</td><td>60</td><td>111</td></tr>
+                                <tr><td>4</td><td>448</td><td>1</td><td>675</td><td>160</td><td>60</td><td>120</td></tr>
+                                <tr><td>5</td><td>844</td><td>1</td><td>750</td><td>185</td><td>70</td><td>83</td></tr>
+                                <tr><td>6</td><td>1450</td><td>1</td><td>2500</td><td>180</td><td>60</td><td>80</td></tr>
+                                <tr><td>7</td><td>493</td><td>1</td><td>350</td><td>154</td><td>80</td><td>98</td></tr>
+                                <tr><td>8</td><td>941</td><td>0</td><td>1500</td><td>200</td><td>70</td><td>93</td></tr>
+                                <tr><td>9</td><td>547</td><td>1</td><td>375</td><td>137</td><td>60</td><td>105</td></tr>
+                                <tr><td>10</td><td>392</td><td>1</td><td>1050</td><td>167</td><td>60</td><td>74</td></tr>
+                                <tr><td>11</td><td>1283</td><td>1</td><td>3000</td><td>180</td><td>60</td><td>80</td></tr>
+                                <tr><td>12</td><td>458</td><td>1</td><td>450</td><td>160</td><td>64</td><td>60</td></tr>
+                                <tr><td>13</td><td>722</td><td>1</td><td>1750</td><td>135</td><td>90</td><td>79</td></tr>
+                                <tr><td>14</td><td>384</td><td>0</td><td>2000</td><td>160</td><td>60</td><td>80</td></tr>
+                                <tr><td>15</td><td>501</td><td>0</td><td>4500</td><td>180</td><td>0</td><td>100</td></tr>
+                                <tr><td>16</td><td>405</td><td>0</td><td>1500</td><td>170</td><td>90</td><td>120</td></tr>
+                                <tr><td>17</td><td>1520</td><td>1</td><td>3000</td><td>180</td><td>0</td><td>129</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>AMI を目的変数 $y$ として，GEN ($x_1$)，AMT ($x_2$)，PR ($x_3$)，DIAP ($x_4$)，QRS ($x_5$) を用いて予測する．そのため，以下の 4 種類のモデルを考える：</p>
+                        $$\text{モデル } 0:\ y = \beta_0 + \varepsilon$$
+                        $$\text{モデル } 1:\ y = \beta_0 + \sum_{k=3}^{5}\beta_k x_k + \varepsilon$$
+                        $$\text{モデル } 2:\ y = \beta_0 + \sum_{k=1}^{2}\beta_k x_k + \varepsilon$$
+                        $$\text{モデル } 3:\ y = \beta_0 + \sum_{k=1}^{5}\beta_k x_k + \varepsilon$$
+                        <p>ここで，$\varepsilon$ は誤差項であり正規分布 $N(0, \sigma^2)$ に従うと仮定する．これらのモデルに対して重回帰分析を行った結果，以下の結果を得た．なお，<code>***</code> は P 値が 0〜0.001，<code>**</code> は 0.001〜0.01，<code>*</code> は 0.01〜0.05，<code>.</code> は 0.05〜1 を意味している．</p>
+
+                        <p class="model-label">モデル 0：</p>
+                        <div class="r-output">Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept)  882.4      167.3   5.275 7.55e-05 ***
+---
+Residual standard error: 689.7 on 16 degrees of freedom</div>
+
+                        <p class="model-label">モデル 1：</p>
+                        <div class="r-output">Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -2015.366  1567.386  -1.286  0.221  .
+PR             13.134     7.428   1.768  0.100  .
+DIAP           -2.851     5.707  -0.500  0.626  .
+QRS             7.708     7.540   1.022  0.325  .
+---
+Residual standard error: 570.1 on 13 degrees of freedom
+Multiple R-squared:  0.4448,   Adjusted R-squared:  0.3167
+F-statistic: 3.472 on 3 and 13 DF,  p-value: 0.04767</div>
+
+                        <p class="model-label">モデル 2：</p>
+                        <div class="r-output">Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -241.34791  196.11640  -1.231 0.23874  .
+GEN          606.30967  183.86521   3.298 0.00529 **
+AMT            0.32425    0.04723   6.866 7.73e-06 ***
+---
+Residual standard error: 340.2 on 14 degrees of freedom
+Multiple R-squared:  0.787,    Adjusted R-squared:  0.7566
+F-statistic: 25.87 on 2 and 14 DF,  p-value: 1.986e-05</div>
+
+                        <p class="model-label">モデル 3：</p>
+                        <div class="r-output">Coefficients:
+              Estimate Std. Error t value Pr(&gt;|t|)
+(Intercept) -2.729e+03  9.288e+02  -2.938 0.013502  *
+GEN          7.630e+02  1.685e+02   4.528 0.000861 ***
+AMT          3.064e-01  6.334e-02   4.837 0.000521 ***
+PR           8.896e+00  4.424e+00   2.011 0.069515  .
+DIAP         7.206e+00  3.354e+00   2.149 0.054782  .
+QRS          4.987e+00  4.002e+00   1.246 0.238622  .
+---
+Residual standard error: 292.4 on 11 degrees of freedom
+Multiple R-squared:  0.8764,   Adjusted R-squared:  0.8202
+F-statistic: 15.6 on 5 and 11 DF,  p-value: 0.0001132</div>
+
+                        <p>これらの結果を用いて以下の問いに答えよ．</p>
+                        <ol>
+                            <li>これらの出力結果から，自由度調整済み決定係数を比べることでモデルを選択することとした．この考え方に従って選択されたモデルはどのモデルか，適切なものを 1 つ選べ．</li>
+                            <li>モデル 3 の解析結果より，有意な変数を選択したい．有意水準 $\alpha = 0.05$ としたとき，選ばれるべき変数をすべてあげよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q161-1">
+                    <h2><i class="fas fa-pencil"></i> 問16.1 [1] — 自由度調整済み決定係数によるモデル選択</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 自由度調整済み決定係数とは</div>
+                            <p>通常の決定係数（Multiple R-squared）$R^2$ は，説明変数を増やすだけで必ず上がります．これはモデルが「過学習」している可能性を示せません．</p>
+                            <p>そこで，説明変数の数（モデルの複雑さ）によるペナルティを加えた<strong>自由度調整済み決定係数（Adjusted R-squared）</strong>$\bar{R}^2$ が使われます：</p>
+                            <div class="formula-block">
+                                $$\bar{R}^2 = 1 - \frac{n-1}{n-p-1}(1-R^2)$$
+                            </div>
+                            <p>ここで $n$ はサンプルサイズ，$p$ は説明変数の数です．$\bar{R}^2$ が<strong>大きいほど</strong>モデルが優れています．</p>
+                        </div>
+
+                        <h4>各モデルの自由度調整済み決定係数を比較する</h4>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>モデル</th>
+                                    <th>説明変数</th>
+                                    <th>変数の数 $p$</th>
+                                    <th>Multiple R²</th>
+                                    <th>Adjusted R²</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>モデル 0</td>
+                                    <td>（なし）</td>
+                                    <td>0</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr>
+                                    <td>モデル 1</td>
+                                    <td>PR, DIAP, QRS</td>
+                                    <td>3</td>
+                                    <td>0.4448</td>
+                                    <td>0.3167</td>
+                                </tr>
+                                <tr>
+                                    <td>モデル 2</td>
+                                    <td>GEN, AMT</td>
+                                    <td>2</td>
+                                    <td>0.787</td>
+                                    <td>0.7566</td>
+                                </tr>
+                                <tr style="background:#e8ffe8;">
+                                    <td><strong>モデル 3</strong></td>
+                                    <td>GEN, AMT, PR, DIAP, QRS</td>
+                                    <td>5</td>
+                                    <td>0.8764</td>
+                                    <td><strong>0.8202</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>自由度調整済み決定係数はモデル 3 が $\bar{R}^2 = 0.8202$ で最大です．</p>
+
+                        <div class="formula-block">
+                            <p>自由度調整済み決定係数が最大のモデルは<strong>モデル 3</strong> である．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>なぜモデル 3 ＞ モデル 2 なのか？</strong><br>
+                                モデル 2 には 2 変数，モデル 3 には 5 変数があります．モデル 3 は変数が増えたぶんペナルティもありますが，それでも当てはまりの改善（$R^2$：0.787 → 0.8764）がペナルティを上回るため，調整済み $R^2$ もモデル 3 のほうが高くなります．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q161-2">
+                    <h2><i class="fas fa-pencil"></i> 問16.1 [2] — モデル 3 で有意な変数の選択（$\alpha = 0.05$）</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 重回帰における各係数の有意性検定</div>
+                            <p>各説明変数 $x_k$ に対して，帰無仮説 $H_0 : \beta_k = 0$（その変数は $y$ の予測に寄与しない）を検定します．</p>
+                            <p>$t$ 統計量 $= \hat{\beta}_k / \text{Std. Error}$ を計算し，$t$ 分布の両側確率 $\mathrm{Pr}(>|t|)$（P 値）を求めます．</p>
+                            <p>P 値 $< \alpha = 0.05$ ならば，その変数は<strong>有意</strong>と判断されます．</p>
+                        </div>
+
+                        <h4>モデル 3 の各変数の P 値を確認する</h4>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>変数</th>
+                                    <th>Estimate</th>
+                                    <th>Std. Error</th>
+                                    <th>t value</th>
+                                    <th>P 値 Pr(&gt;|t|)</th>
+                                    <th>有意（$\alpha=0.05$）</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>(Intercept)</td>
+                                    <td>$-2729$</td>
+                                    <td>$928.8$</td>
+                                    <td>$-2.938$</td>
+                                    <td>$0.013502$</td>
+                                    <td style="color:#4f8ef7;">✓（切片）</td>
+                                </tr>
+                                <tr style="background:#e8ffe8;">
+                                    <td><strong>GEN</strong></td>
+                                    <td>$763.0$</td>
+                                    <td>$168.5$</td>
+                                    <td>$4.528$</td>
+                                    <td>$0.000861$ <code>***</code></td>
+                                    <td style="color:green;font-weight:bold;">✓ 有意</td>
+                                </tr>
+                                <tr style="background:#e8ffe8;">
+                                    <td><strong>AMT</strong></td>
+                                    <td>$0.3064$</td>
+                                    <td>$0.06334$</td>
+                                    <td>$4.837$</td>
+                                    <td>$0.000521$ <code>***</code></td>
+                                    <td style="color:green;font-weight:bold;">✓ 有意</td>
+                                </tr>
+                                <tr>
+                                    <td>PR</td>
+                                    <td>$8.896$</td>
+                                    <td>$4.424$</td>
+                                    <td>$2.011$</td>
+                                    <td>$0.069515$ <code>.</code></td>
+                                    <td style="color:#e74c3c;">✗ 非有意</td>
+                                </tr>
+                                <tr>
+                                    <td>DIAP</td>
+                                    <td>$7.206$</td>
+                                    <td>$3.354$</td>
+                                    <td>$2.149$</td>
+                                    <td>$0.054782$ <code>.</code></td>
+                                    <td style="color:#e74c3c;">✗ 非有意</td>
+                                </tr>
+                                <tr>
+                                    <td>QRS</td>
+                                    <td>$4.987$</td>
+                                    <td>$4.002$</td>
+                                    <td>$1.246$</td>
+                                    <td>$0.238622$</td>
+                                    <td style="color:#e74c3c;">✗ 非有意</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="formula-block">
+                            <p>有意水準 $\alpha = 0.05$ のもとで選ばれる変数は<strong>GEN と AMT</strong> である（P 値がともに $0.05$ 未満）．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>符号の意味の解釈</strong><br>
+                                GEN の係数 $\approx 763$：女性（GEN $=1$）のほうが男性（GEN $=0$）より AMI が約 763 高い傾向がある．<br>
+                                AMT の係数 $\approx 0.306$：アミトリプチリン摂取量が 1 単位増えると AMI が約 0.306 増える傾向がある．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q162">
+                    <h2><i class="fas fa-pencil"></i> 問16.2 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p><code>airquality</code> データは 1973 年 5 月から 9 月までのニューヨークの大気状態を 6 つの変数で観測した 111 個の観測点からなるデータである．6 つの変数は Ozone（オゾンの濃度），Solar.R（日射量），Wind（風力），Temp（温度），Month（月），Day（月のうちの日）である．ここでは，Ozone を他の 5 つの変数で予測する問題を考える．そのため，以下の 3 つのモデルを考える：</p>
+                        $$\text{モデル } 0:\ \mathrm{Ozone} = \beta_0 + \varepsilon$$
+                        $$\text{モデル } 1:\ \mathrm{Ozone} = \beta_0 + \beta_1 \cdot \mathrm{Solar.R} + \beta_2 \cdot \mathrm{Wind} + \beta_3 \cdot \mathrm{Temp} + \beta_4 \cdot \mathrm{Month} + \varepsilon$$
+                        $$\text{モデル } 2:\ \mathrm{Ozone} = \beta_0 + \beta_1 \cdot \mathrm{Solar.R} + \beta_2 \cdot \mathrm{Wind} + \beta_3 \cdot \mathrm{Temp} + \beta_4 \cdot \mathrm{Month} + \beta_5 \cdot \mathrm{Day} + \varepsilon$$
+                        <p>なお，$\varepsilon$ は誤差項であり正規分布 $N(0, \sigma^2)$ に従うと仮定する．これらのモデルに対して重回帰分析を行った結果，以下の結果を得た．</p>
+
+                        <p class="model-label">モデル 0：</p>
+                        <div class="r-output">Coefficients:
+            Estimate Std. Error
+(Intercept)   42.099      3.158
+---
+AIC: 1096.073</div>
+
+                        <p class="model-label">モデル 1：</p>
+                        <div class="r-output">Coefficients:
+            Estimate Std. Error
+(Intercept) -58.05384  22.97114
+Solar.R       0.04960   0.02346
+Wind         -3.31651   0.64579
+Temp          1.87087   0.27363
+Month        -2.99163   1.51592
+---
+Multiple R-squared:  0.6199,   Adjusted R-squared:  0.6055
+F-statistic: 43.21 on 4 and 106 DF,  p-value: &lt; 2.2e-16
+AIC: 996.7119</div>
+
+                        <p class="model-label">モデル 2：</p>
+                        <div class="r-output">Coefficients:
+            Estimate Std. Error
+(Intercept) -64.11632  23.48249
+Solar.R       0.05027   0.02342
+Wind         -3.31844   0.64451
+Temp          1.89579   0.27389
+Month        -3.03996   1.51346
+Day           0.27388   0.22967
+---
+Multiple R-squared:  0.6249,   Adjusted R-squared:  0.6071
+F-statistic: 34.99 on 5 and 105 DF,  p-value: &lt; 2.2e-16
+AIC: 997.2188</div>
+
+                        <ol>
+                            <li>モデル 2 において，Day に対応する係数 $\hat{\beta}_5$ の最小二乗推定量を答えよ．また，その $t$ 統計量を求め有意性について論じよ．</li>
+                            <li>各モデルの決定係数，F 値および AIC の値を用いて，予測誤差の観点からはどのモデルを用いることが望ましいか論じよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.2 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q162-1">
+                    <h2><i class="fas fa-pencil"></i> 問16.2 [1] — Day の係数推定量と $t$ 統計量</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 最小二乗推定量と $t$ 統計量の読み方</div>
+                            <p>Rの <code>lm()</code> 出力において：</p>
+                            <ul>
+                                <li><strong>Estimate</strong>：各係数の最小二乗推定値 $\hat{\beta}_k$</li>
+                                <li><strong>Std. Error</strong>：推定値の標準誤差（$\hat{\beta}_k$ の推定標準偏差）</li>
+                                <li>$t$ 統計量 $= \dfrac{\hat{\beta}_k}{\text{Std. Error}}$（帰無仮説 $H_0:\beta_k=0$ のもとで $t$ 分布に従う）</li>
+                            </ul>
+                        </div>
+
+                        <h4>Day の推定値と $t$ 統計量を計算する</h4>
+                        <p>モデル 2 の出力より：</p>
+                        <ul>
+                            <li>推定値：$\hat{\beta}_5 = 0.27388$</li>
+                            <li>標準誤差：$\mathrm{Std. Error} = 0.22967$</li>
+                        </ul>
+                        $$t = \frac{\hat{\beta}_5}{\mathrm{Std.\ Error}} = \frac{0.27388}{0.22967} \approx 1.1925$$
+
+                        <div class="formula-block">
+                            $$\boxed{\hat{\beta}_5 = 0.27388, \qquad t \approx 1.1925}$$
+                        </div>
+
+                        <h4>有意性の判断</h4>
+                        <p>自由度 $111 - 5 - 1 = 105$ の $t$ 分布における両側確率（P 値）は，$|t| \approx 1.19$ に対して P 値 $\approx 0.236 > 0.1$ となります．</p>
+                        <p>有意水準 $\alpha = 0.1$（$|t| \geq$ 約 1.66 が棄却域）としても $t$ 統計量 1.19 は棄却域に入りません．</p>
+
+                        <div class="formula-block">
+                            <p>Day の係数は<strong>有意ではない</strong>（有意水準 0.1 でも帰無仮説 $\beta_5 = 0$ を棄却できない）．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>別の見方</strong>：モデル 2 には Day の係数 $0.27388$ という正の推定値がありますが，その不確実性（Std. Error = 0.22967）が大きく，「Day が Ozone の予測に本当に寄与するか」という統計的根拠が弱いことを意味します。
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.2 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q162-2">
+                    <h2><i class="fas fa-pencil"></i> 問16.2 [2] — 予測誤差の観点からのモデル選択</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> AIC（赤池情報量基準）とは</div>
+                            <p>AIC（Akaike Information Criterion）は，モデルの当てはまりと複雑さのトレードオフを表す指標です：</p>
+                            <div class="formula-block">
+                                $$\mathrm{AIC} = -2\ell(\hat{\theta}) + 2p$$
+                            </div>
+                            <p>ここで $\ell(\hat{\theta})$ は最大対数尤度，$p$ は推定したパラメータの数です．AIC は<strong>小さいほど</strong>モデルが優れています．</p>
+                            <p><strong>予測誤差の観点</strong>では，決定係数（訓練データへの当てはまり）よりも AIC（汎化性能＝新しいデータへの予測精度）を使うことが適切です．</p>
+                        </div>
+
+                        <h4>各モデルの指標を比較する</h4>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>モデル</th>
+                                    <th>変数の数</th>
+                                    <th>$R^2$</th>
+                                    <th>Adjusted $R^2$</th>
+                                    <th>AIC</th>
+                                    <th>F 統計量（p 値）</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>モデル 0</td>
+                                    <td>0</td>
+                                    <td>—</td>
+                                    <td>—</td>
+                                    <td>1096.073</td>
+                                    <td>—</td>
+                                </tr>
+                                <tr style="background:#e8ffe8;">
+                                    <td><strong>モデル 1</strong></td>
+                                    <td>4</td>
+                                    <td>0.6199</td>
+                                    <td><strong>0.6055</strong></td>
+                                    <td><strong>996.71</strong></td>
+                                    <td>43.21（$<2.2\times10^{-16}$）</td>
+                                </tr>
+                                <tr>
+                                    <td>モデル 2</td>
+                                    <td>5</td>
+                                    <td>0.6249</td>
+                                    <td>0.6071</td>
+                                    <td>997.22</td>
+                                    <td>34.99（$<2.2\times10^{-16}$）</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>各指標から何がわかるか</h4>
+
+                        <p><strong>決定係数 $R^2$</strong>：モデル 2 のほうが大きい（0.6249 &gt; 0.6199）．しかしこれは Day を追加した分だけ機械的に上がっており，当てはまりの「見かけ上の改善」にすぎない可能性があります．</p>
+
+                        <p><strong>AIC</strong>：モデル 1 のほうが小さい（996.71 &lt; 997.22）．AIC はパラメータ数のペナルティを考慮するため，Day の追加によって AIC が悪化していることは，Day が予測に寄与しないことを示唆します．</p>
+
+                        <p><strong>F 統計量</strong>：モデル 1 の F 値（43.21）はモデル 2（34.99）より大きく，モデル 1 のほうが全体的な有意性の観点からも優れています．</p>
+
+                        <div class="formula-block">
+                            <p>予測誤差の観点からは，AIC 最小の<strong>モデル 1</strong> を用いることが望ましい．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>まとめ</strong>：決定係数はモデル 2 が最も大きいが，予測誤差という観点からは AIC 最小のモデル 1 のほうが望ましい．観測データへの当てはまりが最良であることと，予測誤差最小化は必ずしも一致しないことを示している．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.3 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q163">
+                    <h2><i class="fas fa-pencil"></i> 問16.3 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>Aquatic Toxicity データは，322 個の化合物の毒性を調べたデータセットである．ここでは，"原子対記述子" とよばれる 468 次元の説明変数を用いて毒性を予測する．$i$ 番目の化合物の毒性を $y_i$ として，</p>
+                        $$y_i = \beta_0 + \sum_{k=1}^{468}\beta_k x_{i,k} + \varepsilon_i$$
+                        <p>なるモデルを考える．ここで，$x_{i,k}$ は $i$ 番目の化合物の各原子対記述子を表し，$\varepsilon_i$ は独立同一に正規分布 $N(0, \sigma^2)$ に従う誤差項である．このモデルの推定に，Elastic-Net 正則化を用いる．Elastic-Net 正則化による推定は $\lambda \geq 0$ と $0 \leq \alpha \leq 1$ を用いて</p>
+                        $$\hat{\boldsymbol{\beta}} = \arg\min_{\boldsymbol{\beta} \in \mathbb{R}^{469}} \left(\frac{1}{322}\sum_{i=1}^{322}\left(y_i - \beta_0 - \sum_{k=1}^{468}\beta_k x_{i,k}\right)^2 + \lambda\sum_{k=1}^{468}\left(\alpha|\beta_k| + \frac{1}{2}(1-\alpha)\beta_k^2\right)\right)$$
+                        <p>で与えられる．</p>
+                        <ol>
+                            <li>$\alpha = 0$ として，正則化パラメータ $\lambda$ を動かして平均二乗誤差 $\left(\frac{1}{322}\sum_{i=1}^{322}\left(y_i - \beta_0 - \sum_{k=1}^{468}\hat{\beta}_k x_{i,k}\right)^2\right)$ および交差検証法によるスコアを計算したところ，下図のようになった．この図は横軸に正則化パラメータ $\lambda$ の自然対数，縦軸に平均二乗誤差および交差検証スコアをプロットしている．このグラフから予測誤差の観点から望ましい正則化パラメータ $\lambda$ は $e^{-6},\, e^{-4},\, 1,\, e^6$ のうちどれか．</li>
+                            <li>$\lambda = 0$ もしくは，$\lambda = e^{-2}$ かつ $\alpha = 0,\, 0.5,\, 1$ なる設定で推定を行った．推定の結果得られた回帰係数を下図にプロットした．なお，$\lambda = 0$ のときは最小二乗解のなかでも最小ノルム解を用いた．図の (a), (b), (c), (d) はそれぞれ，$\lambda = 0$ および $\lambda = e^{-2}$ かつ $\alpha = 0,\, \alpha = 0.5,\, \alpha = 1$ のどれに対応するか答えよ．</li>
+                            <li>$\alpha = 0,\, 0.5,\, 1$ に対して，$\lambda$ を動かして推定された回帰係数の解パスと非ゼロ要素の数を下図にプロットした．このとき，図 (a), (b), (c) はそれぞれどの $\alpha$ に対応するか答えよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.3 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q163-1">
+                    <h2><i class="fas fa-pencil"></i> 問16.3 [1] — 予測誤差最小の正則化パラメータ $\lambda$</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 正則化パラメータと過学習・過正則化のトレードオフ</div>
+                            <p>$\alpha = 0$（Ridge 回帰）において，$\lambda$ を変えると：</p>
+                            <ul>
+                                <li>$\lambda \to 0$（正則化なし）：推定値が最小二乗解に近くなり，訓練データへの<strong>過学習</strong>が起きる → 残差（Residual）は小さいが，交差検証スコアは悪化</li>
+                                <li>$\lambda \to \infty$（強い正則化）：全ての係数が 0 に近づく → 予測が切片のみになり<strong>過正則化</strong> → 残差も交差検証スコアも悪化</li>
+                                <li><strong>最適な $\lambda$</strong>：交差検証スコアが最小になる点</li>
+                            </ul>
+                        </div>
+
+                        <h4>グラフの形状（問題の図 Residual および cv）から読み取る</h4>
+
+                        <!-- 簡易SVGグラフ (問題の図を概念的に再現) -->
+                        <div class="chart-container">
+                            <div class="chart-title">図：残差（Residual）と交差検証スコア（cv）の概念図（横軸：$\log\lambda$）</div>
+                            <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+                                <!-- Residual グラフ -->
+                                <svg width="240" height="180" viewBox="0 0 240 180" style="border:1px solid #ddd;border-radius:6px;background:#fff;">
+                                    <text x="120" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">Residual</text>
+                                    <!-- 軸 -->
+                                    <line x1="35" y1="155" x2="225" y2="155" stroke="#333" stroke-width="1.5"/>
+                                    <line x1="35" y1="25" x2="35" y2="155" stroke="#333" stroke-width="1.5"/>
+                                    <!-- 軸ラベル -->
+                                    <text x="130" y="172" text-anchor="middle" font-size="10" fill="#555">log λ</text>
+                                    <text x="15" y="95" text-anchor="middle" font-size="9" fill="#555" transform="rotate(-90,15,95)">mean squared error</text>
+                                    <!-- 目盛り -->
+                                    <text x="38" y="158" font-size="9" fill="#666">-6</text>
+                                    <text x="75" y="158" font-size="9" fill="#666">-4</text>
+                                    <text x="113" y="158" font-size="9" fill="#666">-2</text>
+                                    <text x="148" y="158" font-size="9" fill="#666">0</text>
+                                    <text x="185" y="158" font-size="9" fill="#666">2</text>
+                                    <!-- 単調増加の曲線（λが大きいほど残差が増加） -->
+                                    <path d="M 40,145 C 55,143 70,140 85,134 C 100,125 115,110 130,92 C 145,72 160,58 175,46 C 190,36 205,30 220,27"
+                                          fill="none" stroke="#4f8ef7" stroke-width="2.5"/>
+                                    <!-- y軸目盛り -->
+                                    <text x="26" y="147" font-size="9" fill="#666">0.4</text>
+                                    <text x="26" y="112" font-size="9" fill="#666">1.0</text>
+                                    <text x="26" y="75" font-size="9" fill="#666">1.4</text>
+                                    <text x="26" y="40" font-size="9" fill="#666">1.8</text>
+                                </svg>
+                                <!-- cv グラフ -->
+                                <svg width="240" height="180" viewBox="0 0 240 180" style="border:1px solid #ddd;border-radius:6px;background:#fff;">
+                                    <text x="120" y="18" text-anchor="middle" font-size="11" font-weight="bold" fill="#333">cv</text>
+                                    <!-- 軸 -->
+                                    <line x1="35" y1="155" x2="225" y2="155" stroke="#333" stroke-width="1.5"/>
+                                    <line x1="35" y1="25" x2="35" y2="155" stroke="#333" stroke-width="1.5"/>
+                                    <!-- 軸ラベル -->
+                                    <text x="130" y="172" text-anchor="middle" font-size="10" fill="#555">log λ</text>
+                                    <text x="15" y="95" text-anchor="middle" font-size="9" fill="#555" transform="rotate(-90,15,95)">cross validation score</text>
+                                    <!-- 目盛り -->
+                                    <text x="38" y="158" font-size="9" fill="#666">-6</text>
+                                    <text x="75" y="158" font-size="9" fill="#666">-4</text>
+                                    <text x="113" y="158" font-size="9" fill="#666">-2</text>
+                                    <text x="148" y="158" font-size="9" fill="#666">0</text>
+                                    <text x="185" y="158" font-size="9" fill="#666">2</text>
+                                    <!-- U字型の曲線（最小値は log λ = 0 付近） -->
+                                    <path d="M 40,50 C 55,45 70,38 85,34 C 100,31 113,30 128,32 C 143,35 158,43 173,60 C 188,80 205,110 220,140"
+                                          fill="none" stroke="#e74c3c" stroke-width="2.5"/>
+                                    <!-- 最小点マーカー -->
+                                    <circle cx="120" cy="30" r="4" fill="#e74c3c"/>
+                                    <line x1="120" y1="30" x2="120" y2="155" stroke="#e74c3c" stroke-width="1" stroke-dasharray="4,3"/>
+                                    <text x="122" y="145" font-size="9" fill="#e74c3c">λ=1</text>
+                                    <!-- y軸目盛り -->
+                                    <text x="26" y="50" font-size="9" fill="#666">1.6</text>
+                                    <text x="26" y="80" font-size="9" fill="#666">1.4</text>
+                                    <text x="26" y="110" font-size="9" fill="#666">1.2</text>
+                                    <text x="26" y="140" font-size="9" fill="#666">0.8</text>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <h4>グラフから読み取れること</h4>
+                        <ul>
+                            <li><strong>Residual（残差）グラフ</strong>：$\lambda$ が大きいほど（$\log\lambda$ が大きいほど）残差が単調に増加します．これは強い正則化が当てはまりを悪化させるためです．</li>
+                            <li><strong>cv（交差検証スコア）グラフ</strong>：$\log\lambda = 0$（すなわち $\lambda = 1$）付近で最小値を取る U 字型になっています．左側（$\lambda$ が小さすぎ）は過学習，右側（$\lambda$ が大きすぎ）は過正則化でそれぞれ予測精度が悪化します．</li>
+                        </ul>
+
+                        <p><strong>予測誤差（交差検証スコア）最小</strong>の $\lambda$ を選びます：</p>
+
+                        <div class="formula-block">
+                            <p>候補 $e^{-6},\, e^{-4},\, 1,\, e^6$ のなかで，交差検証スコアが最小となるのは $\log\lambda = 0$ すなわち $\boxed{\lambda = 1}$ である．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>直感的な説明</strong>：$\lambda = e^{-6}$ は正則化が弱く訓練データへの過学習が起きており，$\lambda = e^{-4}$ もまだ過学習気味です．$\lambda = 1$（$\log\lambda = 0$）が cv スコアの最小点であり，最も汎化性能が高い．$\lambda = e^6$ は強すぎる正則化で係数がほぼ 0 になり予測精度が大きく落ちます．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.3 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q163-2">
+                    <h2><i class="fas fa-pencil"></i> 問16.3 [2] — 図(a)(b)(c)(d) と $(\lambda, \alpha)$ の対応</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 各設定の特徴</div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>設定</th><th>$\lambda$</th><th>$\alpha$</th><th>正則化の種類</th><th>係数の特徴</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>$\lambda = 0$</td>
+                                        <td>0</td>
+                                        <td>—</td>
+                                        <td>なし（最小ノルム最小二乗）</td>
+                                        <td>係数のノルムが最大（大きくばらつく）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\lambda = e^{-2},\, \alpha = 0$</td>
+                                        <td>$e^{-2}$</td>
+                                        <td>0</td>
+                                        <td>Ridge（$L_2$ 正則化）</td>
+                                        <td>係数が一様に縮小，スパース性なし</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\lambda = e^{-2},\, \alpha = 0.5$</td>
+                                        <td>$e^{-2}$</td>
+                                        <td>0.5</td>
+                                        <td>Elastic-Net（中程度の $L_1$）</td>
+                                        <td>中程度のスパース性</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\lambda = e^{-2},\, \alpha = 1$</td>
+                                        <td>$e^{-2}$</td>
+                                        <td>1</td>
+                                        <td>Lasso（$L_1$ 正則化）</td>
+                                        <td>強いスパース性（多くの係数が正確に 0）</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 簡易散布図グラフ4枚 -->
+                        <div class="chart-container">
+                            <div class="chart-title">図：468次元の回帰係数プロット（横軸：変数番号，縦軸：推定値）の概念図</div>
+                            <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+                                <!-- (a) λ=e^{-2}, α=0 : Ridge, 係数ばらつき少なく0近く -->
+                                <div style="text-align:center;">
+                                    <div style="font-size:0.82em;font-weight:bold;margin-bottom:4px;">(a)</div>
+                                    <svg width="140" height="110" viewBox="0 0 140 110">
+                                        <rect width="140" height="110" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="70" y="12" text-anchor="middle" font-size="9" fill="#555">coefficients</text>
+                                        <line x1="15" y1="95" x2="130" y2="95" stroke="#999" stroke-width="1"/>
+                                        <line x1="15" y1="20" x2="15" y2="95" stroke="#999" stroke-width="1"/>
+                                        <!-- 0線 -->
+                                        <line x1="15" y1="57" x2="130" y2="57" stroke="#ddd" stroke-width="1" stroke-dasharray="3,2"/>
+                                        <!-- 係数は概ね0〜1の間，ばらつき小さい，一部外れ点 -->
+                                        <text x="70" y="105" text-anchor="middle" font-size="8" fill="#666">variable</text>
+                                        <text x="8" y="95" font-size="7" fill="#666">0</text>
+                                        <text x="8" y="40" font-size="7" fill="#666">1</text>
+                                        <text x="8" y="80" font-size="7" fill="#666">-1</text>
+                                        <!-- 散布点: Ridge, 0に近く縮小, 大きなばらつきはない -->
+                                        <g fill="#4f8ef7" opacity="0.7">
+                                            <circle cx="22" cy="52" r="2"/><circle cx="26" cy="55" r="2"/>
+                                            <circle cx="30" cy="58" r="2"/><circle cx="35" cy="53" r="2"/>
+                                            <circle cx="40" cy="60" r="2"/><circle cx="44" cy="54" r="2"/>
+                                            <circle cx="48" cy="50" r="2"/><circle cx="52" cy="56" r="2"/>
+                                            <circle cx="56" cy="62" r="2"/><circle cx="60" cy="48" r="2"/>
+                                            <circle cx="65" cy="55" r="2"/><circle cx="70" cy="58" r="2"/>
+                                            <circle cx="74" cy="52" r="2"/><circle cx="78" cy="60" r="2"/>
+                                            <circle cx="83" cy="54" r="2"/><circle cx="87" cy="49" r="2"/>
+                                            <circle cx="92" cy="57" r="2"/><circle cx="96" cy="53" r="2"/>
+                                            <circle cx="100" cy="61" r="2"/><circle cx="105" cy="47" r="2"/>
+                                            <circle cx="110" cy="56" r="2"/><circle cx="115" cy="54" r="2"/>
+                                            <circle cx="119" cy="59" r="2"/><circle cx="124" cy="51" r="2"/>
+                                            <!-- 少し大きい係数 -->
+                                            <circle cx="42" cy="38" r="2.5"/><circle cx="88" cy="72" r="2.5"/>
+                                        </g>
+                                        <text x="70" y="24" text-anchor="middle" font-size="7.5" fill="#4f8ef7">Ridge (α=0)</text>
+                                    </svg>
+                                </div>
+                                <!-- (b) λ=0: 最小ノルム, 大きくばらつく -->
+                                <div style="text-align:center;">
+                                    <div style="font-size:0.82em;font-weight:bold;margin-bottom:4px;">(b)</div>
+                                    <svg width="140" height="110" viewBox="0 0 140 110">
+                                        <rect width="140" height="110" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="70" y="12" text-anchor="middle" font-size="9" fill="#555">coefficients</text>
+                                        <line x1="15" y1="95" x2="130" y2="95" stroke="#999" stroke-width="1"/>
+                                        <line x1="15" y1="20" x2="15" y2="95" stroke="#999" stroke-width="1"/>
+                                        <line x1="15" y1="57" x2="130" y2="57" stroke="#ddd" stroke-width="1" stroke-dasharray="3,2"/>
+                                        <text x="70" y="105" text-anchor="middle" font-size="8" fill="#666">variable</text>
+                                        <text x="8" y="95" font-size="7" fill="#666">-1</text>
+                                        <text x="8" y="57" font-size="7" fill="#666">0</text>
+                                        <text x="8" y="25" font-size="7" fill="#666">3</text>
+                                        <!-- λ=0 最小ノルム: 大きくばらつく（ノルム大） -->
+                                        <g fill="#e74c3c" opacity="0.7">
+                                            <circle cx="22" cy="45" r="2"/><circle cx="26" cy="70" r="2"/>
+                                            <circle cx="30" cy="35" r="2"/><circle cx="35" cy="75" r="2"/>
+                                            <circle cx="40" cy="42" r="2"/><circle cx="44" cy="68" r="2"/>
+                                            <circle cx="48" cy="30" r="2"/><circle cx="52" cy="80" r="2"/>
+                                            <circle cx="56" cy="47" r="2"/><circle cx="60" cy="28" r="2"/>
+                                            <circle cx="65" cy="73" r="2"/><circle cx="70" cy="38" r="2"/>
+                                            <circle cx="74" cy="82" r="2"/><circle cx="78" cy="44" r="2"/>
+                                            <circle cx="83" cy="25" r="2"/><circle cx="87" cy="76" r="2"/>
+                                            <circle cx="92" cy="50" r="2"/><circle cx="96" cy="33" r="2"/>
+                                            <circle cx="100" cy="85" r="2"/><circle cx="105" cy="40" r="2"/>
+                                            <circle cx="110" cy="66" r="2"/><circle cx="115" cy="27" r="2"/>
+                                            <circle cx="119" cy="78" r="2"/><circle cx="124" cy="55" r="2"/>
+                                        </g>
+                                        <text x="70" y="24" text-anchor="middle" font-size="7.5" fill="#e74c3c">λ=0 (min norm)</text>
+                                    </svg>
+                                </div>
+                                <!-- (c) λ=e^{-2}, α=1 : Lasso, 多くが0 -->
+                                <div style="text-align:center;">
+                                    <div style="font-size:0.82em;font-weight:bold;margin-bottom:4px;">(c)</div>
+                                    <svg width="140" height="110" viewBox="0 0 140 110">
+                                        <rect width="140" height="110" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="70" y="12" text-anchor="middle" font-size="9" fill="#555">coefficients</text>
+                                        <line x1="15" y1="95" x2="130" y2="95" stroke="#999" stroke-width="1"/>
+                                        <line x1="15" y1="20" x2="15" y2="95" stroke="#999" stroke-width="1"/>
+                                        <line x1="15" y1="57" x2="130" y2="57" stroke="#ddd" stroke-width="1" stroke-dasharray="3,2"/>
+                                        <text x="70" y="105" text-anchor="middle" font-size="8" fill="#666">variable</text>
+                                        <text x="8" y="57" font-size="7" fill="#666">0</text>
+                                        <text x="8" y="32" font-size="7" fill="#666">1</text>
+                                        <text x="8" y="80" font-size="7" fill="#666">-1</text>
+                                        <!-- Lasso: ほとんど0, 少数だけ非ゼロ -->
+                                        <g fill="#27ae60" opacity="0.8">
+                                            <!-- 0の点 (y=57) を多数 -->
+                                            <circle cx="22" cy="57" r="1.5"/><circle cx="26" cy="57" r="1.5"/>
+                                            <circle cx="30" cy="57" r="1.5"/><circle cx="35" cy="57" r="1.5"/>
+                                            <circle cx="40" cy="57" r="1.5"/><circle cx="44" cy="57" r="1.5"/>
+                                            <circle cx="48" cy="57" r="1.5"/><circle cx="52" cy="57" r="1.5"/>
+                                            <circle cx="56" cy="57" r="1.5"/><circle cx="60" cy="57" r="1.5"/>
+                                            <circle cx="65" cy="57" r="1.5"/><circle cx="70" cy="57" r="1.5"/>
+                                            <circle cx="74" cy="57" r="1.5"/><circle cx="78" cy="57" r="1.5"/>
+                                            <circle cx="83" cy="57" r="1.5"/><circle cx="87" cy="57" r="1.5"/>
+                                            <circle cx="92" cy="57" r="1.5"/><circle cx="96" cy="57" r="1.5"/>
+                                            <circle cx="100" cy="57" r="1.5"/><circle cx="105" cy="57" r="1.5"/>
+                                            <circle cx="110" cy="57" r="1.5"/><circle cx="115" cy="57" r="1.5"/>
+                                            <circle cx="119" cy="57" r="1.5"/><circle cx="124" cy="57" r="1.5"/>
+                                            <!-- 少数だけ非ゼロ -->
+                                            <circle cx="38" cy="35" r="3"/><circle cx="72" cy="74" r="3"/>
+                                            <circle cx="95" cy="32" r="3"/>
+                                        </g>
+                                        <text x="70" y="24" text-anchor="middle" font-size="7.5" fill="#27ae60">Lasso (α=1)</text>
+                                    </svg>
+                                </div>
+                                <!-- (d) λ=e^{-2}, α=0.5 : Elastic-Net -->
+                                <div style="text-align:center;">
+                                    <div style="font-size:0.82em;font-weight:bold;margin-bottom:4px;">(d)</div>
+                                    <svg width="140" height="110" viewBox="0 0 140 110">
+                                        <rect width="140" height="110" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="70" y="12" text-anchor="middle" font-size="9" fill="#555">coefficients</text>
+                                        <line x1="15" y1="95" x2="130" y2="95" stroke="#999" stroke-width="1"/>
+                                        <line x1="15" y1="20" x2="15" y2="95" stroke="#999" stroke-width="1"/>
+                                        <line x1="15" y1="57" x2="130" y2="57" stroke="#ddd" stroke-width="1" stroke-dasharray="3,2"/>
+                                        <text x="70" y="105" text-anchor="middle" font-size="8" fill="#666">variable</text>
+                                        <text x="8" y="57" font-size="7" fill="#666">0</text>
+                                        <text x="8" y="35" font-size="7" fill="#666">1</text>
+                                        <text x="8" y="78" font-size="7" fill="#666">-1</text>
+                                        <!-- Elastic-Net: RidgeとLassoの中間 -->
+                                        <g fill="#9b59b6" opacity="0.7">
+                                            <circle cx="22" cy="57" r="1.5"/><circle cx="26" cy="57" r="1.5"/>
+                                            <circle cx="30" cy="53" r="1.5"/><circle cx="35" cy="57" r="1.5"/>
+                                            <circle cx="40" cy="61" r="1.5"/><circle cx="44" cy="57" r="1.5"/>
+                                            <circle cx="48" cy="57" r="1.5"/><circle cx="52" cy="54" r="1.5"/>
+                                            <circle cx="56" cy="57" r="1.5"/><circle cx="60" cy="57" r="1.5"/>
+                                            <circle cx="65" cy="60" r="1.5"/><circle cx="70" cy="57" r="1.5"/>
+                                            <circle cx="74" cy="57" r="1.5"/><circle cx="78" cy="53" r="1.5"/>
+                                            <circle cx="83" cy="57" r="1.5"/><circle cx="87" cy="57" r="1.5"/>
+                                            <circle cx="92" cy="61" r="1.5"/><circle cx="96" cy="57" r="1.5"/>
+                                            <circle cx="100" cy="57" r="1.5"/><circle cx="105" cy="57" r="1.5"/>
+                                            <circle cx="110" cy="54" r="1.5"/><circle cx="115" cy="57" r="1.5"/>
+                                            <circle cx="119" cy="57" r="1.5"/><circle cx="124" cy="60" r="1.5"/>
+                                            <!-- 中程度の非ゼロ係数 -->
+                                            <circle cx="38" cy="42" r="2.5"/><circle cx="72" cy="70" r="2.5"/>
+                                            <circle cx="95" cy="40" r="2.5"/><circle cx="55" cy="75" r="2"/>
+                                            <circle cx="112" cy="44" r="2"/>
+                                        </g>
+                                        <text x="70" y="24" text-anchor="middle" font-size="7.5" fill="#9b59b6">Elastic-Net (α=0.5)</text>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>スパース性と $\lambda, \alpha$ の関係</h4>
+                        <p>係数のばらつき具合（スパース性）で図を識別します：</p>
+
+                        <ul>
+                            <li><strong>$\lambda = 0$（最小ノルム最小二乗）</strong>：正則化なし．468 次元で 322 サンプルしかないため，最小二乗解は無数にある．そのなかで最小ノルム解は全係数が大きくばらつきます．これが最も係数のばらつきが大きい図 → <strong>(b)</strong></li>
+                            <li><strong>$\lambda = e^{-2},\, \alpha = 0$（Ridge）</strong>：$L_2$ 正則化のみ．係数は 0 に向けて縮小されますが，完全に 0 にはなりません（スパース性なし）．全体的にばらつきは小さく，0 に近いが非ゼロの点が均一に分布 → <strong>(a)</strong></li>
+                            <li><strong>$\lambda = e^{-2},\, \alpha = 0.5$（Elastic-Net）</strong>：$L_1$ と $L_2$ の混合．中程度のスパース性（Ridge より多くの係数が 0 に，Lasso より少ない非ゼロ係数が残る）→ <strong>(d)</strong></li>
+                            <li><strong>$\lambda = e^{-2},\, \alpha = 1$（Lasso）</strong>：$L_1$ 正則化のみ．強いスパース性（多くの係数が正確に 0，少数の係数だけが非ゼロ）→ <strong>(c)</strong></li>
+                        </ul>
+
+                        <div class="formula-block">
+                            $$\boxed{(a) = \lambda=e^{-2},\,\alpha=0 \quad (b) = \lambda=0 \quad (c) = \lambda=e^{-2},\,\alpha=1 \quad (d) = \lambda=e^{-2},\,\alpha=0.5}$$
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>判断のポイント</strong>：<br>
+                                「(b) が最もノルムが大きくばらついている → $\lambda=0$ が対応」：$\lambda=0$ は最小二乗解でノルムが最大になります．<br>
+                                「スパース性の弱い順：$\lambda=0$（すべて非ゼロ）&gt; $\alpha=0$ &gt; $\alpha=0.5$ &gt; $\alpha=1$（最もスパース）」の順に並べて，図の点の散らばり具合と対応させます．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問16.3 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q163-3">
+                    <h2><i class="fas fa-pencil"></i> 問16.3 [3] — 解パス図(a)(b)(c) と $\alpha$ の対応</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 解パス（coefficient path）とは</div>
+                            <p>$\lambda$ を変えたときに，各回帰係数 $\hat{\beta}_k$ がどのように変化するかを示したグラフです．横軸は $\log\lambda$，縦軸は各係数の値，468 本の折れ線が描かれます．</p>
+                            <p>また，非ゼロ要素数（# of nonzeros）は，$\lambda$ の関数として推定された非ゼロ係数の個数です．</p>
+                            <ul>
+                                <li>$\alpha = 0$（Ridge）：係数は 0 に向けて縮小されるが，完全に 0 にはならない → <strong>非ゼロ要素数は常に 468（変化しない）</strong></li>
+                                <li>$\alpha = 1$（Lasso）：$L_1$ 正則化の効果で係数が順次 0 になる → <strong>非ゼロ要素数が $\lambda$ とともに急速に減少</strong></li>
+                                <li>$\alpha = 0.5$（Elastic-Net）：中間的な挙動 → <strong>非ゼロ要素数は Lasso と Ridge の中間的に減少</strong></li>
+                            </ul>
+                        </div>
+
+                        <!-- 解パス簡易グラフ3枚 -->
+                        <div class="chart-container">
+                            <div class="chart-title">図：解パスと非ゼロ要素数（概念図）</div>
+                            <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+
+                                <!-- (a) α=0 Ridge: 非ゼロ一定 -->
+                                <div style="text-align:center;">
+                                    <div style="font-size:0.82em;font-weight:bold;margin-bottom:2px;">(a)</div>
+                                    <svg width="150" height="120" viewBox="0 0 150 120">
+                                        <rect width="150" height="120" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="75" y="12" text-anchor="middle" font-size="9" fill="#333">Coefficients</text>
+                                        <line x1="20" y1="100" x2="140" y2="100" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="18" x2="20" y2="100" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="60" x2="140" y2="60" stroke="#eee" stroke-width="1" stroke-dasharray="3,2"/>
+                                        <!-- 多数の係数が一斉に0に収束 (Ridge) -->
+                                        <path d="M 25,22 C 40,28 60,38 80,50 C 100,62 120,72 140,78" fill="none" stroke="#4f8ef7" stroke-width="1.2" opacity="0.8"/>
+                                        <path d="M 25,78 C 40,72 60,62 80,58 C 100,55 120,53 140,52" fill="none" stroke="#e74c3c" stroke-width="1.2" opacity="0.8"/>
+                                        <path d="M 25,30 C 40,36 60,44 80,55 C 100,64 120,68 140,70" fill="none" stroke="#27ae60" stroke-width="1.2" opacity="0.8"/>
+                                        <path d="M 25,88 C 40,82 60,74 80,65 C 100,57 120,54 140,53" fill="none" stroke="#9b59b6" stroke-width="1.2" opacity="0.8"/>
+                                        <path d="M 25,60 C 60,60 100,60 140,60" fill="none" stroke="#f39c12" stroke-width="1.2" opacity="0.8"/>
+                                        <!-- 軸ラベル -->
+                                        <text x="80" y="112" text-anchor="middle" font-size="8" fill="#666">log λ</text>
+                                        <text x="25" y="108" font-size="7" fill="#666">2</text>
+                                        <text x="83" y="108" font-size="7" fill="#666">4</text>
+                                        <text x="130" y="108" font-size="7" fill="#666">6</text>
+                                    </svg>
+                                    <!-- 非ゼロ数グラフ: 一定 -->
+                                    <svg width="150" height="90" viewBox="0 0 150 90">
+                                        <rect width="150" height="90" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="75" y="12" text-anchor="middle" font-size="9" fill="#333"># of nonzeros</text>
+                                        <line x1="20" y1="75" x2="140" y2="75" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="18" x2="20" y2="75" stroke="#999" stroke-width="1"/>
+                                        <!-- Ridge: 非ゼロ数は常に468 (横線) -->
+                                        <path d="M 20,22 L 140,22" fill="none" stroke="#4f8ef7" stroke-width="2"/>
+                                        <text x="80" y="85" text-anchor="middle" font-size="8" fill="#666">log λ</text>
+                                        <text x="8" y="25" font-size="7" fill="#666">468</text>
+                                        <text x="8" y="50" font-size="7" fill="#666">300</text>
+                                        <text x="8" y="75" font-size="7" fill="#666">0</text>
+                                    </svg>
+                                    <div style="font-size:0.78em;color:#4f8ef7;font-weight:bold;">$\alpha = 0$（Ridge）</div>
+                                </div>
+
+                                <!-- (b) α=1 Lasso: 非ゼロ急速減少 -->
+                                <div style="text-align:center;">
+                                    <div style="font-size:0.82em;font-weight:bold;margin-bottom:2px;">(b)</div>
+                                    <svg width="150" height="120" viewBox="0 0 150 120">
+                                        <rect width="150" height="120" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="75" y="12" text-anchor="middle" font-size="9" fill="#333">Coefficients</text>
+                                        <line x1="20" y1="100" x2="140" y2="100" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="18" x2="20" y2="100" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="60" x2="140" y2="60" stroke="#eee" stroke-width="1" stroke-dasharray="3,2"/>
+                                        <!-- Lasso: 係数が-5付近から急速に0へ -->
+                                        <path d="M 20,30 C 30,34 45,42 65,52 C 80,60 90,60 140,60" fill="none" stroke="#4f8ef7" stroke-width="1.5" opacity="0.9"/>
+                                        <path d="M 20,85 C 30,80 45,73 65,63 C 80,60 90,60 140,60" fill="none" stroke="#e74c3c" stroke-width="1.5" opacity="0.9"/>
+                                        <path d="M 20,22 C 32,28 50,38 70,52 C 85,60 95,60 140,60" fill="none" stroke="#27ae60" stroke-width="1.5" opacity="0.9"/>
+                                        <path d="M 20,90 C 32,85 50,75 72,63 C 88,60 98,60 140,60" fill="none" stroke="#9b59b6" stroke-width="1.5" opacity="0.9"/>
+                                        <text x="80" y="112" text-anchor="middle" font-size="8" fill="#666">log λ</text>
+                                        <text x="21" y="108" font-size="7" fill="#666">-5</text>
+                                        <text x="68" y="108" font-size="7" fill="#666">-3</text>
+                                        <text x="115" y="108" font-size="7" fill="#666">-1</text>
+                                    </svg>
+                                    <svg width="150" height="90" viewBox="0 0 150 90">
+                                        <rect width="150" height="90" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="75" y="12" text-anchor="middle" font-size="9" fill="#333"># of nonzeros</text>
+                                        <line x1="20" y1="75" x2="140" y2="75" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="18" x2="20" y2="75" stroke="#999" stroke-width="1"/>
+                                        <!-- Lasso: 急速に減少 -->
+                                        <path d="M 20,22 C 40,24 60,32 80,50 C 100,65 120,73 140,75" fill="none" stroke="#e74c3c" stroke-width="2"/>
+                                        <text x="80" y="85" text-anchor="middle" font-size="8" fill="#666">log λ</text>
+                                        <text x="8" y="25" font-size="7" fill="#666">150</text>
+                                        <text x="8" y="50" font-size="7" fill="#666">75</text>
+                                        <text x="8" y="75" font-size="7" fill="#666">0</text>
+                                    </svg>
+                                    <div style="font-size:0.78em;color:#e74c3c;font-weight:bold;">$\alpha = 1$（Lasso）</div>
+                                </div>
+
+                                <!-- (c) α=0.5 Elastic-Net: 中間 -->
+                                <div style="text-align:center;">
+                                    <div style="font-size:0.82em;font-weight:bold;margin-bottom:2px;">(c)</div>
+                                    <svg width="150" height="120" viewBox="0 0 150 120">
+                                        <rect width="150" height="120" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="75" y="12" text-anchor="middle" font-size="9" fill="#333">Coefficients</text>
+                                        <line x1="20" y1="100" x2="140" y2="100" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="18" x2="20" y2="100" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="60" x2="140" y2="60" stroke="#eee" stroke-width="1" stroke-dasharray="3,2"/>
+                                        <!-- Elastic-Net: LassoとRidgeの中間 -->
+                                        <path d="M 20,28 C 35,34 55,44 78,55 C 100,62 120,61 140,60" fill="none" stroke="#4f8ef7" stroke-width="1.5" opacity="0.9"/>
+                                        <path d="M 20,88 C 35,82 55,72 78,63 C 100,59 120,59 140,60" fill="none" stroke="#e74c3c" stroke-width="1.5" opacity="0.9"/>
+                                        <path d="M 20,20 C 36,27 58,38 82,52 C 105,62 124,61 140,60" fill="none" stroke="#27ae60" stroke-width="1.5" opacity="0.9"/>
+                                        <path d="M 20,92 C 36,86 58,76 84,65 C 107,60 126,60 140,60" fill="none" stroke="#9b59b6" stroke-width="1.5" opacity="0.9"/>
+                                        <text x="80" y="112" text-anchor="middle" font-size="8" fill="#666">log λ</text>
+                                        <text x="21" y="108" font-size="7" fill="#666">-5</text>
+                                        <text x="68" y="108" font-size="7" fill="#666">-3</text>
+                                        <text x="115" y="108" font-size="7" fill="#666">-1</text>
+                                    </svg>
+                                    <svg width="150" height="90" viewBox="0 0 150 90">
+                                        <rect width="150" height="90" fill="#fff" stroke="#ccc" rx="4"/>
+                                        <text x="75" y="12" text-anchor="middle" font-size="9" fill="#333"># of nonzeros</text>
+                                        <line x1="20" y1="75" x2="140" y2="75" stroke="#999" stroke-width="1"/>
+                                        <line x1="20" y1="18" x2="20" y2="75" stroke="#999" stroke-width="1"/>
+                                        <!-- Elastic-Net: 中間的に減少 -->
+                                        <path d="M 20,22 C 45,24 70,28 95,40 C 115,52 130,65 140,75" fill="none" stroke="#9b59b6" stroke-width="2"/>
+                                        <text x="80" y="85" text-anchor="middle" font-size="8" fill="#666">log λ</text>
+                                        <text x="8" y="25" font-size="7" fill="#666">250</text>
+                                        <text x="8" y="50" font-size="7" fill="#666">125</text>
+                                        <text x="8" y="75" font-size="7" fill="#666">0</text>
+                                    </svg>
+                                    <div style="font-size:0.78em;color:#9b59b6;font-weight:bold;">$\alpha = 0.5$（Elastic-Net）</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4>スパース性から判断する</h4>
+                        <p>問題の図（a）はまったくスパースになっていない（非ゼロ要素数が $\lambda$ によらず一定）．図（b）と（c）はともに $\lambda$ が大きくなるにつれて非ゼロ要素数が減っているが，（b）のほうがより小さな $\lambda$ で非ゼロ要素数が小さくなっている（より強い $L_1$ 正則化効果）．</p>
+
+                        <ul>
+                            <li><strong>図 (a)</strong>：まったくスパースにならない → $\alpha = 0$（Ridge）</li>
+                            <li><strong>図 (b)</strong>：より小さい $\lambda$ で非ゼロ数が減る → $L_1$ 正則化の効果が強い → $\alpha = 1$（Lasso）</li>
+                            <li><strong>図 (c)</strong>：(b) よりも大きい $\lambda$ まで非ゼロ数が多く残る → $L_1$ 効果が弱い → $\alpha = 0.5$（Elastic-Net）</li>
+                        </ul>
+
+                        <div class="formula-block">
+                            $$\boxed{\text{図}(a) \leftrightarrow \alpha = 0, \quad \text{図}(b) \leftrightarrow \alpha = 1, \quad \text{図}(c) \leftrightarrow \alpha = 0.5}$$
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 問16.3 まとめ</div>
+                            <table class="data-table">
+                                <thead>
+                                    <tr><th>設問</th><th>答え</th><th>根拠</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>[1] 最適 $\lambda$</td>
+                                        <td>$\lambda = 1$（$\log\lambda = 0$）</td>
+                                        <td>交差検証スコア（cv）が最小</td>
+                                    </tr>
+                                    <tr style="background:#f8f9fa;">
+                                        <td>[2] 図(a)</td>
+                                        <td>$\lambda=e^{-2},\, \alpha=0$（Ridge）</td>
+                                        <td>スパース性なし，係数が小さくばらつく</td>
+                                    </tr>
+                                    <tr>
+                                        <td>[2] 図(b)</td>
+                                        <td>$\lambda=0$（最小ノルム最小二乗）</td>
+                                        <td>係数のノルムが最大，大きくばらつく</td>
+                                    </tr>
+                                    <tr style="background:#f8f9fa;">
+                                        <td>[2] 図(c)</td>
+                                        <td>$\lambda=e^{-2},\, \alpha=1$（Lasso）</td>
+                                        <td>強いスパース性，多くが 0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>[2] 図(d)</td>
+                                        <td>$\lambda=e^{-2},\, \alpha=0.5$（Elastic-Net）</td>
+                                        <td>中程度のスパース性</td>
+                                    </tr>
+                                    <tr style="background:#f8f9fa;">
+                                        <td>[3] 図(a)</td>
+                                        <td>$\alpha = 0$（Ridge）</td>
+                                        <td>非ゼロ数が $\lambda$ によらず一定</td>
+                                    </tr>
+                                    <tr>
+                                        <td>[3] 図(b)</td>
+                                        <td>$\alpha = 1$（Lasso）</td>
+                                        <td>より小さい $\lambda$ で非ゼロ数が急減</td>
+                                    </tr>
+                                    <tr style="background:#f8f9fa;">
+                                        <td>[3] 図(c)</td>
+                                        <td>$\alpha = 0.5$（Elastic-Net）</td>
+                                        <td>Lasso と Ridge の中間的に減少</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
