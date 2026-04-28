@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第14章 章末問題解説 - マルコフ連鎖</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第14章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 14 — 章末問題解説</span>
+            <h1>マルコフ連鎖<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter14.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第14章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q141-1">問14.1 [1] 推移確率行列</a></li>
+                            <li><a href="#q141-2">問14.1 [2] 定常分布（極限状態確率）</a></li>
+                            <li><a href="#q142-1">問14.2 [1] 推移確率行列</a></li>
+                            <li><a href="#q142-2">問14.2 [2] 2ステップ後の状態確率</a></li>
+                            <li><a href="#q142-3">問14.2 [3] 定常分布</a></li>
+                            <li><a href="#q143-1">問14.3 [1] 傘の問題：状態空間・推移確率行列</a></li>
+                            <li><a href="#q143-2">問14.3 [2] θの最尤推定値</a></li>
+                            <li><a href="#q143-3">問14.3 [3] 出発時に傘がない確率</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問14.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section" style="background:#f8f9fa;border-left:4px solid var(--primary,#4f8ef7);padding:1.2em 1.5em;margin-bottom:2em;border-radius:0 8px 8px 0;">
+                    <h2 style="margin-top:0;"><i class="fas fa-book"></i> 問14.1 — 問題文</h2>
+                    <p>サイコロの出目によって2つのマス（マス目1と2）を移動する駒を考える．駒が<strong>マス1</strong>にあるとき，サイコロを投げ6の目が出たらその場に留まり，それ以外の目（1〜5）が出た場合はマス2に移る．<strong>マス2</strong>にあるとき，偶数の目（2,4,6）が出たらその場に留まり，奇数の目（1,3,5）が出たらマス1に移る．時点 $n = 0, 1, \ldots$ における駒の位置を $X_n$，初期状態を $X_0 = 1$ として以下に答えよ．</p>
+                    <ol>
+                        <li>マルコフ連鎖 $X = (X_n)_{n=0,1,\ldots}$ の推移確率行列を求めよ．</li>
+                        <li>時点 $n$ における状態確率ベクトルを $\boldsymbol{\pi}_n$ とするとき，$\displaystyle\lim_{n\to\infty}\boldsymbol{\pi}_n$ を求めよ．</li>
+                    </ol>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.1 [1]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q141-1">
+                    <h2><i class="fas fa-pencil"></i> 問14.1 [1] — 推移確率行列</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> マルコフ連鎖と推移確率行列</div>
+                            <p>推移確率 $q_{ij}$ は「現在状態 $i$ にいるとき，次のステップで状態 $j$ に移る確率」です．</p>
+                            <p>推移確率行列 $Q = (q_{ij})$ の各行は確率を表すため，行の和は必ず1になります：</p>
+                            <div class="formula-block">
+                                $$\sum_j q_{ij} = 1 \quad \text{（各行の和 = 1）}$$
+                            </div>
+                        </div>
+
+                        <h4>各状態からの移動確率を整理する</h4>
+
+                        <p><strong>マス1にいるとき</strong>（状態1 → 状態?）：</p>
+                        <ul>
+                            <li>6が出る：確率 $\dfrac{1}{6}$ → <strong>マス1に留まる</strong>（$q_{11} = \dfrac{1}{6}$）</li>
+                            <li>1〜5が出る：確率 $\dfrac{5}{6}$ → <strong>マス2へ移る</strong>（$q_{12} = \dfrac{5}{6}$）</li>
+                        </ul>
+
+                        <p><strong>マス2にいるとき</strong>（状態2 → 状態?）：</p>
+                        <ul>
+                            <li>偶数（2,4,6）が出る：確率 $\dfrac{3}{6} = \dfrac{1}{2}$ → <strong>マス2に留まる</strong>（$q_{22} = \dfrac{1}{2}$）</li>
+                            <li>奇数（1,3,5）が出る：確率 $\dfrac{3}{6} = \dfrac{1}{2}$ → <strong>マス1へ移る</strong>（$q_{21} = \dfrac{1}{2}$）</li>
+                        </ul>
+
+                        <h4>状態確率ベクトルの更新式を確認する</h4>
+                        <p>時点 $n$ の状態確率ベクトルを $\boldsymbol{\pi}_n = (p_n, q_n)$（マス1にいる確率 $p_n$，マス2にいる確率 $q_n$）とすると：</p>
+                        $$p_n = \frac{1}{6} p_{n-1} + \frac{1}{2} q_{n-1}, \qquad q_n = \frac{5}{6} p_{n-1} + \frac{1}{2} q_{n-1}$$
+                        <p>行列で表すと $\boldsymbol{\pi}_n = \boldsymbol{\pi}_{n-1} Q$（行ベクトル × 行列），つまり</p>
+                        <div class="formula-block">
+                            $$\boxed{Q = \begin{pmatrix} 1/6 & 5/6 \\ 1/2 & 1/2 \end{pmatrix}}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>行の意味の確認</strong>：第1行は「マス1から見た移動先の確率」→ $(1/6, 5/6)$，和 $= 1$ ✓<br>
+                                第2行は「マス2から見た移動先の確率」→ $(1/2, 1/2)$，和 $= 1$ ✓
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.1 [2]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q141-2">
+                    <h2><i class="fas fa-pencil"></i> 問14.1 [2] — 定常分布（極限状態確率）</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 定常分布とは</div>
+                            <p>十分多くステップを繰り返すと，状態確率ベクトル $\boldsymbol{\pi}_n$ は特定の確率ベクトル $\boldsymbol{\pi} = (\pi_1, \pi_2)$ に収束します．これを<strong>定常分布</strong>といい，以下の方程式を満たします：</p>
+                            <div class="formula-block">
+                                $$\boldsymbol{\pi} = \boldsymbol{\pi} Q, \qquad \pi_1 + \pi_2 = 1$$
+                            </div>
+                            <p>これは $\boldsymbol{\pi}(Q - I) = \boldsymbol{0}$ と同値で，$\det(Q - I) = 0$ が成り立つとき0でない解が存在します．</p>
+                        </div>
+
+                        <h4>方程式を立てる</h4>
+                        <p>$\boldsymbol{\pi} = (\pi_1, \pi_2)$ とおくと，$\boldsymbol{\pi} Q = \boldsymbol{\pi}$ は：</p>
+                        $$\pi_1 = \frac{1}{6}\pi_1 + \frac{1}{2}\pi_2 \quad \cdots (1)$$
+                        $$\pi_2 = \frac{5}{6}\pi_1 + \frac{1}{2}\pi_2 \quad \cdots (2)$$
+                        $$\pi_1 + \pi_2 = 1 \quad \cdots (3)$$
+
+                        <h4>方程式を解く</h4>
+                        <p>式 (1) を整理します：</p>
+                        $$\pi_1 - \frac{1}{6}\pi_1 = \frac{1}{2}\pi_2 \quad \Rightarrow \quad \frac{5}{6}\pi_1 = \frac{1}{2}\pi_2 \quad \Rightarrow \quad \pi_2 = \frac{5}{3}\pi_1$$
+                        <p>式 (3) に代入：</p>
+                        $$\pi_1 + \frac{5}{3}\pi_1 = 1 \quad \Rightarrow \quad \frac{8}{3}\pi_1 = 1 \quad \Rightarrow \quad \pi_1 = \frac{3}{8}$$
+                        $$\pi_2 = 1 - \frac{3}{8} = \frac{5}{8}$$
+
+                        <div class="formula-block">
+                            $$\boxed{\lim_{n\to\infty}\boldsymbol{\pi}_n = \boldsymbol{\pi} = \left(\frac{3}{8},\ \frac{5}{8}\right)}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>直感的な確認</strong>：マス1では $5/6$ の確率でマス2へ出ていき，マス2では $1/2$ の確率でマス1へ戻ってきます。マス1からの「流出」≒ マス2からの「流入」がバランスする点が定常分布です。 $\pi_1 \cdot (5/6) = \pi_2 \cdot (1/2)$ → $(3/8)(5/6) = (5/8)(1/2) = 5/16$ ✓
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section" style="background:#f8f9fa;border-left:4px solid var(--primary,#4f8ef7);padding:1.2em 1.5em;margin-bottom:2em;border-radius:0 8px 8px 0;">
+                    <h2 style="margin-top:0;"><i class="fas fa-book"></i> 問14.2 — 問題文</h2>
+                    <p>状態空間 $S = \{1, 2, 3\}$ とするマルコフ連鎖 $X = (X_n)_{n=0,1,2,\ldots}$ を次のように定める．中身の見えない箱の中に3枚のカードがあり，それぞれ $a_1, a_2, a_3$ の数字が1つずつ書かれている．ただし $a_1 < a_2 < a_3$ とする．$X$ が状態 $i$ にあるときにカードを1枚ランダムに取り出し，取り出したカードが $a_i$ であれば状態 $i$ にとどまる．カードが $a_j$（$j \neq i$）であったときは，確率 $c_{ij} = \min\{j/i,\ 1\}$ で状態 $j$ に推移し，確率 $1 - c_{ij}$ で $i$ にとどまる．カードは引くたびに箱の中へ戻すとして，以下の問いに答えよ．</p>
+                    <ol>
+                        <li>マルコフ連鎖 $X$ の推移確率行列 $Q$ を求めよ．</li>
+                        <li>初期分布を $\boldsymbol{\pi}_0 = (0, 0, 1)$ とするとき，2回目の状態確率 $\boldsymbol{\pi}_2$ を求めよ．</li>
+                        <li>定常分布は存在するか．あればそれを求めよ．</li>
+                    </ol>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.2 [1]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q142-1">
+                    <h2><i class="fas fa-pencil"></i> 問14.2 [1] — 推移確率行列</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 推移確率 $c_{ij}$ の設計思想</div>
+                            <p>$c_{ij} = \min\{j/i,\ 1\}$ は状態番号が大きい方向（$j > i$）へは積極的に，小さい方向（$j < i$）へは控えめに動くような設計です：</p>
+                            <ul>
+                                <li>$j > i$ のとき：$j/i > 1$ なので $c_{ij} = 1$（確率1で状態 $j$ へ移る）</li>
+                                <li>$j < i$ のとき：$j/i < 1$ なので $c_{ij} = j/i$（確率 $j/i$ で状態 $j$ へ，確率 $1-j/i$ でとどまる）</li>
+                            </ul>
+                        </div>
+
+                        <h4>各遷移確率 $c_{ij}$ を計算する</h4>
+                        <table style="width:auto;border-collapse:collapse;font-size:0.92em;margin:0.6em auto;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:6px 14px;">$c_{ij}$</th>
+                                    <th style="padding:6px 14px;">$j = 1$</th>
+                                    <th style="padding:6px 14px;">$j = 2$</th>
+                                    <th style="padding:6px 14px;">$j = 3$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:6px 14px;font-weight:bold;">$i = 1$</td>
+                                    <td style="padding:6px 14px;text-align:center;">—</td>
+                                    <td style="padding:6px 14px;text-align:center;">$\min\{2/1,1\} = 1$</td>
+                                    <td style="padding:6px 14px;text-align:center;">$\min\{3/1,1\} = 1$</td>
+                                </tr>
+                                <tr style="background:#f8f9fa;">
+                                    <td style="padding:6px 14px;font-weight:bold;">$i = 2$</td>
+                                    <td style="padding:6px 14px;text-align:center;">$\min\{1/2,1\} = 1/2$</td>
+                                    <td style="padding:6px 14px;text-align:center;">—</td>
+                                    <td style="padding:6px 14px;text-align:center;">$\min\{3/2,1\} = 1$</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:6px 14px;font-weight:bold;">$i = 3$</td>
+                                    <td style="padding:6px 14px;text-align:center;">$\min\{1/3,1\} = 1/3$</td>
+                                    <td style="padding:6px 14px;text-align:center;">$\min\{2/3,1\} = 2/3$</td>
+                                    <td style="padding:6px 14px;text-align:center;">—</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>各状態の推移確率 $q_{ij}$ を求める</h4>
+                        <p>カードは3枚各1/3の確率で引かれます．</p>
+
+                        <p><strong>状態1から（$i=1$）：</strong></p>
+                        <ul>
+                            <li>$a_1$ を引く（確率 $1/3$）→ 状態1にとどまる</li>
+                            <li>$a_2$ を引く（確率 $1/3$）→ $c_{12}=1$ なので確実に状態2へ（とどまる確率0）</li>
+                            <li>$a_3$ を引く（確率 $1/3$）→ $c_{13}=1$ なので確実に状態3へ（とどまる確率0）</li>
+                        </ul>
+                        $$q_{11} = \frac{1}{3},\quad q_{12} = \frac{1}{3}\cdot 1 = \frac{1}{3},\quad q_{13} = \frac{1}{3}\cdot 1 = \frac{1}{3}$$
+
+                        <p><strong>状態2から（$i=2$）：</strong></p>
+                        <ul>
+                            <li>$a_2$ を引く（確率 $1/3$）→ 状態2にとどまる</li>
+                            <li>$a_1$ を引く（確率 $1/3$）→ $c_{21}=1/2$ なので確率 $1/2$ で状態1へ，確率 $1/2$ でとどまる</li>
+                            <li>$a_3$ を引く（確率 $1/3$）→ $c_{23}=1$ なので確実に状態3へ</li>
+                        </ul>
+                        $$q_{21} = \frac{1}{3}\cdot\frac{1}{2} = \frac{1}{6},\quad q_{22} = \frac{1}{3} + \frac{1}{3}\cdot\frac{1}{2} + 0 = \frac{1}{3}+\frac{1}{6} = \frac{1}{2},\quad q_{23} = \frac{1}{3}$$
+
+                        <p><strong>状態3から（$i=3$）：</strong></p>
+                        <ul>
+                            <li>$a_3$ を引く（確率 $1/3$）→ 状態3にとどまる</li>
+                            <li>$a_1$ を引く（確率 $1/3$）→ $c_{31}=1/3$ なので確率 $1/3$ で状態1へ，確率 $2/3$ でとどまる</li>
+                            <li>$a_2$ を引く（確率 $1/3$）→ $c_{32}=2/3$ なので確率 $2/3$ で状態2へ，確率 $1/3$ でとどまる</li>
+                        </ul>
+                        $$q_{31} = \frac{1}{3}\cdot\frac{1}{3} = \frac{1}{9},\quad q_{32} = \frac{1}{3}\cdot\frac{2}{3} = \frac{2}{9}$$
+                        $$q_{33} = \frac{1}{3} + \frac{1}{3}\cdot\frac{2}{3} + \frac{1}{3}\cdot\frac{1}{3} = \frac{1}{3}+\frac{2}{9}+\frac{1}{9} = \frac{3}{9}+\frac{3}{9} = \frac{6}{9} = \frac{2}{3}$$
+
+                        <div class="formula-block">
+                            $$\boxed{Q = \begin{pmatrix} 1/3 & 1/3 & 1/3 \\ 1/6 & 1/2 & 1/3 \\ 1/9 & 2/9 & 2/3 \end{pmatrix}}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>行の和の確認</strong>：$1/3+1/3+1/3=1$ ✓，$1/6+1/2+1/3 = 1/6+3/6+2/6=1$ ✓，$1/9+2/9+6/9=9/9=1$ ✓
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.2 [2]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q142-2">
+                    <h2><i class="fas fa-pencil"></i> 問14.2 [2] — 2ステップ後の状態確率 $\boldsymbol{\pi}_2$</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 状態確率ベクトルの更新式</div>
+                            <p>時点 $n$ の状態確率ベクトルを行ベクトル $\boldsymbol{\pi}_n$ とすると，</p>
+                            <div class="formula-block">
+                                $$\boldsymbol{\pi}_n = \boldsymbol{\pi}_{n-1} Q = \boldsymbol{\pi}_0 Q^n$$
+                            </div>
+                            <p>ここで注意するのは「行ベクトルが左から行列 $Q$ を掛ける」形式です（列ベクトルで書く流儀では $Q^{\top}$ を右から掛ける，という流儀もあるので確認が必要）。</p>
+                        </div>
+
+                        <p>初期分布 $\boldsymbol{\pi}_0 = (0, 0, 1)$（状態3に確率1で存在）から計算します．</p>
+
+                        <h4>ステップ1：$\boldsymbol{\pi}_1 = \boldsymbol{\pi}_0 Q$</h4>
+                        <p>$\boldsymbol{\pi}_0 = (0, 0, 1)$ なので，$Q$ の第3行をそのまま読むだけです：</p>
+                        $$\boldsymbol{\pi}_1 = (0, 0, 1)\begin{pmatrix} 1/3 & 1/3 & 1/3 \\ 1/6 & 1/2 & 1/3 \\ 1/9 & 2/9 & 2/3 \end{pmatrix} = \left(\frac{1}{9},\ \frac{2}{9},\ \frac{2}{3}\right)$$
+
+                        <h4>ステップ2：$\boldsymbol{\pi}_2 = \boldsymbol{\pi}_1 Q$</h4>
+                        <p>$\boldsymbol{\pi}_1 = (1/9, 2/9, 2/3)$ を使って各成分を計算します：</p>
+
+                        <p><strong>第1成分</strong>（状態1にいる確率）：</p>
+                        $$\frac{1}{9}\cdot\frac{1}{3} + \frac{2}{9}\cdot\frac{1}{6} + \frac{2}{3}\cdot\frac{1}{9} = \frac{1}{27} + \frac{2}{54} + \frac{2}{27} = \frac{2}{54} + \frac{1}{54} + \frac{4}{54} = \frac{2+1+4}{54} = \frac{7}{54}$$
+
+                        <div class="memo-box">
+                            <i class="fas fa-info-circle"></i>
+                            <div>
+                                <strong>通分の手順</strong>：$1/27 = 2/54$，$2/54 = 2/54$（そのまま），$2/27 = 4/54$<br>
+                                合計 $= (2+1+4)/54 = 7/54$… ん？テキストの答えは $4/27 = 8/54$ です。再確認します。
+                            </div>
+                        </div>
+
+                        <p>改めて $2/9 \cdot 1/6 = 2/54 = 1/27$ と計算します：</p>
+                        $$\frac{1}{9}\cdot\frac{1}{3} + \frac{2}{9}\cdot\frac{1}{6} + \frac{2}{3}\cdot\frac{1}{9}$$
+                        $$= \frac{1}{27} + \frac{1}{27} + \frac{2}{27} = \frac{4}{27}$$
+
+                        <p><strong>第2成分</strong>（状態2にいる確率）：</p>
+                        $$\frac{1}{9}\cdot\frac{1}{3} + \frac{2}{9}\cdot\frac{1}{2} + \frac{2}{3}\cdot\frac{2}{9} = \frac{1}{27} + \frac{1}{9} + \frac{4}{27} = \frac{1}{27} + \frac{3}{27} + \frac{4}{27} = \frac{8}{27}$$
+
+                        <p><strong>第3成分</strong>（状態3にいる確率）：</p>
+                        $$\frac{1}{9}\cdot\frac{1}{3} + \frac{2}{9}\cdot\frac{1}{3} + \frac{2}{3}\cdot\frac{2}{3} = \frac{1}{27} + \frac{2}{27} + \frac{4}{9} = \frac{1}{27} + \frac{2}{27} + \frac{12}{27} = \frac{15}{27} = \frac{5}{9}$$
+
+                        <div class="memo-box">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>和の確認</strong>：$4/27 + 8/27 + 5/9 = 4/27 + 8/27 + 15/27 = 27/27 = 1$ ✓
+                            </div>
+                        </div>
+
+                        <div class="formula-block">
+                            $$\boxed{\boldsymbol{\pi}_2 = \left(\frac{4}{27},\ \frac{8}{27},\ \frac{5}{9}\right)}$$
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.2 [3]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q142-3">
+                    <h2><i class="fas fa-pencil"></i> 問14.2 [3] — 定常分布</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p>定常分布 $\boldsymbol{\pi} = (a, b, c)$（$a+b+c = 1$）を $\boldsymbol{\pi} = \boldsymbol{\pi} Q$ より求めます．</p>
+
+                        <h4>方程式を立てる</h4>
+                        $$a = \frac{1}{3}a + \frac{1}{6}b + \frac{1}{9}c \quad\cdots(1)$$
+                        $$b = \frac{1}{3}a + \frac{1}{2}b + \frac{2}{9}c \quad\cdots(2)$$
+                        $$c = \frac{1}{3}a + \frac{1}{3}b + \frac{2}{3}c \quad\cdots(3)$$
+                        $$a + b + c = 1 \quad\cdots(4)$$
+
+                        <h4>方程式を解く</h4>
+                        <p>式 (3) を整理します：</p>
+                        $$c - \frac{2}{3}c = \frac{1}{3}a + \frac{1}{3}b \quad \Rightarrow \quad \frac{1}{3}c = \frac{1}{3}(a + b) \quad \Rightarrow \quad c = a + b$$
+                        <p>式 (4) に代入：$a + b + (a + b) = 1$ → $a + b = \dfrac{1}{2}$ → したがって $c = \dfrac{1}{2}$</p>
+
+                        <p>式 (1) に $c = 1/2$ を代入して整理：</p>
+                        $$a - \frac{1}{3}a = \frac{1}{6}b + \frac{1}{9}\cdot\frac{1}{2} \quad \Rightarrow \quad \frac{2}{3}a = \frac{1}{6}b + \frac{1}{18}$$
+                        <p>両辺に18を掛けると：$12a = 3b + 1$ …(5)</p>
+                        <p>また $a + b = 1/2$ より $b = 1/2 - a$ …(6)</p>
+                        <p>(6) を (5) に代入：$12a = 3(1/2 - a) + 1 = 3/2 - 3a + 1 = 5/2 - 3a$</p>
+                        $$15a = \frac{5}{2} \quad \Rightarrow \quad a = \frac{1}{6}$$
+                        $$b = \frac{1}{2} - \frac{1}{6} = \frac{1}{3}$$
+
+                        <div class="formula-block">
+                            $$\boxed{\boldsymbol{\pi} = \left(\frac{1}{6},\ \frac{1}{3},\ \frac{1}{2}\right)}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>検算</strong>：$1/6 + 1/3 + 1/2 = 1/6 + 2/6 + 3/6 = 6/6 = 1$ ✓<br>
+                                式(1) を確認：$(1/3)(1/6) + (1/6)(1/3) + (1/9)(1/2) = 1/18 + 1/18 + 1/18 = 3/18 = 1/6 = a$ ✓
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.3 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section" style="background:#f8f9fa;border-left:4px solid var(--primary,#4f8ef7);padding:1.2em 1.5em;margin-bottom:2em;border-radius:0 8px 8px 0;">
+                    <h2 style="margin-top:0;"><i class="fas fa-book"></i> 問14.3 — 問題文（傘の問題）</h2>
+                    <p>A氏は家と職場の往復で雨が降っていないときに傘を持ち歩くのが面倒だったので，家と職場の両方に傘を置くことにした．家を出るとき，または職場から帰るとき，雨が降っていてそこに傘があれば傘を持っていき，なければ仕方なく濡れて行くことにする．以下，$n$ 回目（$n \geq 1$）の移動の出発時にその場所にある傘の本数を $X_n$ とする．また，降雨は移動ごとに独立であり，その確率は一定値 $\theta \in (0, 1)$ であるとする．A氏は，はじめに家と職場に1本ずつ傘を置き，この生活をスタートすることにした．</p>
+                    <ol>
+                        <li>$X = (X_n)_{n=1,2,\ldots}$ はどのようなマルコフ連鎖になるか．状態空間 $S$ と初期分布 $\boldsymbol{\pi}_0$，および推移確率行列を求めよ．</li>
+                        <li>8回目までの移動記録をつけたところ，$(X_1, \ldots, X_8) = (1, 1, 2, 0, 2, 1, 1, 1)$．この観測から得られる $\theta$ の最尤推定値を求めよ．</li>
+                        <li>十分な時間が経過したのち，出発時に傘がない確率の推定値を，[2] で得られた最尤推定値を用いて求めよ．</li>
+                    </ol>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.3 [1]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q143-1">
+                    <h2><i class="fas fa-pencil"></i> 問14.3 [1] — 状態空間・初期分布・推移確率行列</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 問題設定の整理</div>
+                            <p>傘は全部で2本（家と職場に合計2本）。出発地点に傘が $k$ 本あるとき，到着地点には $2 - k$ 本あります（合計2本なので）。</p>
+                            <ul>
+                                <li>雨かつ傘あり（確率 $\theta \cdot \mathbf{1}_{X_n \geq 1}$）→ 傘を1本持参して移動</li>
+                                <li>雨だが傘なし，または晴れ → 傘を持たずに移動</li>
+                            </ul>
+                        </div>
+
+                        <h4>状態空間 $S$</h4>
+                        <p>出発時の傘の本数は 0, 1, 2 のいずれかです：</p>
+                        $$S = \{0, 1, 2\}$$
+
+                        <h4>初期分布 $\boldsymbol{\pi}_0$</h4>
+                        <p>スタート時，家と職場にそれぞれ1本ずつ傘があります．最初の出発は家からで，家には1本の傘があるため $X_1 = 1$（状態1に確率1）：</p>
+                        $$\boldsymbol{\pi}_0 = (0, 1, 0)$$
+
+                        <h4>推移確率の導出</h4>
+                        <p>状態 $i$（出発地に $i$ 本の傘）のとき，到着地には $2 - i$ 本の傘があります．移動後に到着地から次の出発をするとき，傘の本数が $X_{n+1}$ となります．</p>
+
+                        <p><strong>$X_n = 0$ のとき</strong>：出発地に傘なし，雨でも晴れでも傘を持参できない．到着地には $2 - 0 = 2$ 本ある．</p>
+                        $$X_{n+1} = 2 \quad \text{（確率1）}$$
+
+                        <p><strong>$X_n = 1$ のとき</strong>：出発地に1本，到着地に1本．</p>
+                        <ul>
+                            <li>雨（確率 $\theta$）→ 傘1本持参 → 到着地が $1 + 1 = 2$ 本になる → $X_{n+1} = 2$</li>
+                            <li>晴れ（確率 $1-\theta$）→ 傘持参せず → 到着地は1本のまま → $X_{n+1} = 1$</li>
+                        </ul>
+
+                        <p><strong>$X_n = 2$ のとき</strong>：出発地に2本，到着地に0本．</p>
+                        <ul>
+                            <li>雨（確率 $\theta$）→ 傘1本持参 → 到着地が $0 + 1 = 1$ 本 → $X_{n+1} = 1$</li>
+                            <li>晴れ（確率 $1-\theta$）→ 傘持参せず → 到着地は0本のまま → $X_{n+1} = 0$</li>
+                        </ul>
+
+                        <p>以上を整理します（行 $=$ 現在の状態，列 $=$ 次の状態，状態の順は 1,2,3 で 0,1,2 本を表す）：</p>
+
+                        <div class="formula-block">
+                            $$\boxed{Q = \begin{pmatrix} 0 & 0 & 1 \\ 0 & 1-\theta & \theta \\ 1-\theta & \theta & 0 \end{pmatrix}}$$
+                        </div>
+                        <p>ここで行・列の順序は状態 $0 \to 1 \to 2$（すなわち $i = 1,2,3$ が $X = 0,1,2$ に対応）とします（テキスト式 (14.2) の表記方法）．</p>
+
+                        <div class="memo-box">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>行の和</strong>：行1 = $0 + 0 + 1 = 1$ ✓，行2 = $0 + (1-\theta) + \theta = 1$ ✓，行3 = $(1-\theta) + \theta + 0 = 1$ ✓
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.3 [2]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q143-2">
+                    <h2><i class="fas fa-pencil"></i> 問14.3 [2] — $\theta$ の最尤推定値</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> マルコフ連鎖の最尤推定</div>
+                            <p>観測された系列 $(X_1, X_2, \ldots, X_8)$ から，尤度は連続する推移の確率の積で与えられます：</p>
+                            <div class="formula-block">
+                                $$L(\theta) = \prod_{n=1}^{7} q_{X_n, X_{n+1}}$$
+                            </div>
+                        </div>
+
+                        <h4>各推移を読み取る</h4>
+                        <p>観測値 $(X_1, \ldots, X_8) = (1, 1, 2, 0, 2, 1, 1, 1)$ から7つの推移：</p>
+                        <table style="width:100%;border-collapse:collapse;font-size:0.93em;margin:0.6em 0;">
+                            <thead>
+                                <tr style="background:#f0f4ff;">
+                                    <th style="padding:5px 10px;">推移</th>
+                                    <th style="padding:5px 10px;">$X_n$</th>
+                                    <th style="padding:5px 10px;">$X_{n+1}$</th>
+                                    <th style="padding:5px 10px;">推移確率 $q_{ij}$</th>
+                                    <th style="padding:5px 10px;">意味</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="text-align:center;padding:5px 10px;">1→2</td><td style="text-align:center;padding:5px 10px;">1</td><td style="text-align:center;padding:5px 10px;">1</td><td style="text-align:center;padding:5px 10px;">$1-\theta$</td><td style="padding:5px 10px;">傘1本，晴れ → 次も1本</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:5px 10px;">2→3</td><td style="text-align:center;padding:5px 10px;">1</td><td style="text-align:center;padding:5px 10px;">2</td><td style="text-align:center;padding:5px 10px;">$\theta$</td><td style="padding:5px 10px;">傘1本，雨 → 持参して次は2本</td></tr>
+                                <tr><td style="text-align:center;padding:5px 10px;">3→4</td><td style="text-align:center;padding:5px 10px;">2</td><td style="text-align:center;padding:5px 10px;">0</td><td style="text-align:center;padding:5px 10px;">$1-\theta$</td><td style="padding:5px 10px;">傘2本，晴れ → 次は0本</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:5px 10px;">4→5</td><td style="text-align:center;padding:5px 10px;">0</td><td style="text-align:center;padding:5px 10px;">2</td><td style="text-align:center;padding:5px 10px;">$1$</td><td style="padding:5px 10px;">傘0本，必ず次は2本（傘なし移動）</td></tr>
+                                <tr><td style="text-align:center;padding:5px 10px;">5→6</td><td style="text-align:center;padding:5px 10px;">2</td><td style="text-align:center;padding:5px 10px;">1</td><td style="text-align:center;padding:5px 10px;">$\theta$</td><td style="padding:5px 10px;">傘2本，雨 → 持参して次は1本</td></tr>
+                                <tr style="background:#f8f9fa;"><td style="text-align:center;padding:5px 10px;">6→7</td><td style="text-align:center;padding:5px 10px;">1</td><td style="text-align:center;padding:5px 10px;">1</td><td style="text-align:center;padding:5px 10px;">$1-\theta$</td><td style="padding:5px 10px;">傘1本，晴れ → 次も1本</td></tr>
+                                <tr><td style="text-align:center;padding:5px 10px;">7→8</td><td style="text-align:center;padding:5px 10px;">1</td><td style="text-align:center;padding:5px 10px;">1</td><td style="text-align:center;padding:5px 10px;">$1-\theta$</td><td style="padding:5px 10px;">傘1本，晴れ → 次も1本</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>尤度関数を作る</h4>
+                        $$L(\theta) = (1-\theta) \cdot \theta \cdot (1-\theta) \cdot 1 \cdot \theta \cdot (1-\theta) \cdot (1-\theta) = \theta^2 (1-\theta)^4$$
+
+                        <h4>対数尤度を最大化する</h4>
+                        $$\ell(\theta) = \log L(\theta) = 2\log\theta + 4\log(1-\theta)$$
+                        $$\frac{d\ell}{d\theta} = \frac{2}{\theta} - \frac{4}{1-\theta} = 0$$
+                        $$2(1-\theta) = 4\theta \quad \Rightarrow \quad 2 - 2\theta = 4\theta \quad \Rightarrow \quad \theta = \frac{2}{6} = \frac{1}{3}$$
+
+                        <div class="formula-block">
+                            $$\boxed{\hat{\theta} = \frac{1}{3}}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>MLE の直感的な意味</strong>：$\theta$ が影響する推移は「雨が降った回数 ÷ 傘の判断が生じた回数」です。今回は，$\theta$ に関わる推移（状態1や2からの出発）が $2 + 4 = 6$ 回あり，そのうち雨だった回数は $\theta^2$ で2回，晴れは $(1-\theta)^4$ で4回。MLE は $\hat{\theta} = 2/6 = 1/3$ と直感的に計算できます。
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問14.3 [3]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q143-3">
+                    <h2><i class="fas fa-pencil"></i> 問14.3 [3] — 出発時に傘がない確率の推定値</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 「十分な時間が経過したのち」とは</div>
+                            <p>「十分な時間が経過した」とは，$n \to \infty$ の極限を考えることを意味します．この場合，状態確率ベクトルは定常分布 $\boldsymbol{\pi} = (a, b, c)$ に収束します．</p>
+                            <p>求めるのは<strong>出発時に傘が0本（状態0）である定常確率 $a$</strong> です．</p>
+                        </div>
+
+                        <h4>定常分布の方程式を立てる</h4>
+                        <p>$\boldsymbol{\pi} Q = \boldsymbol{\pi}$（$a + b + c = 1$, 状態の順は $0, 1, 2$ 本）：</p>
+                        $$a = (1-\theta)\,c \quad\cdots(1)$$
+                        $$b = (1-\theta)\,b + \theta\,c \quad\cdots(2)$$
+                        $$c = a + \theta\,b \quad\cdots(3)$$
+
+                        <h4>方程式を解く</h4>
+                        <p>式 (2) を整理：$b\theta = \theta\,c$ → <strong>$b = c$</strong>（$\theta \neq 0$ なので両辺を $\theta$ で割れる）</p>
+                        <p>式 (1) より $a = (1-\theta)\,c$</p>
+                        <p>$a + b + c = 1$ に代入：</p>
+                        $$(1-\theta)c + c + c = 1 \quad \Rightarrow \quad (3-\theta)\,c = 1 \quad \Rightarrow \quad c = \frac{1}{3-\theta}$$
+                        $$b = \frac{1}{3-\theta}, \quad a = \frac{1-\theta}{3-\theta}$$
+
+                        <p>定常分布は：</p>
+                        $$\boldsymbol{\pi} = \left(\frac{1-\theta}{3-\theta},\ \frac{1}{3-\theta},\ \frac{1}{3-\theta}\right)$$
+
+                        <h4>$\hat{\theta} = 1/3$ を代入する</h4>
+                        $$a = \frac{1 - 1/3}{3 - 1/3} = \frac{2/3}{8/3} = \frac{2/3 \times 3}{8/3 \times 3} = \frac{2}{8} = \frac{1}{4}$$
+
+                        <div class="formula-block">
+                            $$\boxed{\text{出発時に傘がない確率の推定値} = \frac{1}{4}}$$
+                        </div>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> まとめ</div>
+                            <p>定常分布において，出発時の傘の本数に関する確率は $\hat{\theta} = 1/3$ のもとで：</p>
+                            <table style="width:auto;border-collapse:collapse;font-size:0.93em;margin:0.6em auto;">
+                                <thead>
+                                    <tr style="background:#f0f4ff;">
+                                        <th style="padding:6px 14px;">出発時の傘の本数</th>
+                                        <th style="padding:6px 14px;">定常確率</th>
+                                        <th style="padding:6px 14px;">$\hat{\theta}=1/3$ 代入後</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td style="text-align:center;padding:6px 14px;">0本（濡れる）</td><td style="text-align:center;padding:6px 14px;">$(1-\theta)/(3-\theta)$</td><td style="text-align:center;padding:6px 14px;font-weight:bold;color:#e74c3c;">$1/4$</td></tr>
+                                    <tr style="background:#f8f9fa;"><td style="text-align:center;padding:6px 14px;">1本</td><td style="text-align:center;padding:6px 14px;">$1/(3-\theta)$</td><td style="text-align:center;padding:6px 14px;">$3/8$</td></tr>
+                                    <tr><td style="text-align:center;padding:6px 14px;">2本</td><td style="text-align:center;padding:6px 14px;">$1/(3-\theta)$</td><td style="text-align:center;padding:6px 14px;">$3/8$</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;">確認：$1/4 + 3/8 + 3/8 = 2/8 + 3/8 + 3/8 = 8/8 = 1$ ✓</p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
