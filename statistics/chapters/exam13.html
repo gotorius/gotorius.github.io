@@ -81,8 +81,11 @@
                 <!-- ======================================================== -->
                 <!-- 問題文                                                     -->
                 <!-- ======================================================== -->
-                <section class="content-section" style="background:#f8f9fa;border-left:4px solid var(--primary,#4f8ef7);padding:1.2em 1.5em;margin-bottom:2em;border-radius:0 8px 8px 0;">
-                    <h2 style="margin-top:0;"><i class="fas fa-book"></i> 問13.1 — 問題文</h2>
+                <section class="content-section section-anchor" id="q131">
+                    <h2><i class="fas fa-pencil"></i> 問13.1 — 問題文と小問</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
                     <p>高血圧の治療のために，血圧を下げる効果のある治療薬（A薬）を開発した。A薬の効果を従来薬（B薬）と比較する。いま，2種類の治療薬の効果が等しいという帰無仮説と，<strong>A薬のほうが効果が高い（血圧をより下げる）</strong>という片側対立仮説を考える。</p>
                     <ol>
                         <li>血圧がほぼ等しい高血圧患者6人をランダムに3人ずつに分け，それぞれ，A薬とB薬のいずれかを投与した。薬の投与後の血圧測定の結果が次のようになった（単位：mmHg）。ウィルコクソンの順位和検定を用いて検定するとき，片側P値はいくらか。
@@ -98,6 +101,7 @@
                         <li>血圧がほぼ等しい高血圧患者3人にA薬とB薬を互いの効果が影響しないよう時間をおいて投与した。薬の投与後の血圧測定の結果の差（B薬 − A薬）は，$-3, 17, 7$ となった。符号付き順位検定を用いて検定するとき，片側P値はいくらか。</li>
                         <li>別の患者のデータを用いて，同様の仮説に対する符号付き順位検定を行ったところ，片側P値が5%未満になった。このとき，最低でも何人以上の患者がいたか。</li>
                     </ol>
+                    </div><!-- /example-block -->
                 </section>
 
                 <!-- ======================================================== -->
@@ -112,7 +116,7 @@
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-info-circle"></i> ウィルコクソンの順位和検定とは</div>
                             <p>2群のデータを<strong>一緒にして小さい順に順位を付け</strong>，一方の群の順位の合計（＝順位和 $W$）を検定統計量とします。</p>
-                            <p>帰無仮説「2群の分布は同じ」が正しければ，$m+n$ 個の順位の中から $m$ 個をA群に割り当てる $\binom{m+n}{m}$ 通りはすべて等確率で起こります。</p>
+                            <p>帰無仮説「2群の分布は同じ」が正しければ，$m+n$ 個の順位の中から $m$ 個をA群に割り当てる ${}_{m+n}C_{m}$ 通りはすべて等確率で起こります。</p>
                         </div>
 
                         <h4>ステップ1：6人のデータを合わせて小さい順に並べ，順位を付ける</h4>
@@ -157,7 +161,7 @@
 
                         <h4>ステップ3：P値を計算する</h4>
                         <p>6人から3人（A群）を選ぶ組合せは：</p>
-                        $$\binom{6}{3} = \frac{6!}{3! \cdot 3!} = 20 \text{ 通り}$$
+                        $${}_{6}C_{3} = \frac{6!}{3! \cdot 3!} = 20 \text{ 通り}$$
                         <p>帰無仮説のもとで，これら20通りはすべて等確率（各確率 $1/20$）です。</p>
                         <p>$W_A \leq 7$ となる場合を全て列挙します：</p>
                         <table style="width:auto;border-collapse:collapse;font-size:0.92em;margin:0.6em 0;">
@@ -201,7 +205,7 @@
                             <div class="box-title"><i class="fas fa-info-circle"></i> 考え方：最小P値の議論</div>
                             <p>「P値が3%未満になった」ということは，何らかのデータで実際にP値 &lt; 3% が達成できた，ということです。</p>
                             <p>ウィルコクソン検定で達成できるP値の<strong>最小値</strong>は，A群の順位和が最小のとき（A群が最も低い順位を独占したとき）に得られます：</p>
-                            $$P_{\min} = \frac{1}{\binom{m+n}{m}}$$
+                            $$P_{\min} = \frac{1}{{}_{m+n}C_{m}}$$
                             <p>この $P_{\min}$ が $0.03$ 未満になる最小の総人数 $m+n$ を探します。</p>
                         </div>
 
@@ -218,7 +222,7 @@
                                     <th style="padding:6px 10px;">総人数</th>
                                     <th style="padding:6px 10px;">A群 $m$</th>
                                     <th style="padding:6px 10px;">B群 $n$</th>
-                                    <th style="padding:6px 10px;">$\binom{m+n}{m}$</th>
+                                    <th style="padding:6px 10px;">${}_{m+n}C_{m}$</th>
                                     <th style="padding:6px 10px;">最小P値</th>
                                     <th style="padding:6px 10px;">&lt; 3% ?</th>
                                 </tr>
@@ -228,7 +232,7 @@
                                     <td style="text-align:center;padding:6px 10px;">6</td>
                                     <td style="text-align:center;padding:6px 10px;">3</td>
                                     <td style="text-align:center;padding:6px 10px;">3</td>
-                                    <td style="text-align:center;padding:6px 10px;">$\binom{6}{3} = 20$</td>
+                                    <td style="text-align:center;padding:6px 10px;">${}_{6}C_{3} = 20$</td>
                                     <td style="text-align:center;padding:6px 10px;">$1/20 = 5.0\%$</td>
                                     <td style="text-align:center;padding:6px 10px;color:#e74c3c;font-weight:bold;">✗</td>
                                 </tr>
@@ -236,7 +240,7 @@
                                     <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">7</td>
                                     <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">3</td>
                                     <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">4</td>
-                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">$\binom{7}{3} = 35$</td>
+                                    <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">${}_{7}C_{3} = 35$</td>
                                     <td style="text-align:center;padding:6px 10px;font-weight:bold;color:green;">$1/35 \approx 2.86\%$</td>
                                     <td style="text-align:center;padding:6px 10px;color:green;font-weight:bold;">✓</td>
                                 </tr>
@@ -247,8 +251,8 @@
                             <i class="fas fa-question-circle"></i>
                             <div>
                                 <strong>なぜ A群3人・B群4人（7人）なのか？</strong><br>
-                                [1] と同じ状況（A群3人）を維持しながらB群だけ1人増やして7人にした場合，$\binom{7}{3} = 35$ 通りとなり，最小P値が $1/35 \approx 0.0286 < 0.03$ となります。<br>
-                                実際，6人のとき最小P値 $= 1/20 = 0.05$，$\binom{6}{2} = 15$，$\binom{6}{1} = 6$ であることから，患者6人の場合の順位和の最小P値は $1/20 = 0.05$ です。<br>
+                                [1] と同じ状況（A群3人）を維持しながらB群だけ1人増やして7人にした場合，${}_{7}C_{3} = 35$ 通りとなり，最小P値が $1/35 \approx 0.0286 < 0.03$ となります。<br>
+                                実際，6人のとき最小P値 $= 1/20 = 0.05$，${}_{6}C_{2} = 15$，${}_{6}C_{1} = 6$ であることから，患者6人の場合の順位和の最小P値は $1/20 = 0.05$ です。<br>
                                 患者7人（A群3人，B群4人）において，順位和が最小の6のとき，P値は $1/35 \approx 0.0286 < 0.03$ となります。
                             </div>
                         </div>

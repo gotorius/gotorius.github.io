@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第15章 章末問題解説 - 確率過程の基礎</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第15章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 15 — 章末問題解説</span>
+            <h1>確率過程の基礎<br><small style="font-size:0.65em;color:var(--gray-500);">章末問題・解答と解説</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter15.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第15章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q151-1">問15.1 [1] ブラウン運動：モーメント法による $\sigma$ の推定（$\Delta=1$）</a></li>
+                            <li><a href="#q151-2">問15.1 [2] ブラウン運動：高頻度観測による $\sigma$ の推定</a></li>
+                            <li><a href="#q152-1">問15.2 [1] ポアソン過程：モデルの妥当性</a></li>
+                            <li><a href="#q152-2">問15.2 [2] ポアソン過程：強度 $\lambda$ の最尤推定値</a></li>
+                            <li><a href="#q152-3">問15.2 [3] 複合ポアソン過程：平均・分散</a></li>
+                            <li><a href="#q152-4">問15.2 [4] 複合ポアソン過程：$q$ のモーメント法推定</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 問15.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q151">
+                    <h2><i class="fas fa-pencil"></i> 問15.1 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>為替市場の取引開始時刻を $t = 0$，終了時刻を $t = 100$ として，時刻 $t \in [0, 100]$ において 1 米ドル $= X_t$ 円が</p>
+                        $$X_t = \alpha + \sigma B_t$$
+                        <p>なる確率過程で表されるとする．ただし，$\alpha, \sigma > 0$ は定数で，$(B_t)_{0 \le t \le 100}$ は標準ブラウン運動とする．</p>
+                        <ol>
+                            <li>観測データ $X_t$（$t = 0, 1, 2, \ldots, 100$）を用いて $X_t$ の増分の 2 乗の平均を求めたところ，
+                                $$V = \frac{1}{100}\sum_{t=1}^{100}(X_t - X_{t-1})^2 = 0.0225$$
+                                であった．モーメント法により $\sigma$ の推定値を求めよ．
+                            </li>
+                            <li>[1] よりも高頻度に $X$ を観測し，$X_{k/10}$（$k = 0, 1, \ldots, 1000$）なるデータによって同様に増分の 2 乗和を求めたところ，
+                                $$V' = \frac{1}{1000}\sum_{k=1}^{1000}\left(X_{k/10} - X_{(k-1)/10}\right)^2 = 0.00625$$
+                                であった．これをもとにして，モーメント法により $\sigma$ の推定値 $\hat{\sigma}$ を求めよ．
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問15.1 [1]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q151-1">
+                    <h2><i class="fas fa-pencil"></i> 問15.1 [1] — ブラウン運動のモーメント法推定（$\Delta = 1$）</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> ブラウン運動の増分の分布</div>
+                            <p>$X_t = \alpha + \sigma B_t$ とすると，時間間隔 $\Delta > 0$ での増分は：</p>
+                            $$Z_k := X_{k\Delta} - X_{(k-1)\Delta} = \sigma(B_{k\Delta} - B_{(k-1)\Delta}) \sim N(0, \sigma^2\Delta)$$
+                            <p>したがって，$E[Z_k^2] = \sigma^2\Delta$ です（独立定常増分性より）．</p>
+                        </div>
+
+                        <h4>モーメント条件を立てる</h4>
+                        <p>$\Delta = 1$ のとき，$Z_k = X_k - X_{k-1} \sim N(0, \sigma^2)$ なので：</p>
+                        $$E[Z_k^2] = \sigma^2$$
+
+                        <h4>標本モーメントで置き換える</h4>
+                        <p>モーメント法では，$E[Z_k^2] = \sigma^2$ の左辺を標本平均で置き換えます：</p>
+                        $$\hat{\sigma}^2 = V = \frac{1}{100}\sum_{t=1}^{100}(X_t - X_{t-1})^2 = 0.0225$$
+                        $$\hat{\sigma} = \sqrt{0.0225} = \sqrt{(0.15)^2}$$
+
+                        <div class="formula-block">
+                            $$\boxed{\hat{\sigma} = 0.15}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>直感的理解</strong>：増分の 2 乗平均は分散の推定量です。$\sigma^2 = 0.0225 = (0.15)^2$ より $\sigma = 0.15$ です。ブラウン運動の「ボラティリティ」（変動の大きさ）を表します。
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問15.1 [2]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q151-2">
+                    <h2><i class="fas fa-pencil"></i> 問15.1 [2] — 高頻度観測による $\sigma$ の推定</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 時間間隔 $\Delta$ の効果</div>
+                            <p>今度は $\Delta = 1/10$ で観測しているため，増分の分布は：</p>
+                            $$Z_k := X_{k/10} - X_{(k-1)/10} \sim N\!\left(0, \sigma^2 \cdot \frac{1}{10}\right)$$
+                            <p>したがって，$E[Z_k^2] = \sigma^2 \Delta = \sigma^2 / 10$ です．</p>
+                        </div>
+
+                        <h4>モーメント条件を立てる</h4>
+                        <p>$E[Z_k^2] = \sigma^2 \Delta$ の左辺を標本平均 $V'$ で置き換えると：</p>
+                        $$\hat{\sigma}^2 \cdot \Delta = V' \quad \Rightarrow \quad \hat{\sigma}^2 = \frac{V'}{\Delta}$$
+
+                        <h4>数値を代入する</h4>
+                        $$\hat{\sigma}^2 = \frac{V'}{\Delta} = \frac{0.00625}{1/10} = 10 \times 0.00625 = 0.0625$$
+                        $$\hat{\sigma} = \sqrt{0.0625} = \sqrt{(0.25)^2}$$
+
+                        <div class="formula-block">
+                            $$\boxed{\hat{\sigma} = 0.25}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>なぜ [1] と [2] で推定値が異なるのか？</strong><br>
+                                [1] と [2] で $\hat{\sigma}$ の値が異なることは，有限サンプルでの推定誤差によるものです。観測時刻の個数が多くても（$n=1000$ vs $n=100$），実は $\Delta \to 0$ の高頻度観測では別の漸近理論が必要です。どちらの推定量も一致推定量ですが，実データでは推定誤差が残ります。
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問15.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q152">
+                    <h2><i class="fas fa-pencil"></i> 問15.2 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>ある工場において，製品の品質検査に用いる機械は，ベルトコンベアで製品を運びながら確率 $q \in (0, 1)$ の割合で不良品を発見するという（つまり，確率 $(1-q)$ で不良品を見逃す）．この機械のよさを確かめるために，300 分間で流れてくる製品をすべて人の手で丁寧に検査したところ，558 個の不良品が発見された．このデータの一部をとり，不良品を 100 個みつけるまでの時間（横軸）と累積数（縦軸）をプロットしたグラフが与えられている（グラフは原点から終点まで概ね直線的に増加している）．不良品の発生は他の製品の出来とは独立であるとして，以下の問いに答えよ．</p>
+                        <ol>
+                            <li>グラフの結果をみて，$t$ 分間の不良品の数 $N_t$ は強度 $\lambda$ のポアソン過程に従うと考えた．この妥当性について論ぜよ．</li>
+                            <li>[1] の仮定のもとで，$\lambda$ の最尤推定値を求めよ．</li>
+                            <li>時刻 $t$ までの機械の不良品発見数を $X_t$ とすると，$N_t$ と独立な平均 $q$ のベルヌーイ確率変数 $U_k$（$k = 1, 2, \ldots$）を用いて，$X_t = \sum_{k=1}^{N_t} U_k$ と書けることに注意する．このとき，$X_t$ の平均，分散を求めよ．</li>
+                            <li>この機械で不良品の発見数を調べたところ，1 分間あたりの平均が 1.53 個であった．モーメント法により，$q$ の推定値を求めよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問15.2 [1]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q152-1">
+                    <h2><i class="fas fa-pencil"></i> 問15.2 [1] — ポアソン過程モデルの妥当性</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> ポアソン過程の定義（復習）</div>
+                            <p>強度 $\lambda$ のポアソン過程 $N = (N_t)_{t \ge 0}$ は以下を満たす：</p>
+                            <ol>
+                                <li>$N$ は独立定常増分過程である</li>
+                                <li>$N_t \sim \mathrm{Po}(\lambda t)$（強度 $\lambda t$ のポアソン分布）</li>
+                            </ol>
+                            <p>特に，$E[N_t] = \lambda t$（時間に対して線形）であることが重要です．</p>
+                        </div>
+
+                        <h4>妥当性の論述</h4>
+                        <p><strong>（稀な事象としての妥当性）</strong>：不良品の発生は稀な事象とみなせる（大量の製品の中のごく一部）ため，その個数にポアソン分布を仮定することは不自然ではない．</p>
+
+                        <p><strong>（独立増分性の妥当性）</strong>：不良品の発生は他の製品の出来と独立であるという仮定から，異なる時間区間での不良品の個数は互いに独立と考えられる．これはポアソン過程の独立増分性に対応する．</p>
+
+                        <p><strong>（定常増分性 = 直線的な増加）</strong>：グラフで累積数の増加が直線的であることは，単位時間あたりの発生率（強度 $\lambda$）が一定であることを示す．これはポアソン過程の定常増分性（$N_{t+h} - N_t$ の分布が $h$ のみに依存）に対応する．</p>
+
+                        <div class="formula-block">
+                            <p>以上の3点（稀な事象・独立増分・定常増分）から，$N_t$ をポアソン過程とモデル化することは妥当である．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問15.2 [2]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q152-2">
+                    <h2><i class="fas fa-pencil"></i> 問15.2 [2] — 強度 $\lambda$ の最尤推定値</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> ポアソン過程の最尤推定量（公式）</div>
+                            <p>ポアソン過程の強度 $\lambda$ の最尤推定量は，観測データの形式によらず以下の形になります（教科書式 (15.6) 参照）：</p>
+                            <div class="formula-block">
+                                $$\hat{\lambda} = \frac{\text{イベントの総回数}}{\text{観測時間}}$$
+                            </div>
+                        </div>
+
+                        <h4>データを整理する</h4>
+                        <p>観測時間：300 分間</p>
+                        <p>観測されたイベント（不良品）の総回数：558 個</p>
+
+                        <h4>最尤推定値を計算する</h4>
+                        $$\hat{\lambda} = \frac{558}{300} = 1.86$$
+
+                        <div class="formula-block">
+                            $$\boxed{\hat{\lambda} = 1.86 \text{（個/分）}}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>解釈</strong>：1分間に平均 1.86 個の不良品が発生するということです。なお，この推定量は発生時刻データを用いる場合 (I) と，時間間隔ごとのカウントデータを用いる場合 (II) のどちらでも同じ形になります。
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問15.2 [3]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q152-3">
+                    <h2><i class="fas fa-pencil"></i> 問15.2 [3] — 複合ポアソン過程の平均・分散</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 複合ポアソン過程の公式</div>
+                            <p>$X_t = \sum_{k=1}^{N_t} U_k$ の形（複合ポアソン過程）のとき，$N_t \sim \mathrm{Po}(\lambda t)$ と $U_k$ が独立であれば：</p>
+                            <div class="formula-block">
+                                $$E[X_t] = \lambda t \cdot E[U_k], \qquad V[X_t] = \lambda t \cdot E[U_k^2]$$
+                            </div>
+                            <p>これは条件付き期待値 $E[X_t] = E[E[X_t \mid N_t]]$ で導けます（教科書の例 2 の結果）．</p>
+                        </div>
+
+                        <h4>$U_k$ のモーメントを確認する</h4>
+                        <p>$U_k$ は平均 $q$ のベルヌーイ確率変数（$U_k \in \{0, 1\}$）なので：</p>
+                        $$E[U_k] = q, \qquad V[U_k] = q(1-q), \qquad E[U_k^2] = V[U_k] + (E[U_k])^2 = q(1-q) + q^2 = q$$
+
+                        <h4>$X_t$ の平均を計算する</h4>
+                        <p>条件付き期待値を用いて：</p>
+                        $$E[X_t] = E\!\left[E\!\left[\sum_{k=1}^{N_t}U_k \,\middle|\, N_t\right]\right] = E[N_t \cdot E[U_k]] = E[N_t] \cdot q = \lambda t \cdot q$$
+
+                        <div class="formula-block">
+                            $$E[X_t] = \lambda t q$$
+                        </div>
+
+                        <h4>$X_t$ の分散を計算する</h4>
+                        <p>複合ポアソン過程の分散の公式（教科書例 2 [1] の結果）：</p>
+                        $$V[X_t] = \lambda t \cdot E[U_k^2] = \lambda t \cdot q$$
+
+                        <div class="formula-block">
+                            $$V[X_t] = \lambda t q$$
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-check-circle"></i>
+                            <div>
+                                <strong>ポイント</strong>：ベルヌーイ分布（$U_k \in \{0,1\}$）の場合，$E[U_k^2] = E[U_k] = q$ なので，平均と分散が等しくなります（$E[X_t] = V[X_t] = \lambda tq$）．これは $X_t$ が実は強度 $\lambda q$ のポアソン過程に従うことを示唆しています（稀な事象の独立なフィルタリングはポアソン過程を保つ）。
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問15.2 [4]                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q152-4">
+                    <h2><i class="fas fa-pencil"></i> 問15.2 [4] — $q$ のモーメント法推定</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> モーメント法の手順</div>
+                            <p>モーメント法では，理論的な期待値と標本（経験）での平均値を等置して推定量を求めます．</p>
+                        </div>
+
+                        <h4>モーメント条件を立てる</h4>
+                        <p>[3] より，1 分間（$t = 1$）の機械の不良品発見数 $X_1$ の期待値は：</p>
+                        $$E[X_1] = \lambda \cdot 1 \cdot q = \lambda q$$
+
+                        <p>この期待値の経験推定値が「1 分間あたりの平均 1.53 個」なので：</p>
+                        $$\lambda q = 1.53$$
+
+                        <h4>$q$ の推定値を計算する</h4>
+                        <p>[2] で求めた $\hat{\lambda} = 1.86$ を代入して：</p>
+                        $$1.86 \hat{q} = 1.53$$
+                        $$\hat{q} = \frac{1.53}{1.86}$$
+
+                        <div class="formula-block">
+                            $$\boxed{\hat{q} = \frac{1.53}{1.86} \approx 0.823}$$
+                        </div>
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>解釈</strong>：この機械は，不良品を約 82.3% の確率で正しく検出し，約 17.7% を見逃すということです．$\hat{q}$ は「検出率（感度）」の推定値で，機械の性能指標となります。
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 問15.2 まとめ</div>
+                            <table style="width:100%;border-collapse:collapse;font-size:0.93em;margin:0.6em 0;">
+                                <thead>
+                                    <tr style="background:#f0f4ff;">
+                                        <th style="padding:6px 14px;">設問</th>
+                                        <th style="padding:6px 14px;">答え</th>
+                                        <th style="padding:6px 14px;">根拠</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding:6px 14px;">[1] 妥当性</td>
+                                        <td style="padding:6px 14px;">妥当：稀なイベント・独立増分・累積数の線形増加（定常強度）</td>
+                                        <td style="padding:6px 14px;">グラフが直線的 + 独立性の仮定</td>
+                                    </tr>
+                                    <tr style="background:#f8f9fa;">
+                                        <td style="padding:6px 14px;">[2] $\hat{\lambda}$</td>
+                                        <td style="padding:6px 14px;">$558/300 = 1.86$（個/分）</td>
+                                        <td style="padding:6px 14px;">MLE：総回数 ÷ 観測時間</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding:6px 14px;">[3] $E[X_t],\, V[X_t]$</td>
+                                        <td style="padding:6px 14px;">$E[X_t] = \lambda tq,\quad V[X_t] = \lambda tq$</td>
+                                        <td style="padding:6px 14px;">複合ポアソン過程の公式 + $E[U_k^2] = q$</td>
+                                    </tr>
+                                    <tr style="background:#f8f9fa;">
+                                        <td style="padding:6px 14px;">[4] $\hat{q}$</td>
+                                        <td style="padding:6px 14px;">$1.53/1.86 \approx 0.823$</td>
+                                        <td style="padding:6px 14px;">モーメント法：$\hat{\lambda}\hat{q} = 1.53$</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
