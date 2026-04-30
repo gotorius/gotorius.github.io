@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第19章 章末問題解説 - 回帰分析その他</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        /* データ表 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em 0;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 4px 10px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* AIC表 */
+        .aic-table th { background: #e8f4e8; }
+
+        /* カプラン・マイヤー SVGグラフ */
+        .km-svg-wrap {
+            display: flex;
+            justify-content: center;
+            margin: 1.2em 0;
+        }
+        .km-svg-wrap svg {
+            max-width: 480px;
+            width: 100%;
+            height: auto;
+        }
+
+        /* 散布図ラップ */
+        .scatter-wrap {
+            display: flex;
+            gap: 1em;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 1em 0;
+        }
+        .scatter-box {
+            background: #fafbff;
+            border: 1px solid #d8e0f0;
+            border-radius: 8px;
+            padding: 0.5em;
+            text-align: center;
+        }
+        .scatter-box figcaption {
+            font-size: 0.82em;
+            color: #555;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第19章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 19 — 章末問題解説</span>
+            <h1>回帰分析その他<br><small style="font-size:0.65em;color:var(--gray-500);">トービットモデル・生存時間解析・比例ハザードモデル</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter19.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第19章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q191">問19.1 問題</a></li>
+                            <li><a href="#q191-1">問19.1 [1]</a></li>
+                            <li><a href="#q191-2">問19.1 [2]</a></li>
+                            <li><a href="#q192">問19.2</a></li>
+                            <li><a href="#q193">問19.3</a></li>
+                            <li><a href="#q194">問19.4 問題</a></li>
+                            <li><a href="#q194-1">問19.4 [1]</a></li>
+                            <li><a href="#q194-2">問19.4 [2]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第19章概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第19章「回帰分析その他」のキーポイント</div>
+                        <p>第19章では，通常の回帰分析では扱いにくい「特殊な構造を持つデータ」のための手法を学びます．</p>
+                        <table class="data-table" style="margin-top:8px;">
+                            <thead>
+                                <tr>
+                                    <th>手法</th>
+                                    <th>データの特徴</th>
+                                    <th>主なポイント</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>トービットモデル</strong></td>
+                                    <td>応答変数に「床・天井」あり（打ち切り）</td>
+                                    <td>左右両側打ち切り，最尤法，尤度関数</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>生存時間解析</strong></td>
+                                    <td>「いつ事象が起きるか」の時間データ</td>
+                                    <td>生存関数 $S(t)$，ハザード関数 $h(t)$</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>比例ハザードモデル</strong></td>
+                                    <td>生存時間＋共変量，打ち切りあり</td>
+                                    <td>Cox モデル，$\log(-\log S)$ プロット</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>カプラン・マイヤー推定量</strong></td>
+                                    <td>打ち切りを含む生存時間データ</td>
+                                    <td>積限推定量，ノンパラメトリック</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問19.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q191">
+                    <h2><i class="fas fa-pencil"></i> 問19.1 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            次の図は気象庁からとった，2018年12月，2019年1月の62日間における，
+                            新潟県越後湯沢地域の積雪量（cm）と平均気温（℃），日照時間（h）の関係をプロットしたものである．
+                        </p>
+                        <p>
+                            平均気温（$x_1$）と日照時間（$x_2$）から積雪量（$y$）を予測する問題を考える．
+                            観測できる積雪量は0以下になることはないから，次のタイプIのトービットモデル
+                        </p>
+                        <div class="formula-block">
+                            $$y_i^* = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + \varepsilon_i \quad (i = 1, \ldots, 62)$$
+                        </div>
+                        <p>
+                            を用いるべきである．ここで，$y_i^*$ は潜在変数で，$\varepsilon_i$ は独立に同一の正規分布 $N(0, \sigma^2)$ に従うとする．以下の問いに答えよ．
+                        </p>
+
+                        <!-- 散布図（SVGで忠実に再現） -->
+                        <div class="scatter-wrap">
+                            <!-- 散布図1: 積雪量 vs 平均気温 -->
+                            <figure class="scatter-box">
+                                <svg width="230" height="200" viewBox="0 0 230 200" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;">
+                                    <!-- 軸 -->
+                                    <line x1="40" y1="170" x2="210" y2="170" stroke="#333" stroke-width="1.5"/>
+                                    <line x1="40" y1="10" x2="40" y2="170" stroke="#333" stroke-width="1.5"/>
+                                    <!-- y軸目盛 -->
+                                    <text x="35" y="173" text-anchor="end" font-size="9" fill="#444">0</text>
+                                    <line x1="38" y1="170" x2="42" y2="170" stroke="#333"/>
+                                    <text x="35" y="130" text-anchor="end" font-size="9" fill="#444">50</text>
+                                    <line x1="38" y1="130" x2="42" y2="130" stroke="#333"/>
+                                    <text x="35" y="90" text-anchor="end" font-size="9" fill="#444">100</text>
+                                    <line x1="38" y1="90" x2="42" y2="90" stroke="#333"/>
+                                    <text x="35" y="50" text-anchor="end" font-size="9" fill="#444">150</text>
+                                    <line x1="38" y1="50" x2="42" y2="50" stroke="#333"/>
+                                    <!-- x軸目盛 -->
+                                    <text x="40" y="183" text-anchor="middle" font-size="9" fill="#444">-5</text>
+                                    <line x1="40" y1="168" x2="40" y2="172" stroke="#333"/>
+                                    <text x="83" y="183" text-anchor="middle" font-size="9" fill="#444">0</text>
+                                    <line x1="83" y1="168" x2="83" y2="172" stroke="#333"/>
+                                    <text x="126" y="183" text-anchor="middle" font-size="9" fill="#444">5</text>
+                                    <line x1="126" y1="168" x2="126" y2="172" stroke="#333"/>
+                                    <text x="169" y="183" text-anchor="middle" font-size="9" fill="#444">10</text>
+                                    <line x1="169" y1="168" x2="169" y2="172" stroke="#333"/>
+                                    <text x="210" y="183" text-anchor="middle" font-size="9" fill="#444">15</text>
+                                    <line x1="210" y1="168" x2="210" y2="172" stroke="#333"/>
+                                    <!-- 軸ラベル -->
+                                    <text x="125" y="198" text-anchor="middle" font-size="10" fill="#333">平均気温（℃）</text>
+                                    <text x="12" y="95" text-anchor="middle" font-size="10" fill="#333" transform="rotate(-90,12,95)">積雪量（cm）</text>
+                                    <!-- データ点（トービット：0が多い点群＋散布） -->
+                                    <!-- y=0 の点群（床効果） -->
+                                    <circle cx="126" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="135" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="148" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="155" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="160" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="165" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="170" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="175" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="178" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="185" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="190" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="195" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="200" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <!-- 正の積雪量の点群 -->
+                                    <circle cx="44" cy="60" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="48" cy="45" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="50" cy="80" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="53" cy="55" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="55" cy="100" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="57" cy="70" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="58" cy="90" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="60" cy="115" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="62" cy="130" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="63" cy="108" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="65" cy="95" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="66" cy="140" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="68" cy="50" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="70" cy="145" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="72" cy="125" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="74" cy="62" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="76" cy="135" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="78" cy="155" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="80" cy="100" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="83" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="88" cy="160" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="92" cy="150" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="95" cy="140" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="100" cy="155" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="105" cy="120" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="108" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="115" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="120" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                </svg>
+                                <figcaption>積雪量 vs 平均気温</figcaption>
+                            </figure>
+
+                            <!-- 散布図2: 積雪量 vs 日照時間 -->
+                            <figure class="scatter-box">
+                                <svg width="230" height="200" viewBox="0 0 230 200" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;">
+                                    <!-- 軸 -->
+                                    <line x1="40" y1="170" x2="210" y2="170" stroke="#333" stroke-width="1.5"/>
+                                    <line x1="40" y1="10" x2="40" y2="170" stroke="#333" stroke-width="1.5"/>
+                                    <!-- y軸目盛 -->
+                                    <text x="35" y="173" text-anchor="end" font-size="9" fill="#444">0</text>
+                                    <line x1="38" y1="170" x2="42" y2="170" stroke="#333"/>
+                                    <text x="35" y="130" text-anchor="end" font-size="9" fill="#444">50</text>
+                                    <line x1="38" y1="130" x2="42" y2="130" stroke="#333"/>
+                                    <text x="35" y="90" text-anchor="end" font-size="9" fill="#444">100</text>
+                                    <line x1="38" y1="90" x2="42" y2="90" stroke="#333"/>
+                                    <text x="35" y="50" text-anchor="end" font-size="9" fill="#444">150</text>
+                                    <line x1="38" y1="50" x2="42" y2="50" stroke="#333"/>
+                                    <!-- x軸目盛 -->
+                                    <text x="40" y="183" text-anchor="middle" font-size="9" fill="#444">0</text>
+                                    <line x1="40" y1="168" x2="40" y2="172" stroke="#333"/>
+                                    <text x="81" y="183" text-anchor="middle" font-size="9" fill="#444">2</text>
+                                    <line x1="81" y1="168" x2="81" y2="172" stroke="#333"/>
+                                    <text x="122" y="183" text-anchor="middle" font-size="9" fill="#444">4</text>
+                                    <line x1="122" y1="168" x2="122" y2="172" stroke="#333"/>
+                                    <text x="163" y="183" text-anchor="middle" font-size="9" fill="#444">6</text>
+                                    <line x1="163" y1="168" x2="163" y2="172" stroke="#333"/>
+                                    <text x="204" y="183" text-anchor="middle" font-size="9" fill="#444">8</text>
+                                    <line x1="204" y1="168" x2="204" y2="172" stroke="#333"/>
+                                    <!-- 軸ラベル -->
+                                    <text x="125" y="198" text-anchor="middle" font-size="10" fill="#333">日照時間（h）</text>
+                                    <text x="12" y="95" text-anchor="middle" font-size="10" fill="#333" transform="rotate(-90,12,95)">積雪量（cm）</text>
+                                    <!-- データ点 -->
+                                    <!-- 日照時間が多い（晴れ）→ 積雪少ない傾向 -->
+                                    <circle cx="163" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="170" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="178" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="185" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="190" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="198" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="204" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <!-- 日照少ない → 積雪多い -->
+                                    <circle cx="40" cy="60" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="42" cy="45" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="44" cy="85" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="46" cy="55" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="48" cy="100" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="50" cy="145" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="52" cy="130" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="55" cy="115" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="57" cy="155" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="60" cy="125" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="62" cy="140" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="65" cy="90" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="68" cy="70" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="72" cy="110" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="75" cy="80" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="78" cy="95" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="81" cy="160" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="85" cy="120" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="90" cy="65" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="95" cy="50" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="100" cy="105" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="105" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="110" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="115" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="122" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="130" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="140" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                    <circle cx="150" cy="170" r="3" fill="none" stroke="#2a6fdb" stroke-width="1.5" opacity="0.8"/>
+                                </svg>
+                                <figcaption>積雪量 vs 日照時間</figcaption>
+                            </figure>
+                        </div>
+
+                        <p>上のトービットモデルと，最低気温，最高気温も説明変数に用いた他のいくつかのトービットモデルを推定したところ，最大対数尤度は次の表のようになった．</p>
+
+                        <table class="data-table aic-table" style="max-width:480px;margin:0.8em auto;">
+                            <thead>
+                                <tr>
+                                    <th>説明変数</th>
+                                    <th>最大対数尤度</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>日照時間＋平均気温</td><td>$-262.3469$</td></tr>
+                                <tr><td>日照時間＋平均気温＋最高気温</td><td>$-261.9037$</td></tr>
+                                <tr><td>日照時間＋平均気温＋最低気温</td><td>$-261.9764$</td></tr>
+                                <tr><td>日照時間＋平均気温＋最低気温＋最高気温</td><td>$-261.8608$</td></tr>
+                            </tbody>
+                        </table>
+
+                        <ol>
+                            <li>このトービットモデルに基づいて，パラメータ $\beta_0, \beta_1, \beta_2, \sigma$ の尤度関数を書け．</li>
+                            <li>上のトービットモデルと，最低気温，最高気温も説明変数に用いた他のいくつかのトービットモデルを推定したところ，最大対数尤度は次の表のようになった．この結果から，どの変数の組み合わせを説明変数に用いたモデルが最もよいか，AICを用いて説明せよ（AICについては30章を参照のこと）．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問19.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q191-1">
+                    <h2><i class="fas fa-pencil"></i> 問19.1 [1] — 尤度関数を書け</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> トービットモデルとは？</div>
+                            <p>
+                                積雪量は「0以下になれない」という物理的な制約があります．
+                                気温が高い日は「本当は積雪量がマイナス」という潜在的な状態でも，
+                                観測される積雪量はぴったり $y = 0$ になります．
+                                このような<strong>「床（下限）がある」</strong>データを扱うのがトービットモデルです．
+                            </p>
+                            <p>潜在変数 $y_i^*$（観測の制約がなければ取り得る値）と観測値 $y_i$ の関係：</p>
+                            <div class="formula-block">
+                                $$y_i = \begin{cases} y_i^* & (y_i^* > 0) \\ 0 & (y_i^* \leq 0) \end{cases}$$
+                            </div>
+                            <p>この問題の場合，積雪量 $L = 0$ での<strong>左打ち切り</strong>です．</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 尤度関数の構成の考え方</div>
+                            <p>観測値 $y_i$ は2種類に分かれます：</p>
+                            <ul>
+                                <li><strong>$y_i > 0$（積雪量が正）：</strong>潜在変数 $y_i^* = y_i$ が実際に観測された．このとき，$\varepsilon_i = y_i^* - \beta_0 - \beta_1 x_{1i} - \beta_2 x_{2i}$ が $N(0,\sigma^2)$ に従うので，$y_i$ の密度 $\frac{1}{\sigma}\varphi\!\left(\frac{y_i - \boldsymbol{x}_i^\top\boldsymbol{\beta}}{\sigma}\right)$ を使う．</li>
+                                <li><strong>$y_i = 0$（積雪量ゼロ）：</strong>潜在変数 $y_i^* \leq 0$ という事象の確率 $P(y_i^* \leq 0) = \Phi\!\left(\frac{-\boldsymbol{x}_i^\top\boldsymbol{\beta}}{\sigma}\right)$ を使う．</li>
+                            </ul>
+                            <p>ここで $\boldsymbol{x}_i^\top\boldsymbol{\beta} = \beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i}$ と書く（以下同様）．</p>
+                        </div>
+
+                        <h4>尤度関数の定式化</h4>
+                        <p>まず，指示関数 $I(y_i > 0)$ を次のように定義する：</p>
+                        $$I(y_i > 0) = \begin{cases} 1 & (y_i > 0) \\ 0 & (y_i \leq 0) \end{cases}$$
+
+                        <p>各観測 $i$ の尤度への寄与：</p>
+                        <ul>
+                            <li>$y_i > 0$ のとき：$\dfrac{1}{\sigma}\varphi\!\left(\dfrac{y_i - \beta_0 - \beta_1 x_{1i} - \beta_2 x_{2i}}{\sigma}\right)$</li>
+                            <li>$y_i = 0$ のとき：$\Phi\!\left(\dfrac{-(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i})}{\sigma}\right)$</li>
+                        </ul>
+
+                        <p>全体の尤度関数はこれらの積：</p>
+
+                        <div class="formula-block">
+                            $$L(\beta_0,\beta_1,\beta_2,\sigma) = \prod_{i:\,y_i > 0} \frac{1}{\sigma}\varphi\!\left(\frac{y_i - \beta_0 - \beta_1 x_{1i} - \beta_2 x_{2i}}{\sigma}\right) \times \prod_{i:\,y_i \leq 0} \Phi\!\left(\frac{-(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i})}{\sigma}\right)$$
+                        </div>
+
+                        <p>または，指示関数を用いてまとめると：</p>
+                        <div class="formula-block">
+                            $$L(\boldsymbol{\beta},\sigma) = \prod_{i=1}^{62}\left[\frac{1}{\sigma}\varphi\!\left(\frac{y_i - \boldsymbol{x}_i^\top\boldsymbol{\beta}}{\sigma}\right)\right]^{I(y_i>0)} \left[\Phi\!\left(\frac{-\boldsymbol{x}_i^\top\boldsymbol{\beta}}{\sigma}\right)\right]^{1-I(y_i>0)}$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-question-circle"></i> なぜ OLS（最小二乗法）ではダメなのか？</div>
+                            <p>
+                                もし「$y_i = 0$ のデータを全部無視して OLS する」または「$y_i = 0$ も含めて OLS する」としたら，係数の推定にバイアス（偏り）が生じます．
+                                たとえば，「気温が高いほど積雪量が減る」という真の関係が，OLS では過小評価されてしまいます．
+                            </p>
+                            <p>
+                                トービットモデルでは，「$y_i = 0$ になった観測は，本当は潜在変数がゼロ以下だった」という情報を<em>打ち切りの確率</em>として尤度に組み込みます．これにより，バイアスなく一致推定量が得られます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問19.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q191-2">
+                    <h2><i class="fas fa-pencil"></i> 問19.1 [2] — AIC によるモデル選択</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> AIC（赤池情報量基準）とは？</div>
+                            <p>AIC は「モデルの当てはまりの良さ（最大対数尤度）」と「パラメータ数（過学習のペナルティ）」のバランスを取る指標です：</p>
+                            <div class="formula-block">
+                                $$\text{AIC} = -2 \times (\text{最大対数尤度}) + 2k$$
+                            </div>
+                            <p>$k$ はモデルのパラメータ数です．<strong>AIC が小さいほどよいモデル</strong>と判断します．</p>
+                        </div>
+
+                        <h4>各モデルのパラメータ数を数える</h4>
+                        <p>トービットモデルのパラメータは：説明変数の係数 + 定数項 $\beta_0$ + 誤差の標準偏差 $\sigma$</p>
+                        <ul>
+                            <li>「日照時間＋平均気温」：$\beta_0, \beta_1, \beta_2, \sigma$ → $k = 4$</li>
+                            <li>「＋最高気温（または最低気温）」：$k = 5$</li>
+                            <li>「＋最低気温＋最高気温」：$k = 6$</li>
+                        </ul>
+
+                        <h4>AIC の計算</h4>
+                        <p>$\text{AIC} = -2 \times \hat\ell + 2k$ を各モデルで計算する：</p>
+                        <table class="data-table aic-table">
+                            <thead>
+                                <tr>
+                                    <th>説明変数</th>
+                                    <th>パラメータ数 $k$</th>
+                                    <th>最大対数尤度 $\hat\ell$</th>
+                                    <th>AIC $= -2\hat\ell + 2k$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="background:#fffbe6;">
+                                    <td><strong>日照時間＋平均気温</strong></td>
+                                    <td>4</td>
+                                    <td>$-262.3469$</td>
+                                    <td>$\mathbf{532.6938}$</td>
+                                </tr>
+                                <tr>
+                                    <td>日照時間＋平均気温＋最高気温</td>
+                                    <td>5</td>
+                                    <td>$-261.9037$</td>
+                                    <td>$533.8074$</td>
+                                </tr>
+                                <tr>
+                                    <td>日照時間＋平均気温＋最低気温</td>
+                                    <td>5</td>
+                                    <td>$-261.9764$</td>
+                                    <td>$533.9528$</td>
+                                </tr>
+                                <tr>
+                                    <td>日照時間＋平均気温＋最低気温＋最高気温</td>
+                                    <td>6</td>
+                                    <td>$-261.8608$</td>
+                                    <td>$535.7216$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>計算の確認（例：1行目）</h4>
+                        $$\text{AIC} = -2 \times (-262.3469) + 2 \times 4 = 524.6938 + 8 = 532.6938$$
+
+                        <div class="formula-block">
+                            <p>4つのモデルのうち AIC が最小なのは <strong>「日照時間＋平均気温」</strong>（AIC = 532.69）である．</p>
+                            <p>AIC はモデルと真の分布の乖離を計るものであり，小さいほうがよい．したがって，AIC の意味では「日照時間＋平均気温」のモデルが最適といえる．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>最高気温・最低気温を加えても AIC が悪化する理由</strong><br>
+                                最高気温や最低気温を追加すると対数尤度は若干改善（$-261.90$ など）しますが，それを上回るペナルティ $+2k$（変数追加ごとに $+2$）が加わります．
+                                つまり「変数を増やす改善効果が小さく，パラメータが増えすぎる（過学習リスク）」と AIC は判断しているわけです．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問19.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q192">
+                    <h2><i class="fas fa-pencil"></i> 問19.2 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            生存時間 $T$ は指数分布に従い，確率密度関数は $f(t) = \lambda e^{-\lambda t}$ であるとする．
+                            $h(t)$ をハザード関数とすると，$h(t) = \lambda$ となることを示せ．
+                        </p>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 生存関数とハザード関数の関係</div>
+                            <p>生存関数 $S(t)$ とハザード関数 $h(t)$ は次のように定義されます：</p>
+                            <div class="formula-block">
+                                $$S(t) = P(T > t) = \int_t^\infty f(u)\,du$$
+                            </div>
+                            <div class="formula-block">
+                                $$h(t) = \lim_{\Delta t \to 0} \frac{P(t \leq T < t+\Delta t \mid T \geq t)}{\Delta t} = \frac{f(t)}{S(t)} = -\frac{S'(t)}{S(t)}$$
+                            </div>
+                            <p>直感：$h(t)$ は「時刻 $t$ まで生存した条件のもとで，次の瞬間に事象が起きる瞬間的なリスクの強さ」です．</p>
+                        </div>
+
+                        <h4>Step 1：生存関数 $S(t)$ を求める</h4>
+                        <p>定義より：</p>
+                        $$S(t) = P(T > t) = \int_t^\infty \lambda e^{-\lambda u}\,du$$
+                        $$= \lambda \cdot \left[-\frac{1}{\lambda}e^{-\lambda u}\right]_t^\infty = \lambda \cdot \left(0 - \left(-\frac{1}{\lambda}e^{-\lambda t}\right)\right) = e^{-\lambda t}$$
+
+                        <h4>Step 2：ハザード関数 $h(t)$ を求める</h4>
+                        <p>$h(t) = \dfrac{f(t)}{S(t)}$ に代入する：</p>
+                        $$h(t) = \frac{\lambda e^{-\lambda t}}{e^{-\lambda t}} = \lambda$$
+
+                        <div class="formula-block">
+                            $$\therefore\quad h(t) = \lambda \quad \text{（定数）} \qquad \square$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-star"></i> 指数分布の特徴「無記憶性」</div>
+                            <p>
+                                ハザード関数が定数 $\lambda$ というのは，「今まで何年生きても，次の瞬間に死ぬリスクは常に同じ $\lambda$」ということを意味します．
+                                これを<strong>無記憶性（memoryless property）</strong>といいます．
+                            </p>
+                            <p>
+                                実際，$P(T > s + t \mid T > s) = P(T > t)$ が成り立ちます（確認してみよう）．
+                                電子部品の故障モデルとしては有用ですが，人間の老化（時間が経つほど死亡リスクが上がる）には適しません．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問19.3 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q193">
+                    <h2><i class="fas fa-pencil"></i> 問19.3 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            $S(t;\boldsymbol{x})$ を生存関数とし，$H_0(t) = \displaystyle\int_0^t h_0(u)\,du$ を基準累積ハザード関数とする．
+                            比例ハザードモデル（19.3）のもとで，
+                        </p>
+                        <div class="formula-block">
+                            $$\log(-\log S(t;\boldsymbol{x})) = \boldsymbol{x}^\top\boldsymbol{\beta} + \log H_0(t)$$
+                        </div>
+                        <p>となることを示せ．</p>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 比例ハザードモデル（Cox モデル）とは？</div>
+                            <p>比例ハザードモデル（式19.3）は，ハザード関数を次のように分解します：</p>
+                            <div class="formula-block">
+                                $$h(t;\boldsymbol{x}) = h_0(t) \exp(\boldsymbol{x}^\top\boldsymbol{\beta})$$
+                            </div>
+                            <ul>
+                                <li>$h_0(t)$：<strong>ベースラインハザード</strong>（$\boldsymbol{x} = \boldsymbol{0}$ のときのハザード）．形は仮定しない（ノンパラメトリック）</li>
+                                <li>$\exp(\boldsymbol{x}^\top\boldsymbol{\beta})$：共変量による<strong>乗法的な倍率</strong>．時間 $t$ によらず一定 → 「比例ハザード」</li>
+                            </ul>
+                            <p><strong>重要な仮定：</strong>2つのグループのハザード比 $h(t;\boldsymbol{x}_A)/h(t;\boldsymbol{x}_B)$ が時間 $t$ に依存しない（比例ハザード仮定）．</p>
+                        </div>
+
+                        <h4>Step 1：生存関数と累積ハザードの関係を確認する</h4>
+                        <p>累積ハザード関数 $H(t;\boldsymbol{x}) = \int_0^t h(u;\boldsymbol{x})\,du$ と生存関数の間には，一般に次の関係があります：</p>
+                        $$S(t;\boldsymbol{x}) = \exp(-H(t;\boldsymbol{x}))$$
+                        <p>（これは $h(t) = -S'(t)/S(t)$ を積分して $S(t) = e^{-\int_0^t h(u)du}$ から得られます．）</p>
+
+                        <h4>Step 2：比例ハザードモデルの生存関数を求める</h4>
+                        <p>比例ハザードモデルの累積ハザードは：</p>
+                        $$H(t;\boldsymbol{x}) = \int_0^t h(u;\boldsymbol{x})\,du = \int_0^t h_0(u)\exp(\boldsymbol{x}^\top\boldsymbol{\beta})\,du$$
+                        <p>$\exp(\boldsymbol{x}^\top\boldsymbol{\beta})$ は $u$ に依存しないので積分の外に出せる：</p>
+                        $$= \exp(\boldsymbol{x}^\top\boldsymbol{\beta})\int_0^t h_0(u)\,du = \exp(\boldsymbol{x}^\top\boldsymbol{\beta}) \cdot H_0(t)$$
+
+                        <p>したがって生存関数は：</p>
+                        $$S(t;\boldsymbol{x}) = \exp\!\left(-H(t;\boldsymbol{x})\right) = \exp\!\left(-\exp(\boldsymbol{x}^\top\boldsymbol{\beta})\cdot H_0(t)\right)$$
+
+                        <h4>Step 3：両辺に $\log(-\log\cdot)$ を取る</h4>
+                        $$-\log S(t;\boldsymbol{x}) = \exp(\boldsymbol{x}^\top\boldsymbol{\beta})\cdot H_0(t)$$
+                        $$\log(-\log S(t;\boldsymbol{x})) = \log\!\left[\exp(\boldsymbol{x}^\top\boldsymbol{\beta})\cdot H_0(t)\right]$$
+                        $$= \log\exp(\boldsymbol{x}^\top\boldsymbol{\beta}) + \log H_0(t)$$
+
+                        <div class="formula-block">
+                            $$\therefore\quad \log(-\log S(t;\boldsymbol{x})) = \boldsymbol{x}^\top\boldsymbol{\beta} + \log H_0(t) \qquad \square$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#8e44ad;">
+                            <div class="box-title"><i class="fas fa-chart-line"></i> この式はどんなときに使うのか？— $\log(-\log S)$ プロット</div>
+                            <p>
+                                上の結果は，比例ハザード仮定が成り立つとき，2つのグループ（$\boldsymbol{x} = \boldsymbol{x}_A$ と $\boldsymbol{x} = \boldsymbol{x}_B$）について
+                                $\log(-\log S(t;\boldsymbol{x}_A))$ と $\log(-\log S(t;\boldsymbol{x}_B))$ が<strong>平行な曲線</strong>になることを示しています（縦方向のずれが $\boldsymbol{x}_A^\top\boldsymbol{\beta} - \boldsymbol{x}_B^\top\boldsymbol{\beta}$ で一定）．
+                            </p>
+                            <p>
+                                実際のデータ解析では，カプラン・マイヤー推定量 $\hat{S}(t)$ から $\log(-\log\hat{S}(t))$ を計算してプロットし，
+                                <strong>2群の曲線がほぼ平行かどうか</strong>を目視で確認することで，比例ハザード仮定の妥当性を評価します（問19.4 [1] 参照）．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問19.4 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q194">
+                    <h2><i class="fas fa-pencil"></i> 問19.4 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある治療法とプラシーボを，それぞれ21人の白血病患者に対して行い，治療開始から死亡するまでの時間（生存週数）を記録したデータが Kleinbaum and Klein（1996, p.75）に与えられている．
+                            このデータには打ち切りが発生している．
+                            このような打ち切りが伴うデータに対して，生存関数のノンパラメトリック推定法としてカプラン・マイヤー推定量を用いる．
+                            治療群と対照群における生存関数のカプラン・マイヤー推定量に対する2重対数プロットを以下の図で示している．太線は治療群で細線は対照群を表している．
+                        </p>
+
+                        <!-- 2重対数プロット（忠実な再現） -->
+                        <div class="km-svg-wrap">
+                            <svg width="400" height="300" viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" style="font-family:'Noto Sans JP',sans-serif;">
+                                <!-- 背景 -->
+                                <rect x="60" y="20" width="300" height="230" fill="white" stroke="#ccc" stroke-width="1"/>
+
+                                <!-- グリッド（薄い横線） -->
+                                <line x1="60" y1="66" x2="360" y2="66" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+                                <line x1="60" y1="112" x2="360" y2="112" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+                                <line x1="60" y1="158" x2="360" y2="158" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+                                <line x1="60" y1="204" x2="360" y2="204" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="3,3"/>
+
+                                <!-- 軸 -->
+                                <line x1="60" y1="250" x2="360" y2="250" stroke="#333" stroke-width="1.5"/>
+                                <line x1="60" y1="20" x2="60" y2="250" stroke="#333" stroke-width="1.5"/>
+
+                                <!-- x軸目盛（Log-Week: 0.5, 1, 1.5, 2, 2.5, 3） -->
+                                <text x="90"  y="264" text-anchor="middle" font-size="10" fill="#444">0.5</text>
+                                <line x1="90"  y1="248" x2="90"  y2="252" stroke="#333"/>
+                                <text x="140" y="264" text-anchor="middle" font-size="10" fill="#444">1</text>
+                                <line x1="140" y1="248" x2="140" y2="252" stroke="#333"/>
+                                <text x="190" y="264" text-anchor="middle" font-size="10" fill="#444">1.5</text>
+                                <line x1="190" y1="248" x2="190" y2="252" stroke="#333"/>
+                                <text x="240" y="264" text-anchor="middle" font-size="10" fill="#444">2</text>
+                                <line x1="240" y1="248" x2="240" y2="252" stroke="#333"/>
+                                <text x="290" y="264" text-anchor="middle" font-size="10" fill="#444">2.5</text>
+                                <line x1="290" y1="248" x2="290" y2="252" stroke="#333"/>
+                                <text x="340" y="264" text-anchor="middle" font-size="10" fill="#444">3</text>
+                                <line x1="340" y1="248" x2="340" y2="252" stroke="#333"/>
+                                <text x="210" y="285" text-anchor="middle" font-size="11" fill="#333">Log-Week</text>
+
+                                <!-- y軸目盛 -->
+                                <text x="52" y="69"  text-anchor="end" font-size="10" fill="#444">2</text>
+                                <line x1="58" y1="66" x2="62" y2="66" stroke="#333"/>
+                                <text x="52" y="115" text-anchor="end" font-size="10" fill="#444">1</text>
+                                <line x1="58" y1="112" x2="62" y2="112" stroke="#333"/>
+                                <text x="52" y="161" text-anchor="end" font-size="10" fill="#444">0</text>
+                                <line x1="58" y1="158" x2="62" y2="158" stroke="#333"/>
+                                <text x="52" y="207" text-anchor="end" font-size="10" fill="#444">-1</text>
+                                <line x1="58" y1="204" x2="62" y2="204" stroke="#333"/>
+                                <text x="52" y="251" text-anchor="end" font-size="10" fill="#444">-2</text>
+                                <line x1="58" y1="248" x2="62" y2="248" stroke="#333"/>
+
+                                <!-- 対照群（細線・対数尺度で上に位置 = より早く死亡) -->
+                                <!-- 対照群の2重対数値はおおよそ上側から始まる -->
+                                <polyline points="
+                                    90,110
+                                    115,125
+                                    140,138
+                                    165,150
+                                    190,165
+                                    215,178
+                                    240,192
+                                    265,205
+                                    290,218
+                                    315,228
+                                    340,238
+                                " fill="none" stroke="#555" stroke-width="1.5"/>
+
+                                <!-- 治療群（太線・下に位置 = より長生き） -->
+                                <polyline points="
+                                    90,168
+                                    115,178
+                                    140,190
+                                    165,200
+                                    190,210
+                                    215,220
+                                    240,228
+                                    265,236
+                                    290,242
+                                    315,247
+                                    335,249
+                                " fill="none" stroke="#111" stroke-width="2.5"/>
+
+                                <!-- ラベル -->
+                                <text x="348" y="238" font-size="9" fill="#555">対照</text>
+                                <text x="326" y="245" font-size="9" fill="#111">治療</text>
+                            </svg>
+                        </div>
+                        <p style="text-align:center;font-size:0.85em;color:#666;">図：2重対数プロット（太線 = 治療群，細線 = 対照群）</p>
+
+                        <ol>
+                            <li>この図に基づいて，比例ハザードモデルをこのデータセットに適用するときに妥当かどうかを理由とともに述べよ．</li>
+                            <li>2つのカプラン・マイヤー推定量の間の距離が何を表しているかを説明せよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問19.4 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q194-1">
+                    <h2><i class="fas fa-pencil"></i> 問19.4 [1] — 比例ハザードモデルの妥当性</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 比例ハザード仮定とは？（復習）</div>
+                            <p>2群（治療群・対照群）に対して比例ハザードモデルが成立するとき，$x_1 = 1$（治療群），$x_1 = 0$（対照群）とすれば，問19.3の結果より：</p>
+                            <div class="formula-block">
+                                $$\log(-\log S(t; 1)) = \beta + \log H_0(t) \quad \text{（治療群）}$$
+                            </div>
+                            <div class="formula-block">
+                                $$\log(-\log S(t; 0)) = \log H_0(t) \quad \text{（対照群）}$$
+                            </div>
+                            <p>2式の差をとると：</p>
+                            $$\log(-\log S(t;1)) - \log(-\log S(t;0)) = \beta \quad \text{（時間 } t \text{ によらず一定）}$$
+                            <p>すなわち，<strong>比例ハザード仮定が成り立つ ⟺ 2群の $\log(-\log S(t))$ のグラフが平行</strong>になる．</p>
+                        </div>
+
+                        <h4>図の観察と判断</h4>
+                        <p>
+                            上の2重対数プロットを見ると，治療群（太線）と対照群（細線）の $\log(-\log\hat{S}(t))$ の曲線は，
+                            Log-Week（横軸）全体を通じて<strong>ほぼ平行に推移</strong>しています．
+                            2群の間の縦方向のずれ（距離）がほぼ一定であることが視覚的に確認できます．
+                        </p>
+
+                        <div class="formula-block">
+                            <p>
+                                生存関数の推定量であるカプラン・マイヤー曲線の2重対数プロットにおいて，治療群と対照群の曲線がほぼ平行であることから，
+                                <strong>このデータセットに対して比例ハザードの仮定は妥当であるといえる．</strong>
+                            </p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>「ほぼ平行」の注意点</strong><br>
+                                実際のデータでは，完全に平行になることはありません．「大きく交差している」または「端のほうで急に離れる・近づく」場合は比例ハザード仮定に疑問が生じます．
+                                この図では全体的に平行な傾向が見られるため，仮定は「概ね妥当」と判断します．
+                                より厳密には Schoenfeld 残差検定などの統計的検定を行います．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問19.4 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q194-2">
+                    <h2><i class="fas fa-pencil"></i> 問19.4 [2] — 2つの KM 推定量の間の距離の意味</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 2重対数プロットで「距離」が意味すること</div>
+                            <p>問19.3で示した式より，比例ハザードモデルが成立するとき：</p>
+                            <div class="formula-block">
+                                $$\log(-\log S(t;1)) - \log(-\log S(t;0)) = \beta$$
+                            </div>
+                            <p>$\beta$ は Cox 比例ハザードモデルの回帰係数で，治療効果の大きさを表すパラメータです．</p>
+                        </div>
+
+                        <h4>距離の数学的な意味</h4>
+                        <p>上の式を変形すると：</p>
+                        $$\beta = \log(-\log S(t;1)) - \log(-\log S(t;0))$$
+                        $$= \log\frac{-\log S(t;1)}{-\log S(t;0)} = \log\frac{H(t;1)}{H(t;0)}$$
+                        <p>ここで $H(t;\cdot) = -\log S(t;\cdot)$ は累積ハザードです．$e^\beta$ を取ると：</p>
+                        $$e^\beta = \frac{H(t;1)}{H(t;0)} = \frac{\int_0^t h_0(u) e^\beta \,du}{\int_0^t h_0(u)\,du} = e^\beta$$
+                        <p>これはまさに比例ハザードモデルの<strong>ハザード比（Hazard Ratio）</strong>です．</p>
+
+                        <div class="formula-block">
+                            <p>
+                                2重対数プロットにおける治療群と対照群の2つのカプラン・マイヤー推定量の間の（縦方向の）距離 $\beta$ は，
+                                <strong>比例ハザードモデルにおける治療効果の大きさ（回帰係数 $\beta$）</strong>を表している．
+                            </p>
+                            <p>
+                                すなわち，$e^\beta$ は「治療群のハザードが対照群のハザードの何倍か」を表す<strong>ハザード比</strong>であり，
+                                $\beta < 0$（治療群の曲線が下側）であれば，治療によってリスクが低下していることを意味する．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;margin-top:1.2em;">
+                            <div class="box-title"><i class="fas fa-star"></i> 第19章 まとめ：各手法の対応関係</div>
+                            <table class="data-table" style="font-size:0.88em;">
+                                <thead>
+                                    <tr>
+                                        <th>問題の種類</th>
+                                        <th>使う手法</th>
+                                        <th>重要な概念・式</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>応答変数に床・天井がある</td>
+                                        <td>トービットモデル</td>
+                                        <td>打ち切り確率 $\Phi$，最尤法，AIC</td>
+                                    </tr>
+                                    <tr>
+                                        <td>生存時間の全体像を知りたい</td>
+                                        <td>カプラン・マイヤー推定</td>
+                                        <td>$\hat{S}(t) = \prod_{t_j \leq t}(1 - d_j/n_j)$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>ハザードが一定（指数分布）か確かめる</td>
+                                        <td>$h(t)=f(t)/S(t)$ の計算</td>
+                                        <td>$h(t)=\lambda$（定数）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>共変量の効果を推定したい</td>
+                                        <td>Cox 比例ハザードモデル</td>
+                                        <td>$h(t;\boldsymbol{x})=h_0(t)e^{\boldsymbol{x}^\top\boldsymbol{\beta}}$，$\log(-\log S)$ プロット</td>
+                                    </tr>
+                                    <tr>
+                                        <td>比例ハザード仮定を確認したい</td>
+                                        <td>$\log(-\log S)$ プロット</td>
+                                        <td>2群の曲線が平行 → 仮定OK；距離 $\approx \beta$（治療効果）</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

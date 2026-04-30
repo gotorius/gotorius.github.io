@@ -129,6 +129,10 @@
                             <li>特定のパターン（曲線・上昇トレンドなど）が<strong>見られない</strong></li>
                         </ul>
                     </div>
+                    <figure class="chapter-figure">
+                        <img src="../images/fig17-1.png" alt="図17.1 仮定を満たす残差プロット">
+                        <figcaption>図17.1　仮定を満たす残差プロット</figcaption>
+                    </figure>
                     <div class="concept-box">
                         <p class="box-title"><i class="fas fa-exclamation-triangle"></i> 仮定が怪しい場合（問題ありのパターン）</p>
                         <ul>
@@ -136,6 +140,20 @@
                             <li><strong>曲線状パターン：</strong>残差が系統的に増えたり減ったりする → 線形性の違反。説明変数の2乗項などを追加。</li>
                             <li><strong>飛び離れた点（外れ値）：</strong>他の点から大きく外れた残差がある → その観測値を詳しく調べる。</li>
                         </ul>
+                    </div>
+                    <div class="figure-grid">
+                        <figure class="chapter-figure">
+                            <img src="../images/fig17-2.png" alt="図17.2 外れ値のある残差プロット">
+                            <figcaption>図17.2　外れ値のある残差プロット</figcaption>
+                        </figure>
+                        <figure class="chapter-figure">
+                            <img src="../images/fig17-3.png" alt="図17.3 等分散性を満たさない残差プロット">
+                            <figcaption>図17.3　等分散性を満たさない残差プロット</figcaption>
+                        </figure>
+                        <figure class="chapter-figure">
+                            <img src="../images/fig17-4.png" alt="図17.4 独立性を満たさない残差プロット">
+                            <figcaption>図17.4　独立性を満たさない残差プロット</figcaption>
+                        </figure>
                     </div>
 
                     <h3>チェックすべき仮定のまとめ</h3>
@@ -355,13 +373,21 @@
                     <h3>問17.1：道府県別乗用車所有率の回帰診断</h3>
                     <div class="example-block">
                         <span class="prob-badge badge-q">問題</span>
-                        <p>47都道府県のデータで乗用車所有率 $y$ を人口密度の正の平方根 $\sqrt{x}$ で単回帰した。Rで生成した4つの回帰診断図について次の問いに答えよ。</p>
+                        <p>47都道府県のデータで乗用車所有率 $y$ を人口密度の正の平方根 $\sqrt{x}$ で単回帰した。Rで生成した4つの回帰診断図（図17.5）について次の問いに答えよ。</p>
+                        <figure class="chapter-figure">
+                            <img src="../images/fig17-5.png" alt="図17.5 47都道府県の乗用車所有率に関する回帰診断図">
+                            <figcaption>図17.5　47都道府県の乗用車所有率に関する回帰診断図（R出力）<br>左上：Residuals vs Fitted　右上：Normal Q-Q　左下：Scale-Location　右下：Residuals vs Leverage</figcaption>
+                        </figure>
                         <ol>
                             <li>残差プロット（Residuals vs Fitted）から読み取れることを述べよ。</li>
                             <li>正規Q-Qプロットから正規性について述べよ。</li>
                             <li>Residuals vs Leverageプロットから、影響力の強い都道府県について述べよ。</li>
-                            <li>東京・大阪・神奈川を除いた44道府県で再分析したとき、結果がどう変わるか述べよ。</li>
+                            <li>東京・大阪・神奈川を除いた44道府県で同じモデルを再分析した結果が図17.6である。図17.5と比較してわかることを述べよ。</li>
                         </ol>
+                        <figure class="chapter-figure">
+                            <img src="../images/fig17-6.png" alt="図17.6 44道府県の乗用車所有率に関する回帰診断図">
+                            <figcaption>図17.6　44道府県（東京・大阪・神奈川除く）の乗用車所有率に関する回帰診断図（R出力）</figcaption>
+                        </figure>
                     </div>
                     <div class="answer-block">
                         <span class="prob-badge badge-a">解答</span>
@@ -385,13 +411,22 @@
                             Cookの距離が0.5を超えているなら「影響力が強い」と判断できる。
                         </p>
 
-                        <p><strong>(4) 44道府県での再分析：</strong></p>
+                        <p><strong>(4) 44道府県での再分析（図17.6）との比較：</strong></p>
                         <ul>
-                            <li>大都市圏3都府県を除くと、てこ比が全体的に小さくなる</li>
-                            <li>残差の分布が正規性に近づく可能性が高い</li>
-                            <li>決定係数 $R^2$ が向上し、モデルの当てはまりが改善することが多い</li>
-                            <li>ただし「除外が正当か」は別途検討が必要（外れ値を除くからといって必ずしも正しいわけではない）</li>
+                            <li>大都市圏3都府県を除くと、残差プロットとScale-Locationプロットから残差の散らばりに規則性がなくなり、等分散性が満たされると考えられる</li>
+                            <li>正規Q-Qプロットにはあまり変化がみられない</li>
+                            <li>てこ比も大きな値をもつ観測値がなくなり、Cookの距離が0.5を超えるものがなくなる</li>
+                            <li>ただし自由度調整済み決定係数は大きく変化する</li>
                         </ul>
+                        <p>参考として47都道府県と44道府県で得られた回帰式と（）内に自由度調整済み決定係数を以下に示す（図17.7）。回帰式はほとんど変化がないが、自由度調整済み決定係数が大きく異なる。</p>
+                        <div class="formula-block">
+                            <p>47都道府県：$\hat{y} = 0.74332 - 0.05208\sqrt{x}$ （調整済み $R^{*2} = 0.7011$）</p>
+                            <p>44道府県：$\hat{y} = 0.74285 - 0.05191\sqrt{x}$ （調整済み $R^{*2} = 0.3653$）</p>
+                        </div>
+                        <figure class="chapter-figure">
+                            <img src="../images/fig17-7.png" alt="図17.7 47都道府県と44道府県の回帰直線の比較">
+                            <figcaption>図17.7　47都道府県と44道府県の回帰直線の比較（横軸：$\sqrt{x}$（人口密度の平方根）、縦軸：乗用車所有率）</figcaption>
+                        </figure>
                         <p><strong>(DW比について：)</strong>都道府県データは時系列ではないため、この場合DW比は通常使わない。もしデータが何らかの順序（人口密度順など）でソートされていない限り意味をなさない。</p>
                     </div>
                 </section>

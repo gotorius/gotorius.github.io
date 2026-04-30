@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第18章 章末問題解説 - 質的回帰</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        /* R出力ブロック */
+        .r-output {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            font-family: 'Courier New', Consolas, monospace;
+            font-size: 0.84em;
+            line-height: 1.6;
+            padding: 1em 1.2em;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 0.8em 0;
+            white-space: pre;
+        }
+        .r-output .kw  { color: #89b4fa; }
+        .r-output .sig { color: #a6e3a1; font-weight: bold; }
+        .r-output .sep { color: #f38ba8; }
+
+        /* データ表 */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em 0;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 4px 10px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* モデルラベル */
+        .model-label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 1.05em;
+            margin: 0.8em 0 0.3em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第18章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 18 — 章末問題解説</span>
+            <h1>質的回帰<br><small style="font-size:0.65em;color:var(--gray-500);">ロジスティック回帰・プロビットモデル・ポアソン回帰</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter18.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第18章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q181">問18.1 問題</a></li>
+                            <li><a href="#q181-1">問18.1 [1]</a></li>
+                            <li><a href="#q181-2">問18.1 [2]</a></li>
+                            <li><a href="#q182">問18.2 問題</a></li>
+                            <li><a href="#q182-1">問18.2 [1]</a></li>
+                            <li><a href="#q182-2">問18.2 [2]</a></li>
+                            <li><a href="#q182-3">問18.2 [3]</a></li>
+                            <li><a href="#q183">問18.3 問題</a></li>
+                            <li><a href="#q183-1">問18.3 [1]</a></li>
+                            <li><a href="#q183-2">問18.3 [2]</a></li>
+                            <li><a href="#q184">問18.4 問題</a></li>
+                            <li><a href="#q184-1">問18.4 [1]</a></li>
+                            <li><a href="#q184-2">問18.4 [2]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第18章概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第18章「質的回帰」のキーポイント</div>
+                        <p>第18章では，応答変数が<strong>2値（0/1）</strong>や<strong>カウント（非負整数）</strong>などの「質的」な場合に使う回帰モデルを学びます．</p>
+                        <table class="data-table" style="margin-top:8px;">
+                            <thead>
+                                <tr>
+                                    <th>モデル</th>
+                                    <th>応答変数の型</th>
+                                    <th>リンク関数</th>
+                                    <th>確率のモデル式</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>ロジスティック回帰</strong></td>
+                                    <td>2値（0/1）</td>
+                                    <td>ロジット $\log\dfrac{\pi}{1-\pi}$</td>
+                                    <td>$\pi = \dfrac{e^{\eta}}{1+e^{\eta}}$</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>プロビットモデル</strong></td>
+                                    <td>2値（0/1）</td>
+                                    <td>プロビット $\Phi^{-1}(\pi)$</td>
+                                    <td>$\pi = \Phi(\eta)$</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ポアソン回帰</strong></td>
+                                    <td>カウント（$\geq 0$）</td>
+                                    <td>対数 $\log\mu$</td>
+                                    <td>$\mu = e^{\eta}$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top:8px;font-size:0.9em;">ここで $\eta = \beta_0 + \beta_1 x_1 + \cdots + \beta_d x_d$ は線形予測子，$\Phi$ は標準正規分布の累積分布関数です．</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q181">
+                    <h2><i class="fas fa-pencil"></i> 問18.1 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            以下は，がん患者27人に対し，トリチウムチミジン注入後の細胞活動の増殖性の指標値（LI）と寛解数を表にしたものである．
+                        </p>
+                        <p style="font-size:0.85em;color:#555;margin-top:4px;">
+                            たとえば，(LI, 患者, 寛解) = (20, 3, 2) は，LI値が20の患者3人のうち，2人が寛解した，という意味である．
+                            データは，Alan Agresti, <em>An introduction to categorical data analysis</em>, 2nd ed. Wiley, 2007 のTable 4.8より引用した．
+                        </p>
+
+                        <table class="data-table" style="max-width:600px;margin:0.8em auto;">
+                            <thead>
+                                <tr>
+                                    <th>LI</th><th>患者数</th><th>寛解数</th>
+                                    <th style="border-left:2px solid #b0c0e0;">LI</th><th>患者数</th><th>寛解数</th>
+                                    <th style="border-left:2px solid #b0c0e0;">LI</th><th>患者数</th><th>寛解数</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>8</td><td>2</td><td>0</td>
+                                    <td style="border-left:2px solid #e0e6f0;">18</td><td>1</td><td>1</td>
+                                    <td style="border-left:2px solid #e0e6f0;">28</td><td>1</td><td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>10</td><td>2</td><td>0</td>
+                                    <td style="border-left:2px solid #e0e6f0;">20</td><td>3</td><td>2</td>
+                                    <td style="border-left:2px solid #e0e6f0;">32</td><td>1</td><td>0</td>
+                                </tr>
+                                <tr>
+                                    <td>12</td><td>3</td><td>0</td>
+                                    <td style="border-left:2px solid #e0e6f0;">22</td><td>2</td><td>1</td>
+                                    <td style="border-left:2px solid #e0e6f0;">34</td><td>1</td><td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>14</td><td>3</td><td>0</td>
+                                    <td style="border-left:2px solid #e0e6f0;">24</td><td>1</td><td>0</td>
+                                    <td style="border-left:2px solid #e0e6f0;">38</td><td>3</td><td>2</td>
+                                </tr>
+                                <tr>
+                                    <td>16</td><td>3</td><td>0</td>
+                                    <td style="border-left:2px solid #e0e6f0;">26</td><td>1</td><td>1</td>
+                                    <td style="border-left:2px solid #e0e6f0;"></td><td></td><td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>このデータに対し，統計ソフトウェアを利用してロジスティック回帰モデルを推定したところ，以下のような出力結果が得られた．ただし，応答値は1を「寛解した」，0を「寛解しなかった」としている．出力結果の (Intercept) は回帰モデルの定数項を意味している．</p>
+
+                        <div class="r-output">Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept) -3.77714    1.37862  -2.740  0.00615 **
+LI           0.14486    0.05934   2.441  0.01464 *</div>
+
+                        <ol>
+                            <li>ロジスティック回帰モデルの推定の出力結果によると，寛解確率が 0.5 となるのは LI 値がいくつのときと考えられるか．また，LI 値が 30 の患者の寛解確率を推定せよ．</li>
+                            <li>ロジスティック回帰モデルの推定の出力結果によると，LI 値が 2 増えるとき，寛解のオッズはおおよそ何倍になると考えられるか．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q181-1">
+                    <h2><i class="fas fa-pencil"></i> 問18.1 [1] — 寛解確率が 0.5 となる LI 値・LI = 30 の寛解確率</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> ロジスティック回帰モデルの基礎</div>
+                            <p>2値の応答変数 $y \in \{0, 1\}$ に対し，$y=1$ となる確率 $\pi$ を説明変数 $x$ でモデル化するのがロジスティック回帰です．</p>
+                            <div class="formula-block">
+                                $$\log\frac{\pi}{1-\pi} = \beta_0 + \beta_1 x$$
+                            </div>
+                            <p>左辺 $\log\dfrac{\pi}{1-\pi}$ を<strong>ロジット（logit）</strong>といいます．推定値 $\hat\beta_0,\,\hat\beta_1$ が得られたとき，確率の推定値は：</p>
+                            <div class="formula-block">
+                                $$\hat\pi = \frac{e^{\hat\beta_0 + \hat\beta_1 x}}{1 + e^{\hat\beta_0 + \hat\beta_1 x}} = \frac{1}{1 + e^{-(\hat\beta_0 + \hat\beta_1 x)}}$$
+                            </div>
+                        </div>
+
+                        <p>推定された回帰式（推定量を代入）：</p>
+                        <div class="formula-block">
+                            $$\log\frac{\hat\pi}{1-\hat\pi} = -3.77714 + 0.14486 \times \text{LI}$$
+                        </div>
+
+                        <h4>寛解確率 $\hat\pi = 0.5$ となる LI 値を求める</h4>
+                        <p>$\hat\pi = 0.5$ のとき，オッズは $\dfrac{0.5}{1-0.5} = 1$ となり，$\log(\text{オッズ}) = 0$ です．よって右辺を 0 とおいて：</p>
+                        $$-3.77714 + 0.14486 \times \text{LI} = 0$$
+                        $$\text{LI} = \frac{3.77714}{0.14486} \approx 26.07$$
+
+                        <h4>LI = 30 のときの寛解確率を推定する</h4>
+                        <p>まずロジット値を計算する：</p>
+                        $$\log\frac{\hat\pi}{1-\hat\pi} = -3.77714 + 0.14486 \times 30 = -3.77714 + 4.3458 = 0.56866$$
+                        <p>次に確率に変換する：</p>
+                        $$\hat\pi = \frac{e^{0.56866}}{1 + e^{0.56866}} = \frac{1.766}{2.766} \approx 0.638$$
+
+                        <div class="formula-block">
+                            <p>寛解確率が 0.5 となるのは LI 値がおよそ <strong>26</strong> のときである．また，LI 値が 30 の患者の寛解確率はおよそ <strong>0.64</strong> と推定される．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q181-2">
+                    <h2><i class="fas fa-pencil"></i> 問18.1 [2] — LI 値が 2 増えるときのオッズ倍率</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> オッズ比（Odds Ratio）の考え方</div>
+                            <p>ロジスティック回帰では，説明変数が 1 増えたときのオッズの変化は $e^{\hat\beta_1}$ 倍です．これを<strong>オッズ比</strong>といいます．一般に，LI が $k$ 増えたときのオッズ倍率は $e^{\hat\beta_1 \times k}$ です．</p>
+                        </div>
+
+                        <h4>LI が 2 増えたときのオッズ比を計算する</h4>
+                        <p>オッズの関係式を書くと：</p>
+                        $$\frac{\hat\pi}{1-\hat\pi} = e^{-3.77714 + 0.14486 \times \text{LI}} = e^{-3.77714} \times \bigl(e^{0.14486}\bigr)^{\text{LI}} = e^{-3.77714} \times (1.15588)^{\text{LI}}$$
+                        <p>LI が $k$ から $k+2$ に変化したときの比は：</p>
+                        $$\frac{e^{-3.77714} \times (1.15588)^{k+2}}{e^{-3.77714} \times (1.15588)^{k}} = (1.15588)^2 \approx 1.336$$
+
+                        <div class="formula-block">
+                            <p>LI 値が 2 増えるとき，寛解のオッズはおよそ <strong>1.34 倍</strong>になると考えられる．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>オッズ比の直感的な解釈</strong><br>
+                                オッズ比が 1.34 倍ということは，「LI 値が 2 高いと，寛解する確率が寛解しない確率に対して1.34倍大きい」という意味です．確率そのものは「LI に関係なく一定に増える」わけではなく，オッズが一定の倍率で増えます（この点がロジスティック回帰の特徴）．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q182">
+                    <h2><i class="fas fa-pencil"></i> 問18.2 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            以下は，高血圧を喫煙，肥満，いびきと関連させた 40 歳以上の男性 433 人に対する調査結果を表にしたものである．
+                            ただし，喫煙，肥満，いびきはいずれも，0 が「なし」，1 が「あり」としている．
+                        </p>
+                        <p style="font-size:0.85em;color:#555;">
+                            データは，Douglas G. Altman, <em>Practical Statistics for Medical Research</em>, Chapman &amp; Hall, 1991 のTable 12.9より引用した．
+                        </p>
+
+                        <table class="data-table" style="max-width:480px;margin:0.8em auto;">
+                            <thead>
+                                <tr>
+                                    <th>喫煙</th><th>肥満</th><th>いびき</th><th>例数</th><th>高血圧の人数</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>0</td><td>0</td><td>0</td><td>60</td><td>5</td></tr>
+                                <tr><td>1</td><td>0</td><td>0</td><td>17</td><td>2</td></tr>
+                                <tr><td>0</td><td>1</td><td>0</td><td>8</td><td>1</td></tr>
+                                <tr><td>1</td><td>1</td><td>0</td><td>2</td><td>0</td></tr>
+                                <tr><td>0</td><td>0</td><td>1</td><td>187</td><td>35</td></tr>
+                                <tr><td>1</td><td>0</td><td>1</td><td>85</td><td>13</td></tr>
+                                <tr><td>0</td><td>1</td><td>1</td><td>51</td><td>15</td></tr>
+                                <tr><td>1</td><td>1</td><td>1</td><td>23</td><td>8</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>このデータに対し，統計ソフトウェアを利用してロジスティック回帰モデルを推定したところ，以下のような出力結果が得られた．ただし，応答値は 1 を「高血圧である」，0 を「高血圧でない」としている．出力結果の (Intercept) は回帰モデルの定数項を意味し，変数名は喫煙を Smoking，肥満を Obesity，いびきを Snoring としている．</p>
+
+                        <div class="r-output">Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept) -2.37766    0.38018  -6.254  4e-10 ***
+Smoking     -0.06777    0.27812  -0.244  0.8075
+Obesity      0.69531    0.26509   2.439  0.0147 *
+Snoring      0.87194    0.39757   2.193  0.0283 *</div>
+
+                        <ol>
+                            <li>ロジスティック回帰モデルの推定の出力結果から，喫煙，肥満，いびきがすべて「あり」の男性が高血圧である確率の推定値を計算せよ．</li>
+                            <li>ロジスティック回帰モデルの推定の出力結果から，肥満でない男性に対する肥満の男性の高血圧リスクの推定値を計算せよ．</li>
+                            <li>ロジスティック回帰モデルの推定の出力結果から，肥満に対する高血圧のオッズ比の近似的な 95% 信頼区間を計算せよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.2 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q182-1">
+                    <h2><i class="fas fa-pencil"></i> 問18.2 [1] — 喫煙・肥満・いびきがすべて「あり」の男性が高血圧である確率</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 多変数ロジスティック回帰の基礎</div>
+                            <p>説明変数が複数の場合も，ロジット変換した確率が線形モデルになるという構造は同じです：</p>
+                            <div class="formula-block">
+                                $$\log\frac{\pi}{1-\pi} = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_d x_d$$
+                            </div>
+                        </div>
+
+                        <p>喫煙（$x_1$），肥満（$x_2$），いびき（$x_3$）とすると，推定された回帰式：</p>
+                        <div class="formula-block">
+                            $$\log\frac{\hat\pi}{1-\hat\pi} = -2.37766 - 0.06777\,x_1 + 0.69531\,x_2 + 0.87194\,x_3$$
+                        </div>
+
+                        <h4>$x_1 = x_2 = x_3 = 1$ を代入する</h4>
+                        $$\log\frac{\hat\pi}{1-\hat\pi} = -2.37766 - 0.06777 + 0.69531 + 0.87194 = -0.87818$$
+                        $$\hat\pi = \frac{e^{-0.87818}}{1 + e^{-0.87818}} = \frac{0.41556}{1.41556} \approx 0.2936$$
+
+                        <div class="formula-block">
+                            <p>喫煙，肥満，いびきがすべて「あり」の男性が高血圧である確率の推定値はおよそ <strong>0.29</strong>（約29%）である．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.2 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q182-2">
+                    <h2><i class="fas fa-pencil"></i> 問18.2 [2] — 肥満でない男性に対する肥満の男性の高血圧リスク（オッズ比）</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>$x_1, x_3$ を固定して $x_2$ の効果を取り出す</h4>
+                        <p>喫煙（$x_1$）といびき（$x_3$）の値を任意の定数 $a, c$ に固定すると：</p>
+                        <p><strong>肥満あり（$x_2 = 1$）</strong>のオッズ：
+                        $\displaystyle\frac{\hat\pi}{1-\hat\pi}\Big|_{x_2=1} = e^{-2.37766 - 0.06777a + 0.69531 + 0.87194c}$</p>
+                        <p><strong>肥満なし（$x_2 = 0$）</strong>のオッズ：
+                        $\displaystyle\frac{\hat\pi}{1-\hat\pi}\Big|_{x_2=0} = e^{-2.37766 - 0.06777a + 0.87194c}$</p>
+                        <p>比をとると：</p>
+                        $$\text{オッズ比} = \frac{\text{肥満ありのオッズ}}{\text{肥満なしのオッズ}} = e^{0.69531} \approx 2.00$$
+
+                        <div class="formula-block">
+                            <p>肥満でない男性に対する肥満の男性の高血圧リスク（オッズ比）の推定値は $e^{0.69531} \approx \mathbf{2.00}$ 倍である．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>他の変数を固定したオッズ比</strong><br>
+                                ロジスティック回帰では，他の説明変数の値によらず，$x_2$ が 0 から 1 に変わったときのオッズ比は常に $e^{\hat\beta_2}$ になります（この値が $x_1, x_3$ の値に依存しない点がロジスティック回帰の特徴です）．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.2 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q182-3">
+                    <h2><i class="fas fa-pencil"></i> 問18.2 [3] — 肥満に対する高血圧のオッズ比の近似的な 95% 信頼区間</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> オッズ比の信頼区間の求め方</div>
+                            <p>$\beta_k$ の 95% 信頼区間 $[\hat\beta_k - 1.96 \cdot \text{SE}_k,\; \hat\beta_k + 1.96 \cdot \text{SE}_k]$ を指数変換するとオッズ比の 95% 信頼区間が得られます：</p>
+                            <div class="formula-block">
+                                $$\text{OR の 95\% CI} = \left[e^{\hat\beta_k - 1.96\, \text{SE}_k},\; e^{\hat\beta_k + 1.96\, \text{SE}_k}\right]$$
+                            </div>
+                        </div>
+
+                        <h4>係数 $\hat\beta_2$ の 95% 信頼区間を計算し，指数変換する</h4>
+                        <p>出力結果より，$\hat\beta_2 = 0.69531$，$\text{SE}(\hat\beta_2) = 0.26509$．</p>
+                        <p>$\hat\beta_2$ の近似的な 95% 信頼区間（正規近似）：</p>
+                        $$\hat\beta_2 \pm 1.96 \times \text{SE}(\hat\beta_2) = 0.695 \pm 1.96 \times 0.265 = 0.695 \pm 0.519$$
+                        $$\Rightarrow [0.695 - 0.519,\; 0.695 + 0.519] = [0.176,\; 1.214]$$
+                        <p>オッズ比の 95% 信頼区間：</p>
+                        $$\left[e^{0.176},\; e^{1.214}\right] \approx [1.19,\; 3.37]$$
+
+                        <div class="formula-block">
+                            <p>肥満に対する高血圧のオッズ比の近似的な 95% 信頼区間はおおむね $[\mathbf{1.2},\; \mathbf{3.4}]$ 程度となる．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>信頼区間が 1 を含まない ⟺ 有意水準 5% で有意</strong><br>
+                                オッズ比の 95% 信頼区間が 1 を含まないということは，$\beta_2$ の 95% 信頼区間が 0 を含まないことと同値です．これは $z$ 値を用いた近似的な検定の $p$ 値が 0.05 未満であることに対応し，「肥満は高血圧に有意に関連する」と判断できます（出力では $p = 0.0147 < 0.05$）．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.3 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q183">
+                    <h2><i class="fas fa-pencil"></i> 問18.3 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>問18.2のデータに対し，統計ソフトウェアを利用してプロビットモデルを推定したところ，以下のような出力結果が得られた．変数名などは問18.2と同様である．</p>
+
+                        <div class="r-output">Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept) -1.37312    0.19308  -7.112  1.15e-12 ***
+smoking     -0.03865    0.15682  -0.246  0.8053
+obesity      0.39996    0.16748   2.388  0.0169 *
+snoring      0.46508    0.20464   2.273  0.0230 *</div>
+
+                        <ol>
+                            <li>プロビットモデルの出力結果から，喫煙，肥満，いびきがすべて「あり」の男性が高血圧である確率の推定値を計算せよ．</li>
+                            <li>喫煙といびきがいずれも「なし」の男性について，肥満でない男性の高血圧確率の推定値を計算せよ．またその限界効果を計算せよ．ただし，$\varphi(x)$ は標準正規分布の確率密度関数とし，$\varphi(-1.373) = 0.155$ として計算せよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.3 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q183-1">
+                    <h2><i class="fas fa-pencil"></i> 問18.3 [1] — 喫煙・肥満・いびきがすべて「あり」の男性の高血圧確率</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> プロビットモデルの基礎</div>
+                            <p>プロビットモデルは，確率 $\pi$ を<strong>標準正規分布の累積分布関数 $\Phi$</strong> でモデル化します：</p>
+                            <div class="formula-block">
+                                $$\pi = \Phi(\beta_0 + \beta_1 x_1 + \cdots + \beta_d x_d) = \Phi(\eta)$$
+                            </div>
+                            <p>ロジスティック回帰とプロビットモデルの違いはリンク関数だけで，分析結果（有意な変数，符号の方向）は通常ほぼ一致します．</p>
+                        </div>
+
+                        <p>推定された回帰式（プロビット）：</p>
+                        <div class="formula-block">
+                            $$\hat\pi = \Phi(-1.37312 - 0.03865\,x_1 + 0.39996\,x_2 + 0.46508\,x_3)$$
+                        </div>
+
+                        <h4>$x_1 = x_2 = x_3 = 1$ を代入して線形予測子を計算する</h4>
+                        $$\eta = -1.37312 - 0.03865 + 0.39996 + 0.46508 = -0.54673$$
+                        <p>標準正規分布表より：</p>
+                        $$\hat\pi = \Phi(-0.5467) \approx \Phi(-0.55) = 0.291$$
+
+                        <div class="formula-block">
+                            <p>喫煙，肥満，いびきがすべて「あり」の男性が高血圧である確率の推定値はおよそ <strong>0.29</strong> である．</p>
+                            <p>これはロジスティック回帰の結果（$\approx 0.29$）と一致する．プロビットモデルとロジスティック回帰は異なるリンク関数を使うが，得られる確率の推定値は通常ほぼ同じになる．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.3 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q183-2">
+                    <h2><i class="fas fa-pencil"></i> 問18.3 [2] — 肥満でない男性の高血圧確率と限界効果</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 限界効果（marginal effect）とは</div>
+                            <p><strong>限界効果</strong>：$x_k$ が 1 単位増えたときの確率の変化量の推定値です．</p>
+                            <div class="formula-block">
+                                $$\frac{\partial \pi}{\partial x_k} = \varphi(\beta_0 + \beta_1 x_1 + \cdots + \beta_d x_d) \times \beta_k$$
+                            </div>
+                            <p>ここで $\varphi = \Phi'$ は標準正規分布の確率密度関数（PDF）です．</p>
+                        </div>
+
+                        <h4>$x_1 = x_2 = x_3 = 0$（喫煙なし，肥満なし，いびきなし）のときの確率</h4>
+                        $$\eta = -1.37312 + 0 + 0 + 0 = -1.37312$$
+                        $$\hat\pi\big|_{x_2=0} = \Phi(-1.37312) \approx \Phi(-1.37) = 0.0853$$
+
+                        <h4>限界効果（$x_1 = x_3 = 0$ のもとで $x_2 = 0$ の点で評価）</h4>
+                        <p>肥満（$x_2$）の限界効果は：</p>
+                        $$\frac{\partial \hat\pi}{\partial x_2}\bigg|_{x_1=x_3=0,\, x_2=0} = \varphi(\hat\beta_0)\times\hat\beta_2 = \varphi(-1.37312) \times 0.39996$$
+                        <p>$\varphi(-1.373) = 0.155$（問題文より）を使うと：</p>
+                        $$= 0.155 \times 0.39996 \approx 0.062$$
+
+                        <div class="formula-block">
+                            <p>喫煙・いびきが「なし」，肥満も「なし」のときの高血圧確率の推定値はおよそ <strong>0.085</strong>（約 8.5%）である．</p>
+                            <p>限界効果はおよそ <strong>0.062</strong>，すなわち「肥満でない → 肥満あり」に変化するとき，高血圧の確率が約 <strong>6.2 ポイント</strong>増加すると推定される．</p>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>ダミー変数の場合は「確率の差」にも注目する</strong><br>
+                                肥満のような 2 値のダミー変数では，$x_2 = 0$ から $x_2 = 1$ に変わったときの確率の直接の差を見ることが多いです：
+                                $$\Phi(-1.37312 + 0.39996) - \Phi(-1.37312) = \Phi(-0.97) - \Phi(-1.37) \approx 0.166 - 0.085 = 0.081$$
+                                この約 0.08（8 ポイント増加）が「確率の差」です．これは限界効果（0.062）とは異なりますが，どちらも肥満が高血圧リスクを高めることを示しています．
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.4 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q184">
+                    <h2><i class="fas fa-pencil"></i> 問18.4 — 問題文</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            M君は，2019年Jリーグ Division 1 で優勝した横浜F・マリノスのリーグ戦34試合について，試合ごとの得点数，チーム走行距離合計（km），スプリント回数を調べた．
+                            データは www.jleague.jp のウェブサイトで調べた．
+                        </p>
+
+                        <table class="data-table" style="max-width:420px;margin:0.8em auto;">
+                            <thead>
+                                <tr>
+                                    <th>節</th><th>チーム走行距離合計 (km)</th><th>スプリント回数</th><th>得点</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>121.420</td><td>228</td><td>3</td></tr>
+                                <tr><td>2</td><td>119.772</td><td>211</td><td>2</td></tr>
+                                <tr><td>3</td><td>115.585</td><td>183</td><td>2</td></tr>
+                                <tr><td style="color:#aaa;" colspan="4">⋮ &nbsp;&nbsp;&nbsp; ⋮ &nbsp;&nbsp;&nbsp; ⋮ &nbsp;&nbsp;&nbsp; ⋮</td></tr>
+                                <tr><td>33</td><td>116.338</td><td>204</td><td>4</td></tr>
+                                <tr><td>34</td><td>115.769</td><td>210</td><td>3</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>このデータに対し，統計ソフトウェアを利用してポアソン回帰モデルを推定したところ，以下のような出力結果が得られた．ただし，変数 Dist は「チーム走行距離合計」，Sprint は「スプリント回数」，(Intercept) は回帰モデルの定数項を意味している．</p>
+
+                        <div class="r-output">Coefficients:
+              Estimate Std. Error z value Pr(&gt;|z|)
+(Intercept)  6.340460   4.515147   1.404   0.1602
+Dist        -0.081255   0.049525  -1.641   0.1009
+Sprint       0.019589   0.008136   2.408   0.0161 *</div>
+
+                        <ol>
+                            <li>ポアソン回帰モデルが正しいという仮定のもとで，推定結果を説明せよ．</li>
+                            <li>有意性検定の結果から，チーム走行距離合計とスプリント回数の得点数に対する説明力の大きさを比較せよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.4 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q184-1">
+                    <h2><i class="fas fa-pencil"></i> 問18.4 [1] — 推定結果の説明</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> ポアソン回帰モデルの基礎</div>
+                            <p>応答変数がカウント（0, 1, 2, …）の場合，<strong>ポアソン分布</strong>を仮定したポアソン回帰が使われます．平均 $\mu_i$ を説明変数で次のようにモデル化します（<strong>対数リンク</strong>）：</p>
+                            <div class="formula-block">
+                                $$\log \mu_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2} + \cdots$$
+                            </div>
+                            <p><strong>係数の解釈</strong>：$x_k$ が 1 増えると，平均 $\mu$ は $e^{\beta_k}$ 倍になります．</p>
+                        </div>
+
+                        <h4>推定された対数線形モデルを確認する</h4>
+                        <p>試合ごとの平均得点数を $\mu$ とおくと，推定された対数線形モデルは：</p>
+                        $$\log \hat\mu = 6.340 - 0.08126 \times \text{Dist} + 0.01959 \times \text{Sprint}$$
+
+                        <h4>各係数の意味を解釈する</h4>
+                        <p><strong>Dist の係数 $\hat\beta_{\text{Dist}} = -0.08126$：</strong></p>
+                        <p>他の変数（Sprint）を固定したとき，チーム走行距離合計が 1 km 増えると，平均得点数は $e^{-0.08126} \approx 0.922$ 倍，すなわち約 8% 減少になると推定される．</p>
+
+                        <p><strong>Sprint の係数 $\hat\beta_{\text{Sprint}} = +0.01959$：</strong></p>
+                        <p>他の変数（Dist）を固定したとき，スプリント回数が 1 回増えると，平均得点数は $e^{0.01959} \approx 1.020$ 倍，すなわち約 2% 増加になると推定される．</p>
+
+                        <div class="formula-block">
+                            <p>推定された対数線形モデルは $\log\hat\mu = 6.34 - 0.0813 \times \text{Dist} + 0.0196 \times \text{Sprint}$ である．</p>
+                            <ul>
+                                <li>チーム走行距離合計が 1 km 増えると，得点数の期待値は約 <strong>0.92 倍</strong>に減少すると推定される</li>
+                                <li>スプリント回数が 1 回増えると，得点数の期待値は約 <strong>1.02 倍</strong>に増加すると推定される</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問18.4 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q184-2">
+                    <h2><i class="fas fa-pencil"></i> 問18.4 [2] — チーム走行距離合計とスプリント回数の説明力の比較</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>各変数の有意性検定の結果を確認する</h4>
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>変数</th><th>$\hat\beta$</th><th>標準誤差 SE</th><th>$z$ 値</th><th>$p$ 値</th><th>有意（$\alpha=0.05$）</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Dist（走行距離）</td>
+                                    <td>$-0.08126$</td>
+                                    <td>$0.04953$</td>
+                                    <td>$-1.641$</td>
+                                    <td>$0.1009$</td>
+                                    <td style="color:#e74c3c;">✗ 有意でない</td>
+                                </tr>
+                                <tr>
+                                    <td>Sprint（スプリント）</td>
+                                    <td>$+0.01959$</td>
+                                    <td>$0.00814$</td>
+                                    <td>$+2.408$</td>
+                                    <td>$0.0161$</td>
+                                    <td style="color:green;font-weight:bold;">✓ 有意</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p>$z$ 値は「$\hat\beta / \text{SE}$」で計算されます．ポアソン回帰の係数は漸近正規性を持つため，$|z| > 1.96$（$p < 0.05$）を有意の基準とします．</p>
+
+                        <h4>結果の解釈</h4>
+                        <p><strong>Dist（走行距離）</strong>の $p$ 値は 0.1009 で，有意水準 5% を超えています．「走行距離が増えると得点が減る」という推定結果は，<strong>統計的に有意とはいえない</strong>（偶然の変動による可能性を排除できない）．</p>
+                        <p><strong>Sprint（スプリント回数）</strong>の $p$ 値は 0.0161 で，有意水準 5% を下回っています．ポアソン回帰モデルが正しいと仮定すれば，スプリント回数は得点数に対して<strong>統計的に有意な正の関連性</strong>があると判断できる．</p>
+
+                        <div class="formula-block">
+                            <ul>
+                                <li>チーム走行距離合計の係数は有意でない（$p = 0.10 > 0.05$）．よって「走行距離が増えると得点が減る」という考察の統計的意味は疑わしい</li>
+                                <li>スプリント回数の係数は有意（$p = 0.016 < 0.05$）．ポアソン回帰モデルが正しいと仮定すれば，スプリント回数は得点数への統計的に意味のある説明変数である</li>
+                            </ul>
+                        </div>
+
+                        <div class="memo-box">
+                            <i class="fas fa-lightbulb"></i>
+                            <div>
+                                <strong>「有意でない ≠ 効果がない」</strong><br>
+                                Dist が有意でないことは，「走行距離が得点に無関係」と証明されたわけではありません．サンプルサイズが 34 試合と小さいため，検出力が低い可能性があります．また，走行距離とスプリント回数は互いに相関している可能性があり，多重共線性の影響で Dist の係数の推定が不安定になっている可能性もあります．
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:1.2em;">
+                            <div class="box-title"><i class="fas fa-star"></i> 第18章 まとめ：3つのモデルの使い分け</div>
+                            <table class="data-table" style="font-size:0.88em;">
+                                <thead>
+                                    <tr>
+                                        <th>場面</th>
+                                        <th>使うモデル</th>
+                                        <th>注目する指標</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>2値の結果（病気あり/なし）に対して複数の要因の影響を調べる</td>
+                                        <td>ロジスティック回帰</td>
+                                        <td>オッズ比，$p$ 値，信頼区間</td>
+                                    </tr>
+                                    <tr>
+                                        <td>同上（潜在変数の解釈をしたい）</td>
+                                        <td>プロビットモデル</td>
+                                        <td>限界効果，確率の差</td>
+                                    </tr>
+                                    <tr>
+                                        <td>カウントデータ（件数・回数）の説明要因を調べる</td>
+                                        <td>ポアソン回帰</td>
+                                        <td>倍率 $e^{\hat\beta}$，$p$ 値</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
