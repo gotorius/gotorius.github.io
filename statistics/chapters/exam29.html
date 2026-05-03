@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第29章 章末問題解説 - 不完全データの統計処理</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        /* 選択肢ブロック */
+        .choice-block {
+            border: 1px solid #d0d8ef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 0.6em 0;
+            background: #fafbff;
+        }
+        .choice-block.correct {
+            border-color: #3498db;
+            background: #f0f6ff;
+        }
+        .choice-block.incorrect {
+            border-color: #e0e6f0;
+            background: #fafbff;
+            opacity: 0.85;
+        }
+        .choice-label {
+            font-weight: 700;
+            color: #2471a3;
+            margin-right: 6px;
+        }
+
+        /* 状況説明の図（テキスト） */
+        .situation-box {
+            background: #f8f9fa;
+            border: 1px solid #d0d8ef;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 0.8em 0;
+            font-size: 0.92em;
+        }
+        .situation-box p { margin: 0.3em 0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第29章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 29 — 章末問題解説</span>
+            <h1>不完全データの統計処理<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">欠測メカニズム・トランケーション・回帰補完・相関係数の偏り</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter29.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第29章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q291">問29.1 問題</a></li>
+                            <li><a href="#q291-1">問29.1 [1] 解答</a></li>
+                            <li><a href="#q291-2">問29.1 [2] 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第29章 概要                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第29章「不完全データの統計処理」のキーポイント</div>
+                        <ul>
+                            <li><strong>欠測メカニズム（Missing Mechanism）：</strong>データがなぜ欠測するかの仕組み。統計量の偏りの有無を左右する最重要概念。</li>
+                            <li><strong>MCAR（Missing Completely At Random）：</strong>欠測が観測値・欠測値のどちらにも依存しない完全ランダム欠測。CC解析でも各統計量はほぼ不偏。</li>
+                            <li><strong>MAR（Missing At Random）：</strong>欠測が観測値には依存するが欠測値そのものには依存しない。回帰補完で平均の偏りは除去できるが、標準偏差・相関係数は過小・過大評価となる。</li>
+                            <li><strong>MNAR（Missing Not At Random）：</strong>欠測が欠測値そのものに依存する。単純な補完法では偏りを除去できない。</li>
+                            <li><strong>打ち切り（Censoring）：</strong>値が閾値 $c$ を超えた個体数 $n-m$ が<em>既知</em>のケース。EMアルゴリズムで最尤推定が可能。</li>
+                            <li><strong>トランケーション（Truncation）：</strong>値が閾値 $c$ を超えた個体数が<em>未知</em>のケース。反復計算により最尤推定を行う。トランケーションでは推定の改善量が打ち切りより小さい。</li>
+                            <li><strong>回帰補完：</strong>回帰直線を用いて欠測値を予測補完する方法。平均の偏りは除去できるが、予測値は回帰直線のまわりのばらつきを持たないため、標準偏差を過小評価・相関係数を過大評価する。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問29.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q291">
+                    <h2><i class="fas fa-question-circle"></i> 問29.1　2変量データの欠測とその影響</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+
+                        <div class="situation-box">
+                            <p>
+                                ある大学の授業では，最初にスキルテスト（1回目）を行い，定められた基準 $c$ に満たない学生のみが授業を履修し，
+                                基準を超えた学生は受講を免除される．
+                                授業を履修した学生は最後の授業にあらためてスキルテスト（2回目）を受け，その成績で合否が定まる．
+                            </p>
+                            <p>
+                                最初のスキルテストを受けた <strong>65人</strong>中，
+                                <strong>15人が基準 $c$ を超えて受講を免除</strong>された．
+                                2回のテストを両方とも受験した学生のテストの点数を
+                                $(x_1, y_1), \ldots, (x_{50}, y_{50})$ とする．
+                                また，受講を免除された15人の学生の1回目のテストの点数を
+                                $x_{51}, \ldots, x_{65}$ とする．
+                            </p>
+                            <p>
+                                ここで，<strong>全学生が2回テストを受けたとしたときの点数の分布</strong>は，
+                                相関係数 $\rho$ が正の2変量正規分布
+                                $N_2(\mu_X,\, \mu_Y,\, \sigma_X^2,\, \sigma_Y^2,\, \rho\sigma_X\sigma_Y)$
+                                に従うとする．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin:0.8em 0;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 状況の整理（図）</div>
+                            <table class="data-table" style="max-width:520px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>学生グループ</th><th>人数</th><th>観測データ</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>2回とも受験（授業を履修）</td><td>50人</td><td>$(x_i, y_i)$，$i=1,\ldots,50$</td></tr>
+                                    <tr><td>1回目のみ（受講免除）</td><td>15人</td><td>$x_i$，$i=51,\ldots,65$（$y_i$ は欠測）</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;font-size:0.9em;color:#555;">
+                                ポイント：1回目の点数が基準 $c$ を超えた（つまり <strong>$x_i > c$</strong> の）学生は2回目を受験しないため，
+                                $y_i$ が欠測。欠測するかどうかが $x_i$ の値（観測値）に依存している。
+                            </p>
+                        </div>
+
+                        <h3 style="margin-top:1.2em;">[1] TAのAさんの分析</h3>
+                        <p>
+                            授業のTA（Teaching Assistant）のAさんは，
+                            <strong>2回とも受験した50人の点数 $(x_1, y_1), \ldots, (x_{50}, y_{50})$ のみを用いて</strong>，
+                            2回目のテストの平均値 $\bar{y}_A$ と2回のテスト間の相関係数 $r_A$ を求めた．
+                        </p>
+                        <p>
+                            $\bar{y}_A$ と $r_A$ の記述として，次の①〜⑤のうちから最も適切なものを1つ選べ．
+                        </p>
+                        <div class="choice-block">
+                            <span class="choice-label">①</span>
+                            $\bar{y}_A$ は $\mu_Y$ を偏りなく推定し，$r_A$ は $\rho$ を概ね偏りなく推定する．
+                        </div>
+                        <div class="choice-block">
+                            <span class="choice-label">②</span>
+                            $\bar{y}_A$ は $\mu_Y$ を偏りなく推定するが，$r_A$ は $\rho$ を過大評価する．
+                        </div>
+                        <div class="choice-block">
+                            <span class="choice-label">③</span>
+                            $\bar{y}_A$ は $\mu_Y$ を過小評価するが，$r_A$ は $\rho$ を概ね偏りなく推定する．
+                        </div>
+                        <div class="choice-block">
+                            <span class="choice-label">④</span>
+                            $\bar{y}_A$ は $\mu_Y$ を過小評価し，$r_A$ は $\rho$ を過大評価する．
+                        </div>
+                        <div class="choice-block correct">
+                            <span class="choice-label">⑤</span>
+                            $\bar{y}_A$ は $\mu_Y$ を過小評価し，$r_A$ は $\rho$ を過小評価する．
+                        </div>
+
+                        <h3 style="margin-top:1.4em;">[2] TAのBさんの分析</h3>
+                        <p>
+                            別のTAのBさんは，2回とも受験した50人の点数 $(x_1, y_1), \ldots, (x_{50}, y_{50})$ を用いて
+                            回帰直線 $\hat{y} = a + bx$ を求め，
+                            2回目の点数の得られない15人の学生の点数の予測値
+                            $\hat{y}_i = a + bx_i\;(i=51,\ldots,65)$ を計算した．
+                            そして，
+                        </p>
+                        <div class="formula-block">
+                            $$(x_1,y_1),\ldots,(x_{50},y_{50}),\;(x_{51},\hat{y}_{51}),\ldots,(x_{65},\hat{y}_{65})$$
+                        </div>
+                        <p>
+                            の65組のデータから，2回目のテストの平均値 $\bar{y}_B$ と
+                            2回のテスト間の相関係数 $r_B$ を求めた．
+                        </p>
+                        <p>
+                            $\bar{y}_B$ と $r_B$ の記述として，次の①〜⑤のうちから最も適切なものを1つ選べ．
+                        </p>
+                        <div class="choice-block">
+                            <span class="choice-label">①</span>
+                            $\bar{y}_B$ は $\mu_Y$ を偏りなく推定し，$r_B$ は $\rho$ を概ね偏りなく推定する．
+                        </div>
+                        <div class="choice-block correct">
+                            <span class="choice-label">②</span>
+                            $\bar{y}_B$ は $\mu_Y$ を偏りなく推定するが，$r_B$ は $\rho$ を過大評価する．
+                        </div>
+                        <div class="choice-block">
+                            <span class="choice-label">③</span>
+                            $\bar{y}_B$ は $\mu_Y$ を過小評価するが，$r_B$ は $\rho$ を概ね偏りなく推定する．
+                        </div>
+                        <div class="choice-block">
+                            <span class="choice-label">④</span>
+                            $\bar{y}_B$ は $\mu_Y$ を過小評価し，$r_B$ は $\rho$ を過大評価する．
+                        </div>
+                        <div class="choice-block">
+                            <span class="choice-label">⑤</span>
+                            $\bar{y}_B$ は $\mu_Y$ を過小評価し，$r_B$ は $\rho$ を過小評価する．
+                        </div>
+                    </div>
+
+                <!-- ======================================================== -->
+                <!-- 問29.1 [1] 解答                                            -->
+                <!-- ======================================================== -->
+                    <div class="answer-block" id="q291-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> まず状況を整理する：これはどの欠測メカニズムか？</div>
+                            <p>
+                                2回目の点数 $y_i$ が欠測するのは，
+                                <strong>1回目の点数 $x_i$ が基準 $c$ を超えた（$x_i > c$）</strong>ためです．
+                                $x_i$ は観測されているので，欠測は観測値 $x_i$ に依存しています．
+                            </p>
+                            <p>
+                                しかし，$y_i$ が欠測するかどうかは $y_i$ そのものの値には直接依存していません（$y_i$ は観測されない）．
+                                したがって，これは <strong>MAR（Missing At Random）</strong> に近い状況です．
+                            </p>
+                            <p>
+                                ただし，実質的には「$x_i > c$ だった学生は $y_i$ も高かった可能性が高い（正の相関があるため）」という形で，
+                                欠測している $y_i$ の値が系統的に大きいという<strong>選択バイアス</strong>（トランケーション）が生じています．
+                            </p>
+                        </div>
+
+                        <h3>Aさんの分析の評価：$\bar{y}_A$ について</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">なぜ $\bar{y}_A$ は $\mu_Y$ を過小評価するのか？</div>
+                            <p>
+                                Aさんは，<strong>2回とも受験した50人</strong>，すなわち「1回目の点数が基準 $c$ 以下だった学生」だけで
+                                2回目の平均を計算しています．
+                            </p>
+                            <p>
+                                2変量の相関係数 $\rho > 0$ なので，
+                                「1回目が高い学生は2回目も高い傾向がある」という関係があります．
+                                受講を免除された15人（$x_i > c$）は，もし2回目を受験したとすると，
+                                平均より高い $y_i$ を得ていた可能性が高いです．
+                            </p>
+                            <p>
+                                この「高い $y_i$ を持つはずだったデータ」が丸ごと除外されているため，
+                                50人だけで平均 $\bar{y}_A$ を計算すると
+                                <strong>真の平均 $\mu_Y$ より低い値になります（過小評価）</strong>．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">イメージ（散布図で考える）</div>
+                            <p>
+                                散布図上で考えると，1回目の点数 $x$ が高い領域（右側）のデータが
+                                すべて削除されているような状況です：
+                            </p>
+                            <table class="data-table" style="max-width:520px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>削除されたデータの特徴</th><th>影響</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$x_i > c$（1回目が高得点）</td><td>$\rho > 0$ より $y_i$ も高い傾向 → 削除で $\bar{y}$ が下がる</td></tr>
+                                    <tr><td>分布の右端・上端付近のデータ</td><td>散布図の「外側」の点が削除され，残ったデータは中心に偏る</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>Aさんの分析の評価：$r_A$ について</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">なぜ $r_A$ は $\rho$ を過小評価するのか？（トランケーションの効果）</div>
+                            <p>
+                                相関係数は，散布図での「データの広がりの方向への密集度」を測る指標です．
+                                データが全範囲にわたって散らばっているほど，相関係数は大きく計算されます．
+                            </p>
+                            <p>
+                                今回，$x_i > c$ の領域（散布図の右端・上端）のデータがすべて欠測により除去されています．
+                                これは<strong>分布の上端・右端を切り落とす（トランケーション）</strong>に相当します．
+                            </p>
+                            <p>
+                                散布図の外側（高 $x$，高 $y$）の点を除くと，残ったデータは散布図の
+                                左下部分に集中します．このように<strong>分布の広がりが失われる</strong>と，
+                                相関係数の値は真の値より小さく計算されます（過小評価）．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">トランケーションと相関係数の過小評価（直感的説明）</div>
+                            <p>
+                                例として，身長と体重の散布図を考えます．全身長の範囲でデータが取られていれば高い相関が観察されます．
+                                しかし，身長が高い人だけを除外すると（右端を切り落とす），
+                                残ったデータの身長の範囲が狭くなり，見かけの相関係数は小さくなります．
+                            </p>
+                            <p>
+                                この問題でも同様のことが起きており，$r_A < \rho$（過小評価）となります．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え：⑤</div>
+                            <p>
+                                <strong>$\bar{y}_A$ は $\mu_Y$ を過小評価し，$r_A$ は $\rho$ を過小評価する．</strong>
+                            </p>
+                            <ul style="margin:0.6em 0 0 1.5em;line-height:2;">
+                                <li>$\bar{y}_A$ の過小評価：$\rho > 0$ のため，除外された15人（$x_i > c$）は $y_i$ も高かった可能性が高い．その分平均が下がる．</li>
+                                <li>$r_A$ の過小評価：分布の右端・上端（高 $x$，高 $y$ の領域）が除去されることでトランケーションが生じ，散布図の広がりが失われる．</li>
+                            </ul>
+                            <p>過大評価（②④）ではなく過小評価（③⑤）であることに注意．$\rho > 0$ のときのトランケーションは「下方向」ではなく，分布端の切り落としによる相関の縮小をもたらす．</p>
+                        </div>
+                    </div>
+
+                <!-- ======================================================== -->
+                <!-- 問29.1 [2] 解答                                            -->
+                <!-- ======================================================== -->
+                    <div class="answer-block" id="q291-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> Bさんの手順の確認</div>
+                            <ol style="margin:0.6em 0 0 1.5em;line-height:2.2;">
+                                <li><strong>Step 1：</strong>2回とも受験した50人 $(x_1,y_1),\ldots,(x_{50},y_{50})$ から回帰直線 $\hat{y}=a+bx$ を求める</li>
+                                <li><strong>Step 2：</strong>受講免除の15人の2回目の点数を予測値 $\hat{y}_i = a + bx_i\;(i=51,\ldots,65)$ で補完</li>
+                                <li><strong>Step 3：</strong>65組の「疑似完全データ」から $\bar{y}_B$ と $r_B$ を計算する</li>
+                            </ol>
+                            <p style="margin-top:0.6em;">
+                                これは<strong>回帰代入（regression imputation）</strong>と呼ばれる補完法です．
+                            </p>
+                        </div>
+
+                        <h3>$\bar{y}_B$ の評価：偏りなく推定できる理由</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">2変量正規分布の性質：回帰直線の不変性</div>
+                            <p>
+                                全学生の点数が2変量正規分布 $N_2(\mu_X, \mu_Y, \sigma_X^2, \sigma_Y^2, \rho\sigma_X\sigma_Y)$ に従うとしたとき，
+                                $X$ を与えた条件のもとでの $Y$ の条件付き分布は：
+                            </p>
+                            <div class="formula-block">
+                                $$Y \mid X=x \;\sim\; N\!\left(\mu_Y + \frac{\rho\sigma_Y}{\sigma_X}(x - \mu_X),\; \sigma_Y^2(1-\rho^2)\right)$$
+                            </div>
+                            <p>
+                                すなわち，$Y \mid X=x$ の条件付き期待値は $x$ の線形関数です．
+                                この回帰直線は $x$ の観測・欠測に依存しません（$X=x$ が与えられたもとで $Y$ の欠測がランダム = MAR）．
+                            </p>
+                            <p>
+                                <strong>重要な結論：</strong>2回とも受験した50人から求めた回帰直線 $\hat{y}=a+bx$ は，
+                                全65人が受験したとしたら得られる回帰直線とほぼ一致します．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\bar{y}_B$ が不偏である理由</div>
+                            <p>
+                                65組の疑似データの $y$ 方向の平均を計算します：
+                            </p>
+                            <div class="formula-block">
+                                $$\bar{y}_B = \frac{1}{65}\left(\sum_{i=1}^{50} y_i + \sum_{i=51}^{65} \hat{y}_i\right)
+                                = \frac{1}{65}\left(\sum_{i=1}^{50} y_i + \sum_{i=51}^{65} (a + bx_i)\right)$$
+                            </div>
+                            <p>
+                                回帰直線が全体を代表する直線と一致するなら，予測値 $\hat{y}_i = a + bx_i$ は
+                                「もし受験したとしたときの $y_i$ の期待値」を正しく推定しています．
+                                したがって，65組の $y$ の平均 $\bar{y}_B$ は母平均 $\mu_Y$ を<strong>偏りなく推定</strong>します．
+                            </p>
+                        </div>
+
+                        <h3>$r_B$ の評価：過大評価となる理由</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">回帰予測値にはばらつきがない</div>
+                            <p>
+                                真の関係では，$x$ が同じ値でも $y$ には確率的なばらつきがあります．
+                                2変量正規分布では，$X=x$ のもとで $Y$ は残差分散 $\sigma_Y^2(1-\rho^2)$ を持ちます：
+                            </p>
+                            <div class="formula-block">
+                                $$Y = \underbrace{a + bX}_{\text{回帰直線}} + \underbrace{\varepsilon}_{\sigma_Y^2(1-\rho^2)\text{のノイズ}}$$
+                            </div>
+                            <p>
+                                ところが，Bさんが補完に使った予測値 $\hat{y}_i = a + bx_i$ は
+                                <strong>回帰直線上の点だけ</strong>であり，残差 $\varepsilon$ に相当するランダムな変動が含まれていません．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">なぜ相関係数が過大評価されるのか？（直感的説明）</div>
+                            <p>
+                                補完された15組の $(x_i, \hat{y}_i)$ は，<strong>すべてが回帰直線上にぴったり乗っています</strong>．
+                                回帰直線上にある点は，$x$ と $y$ が完全に線形の関係（相関係数 $= 1$）を持ちます．
+                            </p>
+                            <p>
+                                本来，本物の点は回帰直線からばらついているはずです．
+                                しかしBさんの疑似データでは，15点が「理想的に直線上に並んだ点」となっており，
+                                65点全体で見たとき，点が実際より直線にきれいに揃っているように見えます．
+                                その結果，$r_B > \rho$（過大評価）となります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">数式で確認する（イメージ）</div>
+                            <p>
+                                相関係数は「$x$ の変動と $y$ の変動の共変動 / （$x$ の標準偏差 $\times$ $y$ の標準偏差）」で計算されます．
+                                補完された $\hat{y}_i = a + bx_i$ は $x_i$ と完全に連動しているため：
+                            </p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>共分散 $S_{xy}$ は適切な値（回帰直線の傾きに対応）に近い値</li>
+                                <li>$y$ の標準偏差 $S_y$ は過小評価（回帰予測値のばらつきは $y$ の実際のばらつきより小さい）</li>
+                                <li>結果として $r_B = S_{xy}/(S_x S_y)$ の分母が小さくなり，<strong>$r_B$ は過大評価</strong></li>
+                            </ul>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え：②</div>
+                            <p>
+                                <strong>$\bar{y}_B$ は $\mu_Y$ を偏りなく推定するが，$r_B$ は $\rho$ を過大評価する．</strong>
+                            </p>
+                            <ul style="margin:0.6em 0 0 1.5em;line-height:2;">
+                                <li>$\bar{y}_B$ の不偏性：全学生が2変量正規分布に従うため，50人から求めた回帰直線が全体の回帰直線と一致し，補完された予測値も含めた平均は $\mu_Y$ を正しく推定する．</li>
+                                <li>$r_B$ の過大評価：補完された15点は回帰直線上に乗っており，$y$ 方向のばらつきを持たない．そのため，$y$ の標準偏差が過小評価され，相関係数が過大評価される．</li>
+                            </ul>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> [1] と [2] の比較まとめ</div>
+                            <table class="data-table" style="max-width:600px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>分析方法</th><th>$\bar{y}$（平均）</th><th>$r$（相関係数）</th><th>答え</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Aさん</strong><br>（50人のCCデータのみ）</td>
+                                        <td>過小評価<br>（$y$ が高い群が除外）</td>
+                                        <td>過小評価<br>（トランケーションで広がり減少）</td>
+                                        <td>⑤</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Bさん</strong><br>（回帰補完した65点）</td>
+                                        <td>不偏<br>（回帰直線の不変性）</td>
+                                        <td>過大評価<br>（予測値にばらつきがない）</td>
+                                        <td>②</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.8em;">
+                                Bさんの回帰補完は，平均の偏りを修正する点では優れていますが，
+                                標準偏差や相関係数は依然として偏ります．
+                                これらの偏りをすべて解消するためには，<strong>多重代入法（multiple imputation）</strong>
+                                などのより高度な手法が必要です．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 第29章全体のまとめ</div>
+                            <p>第29章「不完全データの統計処理」の主要な流れ：</p>
+                            <ol style="margin:0.6em 0 0 1.5em;line-height:2.2;">
+                                <li><strong>欠測メカニズムの分類：</strong>MCAR（完全ランダム欠測）・MAR（ランダム欠測）・MNAR（非ランダム欠測）。どのメカニズムかによって対処法と偏りの有無が変わる。</li>
+                                <li><strong>CC解析・AC解析：</strong>MCARならCC解析で十分。MARでは偏りが生じるため補完が必要。MNARは問題ごとの個別対応が必要。</li>
+                                <li><strong>打ち切りとトランケーション：</strong>閾値 $c$ を超えた個体数が既知なら打ち切り（EMアルゴリズム），未知ならトランケーション（反復スキーム）。どちらも過小評価を改善できる。</li>
+                                <li><strong>回帰補完の特性：</strong>MAR下では $y$ の平均の偏りを除去できるが，$y$ の標準偏差を過小評価・相関係数を過大評価する。</li>
+                                <li><strong>多重代入法：</strong>補完値に確率的なばらつきを加えることで，標準誤差の過小評価も含めた偏りを除去する高度な手法。</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

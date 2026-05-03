@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>論文まとめ | R.Goto</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu" id="nav-menu">
+                <li><a href="../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../statistics/index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="index.html" class="active"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../boardgames/index.html"><i class="fas fa-chess-board"></i> ボードゲーム</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" id="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="papers-hero">
+        <div class="container">
+            <span class="hero-badge">
+                <i class="fas fa-file-alt"></i> 論文まとめ
+            </span>
+            <h1>論文まとめ</h1>
+            <p class="hero-sub">CV,ML分野の論文で興味のあるものをまとめています。</p>
+        </div>
+    </header>
+
+    <div class="filter-bar">
+        <div class="container">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="search-input" placeholder="タイトル・著者・キーワードで検索..." autocomplete="off">
+            </div>
+        </div>
+    </div>
+
+    <main class="papers-main">
+        <div class="container">
+            <p class="papers-count" id="papers-count"></p>
+            <div class="papers-list" id="papers-grid">
+                <!-- リストはJSで生成 -->
+            </div>
+            <div class="empty-state" id="empty-state" style="display:none;">
+                <i class="fas fa-search"></i>
+                <p>該当する論文が見つかりませんでした。</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="papers-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 論文まとめ</p>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script>
+    (function () {
+        // ===== ナビゲーション =====
+        const toggle = document.getElementById('nav-toggle');
+        const menu = document.getElementById('nav-menu');
+        if (toggle) {
+            toggle.addEventListener('click', () => menu.classList.toggle('open'));
+        }
+        window.addEventListener('scroll', () => {
+            document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 10);
+        });
+
+        let searchQuery = '';
+
+        // ===== 検索 =====
+        document.getElementById('search-input').addEventListener('input', function () {
+            searchQuery = this.value.trim().toLowerCase();
+            render();
+        });
+
+        // ===== レンダリング =====
+        function render() {
+            const list = document.getElementById('papers-grid');
+            const empty = document.getElementById('empty-state');
+            const countEl = document.getElementById('papers-count');
+
+            const filtered = papersData.filter(p =>
+                !searchQuery
+                || p.title.toLowerCase().includes(searchQuery)
+                || (p.titleJa && p.titleJa.toLowerCase().includes(searchQuery))
+                || p.authors.toLowerCase().includes(searchQuery)
+                || p.tags.some(t => t.toLowerCase().includes(searchQuery))
+                || (p.venue && p.venue.toLowerCase().includes(searchQuery))
+            );
+
+            list.innerHTML = '';
+            if (filtered.length === 0) {
+                empty.style.display = 'block';
+                countEl.innerHTML = '';
+                return;
+            }
+            empty.style.display = 'none';
+            countEl.innerHTML = `<span>${filtered.length}</span> 件`;
+
+            filtered.forEach(p => {
+                const item = document.createElement('article');
+                item.className = 'paper-list-item';
+                item.innerHTML = `
+                    <div class="pli-left">
+                        <span class="pli-year">${esc(String(p.year))}</span>
+                        ${p.venue ? `<span class="pli-venue">${esc(p.venue)}</span>` : ''}
+                    </div>
+                    <div class="pli-right">
+                        <div class="pli-titles">
+                            <h2 class="pli-title-en">${esc(p.title)}</h2>
+                            ${p.titleJa ? `<p class="pli-title-ja">${esc(p.titleJa)}</p>` : ''}
+                        </div>
+                        <div class="pli-row">
+                            <div class="pli-tags">
+                                ${p.tags.map(t => `<span class="pli-tag">${esc(t)}</span>`).join('')}
+                            </div>
+                            <div class="pli-actions">
+                                ${p.links && p.links.arxiv ? `<a href="${p.links.arxiv}" target="_blank" rel="noopener noreferrer" class="paper-ext-link"><i class="fas fa-file-pdf"></i> arXiv</a>` : ''}
+                                ${p.links && p.links.github ? `<a href="${p.links.github}" target="_blank" rel="noopener noreferrer" class="paper-ext-link"><i class="fab fa-github"></i> Code</a>` : ''}
+                                <a href="detail.html?id=${encodeURIComponent(p.id)}" class="pli-detail-link">詳細 <i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function esc(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        render();
+    })();
+    </script>
+</body>
+</html>

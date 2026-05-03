@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第25章 章末問題解説 - 因子分析・グラフィカルモデル</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+        .highlight-row  { background: #f8f9fa !important; font-weight: 600; }
+        .highlight-cell { font-weight: 700; }
+        .neg-cell       { color: #c0392b; font-weight: 700; }
+        .pos-cell       { color: #1a5276; font-weight: 700; }
+        .calc-table th  { background: #e8f0ff; }
+        .derive-table th{ background: #e8f0ff; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        /* グラフ SVG コンテナ */
+        .graph-wrap {
+            display: flex;
+            gap: 32px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            margin: 1.2em 0;
+        }
+        .graph-wrap figure {
+            margin: 0;
+            text-align: center;
+        }
+        .graph-wrap figcaption {
+            font-size: 0.85em;
+            color: #555;
+            margin-top: 6px;
+        }
+
+        /* 散布図 */
+        .scatter-container {
+            display: flex;
+            justify-content: center;
+            margin: 1em 0;
+        }
+
+        /* 証明ブロック */
+        .proof-box {
+            border: 1.5px solid #8e44ad;
+            background: #faf0ff;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 0.8em 0;
+        }
+        .proof-box .proof-title {
+            color: #6c3483;
+            font-weight: 700;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+
+        /* 有向グラフ注釈 */
+        .arrow-label {
+            font-size: 11px;
+            fill: #c0392b;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第25章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 25 — 章末問題解説</span>
+            <h1>因子分析・グラフィカルモデル<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">共通因子・因子負荷量・構造方程式・パス係数・モラルグラフ</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter25.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第25章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q251">問25.1 問題</a></li>
+                            <li><a href="#q251-1">問25.1 [1]</a></li>
+                            <li><a href="#q251-2">問25.1 [2]</a></li>
+                            <li><a href="#q252">問25.2 問題</a></li>
+                            <li><a href="#q252-1">問25.2 [1]</a></li>
+                            <li><a href="#q252-2">問25.2 [2]</a></li>
+                            <li><a href="#q252-3">問25.2 [3]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第25章 概要                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第25章「因子分析・グラフィカルモデル」のキーポイント</div>
+
+                        <h4 style="margin-top:0.5em;">■ 因子分析（Factor Analysis）</h4>
+                        <p>
+                            複数の観測変数の背後に存在する<strong>共通因子（潜在変数）</strong>を推定し，変数間の共変動を少数の因子で説明する手法です．
+                        </p>
+                        <div class="formula-block">
+                            $$x_{ij} = a_j f_i + d_j u_{ij} \qquad \text{（1因子モデル）}$$
+                        </div>
+                        <table class="data-table" style="max-width:500px; margin:0.8em auto;">
+                            <thead><tr><th>記号</th><th>名称</th><th>意味</th></tr></thead>
+                            <tbody>
+                                <tr><td>$f_i$</td><td>因子スコア</td><td>個体 $i$ の共通因子の値（推定値）</td></tr>
+                                <tr><td>$a_j$</td><td>因子負荷量</td><td>共通因子と変数 $j$ の関係を表す係数</td></tr>
+                                <tr><td>$a_j^2$</td><td>共通性</td><td>変数 $j$ の変動のうち共通因子で説明できる割合</td></tr>
+                                <tr><td>$d_j^2$</td><td>独自性</td><td>変数 $j$ の変動のうち共通因子で説明できない割合</td></tr>
+                            </tbody>
+                        </table>
+                        <div class="formula-block" style="margin-top:0.5em;">
+                            $$a_j^2 + d_j^2 = 1 \quad \text{（標準化されているとき）}$$
+                        </div>
+                        <p>
+                            <strong>$m$ 因子モデル</strong>では，変数 $j$ の共通性は $\displaystyle\sum_{k=1}^m a_{jk}^2$ になります（$a_{jk}$ は第 $k$ 因子への負荷量）．
+                        </p>
+
+                        <h4 style="margin-top:1em;">■ グラフィカルモデルと構造方程式</h4>
+                        <p>
+                            <strong>構造方程式（パス解析）</strong>は変数間の因果関係を有向グラフで表現し，各矢印に<strong>パス係数</strong>を対応させたモデルです．
+                            <strong>モラルグラフ（道徳グラフ）</strong>は有向グラフを無向グラフに変換したもので，条件付き独立性の読み取りに用います．
+                        </p>
+                        <div class="concept-box" style="border-left-color:#f39c12;margin-top:0.5em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> モラルグラフの作り方（2ステップ）</div>
+                            <ol>
+                                <li>共通の子ノードを持つ<strong>親ノード同士を辺で結ぶ</strong>（「結婚させる」）</li>
+                                <li>すべての<strong>有向辺を無向辺に変換</strong>する</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問25.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q251">
+                    <h2><i class="fas fa-pencil"></i> 問25.1 — 問題文（コーヒー豆の因子分析）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            コーヒー豆の種類によるコーヒーの味の違いを可視化するために，100人の消費者を対象に，
+                            AからJまでの10種類のコーヒーの味について「苦み」「酸味」「すっきり感」「コク」「香りのよさ」の
+                            5項目についてアンケート調査を行った．100人のデータからコーヒー豆ごとに各項目の平均を求め，
+                            その10行5列の集計結果に<strong>2因子モデル</strong>を適用して5項目間の関連を考察することにした．
+                            推定には最尤法，回転にはバリマックス回転を用いた．
+                            各因子に対する因子負荷量と共通性は次の表のようになった．
+                        </p>
+                        <p>
+                            この結果から，第1因子を「<strong>酸味 or 苦味</strong>」，第2因子を「<strong>味の濃さ</strong>」と名付けることにした．
+                            下図はコーヒー豆の因子得点を横軸を第1因子，縦軸を第2因子としてプロットしたものである．
+                        </p>
+
+                        <p style="font-weight:600;margin-top:1em;">因子負荷量と共通性</p>
+                        <table class="data-table" style="max-width:460px; margin:0 auto;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left;">項目</th>
+                                    <th>第1因子</th>
+                                    <th>第2因子</th>
+                                    <th>共通性</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="text-align:left;">苦み</td>
+                                    <td class="neg-cell">$-0.92$</td>
+                                    <td style="font-weight:700;">$\text{ア}$</td>
+                                    <td>$0.8545$</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">酸味</td>
+                                    <td class="pos-cell">$0.83$</td>
+                                    <td>$-0.08$</td>
+                                    <td>$0.6953$</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">すっきり感</td>
+                                    <td>$-0.09$</td>
+                                    <td class="neg-cell">$-0.84$</td>
+                                    <td>$0.7137$</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">コク</td>
+                                    <td>$0.02$</td>
+                                    <td class="pos-cell">$0.90$</td>
+                                    <td>$0.8104$</td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">香りのよさ</td>
+                                    <td>$-0.35$</td>
+                                    <td>$0.45$</td>
+                                    <td>$0.3250$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- 因子得点プロット SVG -->
+                        <div class="scatter-container">
+                            <svg width="300" height="300" viewBox="-30 -30 300 300" xmlns="http://www.w3.org/2000/svg"
+                                 aria-label="コーヒー豆の因子得点プロット">
+                                <!-- 背景 -->
+                                <rect x="-30" y="-30" width="300" height="300" fill="#fafafa" rx="6"/>
+                                <!-- グリッド -->
+                                <line x1="0"   y1="10"  x2="240" y2="10"  stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="0"   y1="50"  x2="240" y2="50"  stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="0"   y1="90"  x2="240" y2="90"  stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="0"   y1="130" x2="240" y2="130" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="0"   y1="170" x2="240" y2="170" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="0"   y1="210" x2="240" y2="210" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="0"   y1="250" x2="240" y2="250" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="10"  y1="0"   x2="10"  y2="260" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="50"  y1="0"   x2="50"  y2="260" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="90"  y1="0"   x2="90"  y2="260" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="130" y1="0"   x2="130" y2="260" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="170" y1="0"   x2="170" y2="260" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <line x1="210" y1="0"   x2="210" y2="260" stroke="#e0e0e0" stroke-width="0.8"/>
+                                <!-- 軸 -->
+                                <line x1="0" y1="130" x2="240" y2="130" stroke="#888" stroke-width="1.5"/>
+                                <line x1="130" y1="0" x2="130" y2="260" stroke="#888" stroke-width="1.5"/>
+                                <!-- 破線（点線） -->
+                                <line x1="130" y1="0"   x2="130" y2="260" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"/>
+                                <line x1="0"   y1="130" x2="240" y2="130" stroke="#aaa" stroke-width="1" stroke-dasharray="4,3"/>
+                                <!-- 軸ラベル -->
+                                <text x="235" y="134" font-size="11" fill="#555">因子1</text>
+                                <text x="132" y="8"   font-size="11" fill="#555">因子2</text>
+                                <!-- 目盛りラベル（x軸）スケール: 1unit=40px, 中心=(130,130) -->
+                                <text x="88"  y="143" font-size="9" fill="#888" text-anchor="middle">-1</text>
+                                <text x="48"  y="143" font-size="9" fill="#888" text-anchor="middle">-2</text>
+                                <text x="172" y="143" font-size="9" fill="#888" text-anchor="middle">1</text>
+                                <text x="212" y="143" font-size="9" fill="#888" text-anchor="middle">2</text>
+                                <!-- 目盛りラベル（y軸）-->
+                                <text x="122" y="93"  font-size="9" fill="#888" text-anchor="end">1</text>
+                                <text x="122" y="53"  font-size="9" fill="#888" text-anchor="end">2</text>
+                                <text x="122" y="173" font-size="9" fill="#888" text-anchor="end">-1</text>
+                                <text x="122" y="213" font-size="9" fill="#888" text-anchor="end">-2</text>
+
+                                <!-- 各点: cx = 130 + f1*40, cy = 130 - f2*40 -->
+                                <!-- A: f1≈1.0, f2≈1.1 → cx=170, cy=86 -->
+                                <circle cx="170" cy="86"  r="4" fill="#e74c3c"/>
+                                <text x="175" y="83"  font-size="11" fill="#e74c3c" font-weight="700">A</text>
+
+                                <!-- B: f1≈0.9, f2≈-0.3 → cx=166, cy=142 -->
+                                <circle cx="166" cy="142" r="4" fill="#3498db"/>
+                                <text x="171" y="155" font-size="11" fill="#3498db" font-weight="700">B</text>
+
+                                <!-- C: f1≈0.7, f2≈0.05 → cx=158, cy=128 -->
+                                <circle cx="158" cy="128" r="4" fill="#3498db"/>
+                                <text x="163" y="125" font-size="11" fill="#3498db" font-weight="700">C</text>
+
+                                <!-- D: f1≈-0.05, f2≈0.05 → cx=128, cy=128 -->
+                                <circle cx="128" cy="128" r="4" fill="#27ae60"/>
+                                <text x="133" y="125" font-size="11" fill="#27ae60" font-weight="700">D</text>
+
+                                <!-- E: f1≈0.05, f2≈0.0 → cx=132, cy=130 -->
+                                <circle cx="134" cy="133" r="4" fill="#27ae60"/>
+                                <text x="139" y="148" font-size="11" fill="#27ae60" font-weight="700">E</text>
+
+                                <!-- F: f1≈-0.5, f2≈0.7 → cx=110, cy=102 -->
+                                <circle cx="110" cy="102" r="4" fill="#9b59b6"/>
+                                <text x="115" y="99"  font-size="11" fill="#9b59b6" font-weight="700">F</text>
+
+                                <!-- G: f1≈-0.1, f2≈-1.3 → cx=126, cy=182 -->
+                                <circle cx="126" cy="182" r="4" fill="#e67e22"/>
+                                <text x="131" y="193" font-size="11" fill="#e67e22" font-weight="700">G</text>
+
+                                <!-- H: f1≈-0.2, f2≈-2.0 → cx=122, cy=210 -->
+                                <circle cx="122" cy="210" r="4" fill="#c0392b"/>
+                                <text x="127" y="223" font-size="11" fill="#c0392b" font-weight="700">H</text>
+
+                                <!-- I: f1≈-0.35, f2≈-0.1 → cx=116, cy=134 -->
+                                <circle cx="116" cy="134" r="4" fill="#16a085"/>
+                                <text x="103" y="131" font-size="11" fill="#16a085" font-weight="700">I</text>
+
+                                <!-- J: f1≈-1.0, f2≈1.5 → cx=90, cy=70  ★ 答え -->
+                                <circle cx="90"  cy="70"  r="5" fill="#e74c3c" stroke="#c0392b" stroke-width="1.5"/>
+                                <text x="78"  y="67"  font-size="12" fill="#c0392b" font-weight="700">J★</text>
+                            </svg>
+                        </div>
+                        <p style="font-size:0.82em;color:#777;text-align:center;">図25.1　コーヒー豆の因子得点プロット（概略）</p>
+
+                        <ol style="margin-top:0.8em;">
+                            <li>$\boxed{\text{ア}}$ の因子負荷量の値の絶対値を求めよ．</li>
+                            <li>「酸味は強くないが苦味が強いコクのある味わいのコーヒーがほしい」という人がいた場合，AからJのどのコーヒーを勧めるのが最も適切と思うか答えよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問25.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q251-1">
+                    <h2><i class="fas fa-pencil"></i> 問25.1 [1] — ア の絶対値を求める</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 共通性の公式（2因子モデルの場合）</div>
+                            <p>
+                                $m$ 因子モデルでは，変数 $j$ の<strong>共通性</strong>（communality）は
+                                各因子への因子負荷量の2乗和で与えられます：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{（共通性）} = \sum_{k=1}^{m} a_{jk}^2 = a_{j1}^2 + a_{j2}^2 + \cdots + a_{jm}^2$$
+                            </div>
+                            <p>
+                                今回は $m = 2$ の2因子モデルなので，「苦み」の共通性は：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{（苦みの共通性）} = a_{\text{苦},1}^2 + a_{\text{苦},2}^2$$
+                                $$0.8545 = (-0.92)^2 + |\text{ア}|^2$$
+                            </div>
+                        </div>
+
+                        <h4>計算手順</h4>
+                        <div class="step-box">
+                            <div class="step-title">Step 1：$(-0.92)^2$ を計算する</div>
+                            <p>$(-0.92)^2 = 0.8464$</p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">Step 2：$|\text{ア}|^2$ を求める</div>
+                            <p>
+                                $|\text{ア}|^2 = 0.8545 - 0.8464 = 0.0081$
+                            </p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">Step 3：$|\text{ア}|$ を計算する</div>
+                            <p>
+                                $|\text{ア}| = \sqrt{0.0081} = 0.09$
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <div class="formula-block" style="font-size:1.05em;">
+                                $$|\text{ア}| = \sqrt{0.8545 - 0.92^2} = \sqrt{0.8545 - 0.8464} = \sqrt{0.0081} = \boldsymbol{0.09}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 補足：共通性・独自性・因子負荷量の関係</div>
+                            <p>
+                                標準化された変数では $\text{V}[x_j] = 1$ であり，因子モデルの仮定から
+                                $\text{V}[x_j] = a_{j1}^2 + a_{j2}^2 + d_j^2 = 1$ が成立します．
+                                したがって<strong>共通性＋独自性＝1</strong>となります．
+                                苦みの独自性は $1 - 0.8545 = 0.1455$ です．
+                            </p>
+                            <p style="font-size:0.9em;color:#555;margin-top:4px;">
+                                ※ ア の符号は絶対値では判断できません．問題は「絶対値を求めよ」なので 0.09 が正解です．
+                                （文脈から ア &gt; 0，すなわち苦みは第2因子「味の濃さ」にも正の寄与をすると解釈されることが多いです）
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問25.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q251-2">
+                    <h2><i class="fas fa-pencil"></i> 問25.1 [2] — 因子得点プロットから最適なコーヒーを選ぶ</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 因子の解釈を整理する</div>
+                            <p>
+                                因子負荷量の表から，各因子の意味を確認します：
+                            </p>
+                            <table class="data-table derive-table" style="max-width:500px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>因子</th><th>名前</th><th>正の方向</th><th>負の方向</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>第1因子（横軸）</td>
+                                        <td>酸味 or 苦味</td>
+                                        <td>酸味が強い（$+0.83$）</td>
+                                        <td>苦みが強い（$-0.92$）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>第2因子（縦軸）</td>
+                                        <td>味の濃さ</td>
+                                        <td>コクがある（$+0.90$）</td>
+                                        <td>すっきりしている（$-0.84$）</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4>希望するコーヒーの条件を因子得点で表す</h4>
+                        <div class="step-box">
+                            <div class="step-title">「酸味は強くない」</div>
+                            <p>第1因子の<strong>正の方向が「酸味が強い」</strong>なので，酸味が強くないということは<strong>第1因子のスコアが小さい（左方向）</strong></p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">「苦みが強い」</div>
+                            <p>第1因子の<strong>負の方向が「苦みが強い」</strong>なので，苦みが強いということは<strong>第1因子のスコアが負に大きい（さらに左方向）</strong></p>
+                        </div>
+                        <div class="step-box">
+                            <div class="step-title">「コクのある味わい」</div>
+                            <p>第2因子の<strong>正の方向が「コクがある」</strong>なので，<strong>第2因子のスコアが大きい（上方向）</strong></p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#e74c3c;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-marker-alt" style="color:#e74c3c;"></i> 因子スコアプロットで探す位置</div>
+                            <p>
+                                条件をまとめると，<strong>「第1因子スコアが最も小さく（最も左），第2因子スコアが最も大きい（最も上）」</strong>コーヒーを選べばよいことになります．
+                                プロット図を確認すると，この条件に最も合致するのは<strong>左上に位置する J</strong> です．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p>
+                                因子1のスコアが最も小さく（苦みが強く酸味が弱い），因子2のスコアが最も大きい（コクがある）コーヒーは
+                                <strong>J</strong> である．よって，<strong>コーヒー J を勧めるのが最も適切</strong>である．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 各コーヒーの特徴（プロットの読み方）</div>
+                            <table class="data-table" style="max-width:480px; margin:0 auto; font-size:0.88em;">
+                                <thead><tr><th>位置</th><th>コーヒー</th><th>味の特徴</th></tr></thead>
+                                <tbody>
+                                    <tr><td>左上</td><td><strong>J</strong>★</td><td>苦みが強く酸味が弱い，コクがある → <span style="color:#c0392b;">今回の答え</span></td></tr>
+                                    <tr><td>右上</td><td>A</td><td>酸味が強い，コクもある</td></tr>
+                                    <tr><td>左下</td><td>H</td><td>苦みが強い，すっきりしている（コクが薄い）</td></tr>
+                                    <tr><td>右下</td><td>B</td><td>酸味がある，すっきりしている</td></tr>
+                                    <tr><td>中央付近</td><td>D, E, I</td><td>バランス型</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問25.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q252">
+                    <h2><i class="fas fa-pencil"></i> 問25.2 — 問題文（構造方程式・パス係数・モラルグラフ）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            変数 $X, Y, Z, W$ の関係を下図のグラフが定義する構造方程式を考える：
+                        </p>
+                        <div class="formula-block">
+                            $$Y = aX + bW + u, \qquad Z = cX + dY + v \tag{25.3}$$
+                        </div>
+                        <p>
+                            ここで，$X, Y, Z, W$ は標準化されているとし，$X$ と $W$ は独立と仮定する．
+                            $u, v$ は誤差項で，$u$ は $X, W$ と，$v$ は $X, Y$ と独立であるとする．
+                            $X$ と $Y$ の共分散を $\rho_{xy}$，$X$ と $Z$ の共分散を $\rho_{xz}$，
+                            $Y$ と $Z$ の共分散を $\rho_{yz}$，$Y$ と $W$ の共分散を $\rho_{yw}$，
+                            $Z$ と $W$ の共分散を $\rho_{zw}$ とする．
+                        </p>
+
+                        <!-- パス図 SVG -->
+                        <div class="graph-wrap" style="margin-top:1em;">
+                            <figure>
+                                <svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg"
+                                     aria-label="有向グラフ（パス図）">
+                                    <rect width="200" height="160" fill="#fafafa" rx="6"/>
+                                    <!-- 矢印定義 -->
+                                    <defs>
+                                        <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                            <polygon points="0 0, 8 3, 0 6" fill="#2c3e50"/>
+                                        </marker>
+                                        <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                            <polygon points="0 0, 8 3, 0 6" fill="#2980b9"/>
+                                        </marker>
+                                        <marker id="arr-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                            <polygon points="0 0, 8 3, 0 6" fill="#c0392b"/>
+                                        </marker>
+                                    </defs>
+                                    <!-- ノード位置: X=(100,25), Y=(100,110), W=(25,110), Z=(175,110) -->
+                                    <!-- X→Y -->
+                                    <line x1="100" y1="42"  x2="100" y2="93"  stroke="#2c3e50" stroke-width="2" marker-end="url(#arr)"/>
+                                    <text x="106" y="72" font-size="11" fill="#c0392b" font-weight="700">a</text>
+                                    <!-- W→Y -->
+                                    <line x1="44"  y1="110" x2="82"  y2="110" stroke="#2c3e50" stroke-width="2" marker-end="url(#arr)"/>
+                                    <text x="56"  y="105" font-size="11" fill="#c0392b" font-weight="700">b</text>
+                                    <!-- X→Z -->
+                                    <line x1="113" y1="37"  x2="163" y2="96"  stroke="#2c3e50" stroke-width="2" marker-end="url(#arr)"/>
+                                    <text x="148" y="62"  font-size="11" fill="#c0392b" font-weight="700">c</text>
+                                    <!-- Y→Z -->
+                                    <line x1="118" y1="110" x2="156" y2="110" stroke="#2c3e50" stroke-width="2" marker-end="url(#arr)"/>
+                                    <text x="131" y="105" font-size="11" fill="#c0392b" font-weight="700">d</text>
+                                    <!-- ノード（円） -->
+                                    <circle cx="100" cy="28"  r="18" fill="#eaf4fb" stroke="#2980b9" stroke-width="2"/>
+                                    <circle cx="100" cy="110" r="18" fill="#eaf4fb" stroke="#2980b9" stroke-width="2"/>
+                                    <circle cx="25"  cy="110" r="18" fill="#fef9e7" stroke="#f39c12" stroke-width="2"/>
+                                    <circle cx="175" cy="110" r="18" fill="#eaf4fb" stroke="#2980b9" stroke-width="2"/>
+                                    <!-- ノードラベル -->
+                                    <text x="100" y="33"  text-anchor="middle" font-size="14" font-weight="700" fill="#1a5276">X</text>
+                                    <text x="100" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#1a5276">Y</text>
+                                    <text x="25"  y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#7d6608">W</text>
+                                    <text x="175" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#1a5276">Z</text>
+                                    <!-- タイトル -->
+                                    <text x="100" y="150" font-size="10" fill="#777" text-anchor="middle">有向グラフ（パス図）</text>
+                                </svg>
+                                <figcaption>図25.2　構造方程式のパス図</figcaption>
+                            </figure>
+                        </div>
+
+                        <ol>
+                            <li>パス係数 $a, b, c, d$ を $\rho_{xy}, \rho_{xz}, \rho_{yz}, \rho_{yw}, \rho_{zw}$ を用いて表せ．</li>
+                            <li>$\rho_{xz} = c + ad$ となっていることを示せ．</li>
+                            <li>上の有向グラフのモラルグラフを描け．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問25.2 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q252-1">
+                    <h2><i class="fas fa-pencil"></i> 問25.2 [1] — パス係数 a, b, c, d を求める</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 基本方針：両辺に変数を掛けて期待値を取る</div>
+                            <p>
+                                構造方程式の<strong>両辺に各変数を掛けて期待値（平均）をとる</strong>ことで，
+                                パス係数と共分散の関係式が導出できます．
+                                変数が標準化（平均0，分散1）されているので，$\mathrm{E}[X^2] = \mathrm{Var}(X) = 1$ などが使えます．
+                                また，$X \perp W$ より $\mathrm{E}[XW] = 0$，誤差項の独立性より $\mathrm{E}[uX] = \mathrm{E}[uW] = \mathrm{E}[vX] = \mathrm{E}[vY] = 0$ となります．
+                            </p>
+                        </div>
+
+                        <h4>■ a と b の導出（第1式 $Y = aX + bW + u$ から）</h4>
+
+                        <div class="step-box">
+                            <div class="step-title">第1式の両辺に X を掛けて期待値を取る</div>
+                            <div class="formula-block">
+                                $$\mathrm{E}[YX] = a\,\mathrm{E}[X^2] + b\,\mathrm{E}[WX] + \mathrm{E}[uX]$$
+                                $$\rho_{xy} = a \cdot 1 + b \cdot 0 + 0$$
+                                $$\therefore\quad \boxed{a = \rho_{xy}}$$
+                            </div>
+                            <p style="font-size:0.9em;color:#555;">
+                                ・$\mathrm{E}[X^2]=1$（標準化），$\mathrm{E}[WX]=0$（$X \perp W$），$\mathrm{E}[uX]=0$（$u \perp X$）
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">第1式の両辺に W を掛けて期待値を取る</div>
+                            <div class="formula-block">
+                                $$\mathrm{E}[YW] = a\,\mathrm{E}[XW] + b\,\mathrm{E}[W^2] + \mathrm{E}[uW]$$
+                                $$\rho_{yw} = a \cdot 0 + b \cdot 1 + 0$$
+                                $$\therefore\quad \boxed{b = \rho_{yw}}$$
+                            </div>
+                            <p style="font-size:0.9em;color:#555;">
+                                ・$\mathrm{E}[W^2]=1$（標準化），$\mathrm{E}[XW]=0$（$X \perp W$），$\mathrm{E}[uW]=0$（$u \perp W$）
+                            </p>
+                        </div>
+
+                        <h4 style="margin-top:1em;">■ c と d の導出（第2式 $Z = cX + dY + v$ から）</h4>
+
+                        <div class="step-box">
+                            <div class="step-title">第2式の両辺に X を掛けて期待値を取る</div>
+                            <div class="formula-block">
+                                $$\mathrm{E}[ZX] = c\,\mathrm{E}[X^2] + d\,\mathrm{E}[YX] + \mathrm{E}[vX]$$
+                                $$\rho_{xz} = c \cdot 1 + d \cdot \rho_{xy} + 0$$
+                                $$\therefore\quad \rho_{xz} = c + d\rho_{xy} \qquad \cdots\,(*) $$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">第2式の両辺に Y を掛けて期待値を取る</div>
+                            <div class="formula-block">
+                                $$\mathrm{E}[ZY] = c\,\mathrm{E}[XY] + d\,\mathrm{E}[Y^2] + \mathrm{E}[vY]$$
+                                $$\rho_{yz} = c\rho_{xy} + d \cdot 1 + 0$$
+                                $$\therefore\quad \rho_{yz} = c\rho_{xy} + d \qquad \cdots\,(**)$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">連立方程式 (*), (**) を解く</div>
+                            <p>$(*)$ より $c = \rho_{xz} - d\rho_{xy}$ を $(**)$ に代入する：</p>
+                            <div class="formula-block">
+                                $$\rho_{yz} = (\rho_{xz} - d\rho_{xy})\rho_{xy} + d = \rho_{xz}\rho_{xy} + d(1 - \rho_{xy}^2)$$
+                                $$d(1 - \rho_{xy}^2) = \rho_{yz} - \rho_{xy}\rho_{xz}$$
+                                $$\therefore\quad \boxed{d = \frac{\rho_{yz} - \rho_{xy}\rho_{xz}}{1 - \rho_{xy}^2}}$$
+                            </div>
+                            <p>これを $(*)$ に代入して $c$ を求める：</p>
+                            <div class="formula-block">
+                                $$c = \rho_{xz} - \rho_{xy} \cdot \frac{\rho_{yz} - \rho_{xy}\rho_{xz}}{1 - \rho_{xy}^2}
+                                = \frac{\rho_{xz}(1-\rho_{xy}^2) - \rho_{xy}\rho_{yz} + \rho_{xy}^2\rho_{xz}}{1 - \rho_{xy}^2}$$
+                                $$\therefore\quad \boxed{c = \frac{\rho_{xz} - \rho_{xy}\rho_{yz}}{1 - \rho_{xy}^2}}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：パス係数のまとめ</div>
+                            <table class="data-table" style="max-width:480px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>パス係数</th><th>対応する矢印</th><th>値</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$a$</td><td>$X \to Y$</td><td>$a = \rho_{xy}$</td></tr>
+                                    <tr><td>$b$</td><td>$W \to Y$</td><td>$b = \rho_{yw}$</td></tr>
+                                    <tr><td>$c$</td><td>$X \to Z$（直接効果）</td><td>$\displaystyle c = \frac{\rho_{xz} - \rho_{xy}\rho_{yz}}{1 - \rho_{xy}^2}$</td></tr>
+                                    <tr><td>$d$</td><td>$Y \to Z$</td><td>$\displaystyle d = \frac{\rho_{yz} - \rho_{xy}\rho_{xz}}{1 - \rho_{xy}^2}$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問25.2 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q252-2">
+                    <h2><i class="fas fa-pencil"></i> 問25.2 [2] — $\rho_{xz} = c + ad$ を示す</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 直接効果と間接効果</div>
+                            <p>
+                                パス図において，$X$ が $Z$ に与える影響には2種類の経路があります：
+                            </p>
+                            <ul>
+                                <li><strong>直接効果（direct effect）：</strong>$X \xrightarrow{c} Z$ の1本の矢印</li>
+                                <li><strong>間接効果（indirect effect）：</strong>$X \xrightarrow{a} Y \xrightarrow{d} Z$ の2本の矢印の経路（パス係数の積 $ad$）</li>
+                            </ul>
+                            <p>
+                                $\rho_{xz} = c + ad$ という等式は，
+                                「$X$ と $Z$ の相関は，直接効果と間接効果の和で表せる」ことを意味します．
+                            </p>
+                        </div>
+
+                        <div class="proof-box">
+                            <div class="proof-title"><i class="fas fa-pen-fancy"></i> 証明</div>
+                            <p>[1] の結果から，</p>
+                            <div class="formula-block">
+                                $$c + ad = \frac{\rho_{xz} - \rho_{xy}\rho_{yz}}{1 - \rho_{xy}^2} + \rho_{xy} \cdot \frac{\rho_{yz} - \rho_{xy}\rho_{xz}}{1 - \rho_{xy}^2}$$
+                            </div>
+                            <p>分子をまとめると，</p>
+                            <div class="formula-block">
+                                $$\begin{align}
+                                \text{分子} &= \rho_{xz} - \rho_{xy}\rho_{yz} + \rho_{xy}\rho_{yz} - \rho_{xy}^2\rho_{xz}\\
+                                &= \rho_{xz} - \rho_{xy}^2\rho_{xz}\\
+                                &= \rho_{xz}(1 - \rho_{xy}^2)
+                                \end{align}$$
+                            </div>
+                            <p>したがって，</p>
+                            <div class="formula-block">
+                                $$c + ad = \frac{\rho_{xz}(1 - \rho_{xy}^2)}{1 - \rho_{xy}^2} = \rho_{xz} \qquad \blacksquare$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 直感的な理解：経路を追って相関を計算する</div>
+                            <p>
+                                標準化変数の場合，<strong>共分散＝相関係数</strong>であることを使って，構造方程式から直接導くこともできます：
+                            </p>
+                            <div class="formula-block">
+                                $$\rho_{xz} = \mathrm{Cov}(X, Z) = \mathrm{Cov}(X,\ cX + dY + v)$$
+                                $$= c\,\mathrm{Var}(X) + d\,\mathrm{Cov}(X,Y) + \mathrm{Cov}(X,v)$$
+                                $$= c \cdot 1 + d \cdot \rho_{xy} + 0 = c + d\rho_{xy}$$
+                            </div>
+                            <p>
+                                一方，$a = \rho_{xy}$ を代入すると $c + d\rho_{xy} = c + da = c + ad$ となり，$\rho_{xz} = c + ad$ が示されます．
+                            </p>
+                            <p style="font-size:0.9em;color:#777;margin-top:4px;">
+                                ※ これは $(*)$ 式そのものであり，実は Step で既に示されていた内容です．問[1]の導出の中ですでに $\rho_{xz} = c + d\rho_{xy} = c + ad$ が使われています．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問25.2 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q252-3">
+                    <h2><i class="fas fa-pencil"></i> 問25.2 [3] — モラルグラフを描く</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> モラルグラフ（道徳グラフ）の作り方</div>
+                            <p>
+                                モラルグラフとは，有向グラフ（DAG）を無向グラフに変換したものです．
+                                グラフィカルモデルにおいて<strong>条件付き独立性</strong>を読み取るために用いられます．
+            　                </p>
+                            <div class="step-box">
+                                <div class="step-title">手順1：「結婚」— 共通の子ノードを持つ親ノード同士を無向辺で結ぶ</div>
+                                <p>各ノードの親ノード（そのノードへの矢印の出発点）を確認し，2人以上の親を持つノードがあれば，その親たちを辺で結びます．</p>
+                            </div>
+                            <div class="step-box">
+                                <div class="step-title">手順2：「モラル化」— すべての有向辺を無向辺に変換する</div>
+                                <p>矢印の向きを消去し，単純な辺（無向辺）にします．</p>
+                            </div>
+                        </div>
+
+                        <h4>元のパス図の辺と親ノードを確認する</h4>
+                        <table class="data-table derive-table" style="max-width:400px; margin:0 auto;">
+                            <thead>
+                                <tr><th>ノード</th><th>親ノード（矢印の始点）</th><th>処理</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$X$</td><td>なし</td><td>—</td></tr>
+                                <tr><td>$W$</td><td>なし</td><td>—</td></tr>
+                                <tr class="highlight-row">
+                                    <td>$Y$</td>
+                                    <td>$X$ と $W$（2人の親）</td>
+                                    <td>$X$ と $W$ を辺で結ぶ ★</td>
+                                </tr>
+                                <tr>
+                                    <td>$Z$</td>
+                                    <td>$X$ と $Y$（2人の親）</td>
+                                    <td>$X$ と $Y$ はすでに辺あり（$X \to Y$）→ 追加不要</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>モラルグラフの辺一覧</h4>
+                        <ul>
+                            <li>$X - Y$（もとの有向辺 $X \to Y$ を無向化）</li>
+                            <li>$W - Y$（もとの有向辺 $W \to Y$ を無向化）</li>
+                            <li>$X - Z$（もとの有向辺 $X \to Z$ を無向化）</li>
+                            <li>$Y - Z$（もとの有向辺 $Y \to Z$ を無向化）</li>
+                            <li>$X - W$（手順1で追加：$Y$ の親 $X$ と $W$ を結ぶ）</li>
+                        </ul>
+
+                        <!-- モラルグラフ SVG -->
+                        <div class="graph-wrap">
+                            <figure>
+                                <svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg"
+                                     aria-label="モラルグラフ">
+                                    <rect width="200" height="160" fill="#fafafa" rx="6"/>
+                                    <!-- 辺（無向） -->
+                                    <!-- X-Y -->
+                                    <line x1="100" y1="42"  x2="100" y2="92"  stroke="#2c3e50" stroke-width="2"/>
+                                    <!-- W-Y -->
+                                    <line x1="43"  y1="110" x2="82"  y2="110" stroke="#2c3e50" stroke-width="2"/>
+                                    <!-- X-Z -->
+                                    <line x1="113" y1="37"  x2="157" y2="93"  stroke="#2c3e50" stroke-width="2"/>
+                                    <!-- Y-Z -->
+                                    <line x1="118" y1="110" x2="157" y2="110" stroke="#2c3e50" stroke-width="2"/>
+                                    <!-- X-W (追加辺) ★ -->
+                                    <line x1="82"  y1="28"  x2="30"  y2="92"  stroke="#e74c3c" stroke-width="2.5" stroke-dasharray="5,2"/>
+                                    <!-- ノード -->
+                                    <circle cx="100" cy="28"  r="18" fill="#eaf4fb" stroke="#2980b9" stroke-width="2"/>
+                                    <circle cx="100" cy="110" r="18" fill="#eaf4fb" stroke="#2980b9" stroke-width="2"/>
+                                    <circle cx="25"  cy="110" r="18" fill="#fef9e7" stroke="#f39c12" stroke-width="2"/>
+                                    <circle cx="175" cy="110" r="18" fill="#eaf4fb" stroke="#2980b9" stroke-width="2"/>
+                                    <!-- ラベル -->
+                                    <text x="100" y="33"  text-anchor="middle" font-size="14" font-weight="700" fill="#1a5276">X</text>
+                                    <text x="100" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#1a5276">Y</text>
+                                    <text x="25"  y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#7d6608">W</text>
+                                    <text x="175" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#1a5276">Z</text>
+                                    <!-- 追加辺の注釈 -->
+                                    <text x="45" y="62" font-size="9" fill="#c0392b">追加辺</text>
+                                    <!-- タイトル -->
+                                    <text x="100" y="150" font-size="10" fill="#777" text-anchor="middle">モラルグラフ</text>
+                                </svg>
+                                <figcaption>図25.3　モラルグラフ<br><span style="color:#c0392b;font-size:0.9em;">（赤破線：手順1で追加した辺 X−W）</span></figcaption>
+                            </figure>
+
+                            <!-- 比較：元の有向グラフ（再掲）-->
+                            <figure>
+                                <svg width="200" height="160" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg"
+                                     aria-label="元の有向グラフ（再掲）">
+                                    <rect width="200" height="160" fill="#f5f5f5" rx="6"/>
+                                    <defs>
+                                        <marker id="arr2" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                            <polygon points="0 0, 8 3, 0 6" fill="#2c3e50"/>
+                                        </marker>
+                                    </defs>
+                                    <line x1="100" y1="42"  x2="100" y2="93"  stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arr2)"/>
+                                    <line x1="44"  y1="110" x2="82"  y2="110" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arr2)"/>
+                                    <line x1="113" y1="37"  x2="163" y2="96"  stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arr2)"/>
+                                    <line x1="118" y1="110" x2="156" y2="110" stroke="#7f8c8d" stroke-width="1.5" marker-end="url(#arr2)"/>
+                                    <circle cx="100" cy="28"  r="18" fill="#ecf0f1" stroke="#95a5a6" stroke-width="2"/>
+                                    <circle cx="100" cy="110" r="18" fill="#ecf0f1" stroke="#95a5a6" stroke-width="2"/>
+                                    <circle cx="25"  cy="110" r="18" fill="#ecf0f1" stroke="#95a5a6" stroke-width="2"/>
+                                    <circle cx="175" cy="110" r="18" fill="#ecf0f1" stroke="#95a5a6" stroke-width="2"/>
+                                    <text x="100" y="33"  text-anchor="middle" font-size="14" font-weight="700" fill="#555">X</text>
+                                    <text x="100" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#555">Y</text>
+                                    <text x="25"  y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#555">W</text>
+                                    <text x="175" y="115" text-anchor="middle" font-size="14" font-weight="700" fill="#555">Z</text>
+                                    <text x="100" y="150" font-size="10" fill="#999" text-anchor="middle">元の有向グラフ（参考）</text>
+                                </svg>
+                                <figcaption>元の有向グラフ（参考）</figcaption>
+                            </figure>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：モラルグラフ</div>
+                            <p>
+                                モラルグラフは辺 $\{X\text{-}Y,\ W\text{-}Y,\ X\text{-}Z,\ Y\text{-}Z,\ X\text{-}W\}$ を持つ無向グラフ（図25.3）である．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> モラルグラフから条件付き独立性を読む</div>
+                            <p>
+                                モラルグラフにおいて，ノード $A$ と $B$ の間のすべてのパスが集合 $S$ によって遮断されるとき，
+                                $A$ と $B$ は $S$ が与えられたもとで<strong>条件付き独立</strong>になります（マルコフ性）．
+                            </p>
+                            <p>
+                                今回のモラルグラフでは，$W$ と $Z$ を結ぶ直接の辺がありません．
+                                $W - Y - Z$ というパスが存在しますが，$Y$（または $\{X, Y\}$）を条件付ければ，
+                                $W$ と $Z$ のパスが遮断されます．すなわち，<strong>$X, Y$ を与えた下で $W \perp Z$</strong> であることがわかります．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

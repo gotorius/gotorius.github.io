@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第24章 章末問題解説 - クラスター分析</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em 0;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+        .highlight-row  { background: #fffbe6 !important; font-weight: 600; }
+        .highlight-cell { background: #e8f4e8 !important; font-weight: 700; color: #1a7a3c; }
+        .dim-cell       { color: #aaa; }
+        .calc-table th  { background: #e8f0ff; }
+        .step-table th  { background: #e8f4e8; }
+        .badge-correct  { background: #27ae60; color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 0.82em; font-weight: 700; }
+
+        /* デンドログラム SVG */
+        .dendro-wrap {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1em 0;
+        }
+        .dendro-wrap figure {
+            margin: 0;
+            text-align: center;
+        }
+        .dendro-wrap svg {
+            display: block;
+            margin: 0 auto;
+        }
+        .dendro-wrap figcaption {
+            font-size: 0.85em;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第24章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 24 — 章末問題解説</span>
+            <h1>クラスター分析<br><small style="font-size:0.65em;color:var(--gray-500);">階層的クラスタリング・K-means・デンドログラムの読み方</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter24.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第24章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q241">問24.1 問題</a></li>
+                            <li><a href="#q241-1">問24.1 [1]</a></li>
+                            <li><a href="#q241-2">問24.1 [2]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第24章概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第24章「クラスター分析」のキーポイント</div>
+                        <p>
+                            クラスター分析とは，<strong>似ているデータ同士をグループ（クラスター）にまとめる</strong>手法です．
+                            教師なし学習の代表例で，あらかじめグループ数やラベルが分からないデータに使います．
+                        </p>
+                        <table class="data-table step-table" style="margin-top:8px;">
+                            <thead><tr><th>手法</th><th>概要</th><th>特徴</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>最近隣法（単連結法）</strong></td>
+                                    <td>2クラスター間の距離 ＝ 最も近い点同士の距離（min）</td>
+                                    <td>細長い鎖状のクラスターを作りやすい</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>最遠隣法（完全連結法）</strong></td>
+                                    <td>2クラスター間の距離 ＝ 最も遠い点同士の距離（max）</td>
+                                    <td>コンパクトな球状のクラスターを作りやすい</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>K-means 法</strong></td>
+                                    <td>K 個の中心（セントロイド）を反復的に更新してクラスターを形成</td>
+                                    <td>非階層的．K を事前に指定する必要がある</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="concept-box" style="border-left-color:#f39c12;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> デンドログラム（樹形図）の読み方</div>
+                            <p>
+                                階層的クラスタリングの結果は<strong>デンドログラム（樹形図）</strong>で表示されます．
+                                縦軸（Height）はクラスターが結合されたときの距離を表し，<strong>高い位置で結合されるほど「似ていない」</strong>ことを意味します．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問24.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q241">
+                    <h2><i class="fas fa-pencil"></i> 問24.1 — 問題文（TripAdvisor レビューデータのクラスタリング）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            表24.1は，TripAdvisor という旅行に関する口コミ・価格比較を中心とするウェブサイトの6人の利用者が，
+                            旅行先のレストラン・劇場・ビーチに対して与えた評価の平均評価点である（ただし，数値は以後の計算を簡単にするために定数倍してある）．
+                            これらの点数データを3次元ベクトルとして扱って計算した，ユーザ間のユークリッド距離行列を表24.2に示す．
+                            このデータに対して，<strong>最近隣法と最遠隣法</strong>を用いて階層的クラスター分析を行い作成したデンドログラムを図24.1 (a) および (b) に示す．
+                            記号 A〜F はユーザの番号のいずれかに対応する．
+                        </p>
+
+                        <p style="font-weight:600;margin-top:1em;text-align:center;">表24.1　6人のユーザによる平均評価点</p>
+                        <table class="data-table" style="max-width:420px;margin:0 auto;">
+                            <thead>
+                                <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="text-align:left;font-weight:600;">レストラン</td><td>7.7</td><td>10.1</td><td>4.9</td><td>4.8</td><td>6.4</td><td>4.0</td></tr>
+                                <tr><td style="text-align:left;font-weight:600;">劇場</td><td>5.8</td><td>5.9</td><td>4.1</td><td>5.0</td><td>3.7</td><td>5.2</td></tr>
+                                <tr><td style="text-align:left;font-weight:600;">ビーチ</td><td>7.7</td><td>7.3</td><td>7.9</td><td>9.0</td><td>8.0</td><td>11.6</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p style="font-weight:600;margin-top:1em;text-align:center;">表24.2　6人のユーザ間のユークリッド距離</p>
+                        <table class="data-table" style="max-width:400px;margin:0 auto;">
+                            <thead>
+                                <tr><th></th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><b>1</b></td><td>0.0</td><td>2.4</td><td>3.3</td><td>3.3</td><td>2.5</td><td>5.4</td></tr>
+                                <tr><td><b>2</b></td><td>2.4</td><td>0.0</td><td>5.5</td><td>5.6</td><td>4.4</td><td>7.5</td></tr>
+                                <tr><td><b>3</b></td><td>3.3</td><td>5.5</td><td>0.0</td><td class="highlight-cell">1.4</td><td>1.6</td><td>4.0</td></tr>
+                                <tr><td><b>4</b></td><td>3.3</td><td>5.6</td><td class="highlight-cell">1.4</td><td>0.0</td><td>2.3</td><td>2.7</td></tr>
+                                <tr><td><b>5</b></td><td>2.5</td><td>4.4</td><td>1.6</td><td>2.3</td><td>0.0</td><td>4.6</td></tr>
+                                <tr><td><b>6</b></td><td>5.4</td><td>7.5</td><td>4.0</td><td>2.7</td><td>4.6</td><td>0.0</td></tr>
+                            </tbody>
+                        </table>
+                        <p style="font-size:0.85em;color:#777;margin-top:2px;">※ セル色が緑の d(3,4)=1.4 が全距離中の最小値</p>
+
+                        <!-- デンドログラム概略 SVG -->
+                        <div class="dendro-wrap" style="margin-top:1.2em;">
+                            <!-- デンドログラム (a) 最遠隣法 -->
+                            <figure>
+                                <svg width="210" height="220" viewBox="0 0 210 220" xmlns="http://www.w3.org/2000/svg" aria-label="デンドログラム(a)">
+                                    <rect width="210" height="220" fill="#fafafa" rx="4"/>
+                                    <!-- Y軸（Height） -->
+                                    <line x1="30" y1="10" x2="30" y2="185" stroke="#999" stroke-width="1"/>
+                                    <!-- Y軸目盛り -->
+                                    <text x="4" y="185" font-size="9" fill="#888">0</text>
+                                    <text x="4" y="157" font-size="9" fill="#888">1</text>
+                                    <text x="4" y="130" font-size="9" fill="#888">2</text>
+                                    <text x="4" y="102" font-size="9" fill="#888">3</text>
+                                    <text x="4" y="74"  font-size="9" fill="#888">4</text>
+                                    <text x="4" y="47"  font-size="9" fill="#888">5</text>
+                                    <text x="4" y="19"  font-size="9" fill="#888">6</text>
+                                    <!-- Height axis ticks -->
+                                    <line x1="27" y1="185" x2="30" y2="185" stroke="#999" stroke-width="1"/>
+                                    <line x1="27" y1="157" x2="30" y2="157" stroke="#999" stroke-width="1"/>
+                                    <line x1="27" y1="130" x2="30" y2="130" stroke="#999" stroke-width="1"/>
+                                    <line x1="27" y1="102" x2="30" y2="102" stroke="#999" stroke-width="1"/>
+                                    <line x1="27" y1="74"  x2="30" y2="74"  stroke="#999" stroke-width="1"/>
+                                    <line x1="27" y1="47"  x2="30" y2="47"  stroke="#999" stroke-width="1"/>
+                                    <!-- h=1.4 → y=185-1.4*27.5=146.5; h=2.3→y=121.8; h=2.4→y=119; h=4.6→y=58.5; h=7.5→y=≈-21 clip to 10 -->
+                                    <!-- スケール: y = 185 - h*27.5 -->
+                                    <!-- 葉ノード x位置: E=50,D=75,F=110,A=140,C=165,B=195 -->
+                                    <!-- h=1.4: A(140)とC(165) -->
+                                    <line x1="140" y1="185" x2="140" y2="146" stroke="#3498db" stroke-width="2"/><!-- A -->
+                                    <line x1="165" y1="185" x2="165" y2="146" stroke="#3498db" stroke-width="2"/><!-- C -->
+                                    <line x1="140" y1="146" x2="165" y2="146" stroke="#3498db" stroke-width="2"/><!-- AC水平 h=1.4 -->
+                                    <!-- h=2.3: {AC}(152.5)とF(110) -->
+                                    <line x1="152" y1="146" x2="152" y2="122" stroke="#3498db" stroke-width="2"/><!-- AC幹 -->
+                                    <line x1="110" y1="185" x2="110" y2="122" stroke="#3498db" stroke-width="2"/><!-- F -->
+                                    <line x1="110" y1="122" x2="152" y2="122" stroke="#3498db" stroke-width="2"/><!-- ACF水平 h=2.3 -->
+                                    <!-- h=2.4: E(50)とD(75) -->
+                                    <line x1="50"  y1="185" x2="50"  y2="119" stroke="#e74c3c" stroke-width="2"/><!-- E -->
+                                    <line x1="75"  y1="185" x2="75"  y2="119" stroke="#e74c3c" stroke-width="2"/><!-- D -->
+                                    <line x1="50"  y1="119" x2="75"  y2="119" stroke="#e74c3c" stroke-width="2"/><!-- ED水平 h=2.4 -->
+                                    <!-- h=4.6: {ACF}(131) と B(195) -->
+                                    <line x1="131" y1="122" x2="131" y2="59"  stroke="#8e44ad" stroke-width="2"/><!-- ACF幹 -->
+                                    <line x1="195" y1="185" x2="195" y2="59"  stroke="#8e44ad" stroke-width="2"/><!-- B -->
+                                    <line x1="131" y1="59"  x2="195" y2="59"  stroke="#8e44ad" stroke-width="2"/><!-- ACFB水平 h=4.6 -->
+                                    <!-- h=7.5: {ED}(62.5)と{ACFB}(163) → y=185-7.5*27.5≈-21 → clip to 12 -->
+                                    <line x1="62"  y1="119" x2="62"  y2="12"  stroke="#333"    stroke-width="2"/><!-- ED幹 -->
+                                    <line x1="163" y1="59"  x2="163" y2="12"  stroke="#333"    stroke-width="2"/><!-- ACFB幹 -->
+                                    <line x1="62"  y1="12"  x2="163" y2="12"  stroke="#333"    stroke-width="2"/><!-- 最終結合 h≈7.5 -->
+                                    <!-- 葉ラベル -->
+                                    <text x="46"  y="200" font-size="11" fill="#e74c3c" font-weight="700">E</text>
+                                    <text x="71"  y="200" font-size="11" fill="#e74c3c" font-weight="700">D</text>
+                                    <text x="106" y="200" font-size="11" fill="#3498db" font-weight="700">F</text>
+                                    <text x="136" y="200" font-size="11" fill="#3498db" font-weight="700">A</text>
+                                    <text x="161" y="200" font-size="11" fill="#3498db" font-weight="700">C</text>
+                                    <text x="191" y="200" font-size="11" fill="#8e44ad" font-weight="700">B</text>
+                                    <!-- タイトル -->
+                                    <text x="105" y="215" font-size="10" fill="#555" text-anchor="middle">Cluster Dendrogram</text>
+                                </svg>
+                                <figcaption>(a) 最遠隣法（完全連結法）</figcaption>
+                            </figure>
+
+                            <!-- デンドログラム (b) 最近隣法 -->
+                            <figure>
+                                <svg width="210" height="220" viewBox="0 0 210 220" xmlns="http://www.w3.org/2000/svg" aria-label="デンドログラム(b)">
+                                    <rect width="210" height="220" fill="#fafafa" rx="4"/>
+                                    <!-- Y軸 -->
+                                    <line x1="30" y1="10" x2="30" y2="185" stroke="#999" stroke-width="1"/>
+                                    <!-- Y軸目盛り（1.4〜2.7の範囲） -->
+                                    <text x="1" y="185" font-size="9" fill="#888">1.4</text>
+                                    <text x="1" y="150" font-size="9" fill="#888">1.6</text>
+                                    <text x="1" y="114" font-size="9" fill="#888">1.8</text>
+                                    <text x="1" y="79"  font-size="9" fill="#888">2.0</text>
+                                    <text x="1" y="43"  font-size="9" fill="#888">2.2</text>
+                                    <!-- スケール: h=1.4→y=185; h=2.7→y=10; Δ=(185-10)/(2.7-1.4)=175/1.3≈134.6 per unit -->
+                                    <!-- y = 185 - (h-1.4)*134.6 -->
+                                    <!-- h=1.4→185; h=1.6→185-26.9=158; h=2.4→185-134.6=50; h=2.5→185-148=37; h=2.7→10 -->
+                                    <!-- 葉ノード x: B=50,F=80,A=115,C=140,E=168,D=193 -->
+                                    <!-- h=1.4: A(115)とC(140) -->
+                                    <line x1="115" y1="185" x2="115" y2="185" stroke="#3498db" stroke-width="2"/>
+                                    <line x1="140" y1="185" x2="140" y2="185" stroke="#3498db" stroke-width="2"/>
+                                    <line x1="115" y1="185" x2="115" y2="185" stroke="#3498db" stroke-width="2"/>
+                                    <line x1="140" y1="185" x2="140" y2="185" stroke="#3498db" stroke-width="2"/>
+                                    <!-- A と C は底部で結合 h=1.4 -->
+                                    <line x1="115" y1="185" x2="140" y2="185" stroke="#3498db" stroke-width="2"/>
+                                    <!-- h=1.6: {AC}(127.5)とF(80) -->
+                                    <line x1="127" y1="185" x2="127" y2="158" stroke="#3498db" stroke-width="2"/>
+                                    <line x1="80"  y1="185" x2="80"  y2="158" stroke="#3498db" stroke-width="2"/>
+                                    <line x1="80"  y1="158" x2="127" y2="158" stroke="#3498db" stroke-width="2"/>
+                                    <!-- h=2.4: E(168)とD(193) -->
+                                    <line x1="168" y1="185" x2="168" y2="50"  stroke="#e74c3c" stroke-width="2"/>
+                                    <line x1="193" y1="185" x2="193" y2="50"  stroke="#e74c3c" stroke-width="2"/>
+                                    <line x1="168" y1="50"  x2="193" y2="50"  stroke="#e74c3c" stroke-width="2"/>
+                                    <!-- h=2.5: {ACF}(103.5)と{ED}(180.5) -->
+                                    <line x1="103" y1="158" x2="103" y2="37"  stroke="#333"    stroke-width="2"/>
+                                    <line x1="180" y1="50"  x2="180" y2="37"  stroke="#333"    stroke-width="2"/>
+                                    <line x1="103" y1="37"  x2="180" y2="37"  stroke="#333"    stroke-width="2"/>
+                                    <!-- h=2.7: {ACFED}(141.5)とB(50) -->
+                                    <line x1="141" y1="37"  x2="141" y2="10"  stroke="#8e44ad" stroke-width="2"/>
+                                    <line x1="50"  y1="185" x2="50"  y2="10"  stroke="#8e44ad" stroke-width="2"/>
+                                    <line x1="50"  y1="10"  x2="141" y2="10"  stroke="#8e44ad" stroke-width="2"/>
+                                    <!-- 葉ラベル -->
+                                    <text x="46"  y="200" font-size="11" fill="#8e44ad" font-weight="700">B</text>
+                                    <text x="76"  y="200" font-size="11" fill="#3498db" font-weight="700">F</text>
+                                    <text x="111" y="200" font-size="11" fill="#3498db" font-weight="700">A</text>
+                                    <text x="136" y="200" font-size="11" fill="#3498db" font-weight="700">C</text>
+                                    <text x="164" y="200" font-size="11" fill="#e74c3c" font-weight="700">E</text>
+                                    <text x="189" y="200" font-size="11" fill="#e74c3c" font-weight="700">D</text>
+                                    <!-- タイトル -->
+                                    <text x="105" y="215" font-size="10" fill="#555" text-anchor="middle">Cluster Dendrogram</text>
+                                </svg>
+                                <figcaption>(b) 最近隣法（単連結法）</figcaption>
+                            </figure>
+                        </div>
+                        <p style="font-size:0.85em;color:#777;text-align:center;">図24.1　デンドログラム（概略）</p>
+
+                        <ol style="margin-top:1em;">
+                            <li>図24.1 (a) および (b) はどちらの分析法に対応するか，理由を付して答えよ．また，記号 A〜F が対応するユーザの番号を，理由を付して答えよ．</li>
+                            <li>
+                                このデータに対して，初期クラスター中心ベクトルを $\bar{x}_1^{(0)} = (9,6,7)$，$\bar{x}_2^{(0)} = (5,5,10)$ として $K=2$ の K-means 法でクラスタリングを行ったところ，一回の繰り返しでアルゴリズムは停止した．得られた2つのクラスターの中心座標を小数点以下1位まで答えよ．
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問24.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q241-1">
+                    <h2><i class="fas fa-pencil"></i> 問24.1 [1] — デンドログラムの対応とユーザ番号の特定</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 解法のポイント：「最初に結合される2点」から順番に特定する</div>
+                            <p>
+                                階層的クラスタリングでは，<strong>距離行列の中で最も小さい値を持つ2点が最初に結合</strong>されます．
+                                この「最初に結合される組」は，最近隣法・最遠隣法のどちらでも同じです．
+                                そこから順に，各手法独自の距離更新ルールに従って結合を繰り返します．
+                            </p>
+                        </div>
+
+                        <h4>Step 1：最初に結合されるユーザを特定する</h4>
+                        <div class="step-box">
+                            <div class="step-title">距離行列の非対角成分で最小値を探す</div>
+                            <p>表24.2を全て確認すると，最も小さい距離は $d(3,4) = 1.4$ です．</p>
+                            <p>
+                                したがって，両方のデンドログラムで<strong>ユーザ3と4が最初に結合</strong>されます．
+                                デンドログラム (a), (b) とも，最も底部で結合されている2点は A と C であることがわかります．
+                            </p>
+                            <p>→ $\{A, C\} = \{3, 4\}$（A=3, C=4 または A=4, C=3）</p>
+                        </div>
+
+                        <h4>Step 2：次に結合されるユーザを特定する</h4>
+                        <div class="step-box">
+                            <div class="step-title">{3,4} クラスターと残りのユーザの距離を求める</div>
+                            <p>クラスター $\{3,4\}$ と各ユーザ $i$ の距離を，最近隣法・最遠隣法それぞれで計算します：</p>
+                            <table class="data-table calc-table" style="max-width:440px;">
+                                <thead>
+                                    <tr><th>相手 $i$</th><th>最近隣（min）</th><th>最遠隣（max）</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>ユーザ1</td><td>min(3.3, 3.3) = 3.3</td><td>max(3.3, 3.3) = 3.3</td></tr>
+                                    <tr><td>ユーザ2</td><td>min(5.5, 5.6) = 5.5</td><td>max(5.5, 5.6) = 5.6</td></tr>
+                                    <tr class="highlight-row"><td>ユーザ5</td><td>min(1.6, 2.3) = <strong>1.6</strong></td><td>max(1.6, 2.3) = <strong>2.3</strong></td></tr>
+                                    <tr><td>ユーザ6</td><td>min(4.0, 2.7) = 2.7</td><td>max(4.0, 2.7) = 4.0</td></tr>
+                                </tbody>
+                            </table>
+                            <p>
+                                最近隣法でも最遠隣法でも，$\{3,4\}$ と最も近いのはユーザ5です（それぞれ1.6と2.3）．
+                                また，$d(1,2) = 2.4$（ユーザ1と2の距離）も候補になります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">次の結合：図から $\{A,C,F\} = \{3,4,5\}$ と判断できる → F=5</div>
+                            <p>
+                                デンドログラム (a), (b) とも，{A,C} に続いて F が結合されています．
+                                $\{3,4\}$ に次に結合されるのがユーザ5であることから，<strong>F = 5</strong>．
+                            </p>
+                            <p>→ $\{A,C,F\} = \{3,4,5\}$</p>
+                        </div>
+
+                        <h4>Step 3：残り B, D, E を特定する（B=6）</h4>
+                        <div class="step-box">
+                            <div class="step-title">デンドログラムの形から D, E が {1,2} に対応することがわかる</div>
+                            <p>
+                                デンドログラム (a), (b) とも，D と E が対として結合されています．
+                                残りのユーザは1, 2, 6です．$d(1,2) = 2.4$，$d(1,6) = 5.4$，$d(2,6) = 7.5$ であり，
+                                最も近い組は $d(1,2)=2.4$ → D, E はユーザ1と2（$\{D,E\} = \{1,2\}$），したがって <strong>B = 6</strong>．
+                            </p>
+                        </div>
+
+                        <h4>Step 4：(a) と (b) の対応を決める</h4>
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 鍵は「$\{3,4,5\}$ が $\{1,2\}$ とユーザ6のどちらと先に結合するか」</div>
+                            <p>$\{3,4,5\}$ クラスターと残り2者（$\{1,2\}$，ユーザ6）の距離を計算します：</p>
+                            <table class="data-table calc-table" style="max-width:480px;">
+                                <thead>
+                                    <tr><th>比較対象</th><th>最近隣（min）</th><th>最遠隣（max）</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>$\{3,4,5\}$ vs $\{1,2\}$</td>
+                                        <td>min(d(3,1), d(3,2), d(4,1), d(4,2), d(5,1), d(5,2))<br>= min(3.3, 5.5, 3.3, 5.6, <strong>2.5</strong>, 4.4) = <strong>2.5</strong></td>
+                                        <td>max(3.3, 5.5, 3.3, 5.6, 2.5, 4.4) = <strong>5.6</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\{3,4,5\}$ vs ユーザ6</td>
+                                        <td>min(d(3,6), d(4,6), d(5,6))<br>= min(4.0, <strong>2.7</strong>, 4.6) = <strong>2.7</strong></td>
+                                        <td>max(4.0, 2.7, 4.6) = <strong>4.6</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <ul style="margin-top:0.6em;">
+                                <li><strong>最近隣法：</strong>2.5 &lt; 2.7 なので $\{3,4,5\}$ は $\{1,2\}$ と先に結合 → ユーザ6（B）は最後まで孤立</li>
+                                <li><strong>最遠隣法：</strong>4.6 &lt; 5.6 なので $\{3,4,5\}$ はユーザ6（B）と先に結合 → Bが早めに{A,C,F}グループに入る</li>
+                            </ul>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> デンドログラムの形と対応させる</div>
+                            <p>
+                                デンドログラム (b) では B が一番高い位置（最後）に全体に結合されています
+                                — これは最近隣法で B=6 が最後に結合される（h=2.7）構造と一致します．<br>
+                                デンドログラム (a) では B が $\{A,C,F\}$ グループの中に先に取り込まれています
+                                — これは最遠隣法で $\{3,4,5\}$ と6が h=4.6 で結合する構造と一致します．
+                            </p>
+                        </div>
+
+                        <h4>結合順序のまとめ</h4>
+                        <table class="data-table step-table" style="max-width:520px;">
+                            <thead>
+                                <tr><th>手法</th><th>順序</th><th>結合される組</th><th>高さ（距離）</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td rowspan="5"><strong>最遠隣法 (a)</strong></td><td>①</td><td>{3,4} = {A,C}</td><td>1.4</td></tr>
+                                <tr><td>②</td><td>{3,4,5} = {A,C,F}（5を追加）</td><td>2.3</td></tr>
+                                <tr><td>③</td><td>{1,2} = {D,E}</td><td>2.4</td></tr>
+                                <tr><td>④</td><td>{3,4,5,6} = {A,C,F,B}（6を追加）</td><td>4.6</td></tr>
+                                <tr><td>⑤</td><td>全体結合</td><td>7.5</td></tr>
+                                <tr><td rowspan="5"><strong>最近隣法 (b)</strong></td><td>①</td><td>{3,4} = {A,C}</td><td>1.4</td></tr>
+                                <tr><td>②</td><td>{3,4,5} = {A,C,F}（5を追加）</td><td>1.6</td></tr>
+                                <tr><td>③</td><td>{1,2} = {D,E}</td><td>2.4</td></tr>
+                                <tr><td>④</td><td>{1,2,3,4,5} = {A,C,F,D,E}（{1,2}が加入）</td><td>2.5</td></tr>
+                                <tr><td>⑤</td><td>全体結合（6=Bが最後）</td><td>2.7</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p><strong>(a) は最遠隣法，(b) は最近隣法</strong>に対応する．</p>
+                            <p>ユーザ番号の対応：<strong>A=3, B=6, C=4, D=2, E=1, F=5</strong>（A と C，D と E はそれぞれ入れ替えてもよい）</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問24.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q241-2">
+                    <h2><i class="fas fa-pencil"></i> 問24.1 [2] — K-means 法（K=2）のクラスター中心の計算</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> K-means 法の手順をおさらいする</div>
+                            <ol>
+                                <li><strong>初期中心の設定：</strong>K 個の初期クラスター中心 $\bar{x}_1^{(0)}, \ldots, \bar{x}_K^{(0)}$ を与える</li>
+                                <li><strong>割り当てステップ：</strong>各データ点を最も近い中心のクラスターに割り当てる</li>
+                                <li><strong>更新ステップ：</strong>各クラスターに属するデータの平均を新しい中心とする</li>
+                                <li><strong>収束判定：</strong>中心が変化しなければ終了，そうでなければ②に戻る</li>
+                            </ol>
+                        </div>
+
+                        <h4>ユーザ6人のデータを整理する</h4>
+                        <table class="data-table" style="max-width:380px;">
+                            <thead>
+                                <tr><th>ユーザ</th><th>$x_i$（レストラン, 劇場, ビーチ）</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$x_1$</td><td>(7.7, 5.8, 7.7)</td></tr>
+                                <tr><td>$x_2$</td><td>(10.1, 5.9, 7.3)</td></tr>
+                                <tr><td>$x_3$</td><td>(4.9, 4.1, 7.9)</td></tr>
+                                <tr><td>$x_4$</td><td>(4.8, 5.0, 9.0)</td></tr>
+                                <tr><td>$x_5$</td><td>(6.4, 3.7, 8.0)</td></tr>
+                                <tr><td>$x_6$</td><td>(4.0, 5.2, 11.6)</td></tr>
+                            </tbody>
+                        </table>
+                        <p>初期中心：$\bar{x}_1^{(0)} = (9, 6, 7)$，$\bar{x}_2^{(0)} = (5, 5, 10)$</p>
+
+                        <h4>割り当てステップ：各ユーザと初期中心のユークリッド距離</h4>
+                        <p>距離の公式：$d(\bar{x}^{(0)}_k, x_i) = \sqrt{(a-p)^2+(b-q)^2+(c-r)^2}$</p>
+
+                        <p style="font-weight:600;margin-top:0.8em;">中心1（$\bar{x}_1^{(0)} = (9,6,7)$）との距離：</p>
+                        <table class="data-table calc-table" style="max-width:520px;font-size:0.88em;">
+                            <thead>
+                                <tr><th>ユーザ</th><th>計算式</th><th>距離 $d(\bar{x}_1^{(0)}, x_i)$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$x_1$</td>
+                                    <td>$\sqrt{(9-7.7)^2+(6-5.8)^2+(7-7.7)^2} = \sqrt{1.69+0.04+0.49}$</td>
+                                    <td>$= \sqrt{2.22} \approx \mathbf{1.49}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_2$</td>
+                                    <td>$\sqrt{(9-10.1)^2+(6-5.9)^2+(7-7.3)^2} = \sqrt{1.21+0.01+0.09}$</td>
+                                    <td>$= \sqrt{1.31} \approx \mathbf{1.14}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_3$</td>
+                                    <td>$\sqrt{(9-4.9)^2+(6-4.1)^2+(7-7.9)^2} = \sqrt{16.81+3.61+0.81}$</td>
+                                    <td>$= \sqrt{21.23} \approx \mathbf{4.61}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_4$</td>
+                                    <td>$\sqrt{(9-4.8)^2+(6-5.0)^2+(7-9.0)^2} = \sqrt{17.64+1.00+4.00}$</td>
+                                    <td>$= \sqrt{22.64} \approx \mathbf{4.76}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_5$</td>
+                                    <td>$\sqrt{(9-6.4)^2+(6-3.7)^2+(7-8.0)^2} = \sqrt{6.76+5.29+1.00}$</td>
+                                    <td>$= \sqrt{13.05} \approx \mathbf{3.61}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_6$</td>
+                                    <td>$\sqrt{(9-4.0)^2+(6-5.2)^2+(7-11.6)^2} = \sqrt{25.00+0.64+21.16}$</td>
+                                    <td>$= \sqrt{46.80} \approx \mathbf{6.84}$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p style="font-weight:600;margin-top:0.8em;">中心2（$\bar{x}_2^{(0)} = (5,5,10)$）との距離：</p>
+                        <table class="data-table calc-table" style="max-width:520px;font-size:0.88em;">
+                            <thead>
+                                <tr><th>ユーザ</th><th>計算式</th><th>距離 $d(\bar{x}_2^{(0)}, x_i)$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$x_1$</td>
+                                    <td>$\sqrt{(5-7.7)^2+(5-5.8)^2+(10-7.7)^2} = \sqrt{7.29+0.64+5.29}$</td>
+                                    <td>$= \sqrt{13.22} \approx \mathbf{3.64}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_2$</td>
+                                    <td>$\sqrt{(5-10.1)^2+(5-5.9)^2+(10-7.3)^2} = \sqrt{26.01+0.81+7.29}$</td>
+                                    <td>$= \sqrt{34.11} \approx \mathbf{5.84}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_3$</td>
+                                    <td>$\sqrt{(5-4.9)^2+(5-4.1)^2+(10-7.9)^2} = \sqrt{0.01+0.81+4.41}$</td>
+                                    <td>$= \sqrt{5.23} \approx \mathbf{2.29}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_4$</td>
+                                    <td>$\sqrt{(5-4.8)^2+(5-5.0)^2+(10-9.0)^2} = \sqrt{0.04+0.00+1.00}$</td>
+                                    <td>$= \sqrt{1.04} \approx \mathbf{1.02}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_5$</td>
+                                    <td>$\sqrt{(5-6.4)^2+(5-3.7)^2+(10-8.0)^2} = \sqrt{1.96+1.69+4.00}$</td>
+                                    <td>$= \sqrt{7.65} \approx \mathbf{2.77}$</td>
+                                </tr>
+                                <tr>
+                                    <td>$x_6$</td>
+                                    <td>$\sqrt{(5-4.0)^2+(5-5.2)^2+(10-11.6)^2} = \sqrt{1.00+0.04+2.56}$</td>
+                                    <td>$= \sqrt{3.60} \approx \mathbf{1.90}$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <h4>クラスターへの割り当て</h4>
+                        <p>各ユーザを距離が小さい方のクラスターに割り当てます：</p>
+                        <table class="data-table" style="max-width:400px;">
+                            <thead>
+                                <tr><th>ユーザ</th><th>$d(\bar{x}_1^{(0)}, x_i)$</th><th>$d(\bar{x}_2^{(0)}, x_i)$</th><th>割り当て</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight-row"><td>$x_1$</td><td><strong>1.49</strong></td><td>3.64</td><td>→ $C_1$</td></tr>
+                                <tr class="highlight-row"><td>$x_2$</td><td><strong>1.14</strong></td><td>5.84</td><td>→ $C_1$</td></tr>
+                                <tr><td>$x_3$</td><td>4.61</td><td><strong>2.29</strong></td><td>→ $C_2$</td></tr>
+                                <tr><td>$x_4$</td><td>4.76</td><td><strong>1.02</strong></td><td>→ $C_2$</td></tr>
+                                <tr><td>$x_5$</td><td>3.61</td><td><strong>2.77</strong></td><td>→ $C_2$</td></tr>
+                                <tr><td>$x_6$</td><td>6.84</td><td><strong>1.90</strong></td><td>→ $C_2$</td></tr>
+                            </tbody>
+                        </table>
+                        <p>$C_1 = \{x_1, x_2\}$，$C_2 = \{x_3, x_4, x_5, x_6\}$</p>
+
+                        <h4>更新ステップ：新しい中心を計算する</h4>
+
+                        <p style="font-weight:600;">$\bar{x}_1^{(1)}$（$C_1$ の平均，$x_1$ と $x_2$ の平均）：</p>
+                        <div class="formula-block">
+                            $$\bar{x}_1^{(1)} = \frac{1}{2}(x_1+x_2) = \frac{1}{2}\!\begin{pmatrix}7.7+10.1\\5.8+5.9\\7.7+7.3\end{pmatrix} = \frac{1}{2}\begin{pmatrix}17.8\\11.7\\15.0\end{pmatrix} = \begin{pmatrix}8.9\\5.9\\7.5\end{pmatrix}$$
+                        </div>
+
+                        <p style="font-weight:600;">$\bar{x}_2^{(1)}$（$C_2$ の平均，$x_3, x_4, x_5, x_6$ の平均）：</p>
+                        <div class="formula-block">
+                            $$\bar{x}_2^{(1)} = \frac{1}{4}(x_3+x_4+x_5+x_6) = \frac{1}{4}\!\begin{pmatrix}4.9+4.8+6.4+4.0\\4.1+5.0+3.7+5.2\\7.9+9.0+8.0+11.6\end{pmatrix} = \frac{1}{4}\begin{pmatrix}20.1\\18.0\\36.5\end{pmatrix} = \begin{pmatrix}5.0\\4.5\\9.1\end{pmatrix}$$
+                        </div>
+
+                        <h4>収束確認：もう1回繰り返すと？</h4>
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> なぜ1回で収束するのか？</div>
+                            <p>
+                                新しい中心 $\bar{x}_1^{(1)}=(8.9,5.9,7.5)$，$\bar{x}_2^{(1)}=(5.0,4.5,9.1)$ で再び各ユーザを割り当てると，
+                                初期中心と似た位置にあるため割り当てが変わりません（$C_1=\{x_1,x_2\}$，$C_2=\{x_3,x_4,x_5,x_6\}$ のまま）．
+                                割り当てが変わらなければ中心も変化しないので，<strong>アルゴリズムは1回の繰り返しで収束</strong>します．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：得られた2クラスターの中心座標</div>
+                            <table class="data-table" style="max-width:400px;">
+                                <thead>
+                                    <tr><th>クラスター</th><th>含まれるユーザ</th><th>中心座標</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>$C_1$</td>
+                                        <td>ユーザ1, 2（レストラン評価が高い）</td>
+                                        <td>$\bar{x}_1^{(1)} = (8.9,\ 5.9,\ 7.5)$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$C_2$</td>
+                                        <td>ユーザ3, 4, 5, 6（ビーチ評価が高い）</td>
+                                        <td>$\bar{x}_2^{(1)} = (5.0,\ 4.5,\ 9.1)$</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> クラスターの意味を考えよう</div>
+                            <p>
+                                $C_1$（ユーザ1, 2）は<strong>レストラン評価が高い</strong>（$\approx 9$）グループです．
+                                $C_2$（ユーザ3, 4, 5, 6）は<strong>ビーチ評価が高い</strong>（$\approx 9$）グループです．
+                                劇場評価は両グループとも似たような値で，差別化要因になっていません．
+                            </p>
+                            <p>
+                                このようにクラスター分析の結果を「どの特徴量でグループが分かれているか」という観点で解釈することが重要です．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

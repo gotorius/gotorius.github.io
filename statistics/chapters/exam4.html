@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第4章 章末問題解説 - 変数変換</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第4章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 4 — 章末問題解説</span>
+            <h1>変数変換<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">対数正規分布・変数変換による確率密度関数・畳み込み積分</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter4.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第4章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q41">問4.1 問題</a></li>
+                            <li><a href="#q41-1">問4.1 [1] 解答</a></li>
+                            <li><a href="#q41-2">問4.1 [2] 解答</a></li>
+                            <li><a href="#q41-3">問4.1 [3] 解答</a></li>
+                            <li><a href="#q42">問4.2 問題</a></li>
+                            <li><a href="#q42-ans">問4.2 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第4章 概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第4章「変数変換」のキーポイント</div>
+                        <ul>
+                            <li><strong>変数変換の公式（1変数）：</strong>$Y = g(X)$ のとき，$f_Y(y) = f_X(g^{-1}(y)) \left|\dfrac{d}{dy}g^{-1}(y)\right|$　すなわち「$x$ で表した密度を $y$ に書き換え，微分の逆数の絶対値をかける」</li>
+                            <li><strong>モーメント母関数との関係：</strong>$Y = e^X$ ならば $E[Y] = E[e^X] = m(1)$，$E[Y^2] = E[e^{2X}] = m(2)$（$m(\theta)$ はモーメント母関数）</li>
+                            <li><strong>対数正規分布 $\mathrm{LN}(\mu,\sigma^2)$：</strong>$\log Y \sim N(\mu,\sigma^2)$，すなわち $Y = e^X$（$X \sim N(\mu,\sigma^2)$）のとき $Y$ が従う分布．期待値 $e^{\mu+\sigma^2/2}$，分散 $e^{2\mu+\sigma^2}(e^{\sigma^2}-1)$</li>
+                            <li><strong>畳み込み積分（convolution）：</strong>独立な連続型確率変数 $X, Y$ の和 $Z = X+Y$ の密度は $f_Z(z) = \displaystyle\int_{-\infty}^{\infty} f_X(z-w) f_Y(w)\,dw$</li>
+                            <li><strong>指数分布の再生性：</strong>パラメータ $\lambda$ の独立な指数分布の和はガンマ分布（$\Gamma(2,\lambda)$）に従い，密度は $\lambda^2 z e^{-\lambda z}$</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問4.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q41">
+                    <h2><i class="fas fa-question-circle"></i> 問4.1　対数正規分布の期待値・分散・密度関数</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            確率変数 $X$ は正規分布 $N(\mu, \sigma^2)$ に従い，その確率密度関数は
+                        </p>
+                        <div class="formula-block">
+                            $$f(x) = \frac{1}{\sqrt{2\pi}\,\sigma}\exp\!\left[-\frac{(x-\mu)^2}{2\sigma^2}\right]$$
+                        </div>
+                        <p>
+                            であるとする．このとき，確率変数 $Y$ を $Y = \exp(X)$ とする
+                            （$Y$ の対数が正規分布に従うので，$Y$ の分布は<strong>対数正規分布</strong>とよばれる）．
+                        </p>
+                        <p><strong>[1]</strong>　$Y$ の期待値を求めよ．</p>
+                        <p><strong>[2]</strong>　$Y$ の分散を求めよ．</p>
+                        <p><strong>[3]</strong>　$Y$ の確率密度関数を求めよ．</p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q41-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> アイデア：モーメント母関数を利用する</div>
+                            <p>
+                                $Y = e^X$ なので $E[Y] = E[e^X]$ です．
+                                これは $X$ の<strong>モーメント母関数 $m(\theta) = E[e^{\theta X}]$</strong> に $\theta = 1$ を代入したものと一致します．
+                            </p>
+                            <p>
+                                正規分布 $N(\mu, \sigma^2)$ のモーメント母関数は次の公式で与えられます：
+                            </p>
+                            <div class="formula-block">
+                                $$m(\theta) = E[e^{\theta X}] = \exp\!\left(\mu\theta + \frac{\sigma^2 \theta^2}{2}\right)$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\theta = 1$ を代入する</div>
+                            <div class="formula-block">
+                                $$E[Y] = E[e^X] = m(1) = \exp\!\left(\mu \cdot 1 + \frac{\sigma^2 \cdot 1^2}{2}\right) = \exp\!\left(\mu + \frac{\sigma^2}{2}\right)$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$E[Y] = \exp\!\left(\mu + \frac{\sigma^2}{2}\right)$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q41-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> アイデア：$E[Y^2]$ をモーメント母関数で求める</div>
+                            <p>
+                                分散の公式は $V[Y] = E[Y^2] - (E[Y])^2$ です．
+                                $Y^2 = (e^X)^2 = e^{2X}$ なので，$E[Y^2] = E[e^{2X}] = m(2)$ とモーメント母関数に $\theta = 2$ を代入して求められます．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\theta = 2$ を代入して $E[Y^2]$ を求める</div>
+                            <div class="formula-block">
+                                $$E[Y^2] = E[e^{2X}] = m(2) = \exp\!\left(\mu \cdot 2 + \frac{\sigma^2 \cdot 2^2}{2}\right) = \exp\!\left(2\mu + 2\sigma^2\right)$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">分散の公式 $V[Y] = E[Y^2] - (E[Y])^2$ を適用する</div>
+                            <div class="formula-block">
+                                $$V[Y] = \exp(2\mu + 2\sigma^2) - \left[\exp\!\left(\mu + \frac{\sigma^2}{2}\right)\right]^2$$
+                            </div>
+                            <div class="formula-block">
+                                $$= \exp(2\mu + 2\sigma^2) - \exp(2\mu + \sigma^2)$$
+                            </div>
+                            <p>
+                                $\exp(2\mu + \sigma^2)$ でくくります：
+                            </p>
+                            <div class="formula-block">
+                                $$= \exp(2\mu + \sigma^2)\!\left[\exp(\sigma^2) - 1\right]$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$V[Y] = \exp(2\mu + \sigma^2)\!\left(\exp(\sigma^2) - 1\right)$$
+                            </div>
+                            <p style="font-size:0.92em;">
+                                $\sigma^2$ が大きいほど分散は急激に大きくなります（指数的に増大）．
+                                対数正規分布は株価・所得・人口などの右に裾の長いデータをモデル化するのによく使われます．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [3] -->
+                    <div class="answer-block" id="q41-3">
+                        <span class="prob-badge badge-a">[3] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 変数変換による確率密度関数の求め方</div>
+                            <p>
+                                $Y = g(X) = e^X$ という変換の逆関数は $X = g^{-1}(Y) = \log Y$（自然対数）です．
+                            </p>
+                            <p>
+                                変数変換の公式：$X \to Y = g(X)$ のとき，$Y$ の密度関数は
+                            </p>
+                            <div class="formula-block">
+                                $$f_Y(y) = f_X\!\left(g^{-1}(y)\right) \cdot \left|\frac{d}{dy}g^{-1}(y)\right|$$
+                            </div>
+                            <p>
+                                ここで「$|dy/dx|^{-1}$」は「$x$ の微小変化が $y$ の微小変化にどれだけ対応するかを補正する係数」です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：逆関数の微分を求める</div>
+                            <p>
+                                $Y = e^X$ より $X = \log Y$（$y > 0$ の範囲で定義）．$y$ で微分すると：
+                            </p>
+                            <div class="formula-block">
+                                $$\frac{d}{dy}\log y = \frac{1}{y}$$
+                            </div>
+                            <p>
+                                別の見方をすると，$Y = e^X$ を $X$ で微分すると $\dfrac{dY}{dX} = e^X = y$，
+                                よって $\left|\dfrac{dX}{dY}\right| = \dfrac{1}{y}$ となります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：変数変換の公式を適用する</div>
+                            <p>
+                                $f_X(x) = \dfrac{1}{\sqrt{2\pi}\,\sigma}\exp\!\left[-\dfrac{(x-\mu)^2}{2\sigma^2}\right]$ に $x = \log y$ を代入し，$\dfrac{1}{y}$ をかけます：
+                            </p>
+                            <div class="formula-block">
+                                $$f_Y(y) = \frac{1}{\sqrt{2\pi}\,\sigma}\exp\!\left[-\frac{(\log y - \mu)^2}{2\sigma^2}\right] \cdot \frac{1}{y}$$
+                            </div>
+                            <div class="formula-block">
+                                $$= \frac{1}{\sqrt{2\pi}\,\sigma\, y}\exp\!\left[-\frac{(\log y - \mu)^2}{2\sigma^2}\right]$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$f_Y(y) = \frac{1}{\sqrt{2\pi}\,\sigma\, y}\exp\!\left[-\frac{(\log y - \mu)^2}{2\sigma^2}\right] \quad (y > 0)$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 正規分布との対比</div>
+                            <table class="data-table" style="max-width:560px; margin:0 auto;">
+                                <thead>
+                                    <tr><th></th><th>正規分布 $N(\mu,\sigma^2)$</th><th>対数正規分布 $\mathrm{LN}(\mu,\sigma^2)$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>変数の範囲</td><td>$-\infty < X < \infty$</td><td>$Y > 0$</td></tr>
+                                    <tr><td>期待値</td><td>$\mu$</td><td>$e^{\mu+\sigma^2/2}$</td></tr>
+                                    <tr><td>分散</td><td>$\sigma^2$</td><td>$e^{2\mu+\sigma^2}(e^{\sigma^2}-1)$</td></tr>
+                                    <tr><td>密度関数</td><td>左右対称・鐘型</td><td>右に裾が長い（右歪み）</td></tr>
+                                    <tr><td>応用例</td><td>身長・測定誤差など</td><td>株価・所得・降雨量など</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問4.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q42">
+                    <h2><i class="fas fa-question-circle"></i> 問4.2　独立な指数分布の和の確率密度関数</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            確率変数 $X, Y$ が独立でそれぞれパラメータ $\lambda$ の指数分布に従う．
+                            つまり，確率密度関数が
+                        </p>
+                        <div class="formula-block">
+                            $$f(x) = \lambda e^{-\lambda x} \quad (x \geq 0)$$
+                        </div>
+                        <p>
+                            で与えられるとする．このとき，$X + Y$ の確率密度関数を求めよ．
+                        </p>
+                    </div>
+
+                    <div class="answer-block" id="q42-ans">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 独立な確率変数の和の密度：畳み込み積分</div>
+                            <p>
+                                $X$ と $Y$ が独立なとき，$Z = X + Y$ の確率密度関数は<strong>畳み込み積分（convolution）</strong>で求められます：
+                            </p>
+                            <div class="formula-block">
+                                $$f_Z(z) = \int_{-\infty}^{\infty} f_X(z - w)\, f_Y(w)\, dw$$
+                            </div>
+                            <p>
+                                イメージとしては「$Z = z$ になる組み合わせ $(X = z-w, Y = w)$ をすべて足し合わせる」操作です．
+                                $W = w$ を固定したとき，$X = z - w$ が必要なので，$f_X(z-w) \cdot f_Y(w)$ を $w$ について積分します．
+                            </p>
+                        </div>
+
+                        <h3>方法：変数変換 $Z = X+Y$，$W = Y$ を利用する</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：補助変数を導入して同時密度を書く</div>
+                            <p>
+                                $Z = X + Y$，$W = Y$ と置くと，逆変換は $X = Z - W$，$Y = W$ です．
+                            </p>
+                            <p>
+                                $X, Y$ は独立なので $(X, Y)$ の同時密度は $f_X(x) \cdot f_Y(y)$ です．
+                                これを $(Z, W)$ の変数で書き直すと：
+                            </p>
+                            <div class="formula-block">
+                                $$f(z-w)\cdot f(w) = \lambda e^{-\lambda(z-w)} \cdot \lambda e^{-\lambda w} = \lambda^2 e^{-\lambda(z-w)-\lambda w} = \lambda^2 e^{-\lambda z}$$
+                            </div>
+                            <p>
+                                注目すべき点：$w$ が<strong>消えて</strong>，$(Z, W)$ の同時密度の $Z$ 依存部分は $\lambda^2 e^{-\lambda z}$ だけになります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：$W$ の積分範囲を確認する</div>
+                            <p>
+                                $X \geq 0$ かつ $Y \geq 0$ という制約があります．
+                                $W = Y \geq 0$ かつ $X = Z - W \geq 0$（つまり $W \leq Z$）なので，
+                                $Z = z$ が与えられたもとで $W$ の範囲は：
+                            </p>
+                            <div class="formula-block">
+                                $$0 \leq W \leq z$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 3：$W$ について積分して $Z$ の周辺密度を求める</div>
+                            <div class="formula-block">
+                                $$f_Z(z) = \int_0^z \lambda^2 e^{-\lambda z}\, dw$$
+                            </div>
+                            <p>
+                                被積分関数に $w$ が含まれていないので，単純に $z$ をかけるだけです：
+                            </p>
+                            <div class="formula-block">
+                                $$= \lambda^2 e^{-\lambda z} \int_0^z dw = \lambda^2 e^{-\lambda z} \cdot z = \lambda^2 z e^{-\lambda z}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$f_Z(z) = \lambda^2 z e^{-\lambda z} \quad (z \geq 0)$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> これはガンマ分布！</div>
+                            <p>
+                                得られた密度 $\lambda^2 z e^{-\lambda z}$ は，<strong>ガンマ分布 $\Gamma(2, \lambda)$</strong>（形状パラメータ 2，レートパラメータ $\lambda$）の確率密度関数です．
+                            </p>
+                            <p>
+                                ガンマ分布 $\Gamma(k, \lambda)$ の密度は一般に：
+                            </p>
+                            <div class="formula-block">
+                                $$f(z) = \frac{\lambda^k}{\Gamma(k)} z^{k-1} e^{-\lambda z}$$
+                            </div>
+                            <p>
+                                $k=2$ のとき $\Gamma(2) = 1! = 1$ なので $f(z) = \lambda^2 z e^{-\lambda z}$ となり，今回の結果と一致します．
+                            </p>
+                            <p>
+                                より一般に，<strong>パラメータ $\lambda$ の独立な指数分布 $n$ 個の和は $\Gamma(n, \lambda)$ に従います</strong>（指数分布の再生性）．
+                            </p>
+                            <table class="data-table" style="max-width:500px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>和の個数 $n$</th><th>$Z = X_1 + \cdots + X_n$ の分布</th><th>密度関数</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$n=1$</td><td>指数分布 $= \Gamma(1,\lambda)$</td><td>$\lambda e^{-\lambda z}$</td></tr>
+                                    <tr><td>$n=2$</td><td>$\Gamma(2,\lambda)$</td><td>$\lambda^2 z e^{-\lambda z}$</td></tr>
+                                    <tr><td>$n=3$</td><td>$\Gamma(3,\lambda)$</td><td>$\dfrac{\lambda^3}{2} z^2 e^{-\lambda z}$</td></tr>
+                                    <tr><td>一般 $n$</td><td>$\Gamma(n,\lambda)$</td><td>$\dfrac{\lambda^n}{(n-1)!} z^{n-1} e^{-\lambda z}$</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="font-size:0.92em; margin-top:0.6em;">
+                                直感的には「パラメータ $\lambda$ の指数分布は，次のイベントが起きるまでの待ち時間」を表し，
+                                その $n$ 個の和は「$n$ 番目のイベントが起きるまでの合計待ち時間」（アーラン分布）に対応します．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 畳み込み積分のポイントまとめ</div>
+                            <table class="data-table" style="max-width:560px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>手順</th><th>内容</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>①</td><td>補助変数 $W = Y$ を導入し，$Z = X+Y$，$W = Y$ と変換する</td></tr>
+                                    <tr><td>②</td><td>$(Z, W)$ の同時密度を $f_X(z-w) \cdot f_Y(w)$ と書く</td></tr>
+                                    <tr><td>③</td><td>$X \geq 0$，$Y \geq 0$ の制約から積分範囲 $0 \leq w \leq z$ を確認する</td></tr>
+                                    <tr><td>④</td><td>$w$ について積分して $Z$ の周辺密度を得る</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

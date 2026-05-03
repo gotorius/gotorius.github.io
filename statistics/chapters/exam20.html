@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第20章 章末問題解説 - 分散分析と実験計画法</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em 0;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 4px 10px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* 分散分析表 */
+        .anova-table th { background: #e8f0ff; }
+        .anova-table .total-row { font-weight: 700; background: #f0f4ff; }
+
+        /* 直交表 */
+        .oa-table th { background: #e8f4e8; }
+        .oa-table td.lv1 { background: #fff8f0; }
+        .oa-table td.lv2 { background: #f0f8ff; }
+
+        /* バッジ色 */
+        .badge-ng { background: #e74c3c; color: #fff; }
+        .badge-ok { background: #27ae60; color: #fff; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第20章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 20 — 章末問題解説</span>
+            <h1>分散分析と実験計画法<br><small style="font-size:0.65em;color:var(--gray-500);">フィッシャーの三原則・乱塊法・多因子実験・直交表</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter20.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第20章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q201">問20.1</a></li>
+                            <li><a href="#q202">問20.2 問題</a></li>
+                            <li><a href="#q202-1">問20.2 [1]</a></li>
+                            <li><a href="#q202-2">問20.2 [2]</a></li>
+                            <li><a href="#q202-3">問20.2 [3]</a></li>
+                            <li><a href="#q203">問20.3</a></li>
+                            <li><a href="#q204">問20.4 問題</a></li>
+                            <li><a href="#q204-1">問20.4 [1]</a></li>
+                            <li><a href="#q204-2">問20.4 [2]</a></li>
+                            <li><a href="#q205">問20.5 問題</a></li>
+                            <li><a href="#q205-1">問20.5 [1]</a></li>
+                            <li><a href="#q205-2">問20.5 [2]</a></li>
+                            <li><a href="#q205-3">問20.5 [3]</a></li>
+                            <li><a href="#q206">問20.6 問題</a></li>
+                            <li><a href="#q206-1">問20.6 [1]</a></li>
+                            <li><a href="#q206-2">問20.6 [2]</a></li>
+                            <li><a href="#q206-3">問20.6 [3]</a></li>
+                            <li><a href="#q207">問20.7 問題</a></li>
+                            <li><a href="#q207-1">問20.7 [1]</a></li>
+                            <li><a href="#q207-2">問20.7 [2]</a></li>
+                            <li><a href="#q207-3">問20.7 [3]</a></li>
+                            <li><a href="#q207-4">問20.7 [4]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第20章概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第20章「分散分析と実験計画法」のキーポイント</div>
+                        <p>第20章では，複数の処理や因子が応答変数に与える影響を，実験を計画した上で統計的に検定・推定する方法を学びます．</p>
+                        <table class="data-table" style="margin-top:8px;">
+                            <thead>
+                                <tr><th>トピック</th><th>内容</th><th>キーワード</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>フィッシャーの三原則</strong></td>
+                                    <td>良い実験を計画するための基本方針</td>
+                                    <td>反復・無作為化・局所管理</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>一元配置分散分析</strong></td>
+                                    <td>1因子の効果を検定</td>
+                                    <td>水準間平方和 $S_A$，誤差平方和 $S_E$，$F$ 値</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>二元配置・乱塊法</strong></td>
+                                    <td>ブロック因子による変動を取り除き，主因子を精度よく検定</td>
+                                    <td>ブロック因子，交互作用</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>多因子実験・直交表</strong></td>
+                                    <td>複数因子を効率よく割り付ける一部実施要因計画</td>
+                                    <td>$2^{k-p}$ 計画，$L_8(2^7)$ 直交表，交絡</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.1                                                    -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q201">
+                    <h2><i class="fas fa-pencil"></i> 問20.1 — フィッシャーの三原則</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>ある植物の苗からの成長が2種の肥料 $A_1, A_2$ によって異なるかどうかを検討するため，フィッシャーの三原則に基づき実験を計画する．適切なものには○，適切でないものには×をつけ理由を述べよ．</p>
+                        <ol>
+                            <li>植物の苗の大きさにばらつきがあり，その影響を取り除くために，大きいものには肥料 $A_1$ を，小さいものには $A_2$ を与える．</li>
+                            <li>農事試験場には日当たり，水はけに違いがある．そこで，区画内が均一となるように8つの区画を設定し，ランダムに選んだ4つの区画に肥料 $A_1$ を，残りに $A_2$ を与える．</li>
+                            <li>広い面積のほうが多数の苗による肥料の評価ができるので，農事試験場を2つの区画に分割し，ランダムに選んだ一方に肥料 $A_1$ を，他方に肥料 $A_2$ を与える．</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> フィッシャーの三原則とは？</div>
+                            <p>良い実験計画のために守るべき3つの原則：</p>
+                            <ul>
+                                <li><strong>反復（Replication）：</strong>同じ処理を複数回繰り返し，偶然誤差の影響を評価できるようにする．繰り返し数が多いほど検出力が上がる．</li>
+                                <li><strong>無作為化（Randomization）：</strong>処理の割り付けをランダムに行い，「隠れた系統的偏り」が特定の処理に集中しないようにする．</li>
+                                <li><strong>局所管理（Local control）：</strong>実験環境を均一なブロックに分け，ブロック内で処理を比較することで，ブロック間のばらつきを取り除く．</li>
+                            </ul>
+                        </div>
+
+                        <h4>[1] × — 無作為化の原則に違反</h4>
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-times-circle" style="color:#e74c3c;"></i> 判定：× （不適切）</div>
+                            <p>
+                                苗の大きさで肥料を決める（大きい苗 → $A_1$，小さい苗 → $A_2$）のは，<strong>無作為化の原則に違反</strong>します．
+                            </p>
+                            <p>
+                                この割り付けでは，「苗の大きさ」という<strong>交絡因子</strong>が肥料の効果に混入してしまいます．
+                                もし $A_1$ を与えた苗の成長が良くても，それが「肥料 $A_1$ の効果」なのか，「もともと苗が大きかったから」なのかを区別できません．
+                            </p>
+                            <p>
+                                <strong>正しい方法：</strong>苗の大きさによらず，どちらの肥料を与えるかをランダムに決める（または苗の大きさでブロックを作り，各ブロック内でランダム化する）．
+                            </p>
+                        </div>
+
+                        <h4>[2] × — 局所管理の原則に違反（ブロックの使い方が不完全）</h4>
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-times-circle" style="color:#e74c3c;"></i> 判定：× （不適切）</div>
+                            <p>
+                                農事試験場の区画に日当たり・水はけの差があるにもかかわらず，それを「ブロック」として活用せず，8区画を単純にランダムに $A_1$（4区画）と $A_2$（4区画）に分けています．
+                            </p>
+                            <p>
+                                <strong>局所管理の原則を適用する</strong>には，均一とみなせる小区画（ブロック）内で $A_1$, $A_2$ の一揃いを実施する<strong>乱塊法</strong>が適切です．
+                                8区画なら，日当たり・水はけが似た区画を2区画ずつペア（4ブロック）にし，各ブロック内でランダムに $A_1$, $A_2$ を割り付けるべきです．
+                            </p>
+                        </div>
+
+                        <h4>[3] × — 反復・局所管理の原則に違反</h4>
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-times-circle" style="color:#e74c3c;"></i> 判定：× （不適切）</div>
+                            <p>
+                                農事試験場を2区画に分割し，一方に $A_1$，他方に $A_2$ を与えるのは，<strong>繰り返し（反復）が実質1回しかない</strong>設計です．
+                                また，2区画間の日当たり・水はけ等の環境差が肥料効果に交絡してしまいます．
+                            </p>
+                            <p>
+                                さらに，局所管理の原則から，各区画（ブロック）の内部でそれぞれ $A_1$, $A_2$ の両方を試す必要があります．
+                                いくつかの苗が1区画内に存在するとはいえ，区画単位の割り付けでは区画間の系統的な差を肥料効果と分離できません．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q202">
+                    <h2><i class="fas fa-pencil"></i> 問20.2 — 問題文（一元配置分散分析）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            研磨機械 $A_1, A_2, A_3, A_4$ について，単位時間あたりの生産量に違いがあるかどうかを調べるため，下記に示す1時間あたりの生産個数データ $y_{ij}$ を収集した．
+                            なお，$n_i$ は $A_i$ での繰り返し数，$S_{\mathrm{E}i} = \sum_{j=1}^{n_i}(y_{ij} - \bar{y}_{i\cdot})^2$ である．
+                        </p>
+
+                        <table class="data-table" style="max-width:480px;">
+                            <thead>
+                                <tr>
+                                    <th>機械</th>
+                                    <th colspan="5">$y_{ij}$</th>
+                                    <th>$n_i$</th>
+                                    <th>$\bar{y}_{i\cdot}$</th>
+                                    <th>$S_{\mathrm{E}i}$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$A_1$</td><td>15</td><td>13</td><td>15</td><td>16</td><td>14</td>
+                                    <td>5</td><td>14.6</td><td>5.20</td>
+                                </tr>
+                                <tr>
+                                    <td>$A_2$</td><td>18</td><td>17</td><td>16</td><td>15</td><td>18</td>
+                                    <td>5</td><td>16.8</td><td>6.80</td>
+                                </tr>
+                                <tr>
+                                    <td>$A_3$</td><td>19</td><td>16</td><td>17</td><td>18</td><td></td>
+                                    <td>4</td><td>17.5</td><td>5.00</td>
+                                </tr>
+                                <tr>
+                                    <td>$A_4$</td><td>17</td><td>15</td><td>16</td><td></td><td></td>
+                                    <td>3</td><td>16.0</td><td>2.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <ol>
+                            <li>データのモデルを説明し，分散分析の帰無仮説 $H_0$，対立仮説 $H_1$ を述べよ．</li>
+                            <li>分散分析表を作成し，有意水準5%で機械の効果を検定せよ．なお，$S_T = 40.47$ である．</li>
+                            <li>$A_3$ での平均 $\mu(A_3)$ の点推定値，95%信頼区間を求めよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.2 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q202-1">
+                    <h2><i class="fas fa-pencil"></i> 問20.2 [1] — モデルと仮説の設定</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 一元配置分散分析のモデル</div>
+                            <p>機械（因子 $A$）が $a = 4$ 水準あり，各水準 $i$ で $n_i$ 回繰り返し観測したモデルは次のとおりです：</p>
+                            <div class="formula-block">
+                                $$y_{ij} = \mu + \alpha_i + \varepsilon_{ij} \quad (i = 1, \ldots, 4;\; j = 1, \ldots, n_i)$$
+                            </div>
+                            <ul>
+                                <li>$\mu$：全体平均</li>
+                                <li>$\alpha_i$：機械 $A_i$ の主効果（水準効果）</li>
+                                <li>$\varepsilon_{ij}$：誤差項，互いに独立に $N(0, \sigma^2)$ に従う</li>
+                            </ul>
+                        </div>
+
+                        <h4>仮説の設定</h4>
+                        <ul>
+                            <li><strong>帰無仮説 $H_0$：</strong>$\alpha_1 = \alpha_2 = \alpha_3 = \alpha_4 = 0$（機械による効果はない，すべての機械で母平均が等しい）</li>
+                            <li><strong>対立仮説 $H_1$：</strong>$\alpha_1, \ldots, \alpha_4$ のうち少なくとも1つが他と異なる（機械によって生産量の母平均が異なる）</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.2 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q202-2">
+                    <h2><i class="fas fa-pencil"></i> 問20.2 [2] — 分散分析表の作成と検定</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 平方和の分解</div>
+                            <p>総平方和 $S_T$ を，因子 $A$ の平方和 $S_A$ と誤差平方和 $S_E$ に分解します：</p>
+                            <div class="formula-block">
+                                $$S_T = S_A + S_E$$
+                            </div>
+                        </div>
+
+                        <h4>誤差平方和 $S_E$ の計算</h4>
+                        <p>各水準内の偏差平方和を合計します：</p>
+                        <div class="formula-block">
+                            $$S_E = \sum_{i=1}^{4} S_{\mathrm{E}i} = 5.20 + 6.80 + 5.00 + 2.00 = 19.00$$
+                        </div>
+
+                        <h4>機械の平方和 $S_A$ の計算</h4>
+                        <div class="formula-block">
+                            $$S_A = S_T - S_E = 40.47 - 19.00 = 21.47$$
+                        </div>
+
+                        <h4>自由度の確認</h4>
+                        <p>全観測数は $N = 5 + 5 + 4 + 3 = 17$ です．</p>
+                        <ul>
+                            <li>$S_A$ の自由度：$\phi_A = a - 1 = 4 - 1 = 3$</li>
+                            <li>$S_E$ の自由度：$\phi_E = N - a = 17 - 4 = 13$</li>
+                            <li>$S_T$ の自由度：$\phi_T = N - 1 = 16$（確認：$3 + 13 = 16$ ✓）</li>
+                        </ul>
+
+                        <h4>分散（平均平方）と $F$ 値</h4>
+                        <div class="formula-block">
+                            $$V_A = \frac{S_A}{\phi_A} = \frac{21.47}{3} = 7.157, \qquad V_E = \frac{S_E}{\phi_E} = \frac{19.00}{13} = 1.462$$
+                        </div>
+                        <div class="formula-block">
+                            $$F = \frac{V_A}{V_E} = \frac{7.157}{1.462} \approx 4.897$$
+                        </div>
+
+                        <h4>分散分析表</h4>
+                        <table class="data-table anova-table" style="max-width:480px;">
+                            <thead>
+                                <tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>機械 $A$</td><td>21.47</td><td>3</td><td>7.157</td><td>4.897</td></tr>
+                                <tr><td>誤差</td><td>19.00</td><td>13</td><td>1.462</td><td></td></tr>
+                                <tr class="total-row"><td>計</td><td>40.47</td><td>16</td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>検定の結論</h4>
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 判定</div>
+                            <p>
+                                $F(3, 13)$ 分布における上側5%点は $F_{0.05}(3, 13) = 3.41$ です．
+                                計算された $F = 4.897 > 3.41$ なので，帰無仮説 $H_0$ を棄却します．
+                            </p>
+                            <p>
+                                <strong>結論：有意水準5%で機械の効果は有意である．</strong>すなわち，機械によって生産個数の母平均が異なるといえる．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.2 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q202-3">
+                    <h2><i class="fas fa-pencil"></i> 問20.2 [3] — $A_3$ の平均の点推定と信頼区間</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>点推定値</h4>
+                        <p>$\mu(A_3)$ の点推定値は $A_3$ の標本平均 $\bar{y}_{3\cdot}$ です：</p>
+                        <div class="formula-block">
+                            $$\hat\mu(A_3) = \bar{y}_{3\cdot} = 17.5$$
+                        </div>
+
+                        <h4>95%信頼区間</h4>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 一元配置の信頼区間の公式</div>
+                            <p>誤差分散 $\sigma^2$ の推定値として，プールされた $V_E$ を使います．$\mu(A_i)$ の信頼区間は：</p>
+                            <div class="formula-block">
+                                $$\bar{y}_{i\cdot} \pm t_{\alpha/2}(\phi_E) \cdot \sqrt{\frac{V_E}{n_i}}$$
+                            </div>
+                            <p>ここで $t_{0.025}(13) = 2.160$（$t$ 分布表より）．</p>
+                        </div>
+
+                        <p>$A_3$ の場合：$n_3 = 4$，$V_E = 1.462$ を代入する：</p>
+                        <div class="formula-block">
+                            $$17.5 \pm 2.160 \times \sqrt{\frac{1.462}{4}} = 17.5 \pm 2.160 \times \sqrt{0.3655} = 17.5 \pm 2.160 \times 0.6046$$
+                        </div>
+                        <div class="formula-block">
+                            $$= 17.5 \pm 1.306 \approx (16.194,\; 18.806)$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結果</div>
+                            <p>点推定値：$\hat\mu(A_3) = 17.5$</p>
+                            <p>95%信頼区間：$(16.194,\; 18.806)$</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> なぜ $V_E$ をプールするのか？</div>
+                            <p>
+                                一元配置分散分析では，「各水準での誤差分散 $\sigma^2$ は等しい（等分散性の仮定）」を前提とします．
+                                そのため，各水準の標本分散をバラバラに使うより，全水準の誤差をまとめてプールした $V_E$ を使うほうが，$\sigma^2$ の推定精度が高くなります（自由度 $\phi_E = 13$ と大きく，より安定）．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.3                                                    -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q203">
+                    <h2><i class="fas fa-pencil"></i> 問20.3 — 乱塊法とブロック因子</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            3種類の小麦 $A_1, A_2, A_3$ のうち，最も収量が多いものを調べるため，日当たり，肥沃さなどが異なる4カ所の農事試験場 $B_1, B_2, B_3, B_4$ のそれぞれで，$A_1, A_2, A_3$ 一揃いの収量を測定した．これは，農事試験場をブロック因子とする乱塊法となる．適切なものには○，適切でないものには×をつけ理由を述べよ．
+                        </p>
+                        <ol>
+                            <li>$A$ の1元配置分散分析と，$A, B$ の2元配置分散分析では，誤差分散は等しくなり，$A$ の $F$ 値は変わらない．</li>
+                            <li>$A$ の1元配置分散分析に比べ，$A, B$ の2元配置分散分析では，$A$ の平方和が大きくなり効果が検出しやすい．</li>
+                            <li>$A, B$ の2元配置分散分析では，誤差分散に $B$ の影響が含まれず，それにより $A$ の $F$ 値を求めるので，$B$ による変動が大きい場合には $A$ の効果の検出がしやすくなる．</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 乱塊法（ランダム化ブロック法）の考え方</div>
+                            <p>
+                                「農事試験場による差」は知りたいことではなく，邪魔な変動です．
+                                乱塊法（2元配置分散分析）では，この<strong>ブロック（$B$）の変動を誤差から分離</strong>します．
+                                そのため誤差平方和が小さくなり，$A$（小麦の品種）の効果を検出しやすくなります．
+                            </p>
+                        </div>
+
+                        <h4>[1] × — 誤差分散は異なる</h4>
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-times-circle" style="color:#e74c3c;"></i> 判定：× （不適切）</div>
+                            <p>
+                                1元配置の誤差平方和 $S_E^{(1)}$ には，$B$（試験場）の影響が含まれます．
+                                一方，2元配置では $B$ の平方和 $S_B$ を分離するため，$S_E^{(2)} = S_E^{(1)} - S_B$ となります．
+                                $B$ の変動があれば $S_B > 0$ なので，<strong>2元配置の誤差分散 $V_E^{(2)}$ は1元配置の $V_E^{(1)}$ より小さくなります</strong>（ただし自由度も減ります）．
+                            </p>
+                        </div>
+
+                        <h4>[2] × — $A$ の平方和は変わらない</h4>
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-times-circle" style="color:#e74c3c;"></i> 判定：× （不適切）</div>
+                            <p>
+                                $A$ の平方和 $S_A$ はどちらの解析法でも同じです．
+                                なぜなら $S_A$ は「$A$ の水準間の差から計算される量」であり，ブロック因子 $B$ の扱いによって変わりません．
+                            </p>
+                            <p>
+                                乱塊法で検出力が上がるのは，「$A$ の平方和が大きくなる」のではなく，<strong>「誤差分散が小さくなることで $F$ 値が大きくなる」</strong>ためです．
+                            </p>
+                        </div>
+
+                        <h4>[3] ○ — 正しい説明</h4>
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 判定：○ （適切）</div>
+                            <p>
+                                $A, B$ の2元配置では，誤差平方和から $B$（農事試験場）の平方和が分離されます．
+                                したがって<strong>誤差分散 $V_E$ には $B$ の影響が含まれず</strong>，$A$ の $F$ 値は：
+                            </p>
+                            <div class="formula-block">
+                                $$F = \frac{V_A}{V_E^{(2)}} \quad (V_E^{(2)} \text{ に } B \text{ の変動が含まれない})$$
+                            </div>
+                            <p>
+                                $B$ による変動が大きいほど $V_E^{(1)}$ と $V_E^{(2)}$ の差は大きくなり，$F$ 値は大きくなります．
+                                これにより，$A$ の効果の検出がしやすくなります．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.4 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q204">
+                    <h2><i class="fas fa-pencil"></i> 問20.4 — 問題文（2因子実験，交互作用）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ゴム重合工程の生産量 $y$ を高くするために，触媒種類を因子 $A$（水準 $A_1, A_2$），原料種類を因子 $B$（水準 $B_1, B_2, B_3$），繰り返し数2の実験をランダムな順序で実施した．その結果と，水準組合せごとの平均値を次に示す．
+                        </p>
+
+                        <div style="display:flex;gap:2em;flex-wrap:wrap;margin:1em 0;">
+                            <div>
+                                <p style="font-weight:600;margin-bottom:4px;">生産個数データ</p>
+                                <table class="data-table" style="min-width:230px;">
+                                    <thead>
+                                        <tr><th></th><th>$B_1$</th><th>$B_2$</th><th>$B_3$</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>$A_1$</td><td>8, 9</td><td>8, 8</td><td>8, 7</td></tr>
+                                        <tr><td>$A_2$</td><td>3, 4</td><td>6, 8</td><td>11, 10</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <p style="font-weight:600;margin-bottom:4px;">平均値</p>
+                                <table class="data-table" style="min-width:260px;">
+                                    <thead>
+                                        <tr><th></th><th>$B_1$</th><th>$B_2$</th><th>$B_3$</th><th>平均</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>$A_1$</td><td>8.5</td><td>8.0</td><td>7.5</td><td>8.0</td></tr>
+                                        <tr><td>$A_2$</td><td>3.5</td><td>7.0</td><td>10.5</td><td>7.0</td></tr>
+                                        <tr><td>平均</td><td>6.0</td><td>7.5</td><td>9.0</td><td></td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <ol>
+                            <li>分散分析表を作成し，$A, B$ の主効果，交互作用について有意水準5%で検定せよ．なお，$S_T = 57.00$，$S_A = 3.00$，$S_B = 18.00$ である．</li>
+                            <li>分散分析結果を考慮し，生産量 $y$ を大きくする水準を述べよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.4 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q204-1">
+                    <h2><i class="fas fa-pencil"></i> 問20.4 [1] — 分散分析表と検定</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>交互作用平方和と誤差平方和の計算</h4>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 平方和の分解</div>
+                            <p>2因子実験（繰り返しあり）の平方和の分解：</p>
+                            <div class="formula-block">
+                                $$S_T = S_A + S_B + S_{A \times B} + S_E$$
+                            </div>
+                            <p>交互作用平方和は「セル平均から主効果を除いた残り」で，セル内の誤差平方和 $S_E$ とは別物です．</p>
+                        </div>
+
+                        <p>問題で $S_T = 57.00$，$S_A = 3.00$，$S_B = 18.00$ が与えられています．</p>
+                        <p>セル平均から交互作用平方和を求めます．各水準組合せ $(i,j)$ のセル平均 $\bar{y}_{ij}$ を使い：</p>
+                        <div class="formula-block">
+                            $$S_{A\times B} = r \sum_i\sum_j (\bar{y}_{ij} - \bar{y}_{i\cdot} - \bar{y}_{\cdot j} + \bar{y})^2$$
+                        </div>
+                        <p>ここで $r = 2$（繰り返し数），$\bar{y} = 7.5$（全体平均）です．</p>
+                        <p>偏差 $d_{ij} = \bar{y}_{ij} - \bar{y}_{i\cdot} - \bar{y}_{\cdot j} + \bar{y}$ を計算します：</p>
+
+                        <table class="data-table" style="max-width:420px;">
+                            <thead>
+                                <tr><th></th><th>$B_1$</th><th>$B_2$</th><th>$B_3$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$A_1$</td>
+                                    <td>$8.5 - 8.0 - 6.0 + 7.5 = 2.0$</td>
+                                    <td>$8.0 - 8.0 - 7.5 + 7.5 = 0$</td>
+                                    <td>$7.5 - 8.0 - 9.0 + 7.5 = -2.0$</td>
+                                </tr>
+                                <tr>
+                                    <td>$A_2$</td>
+                                    <td>$3.5 - 7.0 - 6.0 + 7.5 = -2.0$</td>
+                                    <td>$7.0 - 7.0 - 7.5 + 7.5 = 0$</td>
+                                    <td>$10.5 - 7.0 - 9.0 + 7.5 = 2.0$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="formula-block">
+                            $$S_{A\times B} = 2 \times (2.0^2 + 0^2 + (-2.0)^2 + (-2.0)^2 + 0^2 + 2.0^2) = 2 \times 16.0 = 32.00$$
+                        </div>
+
+                        <p>誤差平方和：</p>
+                        <div class="formula-block">
+                            $$S_E = S_T - S_A - S_B - S_{A\times B} = 57.00 - 3.00 - 18.00 - 32.00 = 4.00$$
+                        </div>
+
+                        <h4>自由度</h4>
+                        <p>全観測数 $N = 2 \times 2 \times 3 = 12$，水準数は $A$ が2，$B$ が3です．</p>
+                        <ul>
+                            <li>$\phi_A = 2-1 = 1$，$\phi_B = 3-1 = 2$，$\phi_{A\times B} = 1 \times 2 = 2$</li>
+                            <li>$\phi_E = N - ab = 12 - 6 = 6$，$\phi_T = N-1 = 11$</li>
+                        </ul>
+
+                        <h4>分散分析表</h4>
+                        <table class="data-table anova-table" style="max-width:480px;">
+                            <thead>
+                                <tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$A$</td><td>3.00</td><td>1</td><td>3.00</td><td>4.50</td></tr>
+                                <tr><td>$B$</td><td>18.00</td><td>2</td><td>9.00</td><td>13.50</td></tr>
+                                <tr><td>$A \times B$</td><td>32.00</td><td>2</td><td>16.00</td><td>24.00</td></tr>
+                                <tr><td>誤差</td><td>4.00</td><td>6</td><td>0.67</td><td></td></tr>
+                                <tr class="total-row"><td>計</td><td>57.00</td><td>11</td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>検定の結論</h4>
+                        <p>$F(1, 6) = 5.99$，$F(2, 6) = 5.14$（上側5%点）と比較します：</p>
+                        <ul>
+                            <li>$A$：$F = 4.50 < 5.99$ → <strong>有意でない</strong></li>
+                            <li>$B$：$F = 13.50 > 5.14$ → <strong>有意（5%水準）</strong></li>
+                            <li>$A \times B$：$F = 24.00 > 5.14$ → <strong>有意（5%水準）</strong></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.4 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q204-2">
+                    <h2><i class="fas fa-pencil"></i> 問20.4 [2] — 生産量を大きくする水準の選択</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 交互作用が有意なときの水準選択</div>
+                            <p>
+                                交互作用 $A \times B$ が有意なので，「$A$ の最適水準」は $B$ の水準によって変わります．
+                                したがって，$A, B$ を独立に選ぶのではなく，<strong>組み合わせ（セル平均）を見て最大となる組合せ</strong>を選びます．
+                            </p>
+                        </div>
+
+                        <p>各セル平均を確認します：</p>
+                        <table class="data-table" style="max-width:300px;">
+                            <thead>
+                                <tr><th></th><th>$B_1$</th><th>$B_2$</th><th>$B_3$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$A_1$</td><td>8.5</td><td>8.0</td><td>7.5</td></tr>
+                                <tr><td>$A_2$</td><td>3.5</td><td>7.0</td><td style="background:#fffbe6;font-weight:bold;">10.5</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p>
+                                セル平均が最大となるのは $(A_2, B_3)$ の組合せで，平均値は $10.5$ です．
+                                したがって，生産量 $y$ を大きくするには，<strong>触媒種類 $A_2$，原料種類 $B_3$ の組合せを選ぶ</strong>のがよい．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.5 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q205">
+                    <h2><i class="fas fa-pencil"></i> 問20.5 — 問題文（乱塊法の利点と欠点）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            耐磨耗性が高い自動車用タイヤ開発のため，$A_1, A_2$ のゴム種類と，$B_1, B_2$ のタイヤ接地面の形状（トレッドパターン）を取り上げる．
+                            組合せ $(A_1, B_1), (A_1, B_2), (A_2, B_1), (A_2, B_2)$ で，5本ずつタイヤを製造する．磨耗測定用車両5台：$V_1, \ldots, V_5$ を用意し，それぞれの車両に $(A_1, B_1), (A_1, B_2), (A_2, B_1), (A_2, B_2)$ で製造したタイヤを1本ずつランダムに決めた側面に装着し，一定期間走行している．下記はその磨耗指数値であり，値が小さいほど好ましい．
+                        </p>
+
+                        <table class="data-table" style="max-width:560px;">
+                            <thead>
+                                <tr>
+                                    <th rowspan="2"></th>
+                                    <th colspan="2">$V_1$</th>
+                                    <th colspan="2">$V_2$</th>
+                                    <th colspan="2">$V_3$</th>
+                                    <th colspan="2">$V_4$</th>
+                                    <th colspan="2">$V_5$</th>
+                                </tr>
+                                <tr>
+                                    <th>$B_1$</th><th>$B_2$</th>
+                                    <th>$B_1$</th><th>$B_2$</th>
+                                    <th>$B_1$</th><th>$B_2$</th>
+                                    <th>$B_1$</th><th>$B_2$</th>
+                                    <th>$B_1$</th><th>$B_2$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>$A_1$</td>
+                                    <td>132</td><td>116</td>
+                                    <td>100</td><td>86</td>
+                                    <td>95</td><td>84</td>
+                                    <td>114</td><td>103</td>
+                                    <td>110</td><td>97</td>
+                                </tr>
+                                <tr>
+                                    <td>$A_2$</td>
+                                    <td>112</td><td>117</td>
+                                    <td>87</td><td>86</td>
+                                    <td>78</td><td>84</td>
+                                    <td>100</td><td>102</td>
+                                    <td>94</td><td>97</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>形式的に3元配置とみなし，平方和を求めると次のとおりとなる：</p>
+                        <p style="margin-left:1em;">$S_A = 320.0$，$\quad S_{A\times B} = 320.0$，$\quad S_{A\times B\times V} = 11.0$<br>
+                        $S_B = 125.0$，$\quad S_{A\times V} = 5.0$，$\quad S_T = 3656.2$<br>
+                        $S_V = 2862.2$，$\quad S_{B\times V} = 13.00$</p>
+
+                        <ol>
+                            <li>$A_i$, $B_j$, $V_k$ のデータを $y_{ijk}$ とし，$V$ を繰り返しとするときのモデルを示せ．また，分散分析表を作成し，$A$, $B$ の主効果，交互作用を有意水準5%で検定せよ．</li>
+                            <li>$V$ をブロック因子とする乱塊法について，データ $y_{ijk}$ のモデルを示せ．また，分散分析表を作成し，$A$ の主効果，$B$ の主効果，交互作用 $A \times B$ を有意水準5%で検定せよ．</li>
+                            <li>2つの分散分析を比較し，乱塊法の利点，欠点を説明せよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.5 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q205-1">
+                    <h2><i class="fas fa-pencil"></i> 問20.5 [1] — $V$ を繰り返しとする3元配置</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>モデル</h4>
+                        <p>$V$ を単なる繰り返し（誤差のブロックではなく同一水準の反復）とみなすと，交互作用を含む2因子モデルに繰り返しが加わります：</p>
+                        <div class="formula-block">
+                            $$y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \varepsilon_{ijk}$$
+                        </div>
+                        <p>ここで $\varepsilon_{ijk}$ は誤差項で，$V_k$ による変動も含まれます．</p>
+
+                        <h4>誤差平方和</h4>
+                        <p>$V$ を繰り返しとする場合，$V$ の変動や $A\times V$，$B\times V$，$A\times B\times V$ はすべて誤差に含まれます：</p>
+                        <div class="formula-block">
+                            $$S_E = S_V + S_{A\times V} + S_{B\times V} + S_{A\times B\times V} = 2862.2 + 5.0 + 13.0 + 11.0 = 2891.2$$
+                        </div>
+                        <p>自由度：$\phi_E = N - ab = 20 - 4 = 16$（全観測数 $N = 2 \times 2 \times 5 = 20$）</p>
+
+                        <h4>分散分析表（$V$ を繰り返しとする場合）</h4>
+                        <table class="data-table anova-table" style="max-width:480px;">
+                            <thead>
+                                <tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$A$</td><td>320.0</td><td>1</td><td>320.0</td><td>1.77</td></tr>
+                                <tr><td>$B$</td><td>125.0</td><td>1</td><td>125.0</td><td>0.69</td></tr>
+                                <tr><td>$A \times B$</td><td>320.0</td><td>1</td><td>320.0</td><td>1.77</td></tr>
+                                <tr><td>誤差</td><td>2891.2</td><td>16</td><td>180.7</td><td></td></tr>
+                                <tr class="total-row"><td>計</td><td>3656.2</td><td>19</td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>$F(1,16)$ の上側5%点は $4.49$ です．$A, B, A\times B$ のいずれも $F < 4.49$ なので，<strong>すべて有意でない</strong>．</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.5 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q205-2">
+                    <h2><i class="fas fa-pencil"></i> 問20.5 [2] — $V$ をブロック因子とする乱塊法</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>モデル</h4>
+                        <p>$V$ をブロック因子として取り込んだ乱塊法のモデル：</p>
+                        <div class="formula-block">
+                            $$y_{ijk} = \mu + \alpha_i + \beta_j + (\alpha\beta)_{ij} + \gamma_k + \varepsilon_{ijk}$$
+                        </div>
+                        <p>ここで $\gamma_k$ は車両（ブロック）$V_k$ の効果，$\varepsilon_{ijk}$ は残差誤差（$A\times V$，$B\times V$，$A\times B\times V$ の交互作用も誤差に含める）です．</p>
+
+                        <h4>誤差平方和</h4>
+                        <p>ブロック $V$ の変動を分離した残りが誤差：</p>
+                        <div class="formula-block">
+                            $$S_E = S_{A\times V} + S_{B\times V} + S_{A\times B\times V} = 5.0 + 13.0 + 11.0 = 29.0$$
+                        </div>
+                        <p>自由度：$\phi_E = (a-1)(b-1)(n-1) + \ldots = 12$（$\phi_T - \phi_A - \phi_B - \phi_{A\times B} - \phi_V = 19-1-1-1-4=12$）</p>
+
+                        <h4>分散分析表（乱塊法）</h4>
+                        <table class="data-table anova-table" style="max-width:520px;">
+                            <thead>
+                                <tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$A$</td><td>320.0</td><td>1</td><td>320.0</td><td>132.41</td></tr>
+                                <tr><td>$B$</td><td>125.0</td><td>1</td><td>125.0</td><td>51.72</td></tr>
+                                <tr><td>$A \times B$</td><td>320.0</td><td>1</td><td>320.0</td><td>132.41</td></tr>
+                                <tr><td>$V$（ブロック）</td><td>2862.2</td><td>4</td><td>715.6</td><td>296.09</td></tr>
+                                <tr><td>誤差</td><td>29.0</td><td>12</td><td>2.42</td><td></td></tr>
+                                <tr class="total-row"><td>計</td><td>3656.2</td><td>19</td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>$F(1,12)$ の上側5%点は $4.75$ です．</p>
+                        <ul>
+                            <li>$A$：$F = 132.41 \gg 4.75$ → <strong>有意（5%水準）</strong></li>
+                            <li>$B$：$F = 51.72 \gg 4.75$ → <strong>有意（5%水準）</strong></li>
+                            <li>$A \times B$：$F = 132.41 \gg 4.75$ → <strong>有意（5%水準）</strong></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.5 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q205-3">
+                    <h2><i class="fas fa-pencil"></i> 問20.5 [3] — 乱塊法の利点と欠点</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 利点</div>
+                            <p>
+                                ブロック因子（$V$：車両）の変動を誤差から分離することで，<strong>誤差分散が大幅に小さくなります</strong>（$V_E^{(1)} = 180.7$ → $V_E^{(2)} = 2.42$）．
+                                その結果，$A$，$B$，$A\times B$ の $F$ 値が劇的に大きくなり，<strong>効果の検出力が非常に高くなります</strong>．
+                            </p>
+                            <p>
+                                このデータでは，$V$（車両）による変動 $S_V = 2862.2$ が非常に大きく，ブロック因子の影響が支配的でした．
+                                乱塊法はこのような状況で絶大な効果を発揮します．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-times-circle" style="color:#e74c3c;"></i> 欠点</div>
+                            <p>
+                                ブロック因子を取り込むと，<strong>誤差の自由度が減ります</strong>（$\phi_E^{(1)} = 16$ → $\phi_E^{(2)} = 12$）．
+                                ブロック因子による変動がほとんどない場合は，自由度が減って $t$ 分布や $F$ 分布の棄却域が広がるため，かえって効果が検出しにくくなります．
+                            </p>
+                            <p>
+                                したがって，乱塊法は「ブロック因子による変動が，誤差分散を有意に説明できるほど大きい場合」に有効であり，ブロック因子の影響が小さい場合は一元・二元配置のほうが望ましいこともあります．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.6 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q206">
+                    <h2><i class="fas fa-pencil"></i> 問20.6 — 問題文（$2^{4-1}$ 一部実施要因計画）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            2水準因子 $A, B, C, D$ を取り上げる．
+                        </p>
+                        <ol>
+                            <li>$A, B, C$ による $2^3$ 要因計画について，$D = A \times B \times C$ として $2^{4-1}$ 一部実施要因計画を構成し，表を埋めよ．その際，$A_1, A_2$ などではなく単に $1, 2$ と記録すればよい．また，$D$ と $A, B, C$ のそれぞれが直交することを確認せよ．</li>
+                            <li>[1] の計画について，(i) 交絡する主効果と2因子交互作用の組合せ，(ii) 交絡する2因子交互作用同士の組合せをすべて述べよ．</li>
+                            <li>$A, B, C$ により $2^3$ 要因計画を構成し，$D = A \times B$ として $2^{4-1}$ 一部実施要因計画を構成し，次を埋めよ．また，$D$ と $A, B, C$ のそれぞれが直交することを確認せよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.6 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q206-1">
+                    <h2><i class="fas fa-pencil"></i> 問20.6 [1] — $D = A \times B \times C$ の計画</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> $2^{4-1}$ 一部実施要因計画とは？</div>
+                            <p>
+                                4因子の完全要因計画 $2^4 = 16$ 実験を全部行う代わりに，その半分（$2^{4-1} = 8$ 実験）だけ行う計画です．
+                                「どの半分を選ぶか」を定める規則が<strong>生成関係（defining relation）</strong>で，$D = A \times B \times C$ と定めます．
+                            </p>
+                            <p>
+                                $D$ の水準は $A, B, C$ の水準の「積」として決まります：
+                                水準 $1 = 1$ 水準，水準 $2 = 2$ 水準として，1と1の積 = 1，1と2の積 = 2，2と2の積 = 1 のルール（水準を $+1/-1$ 符号で表すときは通常の積）で決めます．
+                                実務上は「$A, B, C$ の水準番号の和を2で割った余りが0なら水準1，1なら水準2」などの規則を使います．
+                            </p>
+                        </div>
+
+                        <p>$2^3$ 要因計画（$A, B, C$）の8通りの水準組合せに対し，$D = A \times B \times C$（水準数を $\{1,2\}$ の積：奇数個が2 → 2，偶数個が2 → 1）で割り付けます：</p>
+
+                        <table class="data-table oa-table" style="max-width:320px;">
+                            <thead>
+                                <tr><th>No.</th><th>$A$</th><th>$B$</th><th>$C$</th><th>$D = A\times B\times C$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                                <tr><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td></tr>
+                                <tr><td>3</td><td>1</td><td>2</td><td>1</td><td>2</td></tr>
+                                <tr><td>4</td><td>1</td><td>2</td><td>2</td><td>1</td></tr>
+                                <tr><td>5</td><td>2</td><td>1</td><td>1</td><td>2</td></tr>
+                                <tr><td>6</td><td>2</td><td>1</td><td>2</td><td>1</td></tr>
+                                <tr><td>7</td><td>2</td><td>2</td><td>1</td><td>1</td></tr>
+                                <tr><td>8</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>直交性の確認</h4>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 直交とは？</div>
+                            <p>2つの因子の列について，「水準1と水準1の組合せ」「水準1と水準2の組合せ」「水準2と水準1の組合せ」「水準2と水準2の組合せ」がすべて同じ回数（ここでは2回ずつ）出現することを<strong>直交</strong>といいます．</p>
+                        </div>
+
+                        <p>$D$ と各因子の組合せ出現回数を数えます：</p>
+                        <ul>
+                            <li>$D$ と $A$：$(1,1)$→No.1,7，$(1,2)$→No.4,6，$(2,1)$→No.2,3，$(2,2)$→No.5,8 → 各2回 → <strong>直交 ✓</strong></li>
+                            <li>$D$ と $B$：$(1,1)$→No.1,6，$(1,2)$→No.4,7，$(2,1)$→No.2,5，$(2,2)$→No.3,8 → 各2回 → <strong>直交 ✓</strong></li>
+                            <li>$D$ と $C$：$(1,1)$→No.1,7，$(1,2)$→No.2,5 ……同様に各2回 → <strong>直交 ✓</strong></li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.6 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q206-2">
+                    <h2><i class="fas fa-pencil"></i> 問20.6 [2] — 交絡関係の特定</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 交絡（Confounding）とは？</div>
+                            <p>
+                                一部実施要因計画では，すべての効果を独立に推定することはできません．
+                                生成関係 $I = ABCD$（$D = ABC$ とすると $I = ABCD$）から，交絡する効果のペアが決まります．
+                            </p>
+                            <p>
+                                生成関係 $I = ABCD$ のもとで，任意の効果 $X$ に対し，$X$ と交絡するのは $X \cdot ABCD$（各文字は2乗すると $I$）です．
+                            </p>
+                        </div>
+
+                        <h4>主効果と2因子交互作用の交絡</h4>
+                        <p>$I = ABCD$ として，各主効果に $ABCD$ をかけます（各文字の2乗は $I$）：</p>
+                        <ul>
+                            <li>$A \cdot ABCD = A^2BCD = BCD$ → <strong>$A$ と $BCD$ が交絡</strong></li>
+                            <li>$B \cdot ABCD = AB^2CD = ACD$ → <strong>$B$ と $ACD$ が交絡</strong></li>
+                            <li>$C \cdot ABCD = ABC^2D = ABD$ → <strong>$C$ と $ABD$ が交絡</strong></li>
+                            <li>$D \cdot ABCD = ABCD^2 = ABC$ → <strong>$D$ と $ABC$ が交絡</strong></li>
+                        </ul>
+                        <p>主効果は3因子交互作用と交絡しており，<strong>主効果と2因子交互作用の交絡はない</strong>．</p>
+
+                        <h4>2因子交互作用同士の交絡</h4>
+                        <ul>
+                            <li>$AB \cdot ABCD = A^2B^2CD = CD$ → <strong>$AB$ と $CD$ が交絡</strong></li>
+                            <li>$AC \cdot ABCD = A^2BC^2D = BD$ → <strong>$AC$ と $BD$ が交絡</strong></li>
+                            <li>$AD \cdot ABCD = A^2BCD^2 = BC$ → <strong>$AD$ と $BC$ が交絡</strong></li>
+                        </ul>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> まとめ</div>
+                            <p>(i) 主効果と2因子交互作用の交絡：<strong>なし</strong>（主効果は3因子交互作用と交絡）</p>
+                            <p>(ii) 2因子交互作用同士の交絡：<strong>$AB \leftrightarrow CD$，$AC \leftrightarrow BD$，$AD \leftrightarrow BC$</strong></p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.6 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q206-3">
+                    <h2><i class="fas fa-pencil"></i> 問20.6 [3] — $D = A \times B$ の計画と直交確認</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p>$D = A \times B$（$A$ と $B$ の水準の積）として割り付けます：</p>
+
+                        <table class="data-table oa-table" style="max-width:320px;">
+                            <thead>
+                                <tr><th>No.</th><th>$A$</th><th>$B$</th><th>$C$</th><th>$D = A\times B$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+                                <tr><td>2</td><td>1</td><td>1</td><td>2</td><td>1</td></tr>
+                                <tr><td>3</td><td>1</td><td>2</td><td>1</td><td>2</td></tr>
+                                <tr><td>4</td><td>1</td><td>2</td><td>2</td><td>2</td></tr>
+                                <tr><td>5</td><td>2</td><td>1</td><td>1</td><td>2</td></tr>
+                                <tr><td>6</td><td>2</td><td>1</td><td>2</td><td>2</td></tr>
+                                <tr><td>7</td><td>2</td><td>2</td><td>1</td><td>1</td></tr>
+                                <tr><td>8</td><td>2</td><td>2</td><td>2</td><td>1</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4>直交性の確認</h4>
+                        <ul>
+                            <li>$D$ と $A$：$(1,1)$→No.1,2，$(2,1)$→No.3,4，$(2,2)$→No.5,6，$(1,2)$→No.7,8 → 各2回 → <strong>直交 ✓</strong></li>
+                            <li>$D$ と $B$：$(1,1)$→No.1,2，$(2,2)$→No.3,4，$(2,1)$→No.5,6，$(1,2)$→No.7,8 → 各2回 → <strong>直交 ✓</strong></li>
+                            <li>$D$ と $C$：$(1,1)$→No.1,3，$(1,2)$→No.2,4，$(2,1)$→No.5,7，$(2,2)$→No.6,8 → 各2回 → <strong>直交 ✓</strong></li>
+                        </ul>
+
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> [1] と [3] の計画の違い</div>
+                            <p>
+                                $D = ABC$（[1]の計画）では，主効果が3因子交互作用とのみ交絡し，2因子交互作用同士が交絡します（解像度IV）．
+                                主効果を他の主効果や2因子交互作用から区別して推定できます．
+                            </p>
+                            <p>
+                                $D = AB$（[3]の計画）では，生成関係が $I = ABD$ となり，解像度IIIの計画です．
+                                $D$ の主効果と $AB$ の2因子交互作用が交絡するため，「$D$ の効果」と「$A$ と $B$ の交互作用」を区別できません．
+                                2因子交互作用が無視できる状況でのみ[3]の計画は適切です．
+                            </p>
+                            <p>したがって，<strong>一般的には[1]の計画（$D=ABC$）のほうが望ましい</strong>計画です．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.7 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q207">
+                    <h2><i class="fas fa-pencil"></i> 問20.7 — 問題文（$L_8(2^7)$ 直交表実験）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>ある自動車用クランクシャフトの製造工程では，表面の粗さを向上させるため下記の因子を取り上げている：</p>
+
+                        <table class="data-table" style="max-width:420px;">
+                            <thead>
+                                <tr><th>因子</th><th>第1水準</th><th>第2水準</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$A$：研磨機回転数</td><td>$A_1$：高速</td><td>$A_2$：低速</td></tr>
+                                <tr><td>$B$：研磨紙押付度</td><td>$B_1$：低</td><td>$B_2$：高</td></tr>
+                                <tr><td>$C$：加工時間</td><td>$C_1$：短</td><td>$C_2$：長</td></tr>
+                                <tr><td>$D$：研磨剤粒度</td><td>$D_1$：大</td><td>$D_2$：小</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>実験回数を $2^{3-1} = 8$ 回にするため，$L_8(2^7)$ 直交表において，第[1]，[2]，[4]，[7]列に因子 $A, B, C, D$ をそれぞれ割り付けた．それぞれの水準組合せで製造し，応答 $y$ である表面粗さの指数を測定した結果を次に示す．この値は，小さいほどなめらかで好ましい．</p>
+
+                        <table class="data-table oa-table" style="max-width:560px;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>$A$<br>[1]</th><th>[2]</th><th>[3]</th>
+                                    <th>$B$<br>[4]</th><th>[5]</th><th>[6]</th>
+                                    <th>$D$<br>[7]</th>
+                                    <th>$y$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>48</td></tr>
+                                <tr><td>2</td><td>1</td><td>1</td><td>1</td><td>2</td><td>2</td><td>2</td><td>2</td><td>40</td></tr>
+                                <tr><td>3</td><td>1</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td><td>46</td></tr>
+                                <tr><td>4</td><td>1</td><td>2</td><td>2</td><td>2</td><td>2</td><td>1</td><td>1</td><td>49</td></tr>
+                                <tr><td>5</td><td>2</td><td>1</td><td>2</td><td>1</td><td>2</td><td>1</td><td>2</td><td>46</td></tr>
+                                <tr><td>6</td><td>2</td><td>1</td><td>2</td><td>2</td><td>1</td><td>2</td><td>1</td><td>58</td></tr>
+                                <tr><td>7</td><td>2</td><td>2</td><td>1</td><td>1</td><td>2</td><td>2</td><td>1</td><td>50</td></tr>
+                                <tr><td>8</td><td>2</td><td>2</td><td>1</td><td>2</td><td>1</td><td>1</td><td>2</td><td>66</td></tr>
+                                <tr style="background:#f0f4ff;font-weight:600;"><td>成</td><td>a</td><td></td><td>a</td><td>a</td><td></td><td></td><td>a</td><td></td></tr>
+                                <tr style="background:#f0f4ff;font-weight:600;"><td>分</td><td></td><td>b</td><td>b</td><td></td><td>b</td><td></td><td>b</td><td></td></tr>
+                                <tr style="background:#f0f4ff;font-weight:600;"><td></td><td></td><td></td><td></td><td>c</td><td>c</td><td>c</td><td>c</td><td></td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>また，列ごとの平方和を次に示す：</p>
+                        <table class="data-table" style="max-width:340px;">
+                            <thead>
+                                <tr><th>列</th><th>平方和</th><th>列</th><th>平方和</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>[1]</td><td>171.125</td><td>[5]</td><td>136.125</td></tr>
+                                <tr><td>[2]</td><td>45.125</td><td>[6]</td><td>28.125</td></tr>
+                                <tr><td>[3]</td><td>3.125</td><td>[7]</td><td>6.125</td></tr>
+                                <tr><td>[4]</td><td>66.125</td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+
+                        <ol>
+                            <li>交互作用 $A \times B$，$A \times C$ が現れる列を示せ．</li>
+                            <li>$A, B, C, D$ の主効果とこれらの2因子交互作用が交絡しないことを，成分記号から確認せよ．</li>
+                            <li>$A, B, C, D$ の主効果，$A \times B$，$A \times C$ 以外を誤差とみなし，分散分析表を作成せよ．</li>
+                            <li>分散分析結果から，考慮すべき主効果，交互作用を求めよ．その際，誤差の自由度が小さく検出力が低いことを考慮し $F = 2$ を目安にせよ．また，水準組合せごとの平均をもとに，表面粗さを好ましくする因子の水準を求めよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.7 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q207-1">
+                    <h2><i class="fas fa-pencil"></i> 問20.7 [1] — 交互作用が現れる列</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> $L_8(2^7)$ 直交表の成分記号と交互作用</div>
+                            <p>
+                                $L_8(2^7)$ 直交表では，各列に成分記号（$a$，$b$，$ab$，$c$，$ac$，$bc$，$abc$）が対応しています．
+                                2列の交互作用は，その2列の成分記号の「積」に対応する列に現れます．
+            </p>
+                            <table class="data-table" style="max-width:300px;">
+                                <thead>
+                                    <tr><th>列</th><th>成分記号</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>[1]</td><td>$a$（= $A$）</td></tr>
+                                    <tr><td>[2]</td><td>$b$</td></tr>
+                                    <tr><td>[3]</td><td>$ab$</td></tr>
+                                    <tr><td>[4]</td><td>$c$（= $B$）</td></tr>
+                                    <tr><td>[5]</td><td>$ac$</td></tr>
+                                    <tr><td>[6]</td><td>$bc$</td></tr>
+                                    <tr><td>[7]</td><td>$abc$（= $D$）</td></tr>
+                                </tbody>
+                            </table>
+                            <p>因子 $C$ は [7] = $abc$ に割り付けられているので，$C$ の成分は $abc$ です（$C$ と書いた列の成分が $abc$）．</p>
+                            <p>
+                                なお，問題では第[1]に $A$，第[2]には割付なし，第[4]に $B$，第[7]に $D$，第[3]には $C$ が割り付けられています（表の「成分」行に $a, b, c$ の対応を確認）．
+                                成分表より：[1]=$a$，[2]=$b$，[3]=$ab$，[4]=$c$，[5]=$ac$，[6]=$bc$，[7]=$abc$ ．
+                                よって，$A$ は成分 $a$，$B$ は成分 $c$，$C$ は成分 $ab$（= [3]列），$D$ は成分 $abc$（= [7]列）に割り付けられています．
+                            </p>
+                        </div>
+
+                        <h4>$A \times B$ が現れる列</h4>
+                        <p>$A$ の成分は $a$，$B$ の成分は $c$ です．その積は $ac$ → 成分 $ac$ は<strong>第[5]列</strong>です．</p>
+                        <div class="formula-block">
+                            $$A \times B \text{ は第[5]列に現れる}$$
+                        </div>
+
+                        <h4>$A \times C$ が現れる列</h4>
+                        <p>$A$ の成分は $a$，$C$ の成分は $ab$ です．その積は $a \cdot ab = a^2b = b$（$a^2 = 1$）→ 成分 $b$ は<strong>第[2]列</strong>です．</p>
+                        <div class="formula-block">
+                            $$A \times C \text{ は第[2]列に現れる（$a \times ab = b$）}$$
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.7 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q207-2">
+                    <h2><i class="fas fa-pencil"></i> 問20.7 [2] — 主効果と2因子交互作用の非交絡の確認</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p>各因子の成分記号を整理します：</p>
+                        <ul>
+                            <li>$A = a$（列[1]），$B = c$（列[4]），$C = ab$（列[3]），$D = abc$（列[7]）</li>
+                        </ul>
+
+                        <p>4つの因子から2つ選び，それらの成分記号の積を求めます．この積が，他の主効果・2因子交互作用の列と一致しないことを確認します：</p>
+
+                        <table class="data-table" style="max-width:480px;">
+                            <thead>
+                                <tr><th>2因子交互作用</th><th>成分の積</th><th>現れる列</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$A \times B = a \times c$</td><td>$ac$</td><td>第[5]列</td></tr>
+                                <tr><td>$A \times C = a \times ab$</td><td>$a^2b = b$</td><td>第[2]列</td></tr>
+                                <tr><td>$A \times D = a \times abc$</td><td>$a^2bc = bc$</td><td>第[6]列</td></tr>
+                                <tr><td>$B \times C = c \times ab$</td><td>$abc$</td><td>第[7]列 = $D$ ！</td></tr>
+                                <tr><td>$B \times D = c \times abc$</td><td>$abc^2 = ab$</td><td>第[3]列 = $C$ ！</td></tr>
+                                <tr><td>$C \times D = ab \times abc$</td><td>$a^2b^2c = c$</td><td>第[4]列 = $B$ ！</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-exclamation-triangle" style="color:#f39c12;"></i> 解説</div>
+                            <p>
+                                上の表から，4つの因子 $A, B, C, D$ の主効果が割り付けられた列（[1],[3],[4],[7]）と，
+                                2因子交互作用が割り付けられた列（[2],[5],[6]）はすべて異なります（$B \times C$，$B \times D$，$C \times D$ は既存の因子列と交絡していますが，$A$ に関する交互作用 $A\times B$，$A\times C$，$A\times D$ は空き列に対応）．
+                            </p>
+                            <p>
+                                問題文の成分行（表の「成分 $a$…」行）を確認すると，列[3]，[5]，[6]の成分はそれぞれ $ab$，$ac$，$bc$ であり，
+                                $A(=a), B(=c), C(=ab), D(=abc)$ と交絡しないことが，成分記号の対応から確認できます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.7 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q207-3">
+                    <h2><i class="fas fa-pencil"></i> 問20.7 [3] — 分散分析表の作成</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <p>
+                            主効果 $A$（[1]），$B$（[4]），$C$（[3]），$D$（[7]），交互作用 $A\times B$（[5]），$A\times C$（[2]）の平方和を各列から取り，残りの列[6]を誤差とします：
+                        </p>
+
+                        <table class="data-table anova-table" style="max-width:520px;">
+                            <thead>
+                                <tr><th>要因</th><th>$S$</th><th>$\phi$</th><th>$V$</th><th>$F$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>$A$（列[1]）</td><td>171.125</td><td>1</td><td>171.125</td><td>6.084</td></tr>
+                                <tr><td>$B$（列[4]）</td><td>45.125</td><td>1</td><td>45.125</td><td>1.604</td></tr>
+                                <tr><td>$C$（列[3]）</td><td>66.125</td><td>1</td><td>66.125</td><td>2.351</td></tr>
+                                <tr><td>$D$（列[7]）</td><td>6.125</td><td>1</td><td>6.125</td><td>0.218</td></tr>
+                                <tr><td>$A\times B$（列[5]）</td><td>136.125</td><td>1</td><td>136.125</td><td>4.840</td></tr>
+                                <tr><td>$A\times C$（列[2]）</td><td>3.125</td><td>1</td><td>3.125</td><td>0.111</td></tr>
+                                <tr><td>誤差（列[6]）</td><td>28.125</td><td>1</td><td>28.125</td><td></td></tr>
+                                <tr class="total-row"><td>計</td><td>455.875</td><td>7</td><td></td><td></td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>$V_E = 28.125$，自由度1の誤差に対する各 $F$ 値は列平方和 ÷ 28.125 で計算しています．</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問20.7 [4]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q207-4">
+                    <h2><i class="fas fa-pencil"></i> 問20.7 [4] — 最適水準の選択</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>考慮すべき効果の選定</h4>
+                        <p>誤差自由度が1と小さいため，$F = 2$ を目安とします（$F \geq 2$ の効果を考慮）：</p>
+                        <ul>
+                            <li>$A$：$F = 6.084$ → <strong>考慮する</strong></li>
+                            <li>$B$：$F = 1.604$ → <strong>無視</strong></li>
+                            <li>$C$：$F = 2.351$ → <strong>考慮する</strong></li>
+                            <li>$D$：$F = 0.218$ → <strong>無視</strong></li>
+                            <li>$A \times B$：$F = 4.840$ → <strong>考慮する</strong></li>
+                            <li>$A \times C$：$F = 0.111$ → <strong>無視</strong></li>
+                        </ul>
+
+                        <p>考慮すべきは $A$，$C$，$A\times B$ です．$A\times B$ が有意なので，$A$ と $B$ の組合せ別の平均で判断します．</p>
+
+                        <h4>水準組合せ別平均の確認</h4>
+                        <p>問題で与えられた水準組合せごとの平均値：</p>
+
+                        <div style="display:flex;gap:2em;flex-wrap:wrap;margin:1em 0;">
+                            <div>
+                                <p style="font-weight:600;margin-bottom:4px;">$A, B$ の2元表（平均）</p>
+                                <table class="data-table" style="min-width:200px;">
+                                    <thead>
+                                        <tr><th></th><th>$B_1$</th><th>$B_2$</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>$A_1$</td><td>45.75</td><td>48.00</td></tr>
+                                        <tr><td>$A_2$</td><td>55.00</td><td>52.75</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div>
+                                <p style="font-weight:600;margin-bottom:4px;">$A, C$ の2元表（平均）</p>
+                                <table class="data-table" style="min-width:200px;">
+                                    <thead>
+                                        <tr><th></th><th>$C_1$</th><th>$C_2$</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>$A_1$</td><td>47.00</td><td>44.50</td></tr>
+                                        <tr><td>$A_2$</td><td>48.00</td><td>62.00</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <h4>最適水準の決定</h4>
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 考慮：$A, C, A\times B$</div>
+                            <p>表面粗さ $y$ を<strong>小さく（なめらかに）</strong>する水準を選びます：</p>
+                            <ul>
+                                <li>$A \times B$ の2元表より，最小は $(A_1, B_1) = 45.75$ です．よって $A_1, B_1$ を選ぶ傾向があります．</li>
+                                <li>$C$ の効果も考慮：$A_1$ のもとでは $C_2 = 44.50 < C_1 = 47.00$ なので，$C_2$ が好ましい．</li>
+                            </ul>
+                            <p>
+                                <strong>結論：$A = A_1$（高速），$B = B_1$（低），$C = C_2$（長）の組合せが好ましい．</strong>
+                                $D$ の効果は無視できる（$F = 0.218$ は非常に小さい）．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 直交表実験の解析のまとめ</div>
+                            <table class="data-table" style="margin-top:8px;">
+                                <thead>
+                                    <tr><th>ステップ</th><th>内容</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>①交絡関係の確認</td>
+                                        <td>成分記号の積で，どの効果がどの列に出るかを確認</td>
+                                    </tr>
+                                    <tr>
+                                        <td>②誤差の設定</td>
+                                        <td>主効果・重要な交互作用以外の列を誤差にプールする</td>
+                                    </tr>
+                                    <tr>
+                                        <td>③分散分析表の作成</td>
+                                        <td>各効果の $F$ 値を計算（自由度1の誤差は $F=2$ 目安）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>④最適水準の決定</td>
+                                        <td>有意な交互作用があれば2元表から組合せで判断</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

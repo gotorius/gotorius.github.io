@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第2章 章末問題解説 - 確率分布と母関数</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第2章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 2 — 章末問題解説</span>
+            <h1>確率分布と母関数<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">同時確率密度関数・周辺分布・条件付き分布・確率母関数・モーメント母関数</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter2.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第2章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q211">問2.1 問題</a></li>
+                            <li><a href="#q211-1">問2.1 [1] 解答</a></li>
+                            <li><a href="#q211-2">問2.1 [2] 解答</a></li>
+                            <li><a href="#q211-3">問2.1 [3] 解答</a></li>
+                            <li><a href="#q212">問2.2 問題</a></li>
+                            <li><a href="#q212-1">問2.2 解答</a></li>
+                            <li><a href="#q213">問2.3 問題</a></li>
+                            <li><a href="#q213-1">問2.3 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第2章 概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第2章「確率分布と母関数」のキーポイント</div>
+                        <ul>
+                            <li><strong>同時確率密度関数 $f(x,y)$：</strong>2つの連続確率変数 $X, Y$ の分布を表す関数．全体を積分すると 1 になる（規格化条件）．</li>
+                            <li><strong>周辺確率密度関数：</strong>同時密度関数をもう一方の変数について積分して得る．$f_X(x) = \displaystyle\int_{-\infty}^\infty f(x,y)\,dy$</li>
+                            <li><strong>条件付き確率密度関数：</strong>$f_{Y|X}(y|x) = \dfrac{f(x,y)}{f_X(x)}$（$X=x$ を与えたときの $Y$ の分布）．</li>
+                            <li><strong>確率母関数 $G(s)$：</strong>非負整数値をとる離散確率変数に対して $G(s) = E[s^X] = \displaystyle\sum_x s^x p(x)$．$G'(1) = E[X]$，$V[X] = G''(1) + G'(1) - (G'(1))^2$</li>
+                            <li><strong>モーメント母関数 $m(\theta)$：</strong>$m(\theta) = E[e^{\theta X}]$．$m'(0) = E[X]$，$m''(0) = E[X^2]$，$V[X] = m''(0) - (m'(0))^2$</li>
+                            <li><strong>幾何分布 $Ge(p)$：</strong>$p(x) = p(1-p)^x$（$x=0,1,2,\ldots$）．期待値 $(1-p)/p$，分散 $(1-p)/p^2$</li>
+                            <li><strong>指数分布 $Ex(\lambda)$：</strong>$f(x) = \lambda e^{-\lambda x}$（$x \geq 0$）．期待値 $1/\lambda$，分散 $1/\lambda^2$</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問2.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q211">
+                    <h2><i class="fas fa-question-circle"></i> 問2.1　単位正方形上の同時確率密度関数</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            $xy$-平面の単位正方形 $\{(x,y) \mid 0 \leq x \leq 1,\; 0 \leq y \leq 1\}$ 上の確率密度関数 $f(x,y)$ を
+                        </p>
+                        <div class="formula-block">
+                            $$f(x,y) = c(x+y)$$
+                        </div>
+                        <p>とおく．</p>
+                        <p><strong>[1]</strong>　基準化定数 $c$ を求めよ．</p>
+                        <p><strong>[2]</strong>　$X$ の周辺確率密度関数を求めよ．</p>
+                        <p><strong>[3]</strong>　$X$ を与えたときの $Y$ の条件付き確率密度関数を求めよ．</p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q211-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 基準化定数とは</div>
+                            <p>
+                                確率密度関数は「全体を積分すると 1 になる」という条件（規格化条件）を満たす必要があります．
+                                $c$ はこの条件を満たすように決める定数です：
+                            </p>
+                            <div class="formula-block">
+                                $$\int_0^1\!\int_0^1 f(x,y)\,dx\,dy = 1$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：二重積分を計算する</div>
+                            <p>
+                                $f(x,y) = c(x+y)$ を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$\int_0^1\!\int_0^1 c(x+y)\,dx\,dy = c\int_0^1\!\int_0^1 (x+y)\,dx\,dy$$
+                            </div>
+                            <p>
+                                $x$ と $y$ の対称性（$x$ と $y$ を入れ替えても積分領域・被積分関数とも変わらない）を利用します：
+                            </p>
+                            <div class="formula-block">
+                                $$\int_0^1\!\int_0^1 (x+y)\,dx\,dy = 2\int_0^1\!\int_0^1 x\,dx\,dy$$
+                            </div>
+                            <p>
+                                内側の $x$ についての積分：$\displaystyle\int_0^1 x\,dx = \left[\frac{x^2}{2}\right]_0^1 = \frac{1}{2}$
+            
+                                外側の $y$ についての積分：$\displaystyle\int_0^1 \frac{1}{2}\,dy = \frac{1}{2}$
+
+                                したがって：$2 \times \dfrac{1}{2} = 1$
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：$c$ を求める</div>
+                            <div class="formula-block">
+                                $$c \times 1 = 1 \implies c = 1$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$c = 1$，すなわち $f(x,y) = x + y \quad (0 \leq x \leq 1,\; 0 \leq y \leq 1)$</p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q211-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 周辺確率密度関数の求め方</div>
+                            <p>
+                                同時確率密度関数 $f(x,y)$ から $X$ だけの分布を取り出すには，
+                                $y$ についてすべての範囲で積分して「$y$ を消す」操作をします：
+                            </p>
+                            <div class="formula-block">
+                                $$f_X(x) = \int_{-\infty}^{\infty} f(x,y)\,dy$$
+                            </div>
+                            <p>
+                                この $f_X(x)$ を <strong>$X$ の周辺確率密度関数</strong>といいます．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$y$ について積分する</div>
+                            <p>
+                                $f(x,y) = x+y$ を $0 \leq y \leq 1$ で積分します：
+                            </p>
+                            <div class="formula-block">
+                                $$f_X(x) = \int_0^1 (x+y)\,dy
+                                = \left[xy + \frac{y^2}{2}\right]_0^1
+                                = x \cdot 1 + \frac{1}{2} - 0
+                                = x + \frac{1}{2}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$f_X(x) = x + \frac{1}{2} \quad (0 \leq x \leq 1)$$
+                            </div>
+                            <p style="font-size:0.92em;">
+                                確認：$\displaystyle\int_0^1\!\left(x+\frac{1}{2}\right)dx = \left[\frac{x^2}{2}+\frac{x}{2}\right]_0^1 = \frac{1}{2}+\frac{1}{2} = 1$ ✓
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [3] -->
+                    <div class="answer-block" id="q211-3">
+                        <span class="prob-badge badge-a">[3] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 条件付き確率密度関数の求め方</div>
+                            <p>
+                                $X = x$ という値が与えられたときの $Y$ の分布を表す条件付き確率密度関数は：
+                            </p>
+                            <div class="formula-block">
+                                $$f_{Y|X}(y|x) = \frac{f(x,y)}{f_X(x)}$$
+                            </div>
+                            <p>
+                                「全体の密度を $x$ が固定されたときの $X$ の密度で割る」ことで，$X=x$ を条件としたときの $Y$ の分布が得られます．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">分子・分母を代入する</div>
+                            <p>
+                                $f(x,y) = x+y$，$f_X(x) = x+\dfrac{1}{2}$ を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$f_{Y|X}(y|x) = \frac{x+y}{x+\dfrac{1}{2}}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$f_{Y|X}(y|x) = \frac{x+y}{x+\dfrac{1}{2}} \quad (0 \leq y \leq 1)$$
+                            </div>
+                            <p style="font-size:0.92em;">
+                                確認：$\displaystyle\int_0^1 \frac{x+y}{x+\frac{1}{2}}\,dy
+                                = \frac{1}{x+\frac{1}{2}}\left[xy+\frac{y^2}{2}\right]_0^1
+                                = \frac{x+\frac{1}{2}}{x+\frac{1}{2}} = 1$ ✓
+                            </p>
+                            <p style="font-size:0.92em;margin-top:0.5em;">
+                                $x$ が大きいほど $X$ と $Y$ が独立（$f_{Y|X}(y|x) \to 1$）に近づく一方，
+                                $x$ が 0 に近づくほど $f_{Y|X}(y|x)$ は $y$ の影響を強く受けます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問2.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q212">
+                    <h2><i class="fas fa-question-circle"></i> 問2.2　幾何分布の確率母関数・期待値・分散</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            $X$ を幾何分布に従う離散確率変数とする．すなわち $X$ は非負整数値をとりその確率関数を
+                        </p>
+                        <div class="formula-block">
+                            $$p(x) = p(1-p)^x, \quad x = 0, 1, 2, \ldots$$
+                        </div>
+                        <p>
+                            とする．ただし $0 < p < 1$ は幾何分布のパラメータである．
+                            $X$ の確率母関数 $G(s)$ を求めよ．また確率母関数を微分することにより $X$ の期待値と分散を求めよ．
+                        </p>
+                    </div>
+
+                    <div class="answer-block" id="q212-1">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 幾何分布のイメージ</div>
+                            <p>
+                                確率 $p$ で成功するベルヌーイ試行を繰り返すとき，<strong>最初に成功するまでの失敗の回数</strong>が幾何分布 $Ge(p)$ に従います．
+                                $p(x) = p(1-p)^x$ は「$x$ 回失敗して，次に成功する」確率です．
+                            </p>
+                            <p>
+                                例：$p=0.5$ の場合，$p(0) = 0.5$（0回失敗で成功），$p(1) = 0.25$，$p(2) = 0.125$，…
+                            </p>
+                        </div>
+
+                        <h3>Step 1：確率母関数 $G(s)$ の計算</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">確率母関数の定義を適用する</div>
+                            <p>
+                                確率母関数は $G(s) = E[s^X] = \displaystyle\sum_{x=0}^\infty s^x p(x)$ です．$p(x) = p(1-p)^x$ を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$G(s) = \sum_{x=0}^\infty s^x \cdot p(1-p)^x
+                                = p\sum_{x=0}^\infty \bigl((1-p)s\bigr)^x$$
+                            </div>
+                            <p>
+                                これは初項 1，公比 $(1-p)s$ の<strong>等比級数</strong>です．
+                                $|(1-p)s| < 1$，すなわち $|s| < \dfrac{1}{1-p}$ のとき収束し：
+                            </p>
+                            <div class="formula-block">
+                                $$G(s) = \frac{p}{1-(1-p)s}, \quad |s| < \frac{1}{1-p}$$
+                            </div>
+                        </div>
+
+                        <h3>Step 2：$G'(s)$ と $G''(s)$ を計算して $s=1$ を代入</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">1階微分 $G'(s)$ を求め，$G'(1)$ を計算する</div>
+                            <p>
+                                商の微分則（または合成関数の微分）を用います：
+                            </p>
+                            <div class="formula-block">
+                                $$G'(s) = \frac{p(1-p)}{\bigl(1-(1-p)s\bigr)^2}$$
+                            </div>
+                            <p>
+                                $s=1$ を代入すると，$1-(1-p)\cdot 1 = p$ なので：
+                            </p>
+                            <div class="formula-block">
+                                $$G'(1) = \frac{p(1-p)}{p^2} = \frac{1-p}{p}$$
+                            </div>
+                            <p>
+                                確率母関数の性質から $G'(1) = E[X]$ なので，<strong>期待値 $E[X] = \dfrac{1-p}{p}$</strong>
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">2階微分 $G''(s)$ を求め，$G''(1)$ を計算する</div>
+                            <div class="formula-block">
+                                $$G''(s) = \frac{2p(1-p)^2}{\bigl(1-(1-p)s\bigr)^3}$$
+                            </div>
+                            <p>
+                                $s=1$ を代入すると：
+                            </p>
+                            <div class="formula-block">
+                                $$G''(1) = \frac{2p(1-p)^2}{p^3} = \frac{2(1-p)^2}{p^2}$$
+                            </div>
+                        </div>
+
+                        <h3>Step 3：分散の公式で $V[X]$ を求める</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">確率母関数による分散の公式を適用する</div>
+                            <p>
+                                確率母関数による分散の公式は：
+                            </p>
+                            <div class="formula-block">
+                                $$V[X] = G''(1) + G'(1) - \bigl(G'(1)\bigr)^2$$
+                            </div>
+                            <p>
+                                各値を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$V[X] = \frac{2(1-p)^2}{p^2} + \frac{1-p}{p} - \left(\frac{1-p}{p}\right)^2$$
+                            </div>
+                            <p>
+                                通分して計算します（分母を $p^2$ に統一）：
+                            </p>
+                            <div class="formula-block">
+                                $$= \frac{2(1-p)^2}{p^2} + \frac{p(1-p)}{p^2} - \frac{(1-p)^2}{p^2}
+                                = \frac{(1-p)\bigl[2(1-p) + p - (1-p)\bigr]}{p^2}$$
+                            </div>
+                            <div class="formula-block">
+                                $$= \frac{(1-p)(2-2p+p-1+p)}{p^2} = \frac{(1-p)(2p)}{p^2}$$
+                            </div>
+                            <p>
+                                括弧内を展開すると：$2(1-p) + p - (1-p) = (1-p) + p = 1$
+                            </p>
+                            <div class="formula-block">
+                                $$V[X] = \frac{1-p}{p^2}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$G(s) = \frac{p}{1-(1-p)s} \quad \left(|s| < \frac{1}{1-p}\right)$$
+                            </div>
+                            <div class="formula-block">
+                                $$E[X] = \frac{1-p}{p}, \qquad V[X] = \frac{1-p}{p^2}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 数値例で確認</div>
+                            <p>
+                                $p = 0.5$ の場合：$E[X] = (1-0.5)/0.5 = 1$，$V[X] = (1-0.5)/0.25 = 2$
+                            </p>
+                            <p>
+                                直感的には「成功確率が 50% なら，平均 1 回の失敗で成功する」ことに対応しています．
+                                また $p$ が小さいほど（成功しにくいほど），期待値・分散ともに大きくなります．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問2.3                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q213">
+                    <h2><i class="fas fa-question-circle"></i> 問2.3　指数分布のモーメント母関数・期待値・分散</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            $X$ を指数分布に従う連続確率変数とする．すなわち $X \geq 0$ の確率密度関数を
+                        </p>
+                        <div class="formula-block">
+                            $$f(x) = \lambda e^{-\lambda x}$$
+                        </div>
+                        <p>
+                            とする．ただし $\lambda > 0$ はパラメータである．
+                            $X$ のモーメント母関数を求めよ．またモーメント母関数を微分することにより $X$ の期待値と分散を求めよ．
+                        </p>
+                    </div>
+
+                    <div class="answer-block" id="q213-1">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 指数分布のイメージ</div>
+                            <p>
+                                指数分布は「ある事象が次に起きるまでの待ち時間」をモデル化するのによく使われます．
+                                たとえば，コールセンターへの次の電話が来るまでの時間，放射性物質が次に崩壊するまでの時間などです．
+                                パラメータ $\lambda$ は単位時間あたりの「発生率」を表します．
+                            </p>
+                        </div>
+
+                        <h3>Step 1：モーメント母関数 $m(\theta)$ の計算</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">定義に従って積分する</div>
+                            <p>
+                                モーメント母関数は $m(\theta) = E[e^{\theta X}]$ です．$f(x) = \lambda e^{-\lambda x}$ を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$m(\theta) = \int_0^\infty e^{\theta x}\cdot \lambda e^{-\lambda x}\,dx
+                                = \lambda\int_0^\infty e^{-(\lambda-\theta)x}\,dx$$
+                            </div>
+                            <p>
+                                この積分は $\lambda - \theta > 0$，すなわち $\theta < \lambda$ のときに収束します．
+                                指数関数の積分公式 $\displaystyle\int_0^\infty e^{-ax}\,dx = \dfrac{1}{a}$（$a > 0$）を用いると：
+                            </p>
+                            <div class="formula-block">
+                                $$m(\theta) = \lambda \cdot \frac{1}{\lambda - \theta} = \frac{\lambda}{\lambda - \theta}, \quad \theta < \lambda$$
+                            </div>
+                        </div>
+
+                        <h3>Step 2：$m'(\theta)$ を求めて期待値を得る</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">1階微分 $m'(\theta)$ を計算し，$\theta=0$ を代入</div>
+                            <p>
+                                $m(\theta) = \lambda(\lambda-\theta)^{-1}$ を $\theta$ で微分します：
+                            </p>
+                            <div class="formula-block">
+                                $$m'(\theta) = \lambda \cdot (-1) \cdot (\lambda-\theta)^{-2} \cdot (-1) = \frac{\lambda}{(\lambda-\theta)^2}$$
+                            </div>
+                            <p>
+                                $\theta = 0$ を代入：
+                            </p>
+                            <div class="formula-block">
+                                $$m'(0) = \frac{\lambda}{\lambda^2} = \frac{1}{\lambda}$$
+                            </div>
+                            <p>
+                                モーメント母関数の性質から $m'(0) = E[X]$ なので，<strong>期待値 $E[X] = \dfrac{1}{\lambda}$</strong>
+                            </p>
+                        </div>
+
+                        <h3>Step 3：$m''(\theta)$ を求めて $E[X^2]$ を得る</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">2階微分 $m''(\theta)$ を計算し，$\theta=0$ を代入</div>
+                            <div class="formula-block">
+                                $$m''(\theta) = \frac{2\lambda}{(\lambda-\theta)^3}$$
+                            </div>
+                            <p>
+                                $\theta = 0$ を代入：
+                            </p>
+                            <div class="formula-block">
+                                $$m''(0) = \frac{2\lambda}{\lambda^3} = \frac{2}{\lambda^2}$$
+                            </div>
+                            <p>
+                                モーメント母関数の性質から $m''(0) = E[X^2]$ なので，$E[X^2] = \dfrac{2}{\lambda^2}$
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 4：分散を計算する</div>
+                            <p>
+                                分散の公式 $V[X] = E[X^2] - (E[X])^2$ を用います：
+                            </p>
+                            <div class="formula-block">
+                                $$V[X] = \frac{2}{\lambda^2} - \left(\frac{1}{\lambda}\right)^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$m(\theta) = \frac{\lambda}{\lambda - \theta} \quad (\theta < \lambda)$$
+                            </div>
+                            <div class="formula-block">
+                                $$E[X] = \frac{1}{\lambda}, \qquad V[X] = \frac{1}{\lambda^2}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 指数分布の性質まとめ</div>
+                            <p>
+                                指数分布では $E[X] = 1/\lambda$，$SD[X] = \sqrt{V[X]} = 1/\lambda$ となり，
+                                <strong>期待値と標準偏差が等しい</strong>という特徴があります．
+                            </p>
+                            <p>
+                                $\lambda$ が大きいほど（事象の発生率が高いほど）待ち時間の平均・ばらつきともに小さくなります．
+                            </p>
+                            <table class="data-table" style="max-width:400px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>$\lambda$</th><th>$E[X] = 1/\lambda$</th><th>$SD[X] = 1/\lambda$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$\lambda=1$</td><td>$1$</td><td>$1$</td></tr>
+                                    <tr><td>$\lambda=2$</td><td>$0.5$</td><td>$0.5$</td></tr>
+                                    <tr><td>$\lambda=0.5$</td><td>$2$</td><td>$2$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 母関数の微分による期待値・分散の求め方（まとめ）</div>
+                            <table class="data-table" style="max-width:560px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>母関数の種類</th><th>期待値</th><th>分散</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>確率母関数</strong> $G(s)$<br>（離散型に利用）</td>
+                                        <td>$E[X] = G'(1)$</td>
+                                        <td>$V[X] = G''(1) + G'(1) - (G'(1))^2$</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>モーメント母関数</strong> $m(\theta)$<br>（連続型に多く利用）</td>
+                                        <td>$E[X] = m'(0)$</td>
+                                        <td>$V[X] = m''(0) - (m'(0))^2$</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

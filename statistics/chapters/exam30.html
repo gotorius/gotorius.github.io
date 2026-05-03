@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第30章 章末問題解説 - モデル選択</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+        .data-table .min-row { background: #f0f6ff; font-weight: 700; }
+        .data-table .min-row td { color: #1a5a8a; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第30章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 30 — 章末問題解説</span>
+            <h1>モデル選択<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">情報量規準・AIC・BIC・クロスバリデーション・過学習</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter30.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第30章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q301">問30.1 問題</a></li>
+                            <li><a href="#q301-ans">問30.1 解答</a></li>
+                            <li><a href="#q302">問30.2 問題</a></li>
+                            <li><a href="#q302-ans">問30.2 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第30章 概要                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第30章「モデル選択」のキーポイント</div>
+                        <ul>
+                            <li><strong>情報量規準（Information Criterion）：</strong>尤度（当てはまりのよさ）とパラメータ数（モデルの簡潔さ）のトレードオフをバランスさせてモデルを選ぶための規準。</li>
+                            <li><strong>AIC（赤池情報量規準）：</strong>$\text{AIC} = -2\log L + 2k$。$k$ はパラメータ数，$L$ は最大尤度。AICを最小にするモデルを選ぶ。大標本近似に基づき導出。</li>
+                            <li><strong>BIC（ベイズ情報量規準）：</strong>$\text{BIC} = -2\log L + k\log n$。$n$ が大きいとき AIC よりペナルティが大きく，より簡潔なモデルを選ぶ傾向がある。$n \to \infty$ で真のモデルを確率1で選択する一致性をもつ。</li>
+                            <li><strong>重回帰分析における最大尤度：</strong>$L = \left(\dfrac{2\pi S_e}{n}\right)^{-n/2}\!\exp\!\left(-\dfrac{n}{2}\right)$，ここで $S_e$ は残差平方和。</li>
+                            <li><strong>重回帰分析でのAIC・BIC：</strong>説明変数を $k$ 個選んだときの残差平方和を $S_e^{(k)}$ とすると，<br>$\text{AIC}(k) = n\!\left(\log S_e^{(k)} + \log\dfrac{2\pi}{n} + 1\right) + 2(k+2)$，<br>$\text{BIC}(k) = n\!\left(\log S_e^{(k)} + \log\dfrac{2\pi}{n} + 1\right) + (k+2)\log n$。</li>
+                            <li><strong>過学習（Overfitting）：</strong>パラメータ数が多いモデルほど学習データへの当てはまりはよくなるが，将来データへの予測精度はかえって低下する現象。情報量規準はこれを防ぐための正則化の役割を果たす。</li>
+                            <li><strong>クロスバリデーション：</strong>データを $K$ 分割し，テスト用と学習用を入れ替えながらモデルの予測精度を評価する方法。Leave-one-out 法は $K=n$ の特殊ケース。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問30.1                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q301">
+                    <h2><i class="fas fa-question-circle"></i> 問30.1　最大尤度の式 (30.2) の導出</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            重回帰モデル $\boldsymbol{y} = X\boldsymbol{\beta} + \boldsymbol{\varepsilon}$，
+                            $\boldsymbol{\varepsilon} \sim N_n(\boldsymbol{0},\, \sigma^2 I_n)$ において，
+                            次の式 (30.2) を示せ：
+                        </p>
+                        <div class="formula-block">
+                            $$L = \left(\frac{2\pi S_e}{n}\right)^{-n/2} \exp\!\left(-\frac{n}{2}\right) \tag{30.2}$$
+                        </div>
+                        <p>
+                            ただし，$S_e$ は残差平方和 $S_e = \boldsymbol{y}^\top(I_n - X(X^\top X)^{-1}X^\top)\boldsymbol{y}$ である．
+                        </p>
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> ヒント</div>
+                            <p>
+                                $\boldsymbol{\beta}$ および $\sigma^2$ の最尤推定量は，
+                                $\hat{\boldsymbol{\beta}} = (X^\top X)^{-1}X^\top\boldsymbol{y}$，
+                                $\hat{\sigma}^2 = \dfrac{S_e}{n}$ と表される．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 -->
+                    <div class="answer-block" id="q301-ans">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 準備：正規分布の尤度関数の形</div>
+                            <p>
+                                $\boldsymbol{y} \sim N_n(X\boldsymbol{\beta},\, \sigma^2 I_n)$ より，
+                                $\boldsymbol{\beta}$ と $\sigma^2$ の尤度関数は次のように書けます：
+                            </p>
+                            <div class="formula-block">
+                                $$L(\boldsymbol{\beta}, \sigma^2)
+                                = (2\pi)^{-n/2}\,|\sigma^2 I_n|^{-1/2}
+                                  \exp\!\left(-\frac{1}{2}(\boldsymbol{y} - X\boldsymbol{\beta})^\top (\sigma^2 I_n)^{-1}(\boldsymbol{y} - X\boldsymbol{\beta})\right)$$
+                            </div>
+                            <p>
+                                $|\sigma^2 I_n| = (\sigma^2)^n$ を代入して整理すると：
+                            </p>
+                            <div class="formula-block">
+                                $$L(\boldsymbol{\beta}, \sigma^2)
+                                = (2\pi)^{-n/2}(\sigma^2)^{-n/2}
+                                  \exp\!\left(-\frac{1}{2\sigma^2}\|\boldsymbol{y} - X\boldsymbol{\beta}\|^2\right)$$
+                            </div>
+                            <p>
+                                最大尤度 $L$ は，$\boldsymbol{\beta}$ と $\sigma^2$ を最尤推定量に置き換えることで得られます．
+                            </p>
+                        </div>
+
+                        <h3>Step 1：$\hat{\boldsymbol{\beta}}$ を代入する</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">残差平方和 $S_e$ の定義</div>
+                            <p>
+                                最尤推定量 $\hat{\boldsymbol{\beta}} = (X^\top X)^{-1}X^\top\boldsymbol{y}$ を代入すると，
+                                残差 $\boldsymbol{y} - X\hat{\boldsymbol{\beta}}$ の二乗ノルムが残差平方和 $S_e$ に一致します：
+                            </p>
+                            <div class="formula-block">
+                                $$\|\boldsymbol{y} - X\hat{\boldsymbol{\beta}}\|^2
+                                = (\boldsymbol{y} - X\hat{\boldsymbol{\beta}})^\top(\boldsymbol{y} - X\hat{\boldsymbol{\beta}})
+                                = S_e$$
+                            </div>
+                            <p style="font-size:0.9em;color:#555;">
+                                （これは $\hat{\boldsymbol{\beta}}$ が残差平方和を最小化する最小二乗推定量であることからも自然にわかります．）
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\hat{\boldsymbol{\beta}}$ を代入した後の尤度</div>
+                            <p>
+                                $\hat{\boldsymbol{\beta}}$ を代入すると，尤度は $\sigma^2$ のみの関数になります：
+                            </p>
+                            <div class="formula-block">
+                                $$L(\sigma^2) = (2\pi)^{-n/2}(\sigma^2)^{-n/2}
+                                  \exp\!\left(-\frac{S_e}{2\sigma^2}\right)$$
+                            </div>
+                        </div>
+
+                        <h3>Step 2：$\hat{\sigma}^2 = S_e/n$ を代入する</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">最尤推定量 $\hat{\sigma}^2$ の代入</div>
+                            <p>
+                                $\hat{\sigma}^2 = S_e/n$ を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$L = (2\pi)^{-n/2}\left(\frac{S_e}{n}\right)^{-n/2}
+                                  \exp\!\left(-\frac{S_e}{2\cdot S_e/n}\right)$$
+                            </div>
+                            <p>
+                                指数の部分を整理します：
+                            </p>
+                            <div class="formula-block">
+                                $$\frac{S_e}{2 \cdot S_e/n} = \frac{S_e \cdot n}{2 S_e} = \frac{n}{2}$$
+                            </div>
+                        </div>
+
+                        <h3>Step 3：式 (30.2) の形にまとめる</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">$(2\pi)^{-n/2}$ と $(S_e/n)^{-n/2}$ を合わせる</div>
+                            <p>
+                                $(2\pi)^{-n/2} \cdot (S_e/n)^{-n/2} = \left(2\pi \cdot \frac{S_e}{n}\right)^{-n/2} = \left(\frac{2\pi S_e}{n}\right)^{-n/2}$
+                                なので：
+                            </p>
+                            <div class="formula-block">
+                                $$\boxed{L = \left(\frac{2\pi S_e}{n}\right)^{-n/2} \exp\!\left(-\frac{n}{2}\right)}$$
+                            </div>
+                            <p>
+                                これが式 (30.2) です．$\blacksquare$
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 式 (30.2) から AIC の式を導く</div>
+                            <p>
+                                式 (30.2) の対数をとって $-2$ 倍すると，
+                                AIC の $-2\log L$ の部分が得られます：
+                            </p>
+                            <div class="formula-block">
+                                $$-2\log L
+                                = -2\left[-\frac{n}{2}\log\frac{2\pi S_e}{n} - \frac{n}{2}\right]
+                                = n\log\frac{2\pi S_e}{n} + n$$
+                            </div>
+                            <p>
+                                $\log\dfrac{2\pi S_e}{n} = \log S_e + \log\dfrac{2\pi}{n}$ と分解すると：
+                            </p>
+                            <div class="formula-block">
+                                $$-2\log L = n\left(\log S_e + \log\frac{2\pi}{n} + 1\right)$$
+                            </div>
+                            <p>
+                                重回帰モデルのパラメータ数は，説明変数 $p$ 個・定数項 $\beta_0$・分散 $\sigma^2$ の
+                                合計 $k = p + 2$ 個なので，AIC の式は次のようになります：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{AIC}(p) = n\left(\log S_e^{(p)} + \log\frac{2\pi}{n} + 1\right) + 2(p+2)$$
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問30.2                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q302">
+                    <h2><i class="fas fa-question-circle"></i> 問30.2　AIC・BIC による変数選択</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            表30.1 の $n=20$ のデータをもとに，$y$ を目的変数，$x_1, x_2, x_3$ を
+                            説明変数の候補として（重）回帰分析を行う．
+                            表30.2 は，さまざまな説明変数の組合せで回帰分析を行ったときの
+                            残差平方和 $S_e$ とその対数 $\log S_e$ の値を記したものである．
+                        </p>
+                        <p>
+                            AIC および BIC による変数選択を行うとき，それぞれにおいて選ばれる
+                            説明変数の組合せを答えよ．ただし，$\log 2\pi = 1.838$，$\log 20 = 2.996$ である．
+                        </p>
+
+                        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-top:0.8em;">
+                            <div style="flex:1;min-width:240px;">
+                                <p style="text-align:center;font-weight:700;margin-bottom:0.3em;">表 30.1（一部）</p>
+                                <table class="data-table" style="max-width:320px;margin:0 auto;">
+                                    <thead>
+                                        <tr><th>番号</th><th>$x_1$</th><th>$x_2$</th><th>$x_3$</th><th>$y$</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>1</td><td>27</td><td>15</td><td>32</td><td>170</td></tr>
+                                        <tr><td>2</td><td>31</td><td>14</td><td>33</td><td>203</td></tr>
+                                        <tr><td>3</td><td>35</td><td>19</td><td>44</td><td>190</td></tr>
+                                        <tr><td>4</td><td>21</td><td>20</td><td>37</td><td>222</td></tr>
+                                        <tr><td>5</td><td>20</td><td>20</td><td>36</td><td>234</td></tr>
+                                        <tr><td>$\vdots$</td><td>$\vdots$</td><td>$\vdots$</td><td>$\vdots$</td><td>$\vdots$</td></tr>
+                                        <tr><td>18</td><td>35</td><td>23</td><td>32</td><td>220</td></tr>
+                                        <tr><td>19</td><td>35</td><td>18</td><td>24</td><td>88</td></tr>
+                                        <tr><td>20</td><td>39</td><td>16</td><td>26</td><td>155</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div style="flex:1;min-width:240px;">
+                                <p style="text-align:center;font-weight:700;margin-bottom:0.3em;">表 30.2</p>
+                                <table class="data-table" style="max-width:340px;margin:0 auto;">
+                                    <thead>
+                                        <tr><th>説明変数</th><th>$S_e$</th><th>$\log S_e$</th></tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr><td>なし</td><td>53180</td><td>10.881</td></tr>
+                                        <tr><td>$x_1$</td><td>41499</td><td>10.633</td></tr>
+                                        <tr><td>$x_2$</td><td>30338</td><td>10.320</td></tr>
+                                        <tr><td>$x_3$</td><td>40420</td><td>10.607</td></tr>
+                                        <tr><td>$x_1, x_2$</td><td>29727</td><td>10.300</td></tr>
+                                        <tr><td>$x_1, x_3$</td><td>26252</td><td>10.176</td></tr>
+                                        <tr><td>$x_2, x_3$</td><td>26923</td><td>10.201</td></tr>
+                                        <tr><td>$x_1, x_2, x_3$</td><td>23893</td><td>10.081</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 解答 -->
+                    <div class="answer-block" id="q302-ans">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h3>Step 1：AIC・BIC の式を確認する</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">重回帰分析における AIC(k) と BIC(k) の公式</div>
+                            <p>
+                                問30.1 の結果より，説明変数を $k$ 個選んだときの残差平方和を $S_e^{(k)}$ とおくと：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{AIC}(k) = n\left(\log S_e^{(k)} + \log\frac{2\pi}{n} + 1\right) + 2(k+2)$$
+                                $$\text{BIC}(k) = n\left(\log S_e^{(k)} + \log\frac{2\pi}{n} + 1\right) + (k+2)\log n$$
+                            </div>
+                            <p>
+                                ここで $k$ は<strong>説明変数の個数</strong>です（定数項 $\beta_0$ や分散 $\sigma^2$ は別にカウントされており，パラメータ総数は $k+2$）．
+                            </p>
+                        </div>
+
+                        <h3>Step 2：共通部分を先に計算する</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">$\log(2\pi/n)$ を計算する</div>
+                            <p>
+                                $\log\dfrac{2\pi}{n} = \log 2\pi - \log n = 1.838 - \log 20$
+                            </p>
+                            <p>
+                                $\log 20 = 2.996$ より：
+                            </p>
+                            <div class="formula-block">
+                                $$\log\frac{2\pi}{n} = 1.838 - 2.996 = -1.158$$
+                            </div>
+                            <p>
+                                したがって，式の共通部分は：
+                            </p>
+                            <div class="formula-block">
+                                $$n\!\left(\log S_e^{(k)} + \log\frac{2\pi}{n} + 1\right)
+                                = 20\bigl(\log S_e^{(k)} - 1.158 + 1\bigr)
+                                = 20\bigl(\log S_e^{(k)} - 0.158\bigr)$$
+                            </div>
+                        </div>
+
+                        <h3>Step 3：ペナルティ項を確認する</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">説明変数の個数 $k$ に応じたペナルティ</div>
+                            <table class="data-table" style="max-width:420px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>説明変数の個数 $k$</th><th>AIC ペナルティ $2(k+2)$</th><th>BIC ペナルティ $(k+2)\log 20$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$k=0$（なし）</td><td>$2\times 2 = 4$</td><td>$2\times 2.996 = 5.992$</td></tr>
+                                    <tr><td>$k=1$（1変数）</td><td>$2\times 3 = 6$</td><td>$3\times 2.996 = 8.988$</td></tr>
+                                    <tr><td>$k=2$（2変数）</td><td>$2\times 4 = 8$</td><td>$4\times 2.996 = 11.984$</td></tr>
+                                    <tr><td>$k=3$（3変数）</td><td>$2\times 5 = 10$</td><td>$5\times 2.996 = 14.980$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>Step 4：各組合せの AIC・BIC を計算する</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">計算例：説明変数「なし」（$k=0$，$\log S_e = 10.881$）</div>
+                            <div class="formula-block">
+                                $$\text{AIC}(0) = 20\times(10.881 - 0.158) + 4 = 20\times 10.723 + 4 = 214.460 + 4 = 218.460$$
+                                $$\text{BIC}(0) = 20\times(10.881 - 0.158) + 5.992 = 214.460 + 5.992 = 220.452$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">計算例：説明変数 $x_1, x_3$（$k=2$，$\log S_e = 10.176$）</div>
+                            <div class="formula-block">
+                                $$\text{AIC}(2) = 20\times(10.176 - 0.158) + 8 = 20\times 10.018 + 8 = 200.360 + 8 = 208.360$$
+                                $$\text{BIC}(2) = 20\times(10.176 - 0.158) + 11.984 = 200.360 + 11.984 = 212.344$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">計算例：説明変数 $x_2$（$k=1$，$\log S_e = 10.320$）</div>
+                            <div class="formula-block">
+                                $$\text{AIC}(1) = 20\times(10.320 - 0.158) + 6 = 20\times 10.162 + 6 = 203.240 + 6 = 209.240$$
+                                $$\text{BIC}(1) = 20\times(10.320 - 0.158) + 8.988 = 203.240 + 8.988 = 212.228$$
+                            </div>
+                        </div>
+
+                        <h3>Step 5：全組合せの結果一覧（表 30.3）</h3>
+
+                        <table class="data-table" style="max-width:520px; margin:0 auto;">
+                            <thead>
+                                <tr><th>説明変数</th><th>$k$</th><th>$\log S_e^{(k)}$</th><th>共通部分 $\times 20$</th><th>AIC</th><th>BIC</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>なし</td><td>0</td><td>10.881</td><td>214.460</td><td>218.460</td><td>220.452</td></tr>
+                                <tr><td>$x_1$</td><td>1</td><td>10.633</td><td>209.500</td><td>215.500</td><td>218.488</td></tr>
+                                <tr class="min-row"><td>$x_2$</td><td>1</td><td>10.320</td><td>203.240</td><td>209.240</td><td><strong>212.228 ← 最小</strong></td></tr>
+                                <tr><td>$x_3$</td><td>1</td><td>10.607</td><td>208.980</td><td>214.980</td><td>217.968</td></tr>
+                                <tr><td>$x_1, x_2$</td><td>2</td><td>10.300</td><td>202.840</td><td>210.840</td><td>214.824</td></tr>
+                                <tr class="min-row"><td>$x_1, x_3$</td><td>2</td><td>10.176</td><td>200.360</td><td><strong>208.360 ← 最小</strong></td><td>212.344</td></tr>
+                                <tr><td>$x_2, x_3$</td><td>2</td><td>10.201</td><td>200.860</td><td>208.860</td><td>212.844</td></tr>
+                                <tr><td>$x_1, x_2, x_3$</td><td>3</td><td>10.081</td><td>198.460</td><td>208.460</td><td>213.440</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box" style="margin-top:1.2em;">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <ul style="margin:0.6em 0 0 1.5em;line-height:2.4;">
+                                <li>
+                                    <strong>AIC による変数選択：$x_1, x_3$</strong>
+                                    （AIC = 208.360 が最小）
+                                </li>
+                                <li>
+                                    <strong>BIC による変数選択：$x_2$</strong>
+                                    （BIC = 212.228 が最小）
+                                </li>
+                            </ul>
+                        </div>
+
+                        <h3 style="margin-top:1.2em;">Step 6：結果の解釈とAIC・BICの違い</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">なぜ AIC と BIC で選ばれる変数が異なるのか？</div>
+                            <p>
+                                AIC は $2(k+2)$，BIC は $(k+2)\log n$ をペナルティとして用います．
+                                $n=20$ では $\log 20 = 2.996 \approx 3.0$ なので，
+                                <strong>変数を1個増やすたびのペナルティが AIC（$+2$）より BIC（$+2.996$）のほうが大きい</strong>です．
+                            </p>
+                            <p>
+                                そのため，BIC はより少ない変数のモデルを選ぼうとする傾向があります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">数値で確認する：$x_2$ vs $x_1, x_3$</div>
+                            <table class="data-table" style="max-width:500px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>指標</th><th>$x_2$（$k=1$）</th><th>$x_1, x_3$（$k=2$）</th><th>差</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$\log S_e$</td><td>10.320</td><td>10.176</td><td>$-0.144$（小さい→$x_1,x_3$ が有利）</td></tr>
+                                    <tr><td>共通部分</td><td>203.240</td><td>200.360</td><td>$-2.880$</td></tr>
+                                    <tr><td>AIC ペナルティ</td><td>6</td><td>8</td><td>$+2$</td></tr>
+                                    <tr><td>BIC ペナルティ</td><td>8.988</td><td>11.984</td><td>$+2.996$</td></tr>
+                                    <tr><td><strong>AIC</strong></td><td>209.240</td><td><strong>208.360</strong></td><td>$x_1,x_3$ が有利（差 $0.880$）</td></tr>
+                                    <tr><td><strong>BIC</strong></td><td><strong>212.228</strong></td><td>212.344</td><td>$x_2$ が有利（差 $0.116$）</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;">
+                                AIC では，$x_1, x_3$ のほうが $x_2$ より当てはまりが大きく改善しており（共通部分で $2.880$ 改善），
+                                AIC のペナルティ増加（$2.0$）を上回るため $x_1, x_3$ が選ばれます．
+                            </p>
+                            <p>
+                                BIC では，ペナルティ増加（$2.996$）が改善量（$2.880$）をわずかに上回るため，
+                                より簡潔な $x_2$ が選ばれます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> AIC と BIC の比較：一般的な特徴</div>
+                            <table class="data-table" style="max-width:560px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>比較項目</th><th>AIC</th><th>BIC</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>ペナルティ（変数1個あたり）</td><td>$+2$</td><td>$+\log n$（$n=20$ なら約 $3.0$）</td></tr>
+                                    <tr><td>モデルの複雑さへの態度</td><td>比較的寛容</td><td>より簡潔を好む</td></tr>
+                                    <tr><td>一致性（真のモデルを選ぶ保証）</td><td>なし（$n\to\infty$ でも過大選択の可能性）</td><td>あり（$n\to\infty$ で確率1で真のモデルを選択）</td></tr>
+                                    <tr><td>適した場面</td><td>予測精度を重視</td><td>モデルの構造を推定したい場合</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 第30章全体のまとめ</div>
+                            <p>第30章「モデル選択」の主要な流れ：</p>
+                            <ol style="margin:0.6em 0 0 1.5em;line-height:2.2;">
+                                <li><strong>情報量規準の必要性：</strong>変数を増やすほど残差平方和は必ず減少するが，過学習が生じる。尤度の大きさとパラメータ数のバランスをとる情報量規準でモデルを選ぶ。</li>
+                                <li><strong>AIC = $-2\log L + 2k$：</strong>重回帰での $L$ は式 (30.2) で与えられる。$\text{AIC}(k) = n(\log S_e^{(k)} + \log(2\pi/n) + 1) + 2(k+2)$ を最小化する変数の組合せを選ぶ。</li>
+                                <li><strong>BIC = $-2\log L + k\log n$：</strong>$n \geq 8$ で AIC より大きいペナルティを課す。$n\to\infty$ で一致性をもつ（真のモデルを確率1で選択）。</li>
+                                <li><strong>AIC と F 検定の関係：</strong>$n$ が大きいとき，AIC は F 統計量の棄却限界値を 2 とした変数選択に対応する。</li>
+                                <li><strong>クロスバリデーション：</strong>データを $K$ 分割してテストデータでモデルの予測精度を評価する。Leave-one-out 法（$K=n$）は特別な場合。計算量は大きくなるが，過学習の検出に有効。</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

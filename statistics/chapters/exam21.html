@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第21章 章末問題解説 - 標本調査法</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em 0;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        .method-table th { background: #e8f4e8; }
+        .calc-table th { background: #e8f0ff; }
+
+        .badge-correct { background: #27ae60; color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 0.82em; font-weight: 700; }
+        .badge-wrong   { background: #e74c3c; color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 0.82em; font-weight: 700; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第21章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 21 — 章末問題解説</span>
+            <h1>標本調査法<br><small style="font-size:0.65em;color:var(--gray-500);">抽出法の種類・層化抽出法・有限母集団修正</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter21.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第21章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q211">問21.1</a></li>
+                            <li><a href="#q212">問21.2 問題</a></li>
+                            <li><a href="#q212-1">問21.2 [1]</a></li>
+                            <li><a href="#q212-2">問21.2 [2]</a></li>
+                            <li><a href="#q213">問21.3 問題</a></li>
+                            <li><a href="#q213-1">問21.3 [1]</a></li>
+                            <li><a href="#q213-2">問21.3 [2]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第21章概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第21章「標本調査法」のキーポイント</div>
+                        <p>第21章では，現実の調査で使われる様々な<strong>標本の抽出方法</strong>と，それぞれの特徴・使い所を学びます．</p>
+                        <table class="data-table method-table" style="margin-top:8px;">
+                            <thead>
+                                <tr><th>抽出法</th><th>概要</th><th>特徴</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>単純無作為抽出</strong></td>
+                                    <td>全個体に番号をつけランダムに選ぶ</td>
+                                    <td>基本的な方法．偏りなし</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>層化抽出（層化無作為抽出）</strong></td>
+                                    <td>母集団をいくつかの層に分け，各層から無作為抽出</td>
+                                    <td>層内が均一なほど推定精度が上がる</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>集落抽出（クラスター抽出）</strong></td>
+                                    <td>集落（グループ）を抽出し，その全員を調査</td>
+                                    <td>調査コスト低減．精度は劣る場合も</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>二段抽出</strong></td>
+                                    <td>集落を抽出後，集落内からさらに抽出</td>
+                                    <td>集落抽出の発展版</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>有意抽出（有意選出）</strong></td>
+                                    <td>調査者の判断で対象を選ぶ</td>
+                                    <td>無作為化なし．統計的推論に不向き</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>系統抽出</strong></td>
+                                    <td>一定の間隔で標本を選ぶ</td>
+                                    <td>簡便だが周期性に注意</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top:0.8em;">また，<strong>層化抽出</strong>では「標本をどの層に何個割り当てるか（標本配分）」が推定精度に大きく影響します．最も精度が高くなるのは<strong>ネイマン配分法</strong>です．</p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問21.1                                                    -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q211">
+                    <h2><i class="fas fa-pencil"></i> 問21.1 — 集落抽出法の選択</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある都市で，いくつかの世帯を抽出し，世帯主を調査する計画を立てた．
+                            調査にあたった機関は「集落抽出法」を用いることとした．
+                        </p>
+                        <p>「集落抽出法」を説明している記述はどれか．次の①〜⑤のうちから最も適切なものを1つ選べ．</p>
+                        <ol>
+                            <li>市内の世帯に一連番号を付け，コンピュータなどでランダムに数値を発生させ，その数値と同じ番号の世帯を抽出する．</li>
+                            <li>市内をいくつかのグループにまとめ，第一段階としてグループを抽出し，選ばれたグループに含まれる世帯をすべて調査する．</li>
+                            <li>属性（住んでいる地域，家族構成，職業など）により各世帯をグループに分け，それぞれのグループから世帯を無作為に抽出する．</li>
+                            <li>市内の世帯のなかで，役員などを行った経験のある世帯を抽出する．</li>
+                            <li>市内をいくつかのグループにまとめ，第一段階としてグループを抽出し，選ばれたグループのなかからさらに世帯を抽出する．</li>
+                        </ol>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 各抽出法の対応を整理しよう</div>
+                            <p>選択肢に登場する5つの方法はそれぞれ異なる抽出法です．まず対応を整理します：</p>
+                            <table class="data-table method-table">
+                                <thead>
+                                    <tr><th>選択肢</th><th>抽出法の名称</th><th>ポイント</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>①</td>
+                                        <td><strong>単純無作為抽出法</strong></td>
+                                        <td>全個体に番号を付け，乱数で選ぶ最も基本的な方法</td>
+                                    </tr>
+                                    <tr style="background:#fffbe6;">
+                                        <td><strong>②</strong></td>
+                                        <td><strong>集落抽出法 ← 正解</strong></td>
+                                        <td>グループ（集落）を抽出し，<strong>選ばれたグループの全員</strong>を調査する</td>
+                                    </tr>
+                                    <tr>
+                                        <td>③</td>
+                                        <td><strong>層化抽出法</strong></td>
+                                        <td>属性でグループ（層）に分け，各層から無作為抽出</td>
+                                    </tr>
+                                    <tr>
+                                        <td>④</td>
+                                        <td><strong>有意抽出法（有意選出法）</strong></td>
+                                        <td>調査者の判断・主観で選ぶ．無作為化なし</td>
+                                    </tr>
+                                    <tr>
+                                        <td>⑤</td>
+                                        <td><strong>二段抽出法</strong></td>
+                                        <td>グループを抽出後，そのグループの中からさらに抽出する</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4>集落抽出法と二段抽出法の違いをしっかり区別しよう</h4>
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-exclamation-triangle" style="color:#f39c12;"></i> ②と⑤の違いが重要</div>
+                            <p>②と⑤はどちらも「まずグループ（集落）を抽出する」という点で共通しています．違いは<strong>第二段階</strong>にあります：</p>
+                            <ul>
+                                <li><strong>② 集落抽出法：</strong>選ばれたグループに含まれる個体を<em>すべて</em>調査する</li>
+                                <li><strong>⑤ 二段抽出法：</strong>選ばれたグループの中からさらに<em>一部を</em>無作為抽出して調査する</li>
+                            </ul>
+                            <p>
+                                集落抽出法は「グループ（集落）」を一つの調査単位として扱い，選ばれた集落は丸ごと調査します．
+                                調査員が集落に出向いてその全員を調査できるため，移動コストを節約できます．
+                                都市の「町丁目」「学校のクラス」などを集落として使うことが多いです．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 正解：② </div>
+                            <p>
+                                集落抽出法とは，市内をいくつかのグループ（集落）にまとめ，第一段階としてグループを無作為に抽出し，
+                                <strong>選ばれたグループに含まれる世帯をすべて調査する</strong>方法です．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問21.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q212">
+                    <h2><i class="fas fa-pencil"></i> 問21.2 — 問題文（層化抽出の推定量と配分法）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある年のA県における40市町村の大豆の作付面積（ha）の小さい順に市町村を4つ（I, II, III, IV）に層別した．
+                        </p>
+                        <p>
+                            各層から市町村を独立に非復元無作為抽出して，大豆収穫量（t）を調査して，以下の式でA県全体の収穫量（総計値）$Y$ を推定する：
+                        </p>
+                        <div class="formula-block">
+                            $$\hat{Y} = \sum_{h=1}^{4} \frac{N_h}{n_h} \sum_{i=1}^{n_h} y_{hi}$$
+                        </div>
+                        <p>
+                            ここで，$h$ は層 I, II, III, IV に数値 1, 2, 3, 4 を対応させたもので，$N_h$ は層 $h$ の母集団の大きさ，$n_h \,(\geq 1)$ は層 $h$ における標本の大きさ，$y_{hi}\,(i=1,\ldots,n_h)$ は層 $h$ において標本に含まれる市町村 $i$ の大豆収穫量を表す．
+                        </p>
+                        <p>下の表は，層の大きさ（市町村の数），各層内の大豆収穫量の平均と標準偏差を示したものである：</p>
+
+                        <table class="data-table" style="max-width:400px;">
+                            <thead>
+                                <tr><th>層</th><th>層の大きさ</th><th>層内平均（t）</th><th>層内標準偏差（t）</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>I</td><td>20</td><td>15</td><td>20</td></tr>
+                                <tr><td>II</td><td>10</td><td>150</td><td>70</td></tr>
+                                <tr><td>III</td><td>5</td><td>510</td><td>290</td></tr>
+                                <tr><td>IV</td><td>5</td><td>1010</td><td>80</td></tr>
+                            </tbody>
+                        </table>
+
+                        <ol>
+                            <li>この年のデータに対して $n_1 = n_2 = n_3 = n_4 = 2$ という標本配分法を用いた場合，母平均の推定量 $\hat{Y}/40$ の期待値を求めよ．</li>
+                            <li>この年のデータに対して下の表の3通りの標本配分方法を用いた場合，推定量 $\hat{Y}$ の分散が最も小さいものはどれか．</li>
+                        </ol>
+
+                        <table class="data-table" style="max-width:340px;margin-top:0.6em;">
+                            <thead>
+                                <tr><th>配分方法</th><th>$n_1$</th><th>$n_2$</th><th>$n_3$</th><th>$n_4$</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>A</td><td>2</td><td>2</td><td>2</td><td>2</td></tr>
+                                <tr><td>B</td><td>4</td><td>2</td><td>1</td><td>1</td></tr>
+                                <tr><td>C</td><td>1</td><td>2</td><td>4</td><td>1</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問21.2 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q212-1">
+                    <h2><i class="fas fa-pencil"></i> 問21.2 [1] — 母平均推定量の期待値</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 推定量 $\hat{Y}$ はなぜ「不偏」なのか？</div>
+                            <p>
+                                層化抽出の総計推定量 $\hat{Y} = \sum_h \frac{N_h}{n_h} \sum_i y_{hi}$ の各層の部分 $\frac{N_h}{n_h}\sum_i y_{hi}$ は，
+                                層 $h$ の総計 $Y_h = N_h \bar{Y}_h$（$\bar{Y}_h$ は層 $h$ の母平均）の不偏推定量です．
+                            </p>
+                            <p>なぜなら，$y_{hi}$ の期待値は層 $h$ の母平均 $\bar{Y}_h$ に等しいので：</p>
+                            <div class="formula-block">
+                                $$E\!\left[\frac{N_h}{n_h}\sum_{i=1}^{n_h} y_{hi}\right] = \frac{N_h}{n_h} \cdot n_h \cdot \bar{Y}_h = N_h \bar{Y}_h$$
+                            </div>
+                            <p>これを全層で足せば $E[\hat{Y}] = Y$（母集団総計）となります．</p>
+                            <p>したがって，<strong>標本配分法（$n_h$ の決め方）によらず $\hat{Y}$ は不偏推定量</strong>です．</p>
+                        </div>
+
+                        <h4>母平均 $\bar{Y} = Y / N$ の計算</h4>
+                        <p>全体の母集団総計 $Y$ は各層の総計の和：</p>
+                        <div class="formula-block">
+                            $$Y = \sum_{h=1}^{4} N_h \bar{Y}_h = 20 \times 15 + 10 \times 150 + 5 \times 510 + 5 \times 1010$$
+                        </div>
+                        <div class="formula-block">
+                            $$= 300 + 1500 + 2550 + 5050 = 9400 \text{（t）}$$
+                        </div>
+
+                        <p>母平均：</p>
+                        <div class="formula-block">
+                            $$\bar{Y} = \frac{Y}{N} = \frac{9400}{40} = 235 \text{（t）}$$
+                        </div>
+
+                        <p>$\hat{Y}/40$ の期待値：</p>
+                        <div class="formula-block">
+                            $$E\!\left[\frac{\hat{Y}}{40}\right] = \frac{E[\hat{Y}]}{40} = \frac{Y}{40} = \bar{Y} = 235 \text{（t）}$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結果</div>
+                            <p>母平均の推定量 $\hat{Y}/40$ の期待値は <strong>235（t）</strong>である．</p>
+                            <p>これは $n_h$ の値（各層の標本数）によらず成立します．すなわち，等配分（配分法A）だけでなく，B, Cの配分法でも期待値は同じ235です．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問21.2 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q212-2">
+                    <h2><i class="fas fa-pencil"></i> 問21.2 [2] — 分散が最小の配分法</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 層化抽出の推定量の分散</div>
+                            <p>非復元抽出の場合，$\hat{Y}$ の分散は次の式で与えられます：</p>
+                            <div class="formula-block">
+                                $$V[\hat{Y}] = \sum_{h=1}^{4} N_h^2 \cdot \frac{N_h - n_h}{N_h - 1} \cdot \frac{1}{n_h} \sigma_h^2$$
+                            </div>
+                            <p>ここで $\sigma_h^2$ は層 $h$ の母分散（標準偏差 $\sigma_h$ の二乗）です．</p>
+                            <p>
+                                この式の意味は：各層の「分散寄与 $N_h^2 \sigma_h^2 / n_h$」の和です（有限修正項 $(N_h - n_h)/(N_h - 1)$ は精度向上のための補正）．
+                                $n_h$ が大きいほど，分散が小さくなります（標本が多いほど精度向上）．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> ネイマン配分法とは？</div>
+                            <p>総標本数 $n = \sum_h n_h$ が固定されているとき，$V[\hat{Y}]$ を最小にする配分法が<strong>ネイマン配分法</strong>です：</p>
+                            <div class="formula-block">
+                                $$n_h \propto N_h \cdot \sigma_h \cdot \sqrt{\frac{N_h}{N_h - 1}}$$
+                            </div>
+                            <p>有限修正項 $\sqrt{N_h/(N_h-1)}$ を無視した近似では $n_h \propto N_h \sigma_h$（比例配分に標準偏差の重みをかけたもの）となります．</p>
+                            <p>3通りの配分法A, B, Cはすべて合計 $n = 8$ です．ネイマン配分法に最も近いものが分散最小になります．</p>
+                        </div>
+
+                        <h4>ネイマン配分の理論値を計算する</h4>
+                        <p>まず，各層の $N_h \sigma_h \sqrt{N_h/(N_h-1)}$ を計算します（有限修正あり）：</p>
+
+                        <table class="data-table calc-table">
+                            <thead>
+                                <tr>
+                                    <th>層 $h$</th>
+                                    <th>$N_h$</th>
+                                    <th>$\sigma_h$</th>
+                                    <th>$N_h \sigma_h$</th>
+                                    <th>$\sqrt{N_h/(N_h-1)}$</th>
+                                    <th>$N_h \sigma_h \sqrt{N_h/(N_h-1)}$</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>I</td><td>20</td><td>20</td>
+                                    <td>400</td>
+                                    <td>$\sqrt{20/19} \approx 1.026$</td>
+                                    <td>$\approx 410.3$</td>
+                                </tr>
+                                <tr>
+                                    <td>II</td><td>10</td><td>70</td>
+                                    <td>700</td>
+                                    <td>$\sqrt{10/9} \approx 1.054$</td>
+                                    <td>$\approx 737.9$</td>
+                                </tr>
+                                <tr>
+                                    <td>III</td><td>5</td><td>290</td>
+                                    <td>1450</td>
+                                    <td>$\sqrt{5/4} = 1.118$</td>
+                                    <td>$\approx 1621.2$</td>
+                                </tr>
+                                <tr>
+                                    <td>IV</td><td>5</td><td>80</td>
+                                    <td>400</td>
+                                    <td>$\sqrt{5/4} = 1.118$</td>
+                                    <td>$\approx 447.2$</td>
+                                </tr>
+                                <tr style="font-weight:700;background:#f0f4ff;">
+                                    <td>合計</td><td></td><td></td><td></td><td></td>
+                                    <td>$\approx 3216.6$</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p>$n = 8$ に対するネイマン配分値：$n_h = 3216.6 \text{ 分の } N_h\sigma_h\sqrt{\cdots} \times 8$</p>
+
+                        <table class="data-table calc-table">
+                            <thead>
+                                <tr><th>層</th><th>ネイマン配分値（小数）</th><th>近似整数</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>I</td><td>$410.3/3216.6 \times 8 \approx 1.02$</td><td>約1</td></tr>
+                                <tr><td>II</td><td>$737.9/3216.6 \times 8 \approx 1.84$</td><td>約2</td></tr>
+                                <tr><td>III</td><td>$1621.2/3216.6 \times 8 \approx 4.03$</td><td>約4</td></tr>
+                                <tr><td>IV</td><td>$447.2/3216.6 \times 8 \approx 1.11$</td><td>約1</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p>これは配分法 <strong>C（$n_1=1, n_2=2, n_3=4, n_4=1$）</strong>に最も近いです．</p>
+
+                        <h4>実際に $V[\hat{Y}]$ を計算して確認する</h4>
+                        <p>各層の貢献：$N_h^2 \cdot \frac{N_h - n_h}{N_h - 1} \cdot \frac{\sigma_h^2}{n_h}$ を計算します．</p>
+
+                        <p style="font-weight:600;margin-top:0.8em;">配分法 A（$n_h = 2$ 均等）：</p>
+                        <table class="data-table calc-table" style="font-size:0.85em;">
+                            <thead>
+                                <tr><th>層</th><th>$N_h^2$</th><th>$(N_h-n_h)/(N_h-1)$</th><th>$\sigma_h^2/n_h$</th><th>寄与</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>I</td><td>400</td><td>18/19</td><td>400/2=200</td><td>$400 \times (18/19) \times 200 \approx 75789$</td></tr>
+                                <tr><td>II</td><td>100</td><td>8/9</td><td>4900/2=2450</td><td>$100 \times (8/9) \times 2450 \approx 217778$</td></tr>
+                                <tr><td>III</td><td>25</td><td>3/4</td><td>84100/2=42050</td><td>$25 \times 0.75 \times 42050 = 788438$</td></tr>
+                                <tr><td>IV</td><td>25</td><td>3/4</td><td>6400/2=3200</td><td>$25 \times 0.75 \times 3200 = 60000$</td></tr>
+                                <tr style="font-weight:700;background:#f0f4ff;"><td colspan="4">$V_A[\hat{Y}]$（合計）</td><td>$\approx 1{,}142{,}005$</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p style="font-weight:600;margin-top:0.8em;">配分法 B（$n_1=4, n_2=2, n_3=1, n_4=1$）：</p>
+                        <table class="data-table calc-table" style="font-size:0.85em;">
+                            <thead>
+                                <tr><th>層</th><th>$N_h^2$</th><th>$(N_h-n_h)/(N_h-1)$</th><th>$\sigma_h^2/n_h$</th><th>寄与</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>I</td><td>400</td><td>16/19</td><td>400/4=100</td><td>$400 \times (16/19) \times 100 \approx 33684$</td></tr>
+                                <tr><td>II</td><td>100</td><td>8/9</td><td>4900/2=2450</td><td>$100 \times (8/9) \times 2450 \approx 217778$</td></tr>
+                                <tr><td>III</td><td>25</td><td>4/4=1</td><td>84100/1=84100</td><td>$25 \times 1 \times 84100 = 2{,}102{,}500$</td></tr>
+                                <tr><td>IV</td><td>25</td><td>4/4=1</td><td>6400/1=6400</td><td>$25 \times 1 \times 6400 = 160{,}000$</td></tr>
+                                <tr style="font-weight:700;background:#f0f4ff;"><td colspan="4">$V_B[\hat{Y}]$（合計）</td><td>$\approx 2{,}513{,}962$</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p style="font-weight:600;margin-top:0.8em;">配分法 C（$n_1=1, n_2=2, n_3=4, n_4=1$）：</p>
+                        <table class="data-table calc-table" style="font-size:0.85em;">
+                            <thead>
+                                <tr><th>層</th><th>$N_h^2$</th><th>$(N_h-n_h)/(N_h-1)$</th><th>$\sigma_h^2/n_h$</th><th>寄与</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>I</td><td>400</td><td>19/19=1</td><td>400/1=400</td><td>$400 \times 1 \times 400 = 160{,}000$</td></tr>
+                                <tr><td>II</td><td>100</td><td>8/9</td><td>4900/2=2450</td><td>$100 \times (8/9) \times 2450 \approx 217{,}778$</td></tr>
+                                <tr><td>III</td><td>25</td><td>1/4</td><td>84100/4=21025</td><td>$25 \times 0.25 \times 21025 = 131{,}406$</td></tr>
+                                <tr><td>IV</td><td>25</td><td>4/4=1</td><td>6400/1=6400</td><td>$25 \times 1 \times 6400 = 160{,}000$</td></tr>
+                                <tr style="font-weight:700;background:#f0f4ff;"><td colspan="4">$V_C[\hat{Y}]$（合計）</td><td>$\approx 669{,}184$</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p>3通りの分散：$V_A \approx 1{,}142{,}005$，$V_B \approx 2{,}513{,}962$，$V_C \approx 669{,}184$</p>
+                            <p><strong>分散が最も小さいのは配分法 C</strong>（ネイマン配分に最も近い）です．</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 直感的な理解</div>
+                            <p>
+                                層IIIは標準偏差 $\sigma_3 = 290$ と非常に大きく，この層の変動が $\hat{Y}$ の分散に最も大きく寄与します．
+                                標本を多く割り当てて精度を上げるには，<strong>ばらつきの大きい層にたくさん標本を配分する</strong>のが効果的です（ネイマン配分法の考え方）．
+                            </p>
+                            <p>
+                                配分法Bは層Iに4個配分していますが，層I はばらつきが小さい（$\sigma_1 = 20$）ので効果が薄く，
+                                むしろ層IIIに1個しかないため大きな分散を生んでいます．
+                                配分法Cは層III（ばらつき最大）に4個集中させているため，分散が最小になります．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問21.3 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q213">
+                    <h2><i class="fas fa-pencil"></i> 問21.3 — 問題文（有限母集団修正と標本平均の分散）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            母集団の大きさを $N$，変数 $x$ の母平均と母分散をそれぞれ $\mu, \sigma^2$ とする．大きさ $n\,(\leq N)$ の標本を非復元単純無作為抽出する場合に，変数 $x$ の標本平均 $\bar{x}$ を $\mu$ の推定量とするとき，この推定量の分散は
+                        </p>
+                        <div class="formula-block">
+                            $$V[\bar{x}] = \frac{N-n}{N-1} \cdot \frac{1}{n} \sigma^2$$
+                        </div>
+                        <p>となる．</p>
+                        <ol>
+                            <li>上の標本平均の分散や，他の抽出法による標本平均の分散などに関して，次の記述①〜③がある．これらの記述のうち正しいものをすべて選べ．
+                                <ol style="list-style:none;padding-left:0;">
+                                    <li style="margin:0.5em 0;">① 有限母集団から母集団の半分の大きさの標本を非復元単純無作為抽出すると，母集団の大きさによらず標本平均の分散はほぼ等しくなる．</li>
+                                    <li style="margin:0.5em 0;">② 有限母集団から非復元単純無作為抽出された標本の平均の分散は，母集団を無限母集団とみなした場合よりも大きくなることはない．</li>
+                                    <li style="margin:0.5em 0;">③ 有限母集団から復元単純無作為抽出された標本の平均の分散は，母集団を無限母集団とみなした場合と等しくなる．</li>
+                                </ol>
+                            </li>
+                            <li>就業者9585人の通勤時間（単位：分）の分散が420である．この母集団から600人を非復元単純無作為抽出した場合の標本平均の分散を $V_1$，同じ抽出をするものの母集団を無限母集団とみなした場合の標本平均の分散を $V_2$ とする．このとき，$V_1, V_2$ を求めよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問21.3 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q213-1">
+                    <h2><i class="fas fa-pencil"></i> 問21.3 [1] — 分散に関する記述の正誤判定</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 公式の確認と「有限修正項」の役割</div>
+                            <p>非復元単純無作為抽出における標本平均の分散：</p>
+                            <div class="formula-block">
+                                $$V[\bar{x}] = \underbrace{\frac{N-n}{N-1}}_{\text{有限修正項}} \cdot \frac{\sigma^2}{n}$$
+                            </div>
+                            <ul>
+                                <li>$\sigma^2/n$ は「無限母集団（復元抽出）とみなした場合」の分散</li>
+                                <li>$(N-n)/(N-1)$ が<strong>有限修正項</strong>（finite population correction）で，$0 \leq (N-n)/(N-1) \leq 1$ を満たす</li>
+                                <li>$n = N$ のとき有限修正項 $= 0$（全数調査なら誤差ゼロ）</li>
+                                <li>$n = 1$ のとき有限修正項 $= 1$（1個抽出なら無限母集団と同じ）</li>
+                            </ul>
+                        </div>
+
+                        <h4>① の検討 — 誤り</h4>
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><span class="badge-wrong">× 誤り</span></div>
+                            <p>
+                                「母集団の半分」つまり $n = N/2$ を代入すると：
+                            </p>
+                            <div class="formula-block">
+                                $$V[\bar{x}] = \frac{N - \frac{N}{2}}{N-1} \cdot \frac{\sigma^2}{\frac{N}{2}} = \frac{\frac{N}{2}}{N-1} \cdot \frac{2\sigma^2}{N} = \frac{\sigma^2}{N-1}$$
+                            </div>
+                            <p>
+                                この値は $\sigma^2/(N-1)$ であり，<strong>$N$ によって変化します</strong>．
+                                $N$ が大きいほど $V[\bar{x}]$ は小さくなり，$N$ によらず「ほぼ等しく」はなりません．
+                                よって①は<strong>誤り</strong>です．
+                            </p>
+                            <p style="font-size:0.9em;color:#666;">例：$N=100$ なら $V = \sigma^2/99$，$N=10000$ なら $V = \sigma^2/9999$，明らかに異なります．</p>
+                        </div>
+
+                        <h4>② の検討 — 正しい</h4>
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><span class="badge-correct">○ 正しい</span></div>
+                            <p>
+                                有限修正項 $(N-n)/(N-1) \leq 1$（$n \geq 1$ のとき）なので：
+                            </p>
+                            <div class="formula-block">
+                                $$V[\bar{x}]_{\text{非復元}} = \frac{N-n}{N-1} \cdot \frac{\sigma^2}{n} \leq \frac{\sigma^2}{n} = V[\bar{x}]_{\text{無限母集団}}$$
+                            </div>
+                            <p>
+                                非復元抽出の分散は，無限母集団（または復元抽出）とみなした場合の分散 $\sigma^2/n$ <strong>以下</strong>になります．
+                                つまり「大きくなることはない」は正しいです．
+                            </p>
+                            <p>
+                                直感的には，非復元抽出では「同じ個体を2度選ばない」ため，情報が効率的に得られ，復元抽出より分散が小さくなります．
+                            </p>
+                        </div>
+
+                        <h4>③ の検討 — 正しい</h4>
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><span class="badge-correct">○ 正しい</span></div>
+                            <p>
+                                <strong>復元</strong>単純無作為抽出では，毎回独立に抽出するため，有限修正項が不要です（無限母集団と同じ状況）．
+                                したがって復元抽出の標本平均の分散は：
+                            </p>
+                            <div class="formula-block">
+                                $$V[\bar{x}]_{\text{復元}} = \frac{\sigma^2}{n}$$
+                            </div>
+                            <p>
+                                これは「母集団を無限母集団とみなした場合」の分散と等しいです．
+                                復元抽出は「取り出した個体を戻す」ので，次の抽出が前回の結果に依存せず，無限母集団からの独立抽出と同等になります．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#2a6fdb;">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 正解：②と③</div>
+                            <p>①は誤り（$V[\bar{x}]$ は $N$ によって変わる），②と③は正しい．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問21.3 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q213-2">
+                    <h2><i class="fas fa-pencil"></i> 問21.3 [2] — $V_1$ と $V_2$ の計算</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>問題の設定を整理する</h4>
+                        <ul>
+                            <li>母集団の大きさ：$N = 9585$</li>
+                            <li>標本の大きさ：$n = 600$</li>
+                            <li>母分散：$\sigma^2 = 420$</li>
+                            <li>$V_1$：有限修正ありの（非復元抽出の）標本平均の分散</li>
+                            <li>$V_2$：有限修正なしの（無限母集団とみなした場合の）標本平均の分散</li>
+                        </ul>
+
+                        <h4>$V_1$ の計算（有限母集団修正あり）</h4>
+                        <div class="formula-block">
+                            $$V_1 = \frac{N-n}{N-1} \cdot \frac{\sigma^2}{n} = \frac{9585 - 600}{9585 - 1} \cdot \frac{420}{600}$$
+                        </div>
+                        <div class="formula-block">
+                            $$= \frac{8985}{9584} \cdot 0.7 = 0.93741\ldots \times 0.7 \approx 0.65619 \approx 0.65625$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> $V_1$ の結果</div>
+                            <div class="formula-block">
+                                $$V_1 = \frac{9585 - 600}{9585 - 1} \times \frac{420}{600} = \frac{8985}{9584} \times 0.7 \approx 0.65625$$
+                            </div>
+                        </div>
+
+                        <h4>$V_2$ の計算（無限母集団とみなす，有限修正なし）</h4>
+                        <p>有限修正項を取り除いた，$\sigma^2/n$ のみ：</p>
+                        <div class="formula-block">
+                            $$V_2 = \frac{\sigma^2}{n} = \frac{420}{600} = 0.7$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結果</div>
+                            <p>$V_1 = 0.65625$，$V_2 = 0.7$</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 有限修正の効果を確認する</div>
+                            <p>
+                                有限修正項の値は $(9585-600)/(9585-1) = 8985/9584 \approx 0.9375$ です．
+                                標本数 $n = 600$ は母集団 $N = 9585$ の約6.3%に相当し，有限修正によって約6.25%分散が小さくなっています．
+                            </p>
+                            <p>
+                                もし $n/N$ が十分小さい場合（例：$n/N < 5\%$）は，有限修正はほぼ1に近く，$V_1 \approx V_2$ と近似できます．
+                                今回の場合は6.3%と少し大きいため，有限修正の影響がわずかに現れています．
+                            </p>
+                            <table class="data-table" style="max-width:360px;margin-top:0.8em;">
+                                <thead>
+                                    <tr><th>$n/N$ の割合</th><th>有限修正項の目安</th><th>判断</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$< 5\%$</td><td>$\approx 1$</td><td>無視可能</td></tr>
+                                    <tr><td>$5\% \sim 20\%$</td><td>$0.8 \sim 0.95$</td><td>考慮すべき</td></tr>
+                                    <tr><td>$> 20\%$</td><td>$< 0.8$</td><td>必ず考慮する</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

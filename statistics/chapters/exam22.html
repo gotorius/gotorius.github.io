@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第22章 章末問題解説 - 主成分分析</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em 0;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        .highlight-row { background: #fffbe6 !important; font-weight: 600; }
+        .calc-table th { background: #e8f0ff; }
+        .interp-table th { background: #e8f4e8; }
+
+        .badge-correct { background: #27ae60; color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 0.82em; font-weight: 700; }
+        .badge-wrong   { background: #e74c3c; color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 0.82em; font-weight: 700; }
+
+        /* バイプロット風の図 */
+        .biplot-container {
+            margin: 1em auto;
+            max-width: 560px;
+        }
+        .biplot-container svg {
+            width: 100%;
+            height: auto;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第22章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 22 — 章末問題解説</span>
+            <h1>主成分分析<br><small style="font-size:0.65em;color:var(--gray-500);">固有値・主成分負荷量・バイプロットの読み方</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter22.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第22章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q221">問22.1 問題</a></li>
+                            <li><a href="#q221-1">問22.1 [1]</a></li>
+                            <li><a href="#q221-2">問22.1 [2]</a></li>
+                            <li><a href="#q221-3">問22.1 [3]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第22章概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第22章「主成分分析」のキーポイント</div>
+                        <p>
+                            <strong>主成分分析（Principal Component Analysis; PCA）</strong>は，多くの変数の情報を，互いに無相関な少数の<strong>主成分</strong>に要約する手法です．
+                            「どの方向にデータが最も広がっているか」を順番に見つけていくイメージです．
+                        </p>
+                        <table class="data-table interp-table" style="margin-top:8px;">
+                            <thead>
+                                <tr><th>用語</th><th>意味・役割</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>固有値 $\lambda_k$</strong></td>
+                                    <td>第 $k$ 主成分が持つ分散の大きさ．大きいほど情報量が多い</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>固有ベクトル $\mathbf{a}_k$</strong></td>
+                                    <td>第 $k$ 主成分の方向（各変数に何倍の重みをかけるか）</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>寄与率</strong></td>
+                                    <td>その主成分が全分散に占める割合 $= \lambda_k / \sum_j \lambda_j$</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>累積寄与率</strong></td>
+                                    <td>第1〜第 $k$ 主成分までの寄与率の合計</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>主成分負荷量</strong></td>
+                                    <td>もとの変数と主成分の相関係数．相関行列ベースのとき $= \sqrt{\lambda_k} \times a_{jk}$</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>バイプロット</strong></td>
+                                    <td>主成分得点（個体）と主成分負荷量（変数）を同一平面に描いた散布図</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="concept-box" style="border-left-color:#f39c12;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 相関行列ベースの主成分分析では「主成分負荷量 = √固有値 × 固有ベクトル成分」</div>
+                            <p>
+                                変数の単位が異なる場合などに相関行列を使って主成分分析を行うとき，
+                                主成分負荷量（第 $k$ 主成分と変数 $j$ の相関係数）は次の式で計算できます：
+                            </p>
+                            <div class="formula-block">
+                                $$l_{jk} = \sqrt{\lambda_k} \cdot a_{jk}$$
+                            </div>
+                            <p>ここで $\lambda_k$ は第 $k$ 主成分の固有値，$a_{jk}$ は固有ベクトルの $j$ 番目の成分です．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問22.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q221">
+                    <h2><i class="fas fa-pencil"></i> 問22.1 — 問題文（2012年ロンドンオリンピック女子7種競技）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            2012年ロンドンオリンピック，女子7種競技の7種の得点について，主成分分析を行った結果が表22.4，表22.5，表22.6と図22.2である．
+                            対象アスリートは，薬禁やドーピングで失格となったものを除く<strong>31名</strong>である．分析には<strong>相関行列</strong>を用いた．
+                        </p>
+                        <p style="font-size:0.9em;color:#555;">
+                            なお，データは Athletics at the 2012 Summer Olympics — Women's heptathlon. In <em>Wikipedia: The Free Encyclopedia.</em> から引用した．
+                        </p>
+
+                        <p style="margin-top:1em;font-weight:600;">表22.4　固有値と寄与率</p>
+                        <table class="data-table" style="max-width:360px;">
+                            <thead>
+                                <tr><th>主成分</th><th>固有値</th><th>寄与率</th><th>累積寄与率</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>第1主成分</td><td>2.26</td><td>32.3%</td><td>32.3%</td></tr>
+                                <tr><td>第2主成分</td><td>1.50</td><td>21.4%</td><td>53.7%</td></tr>
+                                <tr><td>第3主成分</td><td>1.14</td><td>16.3%</td><td>70.0%</td></tr>
+                                <tr><td>第4主成分</td><td>0.90</td><td>12.9%</td><td>83.0%</td></tr>
+                                <tr><td>第5主成分</td><td>0.77</td><td>11.0%</td><td>94.0%</td></tr>
+                                <tr><td>第6主成分</td><td>0.28</td><td>3.9%</td><td>97.9%</td></tr>
+                                <tr><td>第7主成分</td><td>0.15</td><td>2.1%</td><td>100.0%</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p style="margin-top:1em;font-weight:600;">表22.5　固有ベクトル（第1, 2主成分）</p>
+                        <table class="data-table" style="max-width:440px;">
+                            <thead>
+                                <tr><th>変数</th><th>略称</th><th>第1主成分</th><th>第2主成分</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>100mハードル</td><td>X.100h</td><td>−0.497</td><td>0.217</td></tr>
+                                <tr><td>走り高跳</td><td>HJ</td><td>−0.364</td><td>0.169</td></tr>
+                                <tr><td>砲丸投</td><td>SP</td><td>0.004</td><td>0.624</td></tr>
+                                <tr><td>200m走</td><td>200m</td><td>−0.516</td><td>−0.247</td></tr>
+                                <tr><td>走り幅跳</td><td>LJ</td><td>−0.539</td><td>0.043</td></tr>
+                                <tr><td>槍投げ</td><td>JT</td><td>0.050</td><td>0.677</td></tr>
+                                <tr><td>800m走</td><td>800m</td><td>−0.247</td><td>−0.116</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p style="margin-top:1em;font-weight:600;">表22.6　主成分負荷量（第1, 2主成分）</p>
+                        <table class="data-table" style="max-width:440px;">
+                            <thead>
+                                <tr><th>変数</th><th>略称</th><th>第1主成分</th><th>第2主成分</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight-row"><td>100mハードル</td><td>X.100h</td><td>ア</td><td>イ</td></tr>
+                                <tr><td>走り高跳</td><td>HJ</td><td>−0.55</td><td>0.21</td></tr>
+                                <tr><td>砲丸投</td><td>SP</td><td>0.01</td><td>0.76</td></tr>
+                                <tr><td>200m走</td><td>200m</td><td>−0.78</td><td>−0.30</td></tr>
+                                <tr><td>走り幅跳</td><td>LJ</td><td>−0.81</td><td>0.05</td></tr>
+                                <tr><td>槍投げ</td><td>JT</td><td>0.08</td><td>0.83</td></tr>
+                                <tr><td>800m走</td><td>800m</td><td>−0.37</td><td>−0.14</td></tr>
+                            </tbody>
+                        </table>
+
+                        <p style="margin-top:1em;">
+                            図22.2は，各アスリートの主成分得点を，第1主成分（PC1）と第2主成分（PC2）を軸として布置し，
+                            7つの変数の主成分負荷量を Gabriel, K. R. (1971) の方法で規格化した値（ほぼ主成分負荷量に同じ）を矢印で表している．
+                            また，図中の数字は最終順位を表す．
+                        </p>
+
+                        <!-- バイプロット概略 SVG -->
+                        <div class="biplot-container">
+                            <svg viewBox="0 0 560 420" xmlns="http://www.w3.org/2000/svg" aria-label="バイプロット概略図">
+                                <!-- 背景 -->
+                                <rect width="560" height="420" fill="#fafafa" rx="6"/>
+                                <!-- 軸 -->
+                                <line x1="50" y1="210" x2="510" y2="210" stroke="#999" stroke-width="1.5"/>
+                                <line x1="280" y1="20"  x2="280" y2="400" stroke="#999" stroke-width="1.5"/>
+                                <!-- 軸ラベル -->
+                                <text x="515" y="214" font-size="14" fill="#555" font-weight="600">PC1</text>
+                                <text x="283" y="16"  font-size="14" fill="#555" font-weight="600">PC2</text>
+                                <!-- 目盛り -->
+                                <text x="264" y="225" font-size="11" fill="#888">0</text>
+                                <text x="200" y="225" font-size="11" fill="#888">−1</text>
+                                <text x="355" y="225" font-size="11" fill="#888">1</text>
+                                <text x="135" y="225" font-size="11" fill="#888">−2</text>
+                                <text x="415" y="225" font-size="11" fill="#888">2</text>
+
+                                <!-- 負荷量ベクトル（矢印・変数名）  -->
+                                <!-- X.100h: PC1=-0.75, PC2=0.27 → 左上方向 -->
+                                <line x1="280" y1="210" x2="167" y2="170" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow-r)"/>
+                                <text x="150" y="162" font-size="12" fill="#e74c3c" font-weight="600">X.100h</text>
+                                <!-- HJ: PC1=-0.55, PC2=0.21 → 左上 -->
+                                <line x1="280" y1="210" x2="198" y2="178" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow-r)"/>
+                                <text x="182" y="170" font-size="11" fill="#e74c3c">HJ</text>
+                                <!-- LJ: PC1=-0.81, PC2=0.05 → ほぼ左 -->
+                                <line x1="280" y1="210" x2="159" y2="206" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow-r)"/>
+                                <text x="138" y="200" font-size="11" fill="#e74c3c">LJ</text>
+                                <!-- 200m: PC1=-0.78, PC2=-0.30 → 左下 -->
+                                <line x1="280" y1="210" x2="163" y2="250" stroke="#e74c3c" stroke-width="2" marker-end="url(#arrow-r)"/>
+                                <text x="130" y="262" font-size="11" fill="#e74c3c">200m</text>
+                                <!-- 800m: PC1=-0.37, PC2=-0.14 → 少し左下 -->
+                                <line x1="280" y1="210" x2="224" y2="229" stroke="#c0392b" stroke-width="1.5" marker-end="url(#arrow-r)"/>
+                                <text x="208" y="244" font-size="11" fill="#c0392b">800m</text>
+                                <!-- SP: PC1=0.01, PC2=0.76 → 上 -->
+                                <line x1="280" y1="210" x2="282" y2="108" stroke="#2980b9" stroke-width="2" marker-end="url(#arrow-b)"/>
+                                <text x="287" y="100" font-size="12" fill="#2980b9" font-weight="600">SP</text>
+                                <!-- JT: PC1=0.08, PC2=0.83 → 上 -->
+                                <line x1="280" y1="210" x2="292" y2="99" stroke="#2980b9" stroke-width="2" marker-end="url(#arrow-b)"/>
+                                <text x="296" y="92" font-size="12" fill="#2980b9" font-weight="600">JT</text>
+
+                                <!-- A, B, C, D 位置 （A:左上, B:左0付近, C:やや左0, D:左下） -->
+                                <circle cx="152" cy="188" r="7" fill="#f39c12"/>
+                                <text x="142" y="180" font-size="13" fill="#f39c12" font-weight="700">A</text>
+                                <circle cx="174" cy="210" r="7" fill="#27ae60"/>
+                                <text x="164" y="202" font-size="13" fill="#27ae60" font-weight="700">B</text>
+                                <circle cx="186" cy="214" r="7" fill="#8e44ad"/>
+                                <text x="176" y="206" font-size="13" fill="#8e44ad" font-weight="700">C</text>
+                                <circle cx="175" cy="235" r="7" fill="#2c3e50"/>
+                                <text x="165" y="227" font-size="13" fill="#2c3e50" font-weight="700">D</text>
+
+                                <!-- 矢印マーカー定義 -->
+                                <defs>
+                                    <marker id="arrow-r" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                        <path d="M0,0 L0,6 L8,3 z" fill="#e74c3c"/>
+                                    </marker>
+                                    <marker id="arrow-b" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                                        <path d="M0,0 L0,6 L8,3 z" fill="#2980b9"/>
+                                    </marker>
+                                </defs>
+
+                                <!-- 下部ラベル -->
+                                <text x="280" y="418" font-size="12" fill="#777" text-anchor="middle">図22.2（概略）　バイプロット — 赤矢印：走・跳系，青矢印：投てき系</text>
+                            </svg>
+                        </div>
+
+                        <ol style="margin-top:0.5em;">
+                            <li>表22.6の <strong>ア</strong>，<strong>イ</strong> の値を求めよ．</li>
+                            <li>表22.4，表22.5，表22.6と図22.2の結果よりどのようなことがいえるか考察せよ．その際，固有値，寄与率，累積寄与率，主成分，主成分負荷量などの値を適宜含めること．</li>
+                            <li>図22.2のA, B, C, Dの4名のなかに優勝したアスリートがいる．問[2]の考察をふまえてA, B, C, Dのうちどの点が優勝したアスリートのものか，理由を述べて答えよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問22.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q221-1">
+                    <h2><i class="fas fa-pencil"></i> 問22.1 [1] — ア・イの値を求める</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 主成分負荷量の計算式をおさらいする</div>
+                            <p>
+                                <strong>相関行列を使って主成分分析を行った場合</strong>，第 $k$ 主成分と変数 $j$ の相関係数（＝主成分負荷量 $l_{jk}$）は次の式で計算できます：
+                            </p>
+                            <div class="formula-block">
+                                $$l_{jk} = \sqrt{\lambda_k} \cdot a_{jk}$$
+                            </div>
+                            <p>ここで：</p>
+                            <ul>
+                                <li>$\lambda_k$：第 $k$ 主成分の<strong>固有値</strong>（表22.4から読む）</li>
+                                <li>$a_{jk}$：第 $k$ 主成分の固有ベクトルの<strong>第 $j$ 成分</strong>（表22.5から読む）</li>
+                            </ul>
+                            <p>
+                                なぜ「$\sqrt{\lambda_k} \times a_{jk}$」が「もとの変数と主成分の相関係数」になるのか？
+                                直感的には，<strong>固有値は主成分の「ばらつきの大きさ（分散）」</strong>を表しており，
+                                相関係数 $=$ 共分散 $\div$（両方の標準偏差の積）で計算するので，
+                                標準化された変数（分散1）との相関を取ると $\sqrt{\lambda_k}$ が出てきます．
+                            </p>
+                        </div>
+
+                        <h4>ア の計算（100mハードルと第1主成分の主成分負荷量）</h4>
+                        <ul>
+                            <li>第1主成分の固有値：$\lambda_1 = 2.26$（表22.4）</li>
+                            <li>100mハードルの第1主成分固有ベクトル成分：$a_{1,1} = -0.497$（表22.5，1行目）</li>
+                        </ul>
+                        <div class="formula-block">
+                            $$\text{ア} = \sqrt{\lambda_1} \cdot a_{1,1} = \sqrt{2.26} \times (-0.497)$$
+                        </div>
+                        <div class="formula-block">
+                            $$= 1.5033\ldots \times (-0.497) \approx -0.747 \approx -0.75$$
+                        </div>
+
+                        <h4>イ の計算（100mハードルと第2主成分の主成分負荷量）</h4>
+                        <ul>
+                            <li>第2主成分の固有値：$\lambda_2 = 1.50$（表22.4）</li>
+                            <li>100mハードルの第2主成分固有ベクトル成分：$a_{1,2} = 0.217$（表22.5，1行目）</li>
+                        </ul>
+                        <div class="formula-block">
+                            $$\text{イ} = \sqrt{\lambda_2} \cdot a_{1,2} = \sqrt{1.50} \times 0.217$$
+                        </div>
+                        <div class="formula-block">
+                            $$= 1.2247\ldots \times 0.217 \approx 0.2658 \approx 0.27$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結果</div>
+                            <p>
+                                $\text{ア} = -0.75$，$\quad \text{イ} = 0.27$
+                            </p>
+                            <p>
+                                これは「100mハードルの得点が高いと，第1主成分の値は低くなる（負の相関，絶対値0.75）」，
+                                「第2主成分とは正の相関が弱くある（0.27）」ことを意味しています．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 検算：他の行でも確認してみよう</div>
+                            <p>例えば，走り幅跳（LJ）の第1主成分負荷量：</p>
+                            <div class="formula-block">
+                                $$\sqrt{2.26} \times (-0.539) = 1.5033 \times (-0.539) \approx -0.810 \approx -0.81 \quad\checkmark$$
+                            </div>
+                            <p>表22.6の値 $-0.81$ と一致することが確認できます．</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問22.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q221-2">
+                    <h2><i class="fas fa-pencil"></i> 問22.1 [2] — 主成分分析結果の考察</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 考察の書き方：3つの観点で整理する</div>
+                            <p>主成分分析の結果を考察するには，次の3つの観点をカバーすると完全な解答になります：</p>
+                            <ol>
+                                <li><strong>情報圧縮の効率：</strong>固有値・寄与率・累積寄与率を読む</li>
+                                <li><strong>第1主成分の意味：</strong>固有ベクトル（や負荷量）の符号と大きさを読む</li>
+                                <li><strong>第2主成分の意味：</strong>同様に読む</li>
+                            </ol>
+                        </div>
+
+                        <h4>① 情報圧縮の効率（固有値・寄与率・累積寄与率）</h4>
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 寄与率の読み方</div>
+                            <p>
+                                表22.4より，<strong>第1主成分の寄与率は32.3%，第2主成分は21.4%</strong>で，
+                                2つの主成分での<strong>累積寄与率は53.7%（約54%）</strong>です．
+                                つまり，7変数の情報の約半分が2つの主成分で説明できます．
+                            </p>
+                            <p>
+                                また，<strong>第3，4主成分まで使うと累積寄与率は83.0%</strong>，すなわち7〜8割の情報が第1〜4主成分で捉えられます．
+                            </p>
+                            <p style="font-size:0.9em;color:#555;">
+                                補足：固有値が1以上の主成分は第1〜第3主成分（固有値：2.26, 1.50, 1.14）で，
+                                「固有値1以上」を主成分の個数の目安にすると第3主成分まで採用することになります（カイザー基準）．
+                            </p>
+                        </div>
+
+                        <h4>② 第1主成分の解釈（走力・跳力の総合指標）</h4>
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-running"></i> 第1主成分 ＝ 走力・跳力に関する指標</div>
+                            <p>
+                                表22.5（固有ベクトル）と表22.6（主成分負荷量）の第1主成分列を見ると：
+                            </p>
+                            <table class="data-table" style="max-width:420px;">
+                                <thead>
+                                    <tr><th>変数</th><th>負荷量（第1主成分）</th><th>特徴</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>100mハードル</td><td>−0.75</td><td>負で絶対値大</td></tr>
+                                    <tr><td>走り高跳</td><td>−0.55</td><td>負で絶対値中程度</td></tr>
+                                    <tr><td>砲丸投</td><td>0.01</td><td>ほぼゼロ</td></tr>
+                                    <tr><td>200m走</td><td>−0.78</td><td>負で絶対値大</td></tr>
+                                    <tr><td>走り幅跳</td><td>−0.81</td><td>負で絶対値最大</td></tr>
+                                    <tr><td>槍投げ</td><td>0.08</td><td>ほぼゼロ</td></tr>
+                                    <tr><td>800m走</td><td>−0.37</td><td>負で絶対値小</td></tr>
+                                </tbody>
+                            </table>
+                            <p>
+                                100mハードル，200m走，走り幅跳は<strong>負の値が大きく（絶対値0.75〜0.81）</strong>，
+                                砲丸投と槍投げはゼロに近いです．
+                                また，主成分負荷量をみても100mハードル，200m走，走り幅跳は第1主成分との相関係数の絶対値が0.75を超えており，<strong>強い負の相関</strong>です．
+                            </p>
+                            <p>
+                                すなわち，<strong>第1主成分は走力・跳力（走る・跳ぶ）の総合的な指標</strong>です．
+                                負の値が大きいほど走力・跳力が高く，バイプロットでは<strong>左側ほど走力・跳力が高い</strong>ことになります．
+                            </p>
+                        </div>
+
+                        <h4>③ 第2主成分の解釈（投てき力の指標）</h4>
+                        <div class="concept-box" style="border-left-color:#2980b9;">
+                            <div class="box-title"><i class="fas fa-circle-notch"></i> 第2主成分 ＝ 投てきの能力に関する指標</div>
+                            <p>
+                                第2主成分の固有ベクトル（や負荷量）を見ると：
+                            </p>
+                            <table class="data-table" style="max-width:420px;">
+                                <thead>
+                                    <tr><th>変数</th><th>負荷量（第2主成分）</th><th>特徴</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>100mハードル</td><td>0.27</td><td>正だが小さい</td></tr>
+                                    <tr><td>走り高跳</td><td>0.21</td><td>正だが小さい</td></tr>
+                                    <tr><td>砲丸投</td><td><strong>0.76</strong></td><td>正で絶対値大</td></tr>
+                                    <tr><td>200m走</td><td>−0.30</td><td>負で絶対値小</td></tr>
+                                    <tr><td>走り幅跳</td><td>0.05</td><td>ほぼゼロ</td></tr>
+                                    <tr><td>槍投げ</td><td><strong>0.83</strong></td><td>正で絶対値最大</td></tr>
+                                    <tr><td>800m走</td><td>−0.14</td><td>ほぼゼロ</td></tr>
+                                </tbody>
+                            </table>
+                            <p>
+                                砲丸投（0.76）と槍投げ（0.83）が突出して大きく，他の5種はそれほど大きくありません．
+                                したがって，<strong>第2主成分は投てき（砲丸投・槍投げ）の能力に関する指標</strong>です．
+                                第2主成分の値が大きい（バイプロットで上方）ほど，投てき力が高いことを意味します．
+                            </p>
+                        </div>
+
+                        <h4>まとめ（模範解答）</h4>
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 考察のまとめ</div>
+                            <p>
+                                累積寄与率をみると，第1, 2主成分で全体の約54%の情報を持っていることがわかる．
+                                第3, 4主成分まででは，7〜8割の情報が取れることがわかる（第3主成分まで固有値が1以上）．
+                            </p>
+                            <p>
+                                第1主成分は，100mハードル・走り高跳・200m走・走り幅跳・800m走の5種の固有ベクトル成分（および主成分負荷量）の符号が負であり，
+                                砲丸投と槍投げの値がゼロに近い．
+                                また，もとの変数と主成分との相関係数である主成分負荷量をみても，
+                                100mハードル，200m走，走り幅跳は第1主成分と負の相関が絶対値0.75を越えており強くなっている．
+                                したがって，<strong>第1主成分は走力と跳力に関する指標</strong>であり，
+                                第1主成分の値が小さい（負方向が大きい）ほど走力・跳力が高いといえる．
+                            </p>
+                            <p>
+                                一方，第2主成分は，砲丸投と槍投げの値が他の5種よりも高い値をとっており，
+                                投てき2種は第2主成分と正の相関が強い（0.76，0.83）．
+                                したがって，<strong>第2主成分は投てきの能力に関する指標</strong>であり，
+                                第2主成分の値が大きいほど投てき力が高いといえる．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問22.1 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q221-3">
+                    <h2><i class="fas fa-pencil"></i> 問22.1 [3] — A, B, C, Dのうち優勝者を特定する</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> バイプロットの読み方をおさらいする</div>
+                            <p>バイプロットでは，各アスリートの「主成分得点」が散布図のように布置されています：</p>
+                            <ul>
+                                <li><strong>第1主成分（横軸，PC1）：</strong>走力・跳力の指標 → <strong>左ほど高能力</strong>（負の値が大きい＝走力・跳力が優れている）</li>
+                                <li><strong>第2主成分（縦軸，PC2）：</strong>投てき力の指標 → <strong>上ほど高能力</strong>（正の値が大きい＝投てき力が優れている）</li>
+                            </ul>
+                            <p>なぜ「左ほど走力が高い」かというと，走力系変数（100mハードル，200m走，走り幅跳など）の主成分負荷量が<strong>負</strong>であるため，
+                            走り得点が高い選手ほど第1主成分が低い（左に位置する）からです．</p>
+                        </div>
+
+                        <h4>図22.2から A, B, C, D の位置を分析する</h4>
+                        <p>
+                            図22.2（バイプロット概略）において，A, B, C, Dの4名は左側（第1主成分が低い側）に位置しています．
+                            4名の中で最も<strong>左</strong>に位置するのは A です（第1主成分の値が最も小さい）．
+                        </p>
+
+                        <table class="data-table" style="max-width:460px;">
+                            <thead>
+                                <tr><th>アスリート</th><th>PC1（走力・跳力）</th><th>PC2（投てき力）</th><th>評価</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr class="highlight-row"><td><strong>A</strong></td><td>最も左（最小）</td><td>4名中最も高位</td><td>走・跳・投てき，すべて4名で最高</td></tr>
+                                <tr><td>B</td><td>左（Aより右）</td><td>PC2は中程度</td><td>走力はやや劣る</td></tr>
+                                <tr><td>C</td><td>左（BよりやはりAより右）</td><td>PC2はやや下</td><td>走・投てきともBより劣る</td></tr>
+                                <tr><td>D</td><td>Cと近い</td><td>PC2が最も低い</td><td>投てき力が低い</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 第1主成分からの判断</div>
+                            <p>
+                                第1主成分（走力・跳力）は<strong>左側ほど能力が高い</strong>ので，
+                                4名では最も左に位置する<strong>A</strong>の走力・跳力が一番高いと考えられます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#2980b9;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 第2主成分からの確認</div>
+                            <p>
+                                第2主成分（投てき力）は<strong>上ほど能力が高い</strong>ので，
+                                4名のうちで最も上に位置する<strong>A</strong>の投てき力が一番高いです．
+                                この点でも4名のうちでは A が一番能力が高いといえます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p>
+                                <strong>優勝したアスリートは A である．</strong>
+                            </p>
+                            <p>
+                                <u>理由：</u>
+                                第1主成分は走力と跳力に関する指標であり，左側ほど能力が高いことを示す．
+                                A, B, C, Dの4名のなかで最も左に位置するAの走力・跳力が最も高いと考えられる．
+                                また，第2主成分は投てきの能力に関する指標であり，4名のうちAが最も上に位置するため，
+                                投てき力でもAが最高である．
+                                したがって，いずれの観点でもAの能力が4名のうちで一番高く，Aが優勝者である．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 主成分分析を使った順位評価の意義</div>
+                            <p>
+                                7種競技のように，複数の種目の得点を合算して順位を決める場合，
+                                主成分分析によって「走力・跳力」と「投てき力」という<strong>互いに独立した能力軸</strong>に分解できます．
+                            </p>
+                            <p>
+                                バイプロットで左上（走力・跳力が高く，投てき力も高い）に位置する選手が総合的に優れているといえます．
+                                今回の例では A がそれに該当します．
+                            </p>
+                            <p>
+                                このように主成分分析は，複雑な多変量データを少数の軸に要約し，
+                                <strong>個体間の比較や変数間の関係を視覚的に理解する</strong>ための強力なツールです．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

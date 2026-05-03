@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第6章 章末問題解説 - 連続型分布と標本分布</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        .blank-box {
+            display: inline-block;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            padding: 2px 14px;
+            font-weight: 700;
+            color: #2471a3;
+            background: #f0f6ff;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第6章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 6 — 章末問題解説</span>
+            <h1>連続型分布と標本分布<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">正規分布・偏差値・四分位範囲・2変量正規分布・指数分布・混合正規分布</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter6.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第6章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q61">問6.1 問題</a></li>
+                            <li><a href="#q61-1">問6.1 [1] 解答</a></li>
+                            <li><a href="#q61-2">問6.1 [2] 解答</a></li>
+                            <li><a href="#q61-3">問6.1 [3] 解答</a></li>
+                            <li><a href="#q61-4">問6.1 [4] 解答</a></li>
+                            <li><a href="#q62">問6.2 問題</a></li>
+                            <li><a href="#q62-1">問6.2 [1] 解答</a></li>
+                            <li><a href="#q62-2">問6.2 [2] 解答</a></li>
+                            <li><a href="#q63">問6.3 問題</a></li>
+                            <li><a href="#q63-1">問6.3 [1] 解答</a></li>
+                            <li><a href="#q63-2">問6.3 [2] 解答</a></li>
+                            <li><a href="#q63-3">問6.3 [3] 解答</a></li>
+                            <li><a href="#q64">問6.4 問題</a></li>
+                            <li><a href="#q64-1">問6.4 [1] 解答</a></li>
+                            <li><a href="#q64-2">問6.4 [2] 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第6章 概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第6章「連続型分布と標本分布」のキーポイント</div>
+                        <ul>
+                            <li><strong>正規分布 $N(\mu, \sigma^2)$：</strong>標準化 $Z=(X-\mu)/\sigma \sim N(0,1)$．$\Phi(z)$ は標準正規分布の累積分布関数（CDF）．</li>
+                            <li><strong>偏差値：</strong>$50 + 10 \times \dfrac{X-\mu}{\sigma}$（平均50・SD10に変換した標準化スコア）</li>
+                            <li><strong>四分位範囲（IQR）：</strong>$N(0,1)$ の下側 25% 点は $-0.675$，IQR $= 2 \times 0.675\sigma = 1.35\sigma$</li>
+                            <li><strong>切断正規分布の期待値：</strong>$X \sim N(\mu,\sigma^2)$ のとき $E[X \mid X \geq \mu] = \mu + \sigma\sqrt{2/\pi}$</li>
+                            <li><strong>2変量正規分布：</strong>$X_1=x_1$ を条件とした $X_2$ の条件付き期待値は $E[X_2]+\rho\dfrac{\sigma_2}{\sigma_1}(x_1-E[X_1])$</li>
+                            <li><strong>指数分布 $\mathrm{Exp}(\lambda)$：</strong>生存関数 $S(t)=e^{-\lambda t}$，密度 $f(t)=\lambda e^{-\lambda t}$，期待値 $1/\lambda$，上側 $\alpha$ 点は $(-\log \alpha)/\lambda$</li>
+                            <li><strong>混合正規分布：</strong>CDF $= \sum_j p_j \Phi\!\left(\frac{x-\mu_j}{\sigma_j}\right)$，合格率等は混合比率で重み付け．</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問6.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q61">
+                    <h2><i class="fas fa-question-circle"></i> 問6.1　正規分布と偏差値・四分位範囲・切断期待値</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            あるテストの受験者は全部で 1000 人であり，受験者全体でのテストの得点の分布は正規分布 $N(65, 10^2)$ で近似できるとする．このテストで A 君は 85 点，B 君は 60 点であった．なお，標準正規分布 $N(0,1)$ の確率密度関数は $f(z) = \dfrac{1}{\sqrt{2\pi}}\exp(-z^2/2)$ である．
+                        </p>
+                        <p><strong>[1]</strong>　A 君および B 君の偏差値はいくらか．</p>
+                        <p><strong>[2]</strong>　A 君の得点と B 君の得点の間に入る受験者の人数はおおよそ何人か．</p>
+                        <p><strong>[3]</strong>　このテストの全受験者の得点の箱ひげ図を描いた場合，四分位範囲（箱の長さ）はいくらか．</p>
+                        <p><strong>[4]</strong>　このテストで 65 点以上の受験者のみを集めた場合，彼・彼女らの得点の平均値はおおよそいくらか．</p>
+                    </div>
+
+                    <!-- [1] 偏差値 -->
+                    <div class="answer-block" id="q61-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 偏差値の定義</div>
+                            <p>
+                                偏差値は「平均 50・標準偏差 10」になるように変換した標準化スコアで，以下の式で計算します：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{偏差値} = 50 + 10 \times \frac{X - \mu}{\sigma} = 50 + 10z$$
+                            </div>
+                            <p>ここで $z=(X-\mu)/\sigma$ は標準化得点（$z$ スコア）です．</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">A 君（85 点）の偏差値</div>
+                            <div class="formula-block">
+                                $$z_A = \frac{85 - 65}{10} = \frac{20}{10} = 2$$
+                            </div>
+                            <div class="formula-block">
+                                $$\text{偏差値}_A = 50 + 10 \times 2 = 70$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">B 君（60 点）の偏差値</div>
+                            <div class="formula-block">
+                                $$z_B = \frac{60 - 65}{10} = \frac{-5}{10} = -0.5$$
+                            </div>
+                            <div class="formula-block">
+                                $$\text{偏差値}_B = 50 + 10 \times (-0.5) = 45$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>A 君の偏差値 $= 70$，B 君の偏差値 $= 45$</p>
+                        </div>
+                    </div>
+
+                    <!-- [2] 人数 -->
+                    <div class="answer-block" id="q61-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 2点の間に入る受験者の割合を標準正規分布で求める</div>
+                            <p>
+                                60 点（$z=-0.5$）から 85 点（$z=2$）の間に入る受験者の割合は：
+                            </p>
+                            <div class="formula-block">
+                                $$P(-0.5 \leq Z \leq 2) = \Phi(2) - \Phi(-0.5)$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">標準正規分布の確率を計算する</div>
+                            <p>
+                                $\Phi(-0.5) = 1 - \Phi(0.5) = 1 - 0.6915 = 0.3085$（$\Phi$ は左側の面積）
+                            </p>
+                            <div class="formula-block">
+                                $$\Phi(2) - \Phi(-0.5) = 0.9772 - 0.3085 = 0.6687$$
+                            </div>
+                            <p>
+                                あるいは，$P(Z > 2) \approx 0.0228$，$P(Z > 0.5) \approx 0.3085$ と補集合で考えると：
+                            </p>
+                            <div class="formula-block">
+                                $$P(-0.5 \leq Z \leq 2) = 1 - P(Z > 2) - P(Z \leq -0.5) = 1 - 0.0228 - 0.3085 = 0.6687$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">人数を求める</div>
+                            <div class="formula-block">
+                                $$1000 \times 0.6687 \approx 669\;\text{人}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>おおよそ $669$ 人</p>
+                        </div>
+                    </div>
+
+                    <!-- [3] 四分位範囲 -->
+                    <div class="answer-block" id="q61-3">
+                        <span class="prob-badge badge-a">[3] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 四分位範囲（IQR）の求め方</div>
+                            <p>
+                                四分位範囲 $= $ 第3四分位数（上側 25% 点）$-$ 第1四分位数（下側 25% 点）
+                            </p>
+                            <p>
+                                標準正規分布 $N(0,1)$ の下側 25% 点（$\Phi(z_{0.25}) = 0.25$ となる $z$）は $z_{0.25} = -0.675$ です．
+                                対称性から上側 25% 点は $z_{0.75} = +0.675$ です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$N(65, 10^2)$ の四分位数を求める</div>
+                            <p>
+                                $X \sim N(65, 10^2)$ において，$P(X \leq x_{0.25}) = 0.25$ となる $x_{0.25}$ は：
+                            </p>
+                            <div class="formula-block">
+                                $$\Phi\!\left(\frac{x_{0.25} - 65}{10}\right) = 0.25 \implies \frac{x_{0.25} - 65}{10} = -0.675$$
+                            </div>
+                            <div class="formula-block">
+                                $$x_{0.25} = 65 - 0.675 \times 10 = 58.25\;\text{点}$$
+                            </div>
+                            <p>
+                                対称性より上側 25% 点（第3四分位数）：
+                            </p>
+                            <div class="formula-block">
+                                $$x_{0.75} = 65 + 0.675 \times 10 = 71.75\;\text{点}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">四分位範囲を求める</div>
+                            <div class="formula-block">
+                                $$\text{IQR} = x_{0.75} - x_{0.25} = 71.75 - 58.25 = 2 \times 0.675 \times 10 = 13.5 \approx 14\;\text{点}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>四分位範囲 $\approx 14$ 点（正確には $13.5$ 点）</p>
+                            <p style="font-size:0.92em;">
+                                一般に $N(\mu,\sigma^2)$ の四分位範囲は $2 \times 0.675 \times \sigma = 1.35\sigma$ です．
+                                ここでは $\sigma = 10$ なので，IQR $= 1.35 \times 10 = 13.5$ 点となります．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- [4] 切断期待値 -->
+                    <div class="answer-block" id="q61-4">
+                        <span class="prob-badge badge-a">[4] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 切断正規分布の期待値</div>
+                            <p>
+                                「65 点以上の受験者のみの平均」は，$X \sim N(65, 10^2)$ を $X \geq 65$ に切断したときの条件付き期待値 $E[X \mid X \geq 65]$ です．
+                            </p>
+                            <p>
+                                平均値 $\mu = 65$ なので，$X \geq 65$ は $X \geq \mu$ に相当します．
+                                標準化変数 $Z = (X-65)/10$ を用いると：
+                            </p>
+                            <div class="formula-block">
+                                $$E[X \mid X \geq 65] = 65 + 10\,E[Z \mid Z \geq 0]$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$E[Z \mid Z \geq 0]$ を計算する</div>
+                            <p>
+                                $Z \sim N(0,1)$，$Z \geq 0$ に切断したときの期待値：
+                            </p>
+                            <div class="formula-block">
+                                $$E[Z \mid Z \geq 0] = \frac{\displaystyle\int_0^\infty z \cdot \frac{1}{\sqrt{2\pi}}e^{-z^2/2}\,dz}{P(Z \geq 0)} = \frac{\displaystyle\int_0^\infty z \cdot \frac{1}{\sqrt{2\pi}}e^{-z^2/2}\,dz}{1/2}$$
+                            </div>
+                            <p>
+                                分子の積分：$u = z^2/2$ と置換すると $\displaystyle\int_0^\infty z e^{-z^2/2}\,dz = \left[-e^{-z^2/2}\right]_0^\infty = 1$
+                            </p>
+                            <div class="formula-block">
+                                $$E[Z \mid Z \geq 0] = \frac{1/\sqrt{2\pi}}{1/2} = \sqrt{\frac{2}{\pi}} \approx 0.798$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">元の得点スケールに戻す</div>
+                            <div class="formula-block">
+                                $$E[X \mid X \geq 65] = 65 + 10 \times 0.798 = 65 + 7.98 \approx 73\;\text{点}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>65 点以上の受験者の得点の平均 $\approx 73$ 点</p>
+                            <p style="font-size:0.92em;">
+                                直感的には「65点以上（全体の上位50%）のグループの平均は65点よりも約8点高い73点」となります．
+                                これは，切断された正規分布では上側の裾が省かれるため，平均が上方にシフトするためです．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問6.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q62">
+                    <h2><i class="fas fa-question-circle"></i> 問6.2　2変量正規分布と条件付き期待値</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            全国規模の英語能力試験は Listening と Reading からなり，それらの合計が Total として算出される．ある回の試験では，Listening，Reading および Total の点数の平均点は 305 点，250 点，555 点であり，標準偏差はそれぞれ 80 点，90 点，150 点であった．
+                        </p>
+                        <p><strong>[1]</strong>　この回の試験で，Listening の点数と Reading の点数の間の相関係数はいくらか．</p>
+                        <p><strong>[2]</strong>　Listening と Reading の点数が 2 変量正規分布に従うとき，この回の試験で Listening の点数が 335 点だった人たちの Reading の点数の条件付き期待値の推定値はいくらか．</p>
+                    </div>
+
+                    <!-- [1] -->
+                    <div class="answer-block" id="q62-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> Total の分散から共分散を求める</div>
+                            <p>
+                                $\mathrm{Total} = \mathrm{Listening} + \mathrm{Reading}$ であり，分散の加法公式から：
+                            </p>
+                            <div class="formula-block">
+                                $$V[\mathrm{Total}] = V[L] + V[R] + 2\,\mathrm{Cov}[L, R]$$
+                            </div>
+                            <p>
+                                これを変形すると共分散が求められます：
+                            </p>
+                            <div class="formula-block">
+                                $$\mathrm{Cov}[L, R] = \frac{V[\mathrm{Total}] - V[L] - V[R]}{2}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">数値を代入して共分散を求める</div>
+                            <div class="formula-block">
+                                $$\mathrm{Cov}[L, R] = \frac{150^2 - 80^2 - 90^2}{2} = \frac{22500 - 6400 - 8100}{2} = \frac{8000}{2} = 4000$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">相関係数を求める</div>
+                            <div class="formula-block">
+                                $$\rho = \frac{\mathrm{Cov}[L, R]}{\sigma_L \cdot \sigma_R} = \frac{4000}{80 \times 90} = \frac{4000}{7200} \approx 0.556 \approx 0.56$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>相関係数 $\approx 0.56$</p>
+                            <p style="font-size:0.92em;">
+                                英語試験の Listening と Reading の間に正の相関があることは直感に合います（英語が得意な人は両方高い傾向がある）．
+                                0.56 は中程度の正の相関です．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- [2] -->
+                    <div class="answer-block" id="q62-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 2変量正規分布の条件付き期待値</div>
+                            <p>
+                                $(X, Y)$ が 2 変量正規分布に従うとき，$X = x$ を条件とした $Y$ の条件付き期待値は：
+                            </p>
+                            <div class="formula-block">
+                                $$E[Y \mid X = x] = E[Y] + \rho \cdot \frac{\sigma_Y}{\sigma_X}(x - E[X])$$
+                            </div>
+                            <p>
+                                これは「$X$ の平均からのズレに比例して，$Y$ の期待値もズレる」という式です．比例係数 $\rho\,(\sigma_Y/\sigma_X)$ は回帰係数に対応します．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$X$ = Listening，$Y$ = Reading として代入する</div>
+                            <table class="data-table" style="max-width:420px; margin:0 auto 10px;">
+                                <thead><tr><th>記号</th><th>意味</th><th>値</th></tr></thead>
+                                <tbody>
+                                    <tr><td>$E[X]$</td><td>Listening の平均</td><td>305</td></tr>
+                                    <tr><td>$E[Y]$</td><td>Reading の平均</td><td>250</td></tr>
+                                    <tr><td>$\sigma_X$</td><td>Listening の SD</td><td>80</td></tr>
+                                    <tr><td>$\sigma_Y$</td><td>Reading の SD</td><td>90</td></tr>
+                                    <tr><td>$\rho$</td><td>相関係数</td><td>0.556</td></tr>
+                                    <tr><td>$x$</td><td>今回の Listening 点</td><td>335</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="formula-block">
+                                $$E[Y \mid X = 335] = 250 + 0.556 \times \frac{90}{80} \times (335 - 305)$$
+                            </div>
+                            <div class="formula-block">
+                                $$= 250 + 0.556 \times 1.125 \times 30 = 250 + 18.765 \approx 269$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>Listening が 335 点の人の Reading の条件付き期待値 $\approx 269$ 点</p>
+                            <p style="font-size:0.92em;">
+                                Listening の平均 305 点より 30 点高いため，相関係数の効果により Reading の期待値も 250 点より約 19 点高い 269 点になります．
+                                ただし相関係数が 1 でないため，Listening が 30 点高くても Reading が同じだけ高くなるわけではない点に注意が必要です．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問6.3                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q63">
+                    <h2><i class="fas fa-question-circle"></i> 問6.3　指数分布の密度・期待値・上側分位点の推定</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある医学研究で，患者が登録された時点から死亡までの時間 $t$（$t \geq 0$）に関する生存関数について，パラメータ $\lambda$ をもつ関数 $S(t)$ を次のように仮定した：
+                        </p>
+                        <div class="formula-block">
+                            $$S(t) = P(T > t) = \exp(-\lambda t)$$
+                        </div>
+                        <p><strong>[1]</strong>　確率変数 $T$ の確率密度関数 $f(t)$ を求めよ．</p>
+                        <p><strong>[2]</strong>　確率密度関数 $f(t)$ をもつ分布の平均と上側 25% 点を求めよ．</p>
+                        <p><strong>[3]</strong>　10 人の死亡までの時間を調べ，確率変数 $T$ の標本平均を求めたところ 3.0 年となった．[2] の結果に基づき，$T$ の上側 25% 点の推定値を求めるといくらになるか．ただし，必要に応じて $\log 2 \approx 0.7$，$\log 4 \approx 1.4$ を用いてよい．</p>
+                    </div>
+
+                    <!-- [1] -->
+                    <div class="answer-block" id="q63-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 生存関数・累積分布関数・確率密度関数の関係</div>
+                            <p>
+                                <strong>生存関数</strong>$S(t) = P(T > t) = 1 - F(t)$ なので，累積分布関数は $F(t) = 1 - S(t)$．
+                                確率密度関数は累積分布関数の導関数です：
+                            </p>
+                            <div class="formula-block">
+                                $$f(t) = F'(t) = \frac{d}{dt}[1 - S(t)] = -S'(t)$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$S(t) = e^{-\lambda t}$ を微分する</div>
+                            <p>
+                                $t \geq 0$ のとき，$F(t) = 1 - e^{-\lambda t}$ を $t$ で微分します：
+                            </p>
+                            <div class="formula-block">
+                                $$f(t) = \frac{d}{dt}(1 - e^{-\lambda t}) = \lambda e^{-\lambda t}$$
+                            </div>
+                            <p>
+                                $t < 0$ では $F(t) = 0$ なので $f(t) = 0$．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$f(t) = \begin{cases} \lambda e^{-\lambda t} & (t \geq 0) \\ 0 & (t < 0) \end{cases}$$
+                            </div>
+                            <p style="font-size:0.92em;">これはパラメータ $\lambda$ の指数分布の確率密度関数です．</p>
+                        </div>
+                    </div>
+
+                    <!-- [2] -->
+                    <div class="answer-block" id="q63-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="step-box">
+                            <div class="step-title">平均 $E[T]$ を求める（部分積分）</div>
+                            <div class="formula-block">
+                                $$E[T] = \int_0^\infty t \lambda e^{-\lambda t}\,dt$$
+                            </div>
+                            <p>
+                                部分積分：$u = t$，$dv = \lambda e^{-\lambda t}\,dt$ とおくと $du = dt$，$v = -e^{-\lambda t}$ なので：
+                            </p>
+                            <div class="formula-block">
+                                $$E[T] = \lambda\left[\left(-\frac{t}{\lambda}e^{-\lambda t}\right)_0^\infty + \frac{1}{\lambda}\int_0^\infty e^{-\lambda t}\,dt\right]
+                                = \lambda\left[0 + \frac{1}{\lambda}\cdot\frac{1}{\lambda}\right] = \frac{1}{\lambda}$$
+                            </div>
+                            <p style="font-size:0.9em;">
+                                ※ $\left[-te^{-\lambda t}\right]_0^\infty = 0$（$t \to \infty$ で $te^{-\lambda t} \to 0$）
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">上側 25% 点を求める</div>
+                            <p>
+                                上側 25% 点 $t_{0.25}$ とは，$P(T > t_{0.25}) = 0.25$，すなわち $S(t_{0.25}) = 1/4$ を満たす $t$ です：
+                            </p>
+                            <div class="formula-block">
+                                $$e^{-\lambda t_{0.25}} = \frac{1}{4}$$
+                            </div>
+                            <p>両辺の自然対数をとると：</p>
+                            <div class="formula-block">
+                                $$-\lambda t_{0.25} = \log\frac{1}{4} = -\log 4$$
+                            </div>
+                            <div class="formula-block">
+                                $$t_{0.25} = \frac{\log 4}{\lambda}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>平均 $= \dfrac{1}{\lambda}$，上側 25% 点 $= \dfrac{\log 4}{\lambda}$</p>
+                        </div>
+                    </div>
+
+                    <!-- [3] -->
+                    <div class="answer-block" id="q63-3">
+                        <span class="prob-badge badge-a">[3] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> パラメータを標本平均で推定する（モーメント法）</div>
+                            <p>
+                                $T$ の期待値は $E[T] = 1/\lambda$ なので，「期待値 $=$ 標本平均 $\bar{T}$」とおいてパラメータを推定します：
+                            </p>
+                            <div class="formula-block">
+                                $$\frac{1}{\hat{\lambda}} = \bar{T} = 3.0 \implies \hat{\lambda} = \frac{1}{3}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">上側 25% 点の推定値を求める</div>
+                            <p>
+                                $\hat{\lambda} = 1/3$ を [2] で求めた上側 25% 点の公式に代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$\hat{t}_{0.25} = \frac{\log 4}{\hat{\lambda}} = \log 4 \times \frac{1}{\hat{\lambda}} = \log 4 \times \bar{T} = 1.4 \times 3.0 = 4.2\;\text{年}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>上側 25% 点の推定値 $= 4.2$ 年</p>
+                            <p style="font-size:0.92em;">
+                                「平均生存期間が 3.0 年のとき，25% の患者が生存し続ける（上側 25% 点）のは約 4.2 年」と解釈できます．
+                                平均の $\log 4 \approx 1.4$ 倍が上側 25% 点になります．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問6.4                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q64">
+                    <h2><i class="fas fa-question-circle"></i> 問6.4　混合正規分布と偏差値・合格率</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある大学の文理融合系学部における統計学の講義の受講生 500 名のうち，300 名は文系，200 名は理系の学生で，500 名全員が期末試験を受験した．期末試験は 100 点満点で，受講生全体の成績の分布は，文系が平均 65 点・標準偏差 4 点の正規分布 $N(65, 4^2)$，理系が平均 85 点・標準偏差 3 点の正規分布 $N(85, 3^2)$ という 2 つの正規分布の混合正規分布で近似できた．
+                        </p>
+                        <p><strong>[1]</strong>　このテストにおいて，文系の A さんは 67 点，理系の B さんは 82 点であった．文系の学生のなかにおける A さんの偏差値と，理系の学生のなかにおける B さんの偏差値はいくらか．</p>
+                        <p><strong>[2]</strong>　この期末試験では 60 点以上を合格とした．この試験の合格率はおよそ何%か．</p>
+                    </div>
+
+                    <!-- [1] -->
+                    <div class="answer-block" id="q64-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 偏差値は「自分が属するグループの中での相対位置」</div>
+                            <p>
+                                A さんは文系なので，文系の分布 $N(65, 4^2)$ を基準に偏差値を計算します．
+                                B さんは理系なので，理系の分布 $N(85, 3^2)$ を基準にします．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">A さん（文系，67 点）の偏差値</div>
+                            <p>文系の平均 $\mu = 65$，標準偏差 $\sigma = 4$ を使用：</p>
+                            <div class="formula-block">
+                                $$\text{偏差値}_A = 50 + 10 \times \frac{67 - 65}{4} = 50 + 10 \times \frac{2}{4} = 50 + 5 = 55$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">B さん（理系，82 点）の偏差値</div>
+                            <p>理系の平均 $\mu = 85$，標準偏差 $\sigma = 3$ を使用：</p>
+                            <div class="formula-block">
+                                $$\text{偏差値}_B = 50 + 10 \times \frac{82 - 85}{3} = 50 + 10 \times \frac{-3}{3} = 50 - 10 = 40$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>A さん（文系）の偏差値 $= 55$，B さん（理系）の偏差値 $= 40$</p>
+                            <p style="font-size:0.92em;">
+                                A さんは文系の中で平均より上（偏差値 55），B さんは理系の中で平均より下（偏差値 40）という位置づけです．
+                                絶対点数（67 点 vs 82 点）で比較するのではなく，各グループ内での相対的な位置を偏差値は表しています．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- [2] -->
+                    <div class="answer-block" id="q64-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 混合正規分布の確率の求め方</div>
+                            <p>
+                                混合正規分布では，全体の確率は各成分の確率を<strong>混合比率で重み付けして加算</strong>します：
+                            </p>
+                            <div class="formula-block">
+                                $$P(X \geq 60) = p_{\text{文}} \cdot P_{\text{文}}(X \geq 60) + p_{\text{理}} \cdot P_{\text{理}}(X \geq 60)$$
+                            </div>
+                            <p>
+                                混合比率：文系 $p_{\text{文}} = 300/500 = 3/5$，理系 $p_{\text{理}} = 200/500 = 2/5$
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：文系の合格確率 $P_{\text{文}}(X \geq 60)$ を求める</div>
+                            <p>文系 $X \sim N(65, 4^2)$：</p>
+                            <div class="formula-block">
+                                $$P_{\text{文}}(X \geq 60) = P\!\left(Z \geq \frac{60-65}{4}\right) = P(Z \geq -1.25) = \Phi(1.25) \approx 0.8944$$
+                            </div>
+                            <p style="font-size:0.9em;">
+                                $\Phi(1.25) = 1 - \Phi(-1.25) = 1 - 0.1056 = 0.8944$（より正確には $P(Z \geq -1.25) = 1 - P(Z < -1.25) = 1 - 0.1056 = 0.8944$）
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：理系の合格確率 $P_{\text{理}}(X \geq 60)$ を求める</div>
+                            <p>理系 $X \sim N(85, 3^2)$：</p>
+                            <div class="formula-block">
+                                $$P_{\text{理}}(X \geq 60) = P\!\left(Z \geq \frac{60-85}{3}\right) = P(Z \geq -8.33) \approx 1.0000$$
+                            </div>
+                            <p style="font-size:0.9em;">
+                                平均 85 点から 25 点も下の 60 点は，$z = -8.33$ という極端な値なので，ほぼ 100% の理系学生が 60 点以上です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 3：混合確率を計算する</div>
+                            <div class="formula-block">
+                                $$P(X \geq 60) = \frac{3}{5} \times 0.8944 + \frac{2}{5} \times 1.0000$$
+                            </div>
+                            <div class="formula-block">
+                                $$= 0.5366 + 0.4000 = 0.9366 \approx 94\%$$
+                            </div>
+                            <p style="font-size:0.9em;">
+                                より丁寧に書くと：
+                                $P(X \geq 60) = 1 - P(X < 60) = 1 - \left[\dfrac{3}{5}\Phi(-1.25) + \dfrac{2}{5}\Phi(-8.33)\right]$
+                                $= 1 - \left[\dfrac{3}{5} \times 0.1056 + \dfrac{2}{5} \times 0\right]$
+                                $= 1 - 0.0634 = 0.9366$
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>合格率 $\approx 94\%$</p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 結果の解釈</div>
+                            <table class="data-table" style="max-width:500px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>グループ</th><th>人数・比率</th><th>分布</th><th>60点以上の割合</th><th>合格者数</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>文系</td><td>300人（3/5）</td><td>$N(65, 4^2)$</td><td>約89.4%</td><td>約268人</td></tr>
+                                    <tr><td>理系</td><td>200人（2/5）</td><td>$N(85, 3^2)$</td><td>ほぼ100%</td><td>約200人</td></tr>
+                                    <tr><td><strong>合計</strong></td><td>500人</td><td>混合分布</td><td><strong>約93.7%</strong></td><td><strong>約468人</strong></td></tr>
+                                </tbody>
+                            </table>
+                            <p style="font-size:0.92em; margin-top:0.6em;">
+                                合格率が低い文系でも約 89% が合格しており，理系はほぼ全員合格するため，全体の合格率は 94% という高い値になっています．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

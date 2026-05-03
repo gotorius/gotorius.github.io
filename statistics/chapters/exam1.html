@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第1章 章末問題解説 - 事象と確率</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        /* 確率ツリー */
+        .prob-tree {
+            background: #f8f9fa;
+            border: 1px solid #d0d8ef;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 0.8em 0;
+            font-size: 0.9em;
+            line-height: 2;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第1章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 1 — 章末問題解説</span>
+            <h1>事象と確率<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">条件付き確率・ベイズの定理・全確率の定理・期待値・分散</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter1.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第1章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q111">問1.1 問題</a></li>
+                            <li><a href="#q111-1">問1.1 [1] 解答</a></li>
+                            <li><a href="#q111-2">問1.1 [2] 解答</a></li>
+                            <li><a href="#q112">問1.2 問題</a></li>
+                            <li><a href="#q112-1">問1.2 [1] 解答</a></li>
+                            <li><a href="#q112-2">問1.2 [2] 解答</a></li>
+                            <li><a href="#q113">問1.3 問題</a></li>
+                            <li><a href="#q113-1">問1.3 [1] 解答</a></li>
+                            <li><a href="#q113-2">問1.3 [2] 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第1章 概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第1章「事象と確率」のキーポイント</div>
+                        <ul>
+                            <li><strong>条件付き確率：</strong>$P(B|A) = \dfrac{P(A \cap B)}{P(A)}$　— $A$ が起きたという条件のもとで $B$ が起きる確率．</li>
+                            <li><strong>乗法定理：</strong>$P(A \cap B) = P(A) \times P(B|A)$　— 積事象の確率は順番に掛ける．</li>
+                            <li><strong>全確率の定理：</strong>事象 $A_1, \ldots, A_K$ が全事象の排反な分割のとき，$P(B) = \displaystyle\sum_{i=1}^K P(B|A_i)P(A_i)$</li>
+                            <li><strong>ベイズの定理：</strong>$P(A_i|B) = \dfrac{P(B|A_i)P(A_i)}{\displaystyle\sum_{j=1}^K P(B|A_j)P(A_j)}$　— 結果 $B$ を観測した後の原因 $A_i$ の確率（事後確率）を求める．</li>
+                            <li><strong>独立性：</strong>$P(A \cap B) = P(A) \times P(B)$，または等価に $P(B|A) = P(B)$．</li>
+                            <li><strong>期待値：</strong>$E[X] = \displaystyle\sum_x x\,p(x)$，　<strong>分散：</strong>$V[X] = E[X^2] - (E[X])^2$</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問1.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q111">
+                    <h2><i class="fas fa-question-circle"></i> 問1.1　大学入試の合格率（全確率の定理・ベイズの定理）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            男女共学の A 大学の入学試験では，ある年，受験生に占める女子の比率は 0.4 で，
+                            合格率は，女子が 0.5 で男子が 0.4 であった．
+                        </p>
+                        <p><strong>[1]</strong>　この大学全体の合格率を求めよ．</p>
+                        <p><strong>[2]</strong>　この大学の合格者名簿のなかからランダムに選んだ 1 人が女子である確率を求めよ．</p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q111-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 全確率の定理</div>
+                            <p>
+                                全事象を「女子受験生」と「男子受験生」という2つの排反な部分に分けます．
+                                このとき，どちらの部分でも「合格」するという事象に対して，
+                                <strong>全確率の定理</strong>を適用します：
+                            </p>
+                            <div class="formula-block">
+                                $$P(B) = P(B|A_1)P(A_1) + P(B|A_2)P(A_2)$$
+                            </div>
+                            <p>
+                                ここで $A_1 =$ 「女子」，$A_2 =$ 「男子」，$B =$ 「合格」とします．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">数値を当てはめる</div>
+                            <p>問題の設定を整理します：</p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>女子の比率：$P(A_1) = 0.4$，男子の比率：$P(A_2) = 0.6$（女子でなければ男子なので $1-0.4$）</li>
+                                <li>女子の合格率：$P(B|A_1) = 0.5$</li>
+                                <li>男子の合格率：$P(B|A_2) = 0.4$</li>
+                            </ul>
+                            <div class="formula-block">
+                                $$P(B) = \underbrace{0.5 \times 0.4}_{\text{女子が合格}} + \underbrace{0.4 \times 0.6}_{\text{男子が合格}}
+                                = 0.20 + 0.24 = 0.44$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>大学全体の合格率 $= \mathbf{0.44}$（44%）</p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q111-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> ベイズの定理のイメージ</div>
+                            <p>
+                                [1] では「合格率」を求めました（原因 → 結果の方向）．
+                                [2] では「合格者のうち女子の割合」を求めます（<strong>結果 → 原因の方向</strong>）．
+                                これがベイズの定理を使う典型的な状況です．
+                            </p>
+                            <p>
+                                $W =$ 「女子である」，$S =$ 「合格する」とすると，求める確率は $P(W|S)$．
+                            </p>
+                            <div class="formula-block">
+                                $$P(W|S) = \frac{P(S|W)\,P(W)}{P(S)}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">数値を代入する</div>
+                            <p>
+                                $P(S|W) = 0.5$，$P(W) = 0.4$，$P(S) = 0.44$（[1] の結果）を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$P(W|S) = \frac{0.5 \times 0.4}{0.44} = \frac{0.20}{0.44} = \frac{20}{44} = \frac{5}{11}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>合格者の中から選んだ1人が女子である確率 $= \dfrac{5}{11} \approx 0.455$（約45.5%）</p>
+                            <p style="margin-top:0.5em;font-size:0.92em;">
+                                受験生全体の女子比率は 0.4（40%）でしたが，女子の合格率（0.5）が男子（0.4）より高いため，
+                                合格者の中では女子の比率が $5/11 \approx 45.5\%$ と高くなっています．
+                                ベイズの定理は「合格している」という条件を加えることで，確率が更新されることを示しています．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問1.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q112">
+                    <h2><i class="fas fa-question-circle"></i> 問1.2　特殊なサイコロの確率分布（期待値・分散）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            1, 2, 3 のいずれかの数字が各面に 1 つずつ書かれた正六面体のサイコロがある．
+                            また，1, 2, 3 のそれぞれの数字は少なくとも 1 つの面に書かれている．
+                            サイコロを投げたときに出る目を確率変数 $X$ とすると，
+                            確率 $P(X=1) = P(X=2)$ であり，$X$ の期待値は 2 より大であった．
+                            ただし，サイコロを投げたときに各面が出る確率は 1/6 とする．
+                        </p>
+                        <p><strong>[1]</strong>　確率変数 $X$ の期待値と分散を求めよ．</p>
+                        <p>
+                            <strong>[2]</strong>　このサイコロを 2 度投げ，
+                            異なる目が出た場合は大きいほうの数字，
+                            同じ目が出た場合はその数字を確率変数 $Y$ とする．
+                            確率 $P(Y=3)$ を求めよ．
+                        </p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q112-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <h3>確率関数の特定</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：条件を整理して $P(X=1), P(X=2)$ の値を絞り込む</div>
+                            <p>
+                                6面のサイコロに 1, 2, 3 が書かれており，各面の確率は 1/6 です．
+                                $P(X=1) = P(X=2)$ とし，この共通の値を $p$ とおきます．
+                                3つの確率の合計は 1 なので：
+                            </p>
+                            <div class="formula-block">
+                                $$P(X=1) + P(X=2) + P(X=3) = 1 \implies 2p + P(X=3) = 1$$
+                            </div>
+                            <p>
+                                サイコロの各面には 1/6 の確率があり，$P(X=k)$ は $k$ が書かれている面の数 / 6 です．
+                                少なくとも 1 面ずつあるという条件から，各面の数は 1 以上の整数です．
+                                $P(X=1) = P(X=2)$ なので，「1」と「2」が書かれた面の数は等しい必要があります．
+                            </p>
+                            <p>
+                                整数でかつ確率の合計が 1 になるケースを考えると：
+                            </p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>$p = 1/6$（1の面が1枚，2の面が1枚，3の面が4枚）→ $P(X=3) = 4/6$</li>
+                                <li>$p = 2/6 = 1/3$（1の面が2枚，2の面が2枚，3の面が2枚）→ $P(X=3) = 2/6$</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：「期待値が 2 より大」の条件で絞り込む</div>
+                            <p>
+                                $p = 2/6 = 1/3$ の場合（1, 2, 3 が各 2 面ずつ）：
+                            </p>
+                            <div class="formula-block">
+                                $$E[X] = 1 \times \frac{2}{6} + 2 \times \frac{2}{6} + 3 \times \frac{2}{6} = \frac{2+4+6}{6} = 2$$
+                            </div>
+                            <p>
+                                これは「2 より大」ではなく「2 に等しい」ので，<strong>条件に反する</strong>．
+                            </p>
+                            <p>
+                                したがって $p = 1/6$ と決まります．確率分布表：
+                            </p>
+                            <table class="data-table" style="max-width:300px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>$x$</th><th>1</th><th>2</th><th>3</th><th>合計</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$p(x)$</td><td>$1/6$</td><td>$1/6$</td><td>$4/6$</td><td>$1$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 3：期待値の計算</div>
+                            <div class="formula-block">
+                                $$E[X] = 1 \times \frac{1}{6} + 2 \times \frac{1}{6} + 3 \times \frac{4}{6}
+                                = \frac{1}{6} + \frac{2}{6} + \frac{12}{6}
+                                = \frac{15}{6} = \frac{5}{2}$$
+                            </div>
+                            <p>確かに $5/2 = 2.5 > 2$ なので条件を満たします．</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 4：分散の計算（$V[X] = E[X^2] - \mu^2$）</div>
+                            <p>
+                                まず $E[X^2]$ を求めます：
+                            </p>
+                            <div class="formula-block">
+                                $$E[X^2] = 1^2 \times \frac{1}{6} + 2^2 \times \frac{1}{6} + 3^2 \times \frac{4}{6}
+                                = \frac{1}{6} + \frac{4}{6} + \frac{36}{6}
+                                = \frac{41}{6}$$
+                            </div>
+                            <p>
+                                $\mu = E[X] = 5/2$ なので：
+                            </p>
+                            <div class="formula-block">
+                                $$V[X] = E[X^2] - \mu^2
+                                = \frac{41}{6} - \left(\frac{5}{2}\right)^2
+                                = \frac{41}{6} - \frac{25}{4}
+                                = \frac{82}{12} - \frac{75}{12}
+                                = \frac{7}{12}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>
+                                期待値：$E[X] = \dfrac{5}{2}$，　分散：$V[X] = \dfrac{7}{12}$
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q112-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> $Y = 3$ になる条件を整理する</div>
+                            <p>
+                                $Y$ は「2回投げたときの大きいほうの目（または同じ目）」です．
+                                $Y = 3$ となるのは，「少なくとも一方で 3 が出た」場合です．
+                            </p>
+                            <p>
+                                <strong>余事象を使う</strong>と計算が楽になります：
+                            </p>
+                            <div class="formula-block">
+                                $$P(Y=3) = 1 - P(Y \leq 2)$$
+                            </div>
+                            <p>
+                                $Y \leq 2$ とは「2回とも 3 以外（1か2）が出る」ことを意味します．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$P(Y \leq 2)$ を計算する</div>
+                            <p>
+                                1回の投げで $X \leq 2$（1か2が出る）確率は：
+                            </p>
+                            <div class="formula-block">
+                                $$P(X \leq 2) = P(X=1) + P(X=2) = \frac{1}{6} + \frac{1}{6} = \frac{2}{6} = \frac{1}{3}$$
+                            </div>
+                            <p>
+                                2回の投げは<strong>独立</strong>なので：
+                            </p>
+                            <div class="formula-block">
+                                $$P(Y \leq 2) = P(X_1 \leq 2,\; X_2 \leq 2)
+                                = P(X_1 \leq 2) \times P(X_2 \leq 2)
+                                = \left(\frac{1}{3}\right)^2 = \frac{1}{9}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">余事象で $P(Y=3)$ を求める</div>
+                            <div class="formula-block">
+                                $$P(Y=3) = 1 - P(Y \leq 2) = 1 - \frac{1}{9} = \frac{8}{9}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$P(Y=3) = \dfrac{8}{9}$</p>
+                            <p style="margin-top:0.5em;font-size:0.92em;">
+                                直感的には，$P(X=3) = 4/6 \approx 0.67$ と「3」が出る確率が非常に高いため，
+                                2回のうち少なくとも1回は3が出る確率が $8/9 \approx 89\%$ と高くなることは自然です．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問1.3                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q113">
+                    <h2><i class="fas fa-question-circle"></i> 問1.3　2段階検査のベイズの定理（偽陽性・感度・特異度）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            高齢者（65歳以上）のうち 100 人に 1 人がある病気にかかっているとする．
+                            この病気には検査 1，検査 2 の 2 種類の検査がある．
+                        </p>
+                        <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                            <li><strong>検査 1：</strong>本当に病気にかかっている場合に 99.0% の確率で陽性反応（感度 99%）．病気でない場合でも 2% の確率で陽性反応（偽陽性率 2%）．</li>
+                            <li><strong>検査 2：</strong>検査 1 で陽性と診断された者に対して行う．病気の場合は 90% で陽性（感度 90%），病気でない場合は 10% で陽性（偽陽性率 10%）．</li>
+                        </ul>
+                        <p><strong>[1]</strong>　高齢者の A さんが検査 1 を受診したところ，結果は「陽性」であった．A さんが本当にその病気にかかっている確率を求めよ．</p>
+                        <p><strong>[2]</strong>　検査 1 で「陽性」と判定された A さんは，次に検査 2 を受診し，再び「陽性」と判定された．A さんが本当にその病気にかかっている確率を求めよ．</p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q113-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> ベイズの定理の設定</div>
+                            <p>
+                                事象を次のように定義します：
+                            </p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>$X$ ：「その病気にかかっている」</li>
+                                <li>$X^c$ ：「その病気にかかっていない」</li>
+                                <li>$Y_1$ ：「検査 1 の結果が陽性」</li>
+                            </ul>
+                            <p>求める確率は $P(X|Y_1)$（検査 1 が陽性のとき，本当に病気である確率）．</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：問題の数値を確率に対応させる</div>
+                            <table class="data-table" style="max-width:500px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>確率</th><th>意味</th><th>値</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$P(X)$</td><td>病気の有病率</td><td>$1/100 = 0.01$</td></tr>
+                                    <tr><td>$P(X^c)$</td><td>病気でない確率</td><td>$99/100 = 0.99$</td></tr>
+                                    <tr><td>$P(Y_1|X)$</td><td>病気の人が検査1で陽性（感度）</td><td>$0.99$</td></tr>
+                                    <tr><td>$P(Y_1|X^c)$</td><td>病気でない人が検査1で陽性（偽陽性率）</td><td>$0.02$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：検査 1 が陽性になる全確率 $P(Y_1)$ を求める</div>
+                            <p>
+                                全確率の定理を適用します：
+                            </p>
+                            <div class="formula-block">
+                                $$P(Y_1) = P(Y_1|X)\,P(X) + P(Y_1|X^c)\,P(X^c)$$
+                                $$= 0.99 \times 0.01 + 0.02 \times 0.99
+                                = 0.0099 + 0.0198 = 0.0297$$
+                            </div>
+                            <p>
+                                注：$0.0099 = 0.99 \times 0.01$ と $0.0198 = 0.02 \times 0.99$ という2つの項をよく見ると，
+                                実は <strong>$0.99 \times (0.01 + 0.02)$</strong> と因数分解できます（次の Step で利用します）．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 3：ベイズの定理で事後確率を計算する</div>
+                            <div class="formula-block">
+                                $$P(X|Y_1) = \frac{P(Y_1|X)\,P(X)}{P(Y_1)}
+                                = \frac{0.99 \times 0.01}{0.99 \times 0.01 + 0.02 \times 0.99}$$
+                            </div>
+                            <p>
+                                分子・分母を $0.99$ で割ると：
+                            </p>
+                            <div class="formula-block">
+                                $$P(X|Y_1)= \frac{0.01}{0.01 + 0.02} = \frac{0.01}{0.03} = \frac{1}{3}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$P(X|Y_1) = \dfrac{1}{3} \approx 33.3\%$</p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 直感に反する結果？</div>
+                            <p>
+                                感度 99% の検査で陽性が出たのに，本当に病気である確率は $1/3$ しかありません．
+                                これは「有病率が低い（1%）のに，偽陽性率も存在する（2%）」ことの組み合わせが原因です．
+                            </p>
+                            <p>
+                                100 人の高齢者を検査した場合の内訳（1000 人で考えると：）
+                            </p>
+                            <table class="data-table" style="max-width:460px; margin:0 auto;">
+                                <thead>
+                                    <tr><th></th><th>病気 (10 人)</th><th>病気でない (990 人)</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>検査1 陽性</td><td>$10 \times 0.99 = \mathbf{9.9}$ 人</td><td>$990 \times 0.02 = \mathbf{19.8}$ 人</td></tr>
+                                    <tr><td>検査1 陰性</td><td>$0.1$ 人</td><td>$970.2$ 人</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.5em;">
+                                陽性者合計 $\approx 29.7$ 人のうち，本当に病気なのは $9.9$ 人 $\to 9.9/29.7 = 1/3$．
+                                偽陽性（病気でないのに陽性）が多くなる理由は，<strong>病気でない人の数が圧倒的に多い</strong>からです．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q113-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 検査 2 の設定と [1] の結果の引き継ぎ</div>
+                            <p>
+                                $Y_2 =$ 「検査 2 の結果が陽性」とします．求める確率は $P(X|Y_1, Y_2)$．
+                            </p>
+                            <p>
+                                [1] の結果より：$P(X|Y_1) = 1/3$，$P(X^c|Y_1) = 2/3$．
+                                これを「検査 1 が陽性の集団」における新しい事前確率として用います．
+                            </p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>$P(Y_2|X,\, Y_1) = 0.9$（病気かつ検査 1 陽性 → 検査 2 陽性の確率）</li>
+                                <li>$P(Y_2|X^c,\, Y_1) = 0.1$（病気でなくかつ検査 1 陽性 → 検査 2 陽性の確率）</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：$P(Y_2|Y_1)$ を全確率の定理で求める</div>
+                            <div class="formula-block">
+                                $$P(Y_2|Y_1) = P(Y_2|X,\,Y_1)\,P(X|Y_1) + P(Y_2|X^c,\,Y_1)\,P(X^c|Y_1)$$
+                                $$= 0.9 \times \frac{1}{3} + 0.1 \times \frac{2}{3}
+                                = \frac{0.9}{3} + \frac{0.2}{3}
+                                = \frac{1.1}{3}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：ベイズの定理を再適用する</div>
+                            <div class="formula-block">
+                                $$P(X|Y_1,\,Y_2) = \frac{P(Y_2|X,\,Y_1)\,P(X|Y_1)}{P(Y_2|Y_1)}
+                                = \frac{0.9 \times \dfrac{1}{3}}{\dfrac{1.1}{3}}
+                                = \frac{\dfrac{9}{10} \times \dfrac{1}{3}}{\dfrac{9}{10} \times \dfrac{1}{3} + \dfrac{1}{10} \times \dfrac{2}{3}}$$
+                            </div>
+                            <p>
+                                分子・分母を $\dfrac{1}{30}$ で割ると：
+                            </p>
+                            <div class="formula-block">
+                                $$= \frac{9}{9 + 2} = \frac{9}{11}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$P(X|Y_1,Y_2) = \dfrac{9}{11} \approx 81.8\%$</p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 2段階検査の効果</div>
+                            <p>
+                                検査を重ねるごとに事後確率がどう変化するかまとめます：
+                            </p>
+                            <table class="data-table" style="max-width:440px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>段階</th><th>病気である確率</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>事前（検査前）</td><td>$P(X) = 1/100 = 1\%$</td></tr>
+                                    <tr><td>検査 1 で陽性</td><td>$P(X|Y_1) = 1/3 \approx 33.3\%$</td></tr>
+                                    <tr><td>検査 1・2 両方で陽性</td><td>$P(X|Y_1,Y_2) = 9/11 \approx 81.8\%$</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.5em;">
+                                1回目の陽性判定で確率が $1\%$ → $33\%$ に跳ね上がり，
+                                2回目の陽性判定でさらに $82\%$ まで上昇します．
+                                このように，複数の検査結果を順番にベイズの定理で更新していくことで，
+                                診断の精度を段階的に高めることができます．
+                                この「証拠を積み重ねることで確率を更新する」考え方がベイズ推論の本質です．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

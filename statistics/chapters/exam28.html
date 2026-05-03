@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第28章 章末問題解説 - 分割表</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+        .calc-table th { background: #e8f0ff; }
+        .expected-table th { background: #f0f4ff; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        /* グラフコンテナ */
+        .graph-center {
+            display: flex;
+            justify-content: center;
+            margin: 1em 0;
+        }
+
+        /* 選択肢ブロック */
+        .choice-block {
+            border: 1px solid #d0d8ef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin: 0.6em 0;
+            background: #fafbff;
+        }
+        .choice-block.correct {
+            border-color: #3498db;
+            background: #f0f6ff;
+        }
+        .choice-block.incorrect {
+            border-color: #e0e6f0;
+            background: #fafbff;
+            opacity: 0.85;
+        }
+        .choice-label {
+            font-weight: 700;
+            color: #2471a3;
+            margin-right: 6px;
+        }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第28章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 28 — 章末問題解説</span>
+            <h1>分割表<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">オッズ比・症例対照研究・適合度検定・逸脱度・グラフィカルモデル</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter28.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第28章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q281">問28.1 問題</a></li>
+                            <li><a href="#q281-ans">問28.1 解答</a></li>
+                            <li><a href="#q282">問28.2 問題</a></li>
+                            <li><a href="#q282-ans">問28.2 解答</a></li>
+                            <li><a href="#q283">問28.3 問題</a></li>
+                            <li><a href="#q283-1">問28.3 [1]</a></li>
+                            <li><a href="#q283-2">問28.3 [2]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第28章 概要                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第28章「分割表」のキーポイント</div>
+                        <ul>
+                            <li><strong>分割表（分割表）：</strong> 複数の質的変量の組合せごとの頻度を表にしたもの。$2\times 2$ 分割表が基本。</li>
+                            <li><strong>オッズ比 $\psi$：</strong> 2つの二項確率 $\theta_1, \theta_2$ のオッズの比。$\psi = \dfrac{\theta_1/(1-\theta_1)}{\theta_2/(1-\theta_2)}$。$H_0:\psi=1$ は独立性（一様性）と同値。</li>
+                            <li><strong>前向き研究・後向き研究：</strong> 後向き（症例対照）研究では有病率の差や比は推定できないが、<em>オッズ比は前向き研究のオッズ比と一致する</em>（ベイズの定理より）。希少事象では $\psi \approx \theta_1/\theta_2$（相対リスクの近似）。</li>
+                            <li><strong>適合度カイ二乗検定 $\chi^2$：</strong> 帰無仮説下の当てはめ値 $m_{ij} = x_{i\cdot}x_{\cdot j}/x_{\cdot\cdot}$ を用いる。$2\times 2$ では $\chi^2 = x_{\cdot\cdot}(x_{11}x_{22}-x_{12}x_{21})^2/(x_{1\cdot}x_{2\cdot}x_{\cdot 1}x_{\cdot 2})$。</li>
+                            <li><strong>逸脱度 $G^2$：</strong> 尤度比検定統計量。$G^2 = 2\sum_{ij} x_{ij}\log(x_{ij}/m_{ij})$。自由度1のカイ二乗分布に漸近。</li>
+                            <li><strong>対数オッズ比の信頼区間：</strong> 標本対数オッズ比 $\log(\widehat{OR})$ の標準誤差は $\sqrt{1/x_{11}+1/x_{12}+1/x_{21}+1/x_{22}}$。</li>
+                            <li><strong>グラフィカルモデル：</strong> 無向独立グラフの性質から条件付き独立性を読み取る。辺がない $\Leftrightarrow$ 他のすべての因子を条件付けて独立。分離する頂点集合を条件付ければ独立。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問28.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q281">
+                    <h2><i class="fas fa-question-circle"></i> 問28.1　症例対照研究と確率の解釈</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある産婦人科では，出産における低出生体重児の原因として母親の喫煙習慣の影響を調べるために，以下のような調査を行った．
+                            まず，この産婦人科で過去に低出生体重児を出産した母親 12 名について，出産時の喫煙習慣の有無を調査した．
+                            次に，過去にこの産婦人科で通常の出産を行った母親のなかから，低出生体重児を出産した母親 12 名のそれぞれと，
+                            年齢・体重が比較的近い母親を 3 名ずつ選んだ．選ばれた 36 名をコントロール群とよび，
+                            コントロール群に対しても出産時の喫煙習慣の有無を調査した．調査結果をまとめたのが次の表である（数値は架空）．
+                        </p>
+                        <table class="data-table" style="max-width:460px; margin:0.8em auto;">
+                            <thead>
+                                <tr><th></th><th>低体重児</th><th>コントロール</th><th>計</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>喫煙習慣あり</strong></td><td>4</td><td>6</td><td>10</td></tr>
+                                <tr><td><strong>喫煙習慣なし</strong></td><td>8</td><td>30</td><td>38</td></tr>
+                                <tr><td><strong>計</strong></td><td>12</td><td>36</td><td>48</td></tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            この調査から読み取れる，出産における低体重児の発生の確率の解釈について，
+                            次の①〜③のうちから最も適切なものを1つ選べ．
+                        </p>
+                        <div class="choice-block">
+                            <span class="choice-label">①</span>
+                            喫煙習慣がある母親に関する低出生体重児の割合は $4/10 = 0.40$ であり，
+                            喫煙習慣のない母親に関する低出生体重児の割合は $8/38 = 0.21$ である．
+                            これらはそれぞれ，喫煙習慣がある母親とない母親のそれぞれに対する，低体重児の出生率の妥当な推定値である．
+                        </div>
+                        <div class="choice-block">
+                            <span class="choice-label">②</span>
+                            喫煙習慣がある母親に関する低出生体重児の割合は $4/10 = 0.40$ であり，
+                            喫煙習慣のない母親に関する低出生体重児の割合は $8/38 = 0.21$ であり，その差はおよそ $0.19$ である．
+                            このことから，喫煙習慣があると，喫煙習慣がない場合に比べて，低体重児の出生率が 19 % 増えると推定できる．
+                        </div>
+                        <div class="choice-block correct">
+                            <span class="choice-label">③</span>
+                            低体重児を出産した母親に関する喫煙歴ありのオッズ $(4/8 = 0.5)$ は，
+                            コントロール群に関する喫煙歴ありのオッズ $(6/30 = 0.2)$ の 2.5 倍である．
+                            低体重児の出生率は小さい値であると知られているので，
+                            喫煙習慣がある母親とない母親のそれぞれに対する低体重児の出生率の比（相対リスク）は，
+                            およそ 2.5 であると推定できる．
+                        </div>
+                    </div>
+
+                    <!-- ====== 解答 ====== -->
+                    <div class="answer-block" id="q281-ans">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 研究デザインの確認：後向き研究（症例対照研究）</div>
+                            <p>
+                                この調査は，<strong>低体重児を出産した母親（症例群）</strong>と<strong>通常の出産をした母親（コントロール群）</strong>の
+                                2 グループをあらかじめ用意し，そこから過去の喫煙歴を調べる研究です．
+                                このような研究デザインを<strong>後向き研究（retrospective study）</strong>，
+                                あるいは<strong>症例対照研究（case-control study）</strong>といいます．
+                            </p>
+                            <p>
+                                後向き研究では，コントロール群の人数（36 名）は研究者が設定した固定値です．
+                                実際の低体重児の発生率を反映したものではありません．
+                                したがって，<strong>行ごとの構成比（割合）には意味がなく，罹患率・発生率の差を推定することはできません</strong>．
+                            </p>
+                        </div>
+
+                        <h3>① の評価</h3>
+                        <div class="choice-block incorrect">
+                            <span class="choice-label">① 誤り</span>
+                            <p style="margin-top:6px;">
+                                低体重児を出産した母親とコントロール群の標本サイズの比 $1:3$ は，研究デザインで定めたものです．
+                                したがって，「喫煙習慣あり 10 名のうち低体重児 4 名」という行ごとの比は，
+                                <strong>喫煙習慣がある母親全体のなかでの低体重児の割合を反映していません</strong>．
+                                後向き研究では，各行の合計（10, 38）はランダムに決まったものではなく，列の合計（12, 36）が固定されています．
+                            </p>
+                        </div>
+
+                        <h3>② の評価</h3>
+                        <div class="choice-block incorrect">
+                            <span class="choice-label">② 誤り</span>
+                            <p style="margin-top:6px;">
+                                ① と同じ理由で誤りです．後向き研究では，曝露要因（喫煙習慣）ごとの罹患率や，
+                                その差（19%増加）を推定することは<strong>できません</strong>．
+                                割合の差 $0.40 - 0.21 = 0.19$ は研究デザインによって変化する値であり，意味をもちません．
+                            </p>
+                        </div>
+
+                        <h3>③ の評価（正解）</h3>
+                        <div class="choice-block correct">
+                            <span class="choice-label">③ 正しい</span>
+                            <p style="margin-top:6px;">
+                                後向き研究において，<strong>オッズ比は前向き研究のオッズ比と一致する</strong>という重要な性質があります（ベイズの定理から導かれます）．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">標本オッズ比の計算</div>
+                            <p>
+                                低体重児群における「喫煙あり」のオッズ：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{オッズ}_{\text{低体重児}} = \frac{4}{8} = 0.5$$
+                            </div>
+                            <p>
+                                コントロール群における「喫煙あり」のオッズ：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{オッズ}_{\text{コントロール}} = \frac{6}{30} = 0.2$$
+                            </div>
+                            <p>
+                                したがって，標本オッズ比は
+                            </p>
+                            <div class="formula-block">
+                                $$\widehat{OR} = \frac{4/8}{6/30} = \frac{0.5}{0.2} = 2.5$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">後向き研究のオッズ比 ＝ 前向き研究のオッズ比（ベイズの定理）</div>
+                            <p>
+                                後向き研究での母数 $\pi_j = P(\text{喫煙あり} \mid B_j)$（$j=1$：低体重児群，$j=2$：コントロール群）について，
+                                ベイズの定理を用いると：
+                            </p>
+                            <div class="formula-block">
+                                $$\frac{\pi_1/(1-\pi_1)}{\pi_2/(1-\pi_2)}
+                                = \frac{P(\text{低体重児}\mid\text{喫煙あり})/P(\text{低体重児}\mid\text{喫煙なし})}{P(\text{コントロール}\mid\text{喫煙あり})/P(\text{コントロール}\mid\text{喫煙なし})}
+                                = \frac{\theta_1/(1-\theta_1)}{\theta_2/(1-\theta_2)}$$
+                            </div>
+                            <p>
+                                つまり，後向き研究で求めたオッズ比は，前向き研究のオッズ比 $\psi = \theta_1(1-\theta_2)/(\theta_2(1-\theta_1))$ に等しくなります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">希少事象における相対リスクの近似</div>
+                            <p>
+                                低体重児の出生率 $\theta_1, \theta_2$ がいずれも非常に小さい（希少事象）とき，
+                                $1-\theta_1 \approx 1$，$1-\theta_2 \approx 1$ と近似できるので：
+                            </p>
+                            <div class="formula-block">
+                                $$\psi = \frac{\theta_1/(1-\theta_1)}{\theta_2/(1-\theta_2)} \approx \frac{\theta_1}{\theta_2} = \text{相対リスク}$$
+                            </div>
+                            <p>
+                                したがって，標本オッズ比 2.5 は，喫煙習慣がある母親の低体重児の出生率が，
+                                喫煙習慣がない母親のそれの<strong>約 2.5 倍</strong>であるという相対リスクの推定値として使えます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> まとめ：後向き研究で推定できること・できないこと</div>
+                            <table class="data-table" style="max-width:540px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>指標</th><th>後向き研究で推定できるか</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>各群の罹患率 $\theta_1, \theta_2$</td><td>❌ できない（サンプルサイズが研究者の設定値）</td></tr>
+                                    <tr><td>罹患率の差 $\theta_1 - \theta_2$</td><td>❌ できない</td></tr>
+                                    <tr><td>オッズ比 $\psi$</td><td>✅ できる（前向き研究と同一値）</td></tr>
+                                    <tr><td>相対リスク $\theta_1/\theta_2$（希少事象）</td><td>✅ オッズ比で近似できる</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 答え：③</div>
+                            <p>
+                                ③ のみが，この研究の設計（後向き研究）に即した正しい解釈です．
+                                後向き研究ではオッズ比だけを推定でき，希少事象の仮定のもとで相対リスクの推定値として利用できます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問28.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q282">
+                    <h2><i class="fas fa-question-circle"></i> 問28.2　適合度検定・逸脱度・信頼区間</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            問28.1 の分割表データに対して，一様性の帰無仮説のもとでの当てはめ値，
+                            適合度カイ二乗 $\chi^2$，逸脱度 $G^2$ を計算し，有意水準 5% で両側検定せよ．
+                            また，標本オッズ比に基づく母集団のオッズ比 $\psi$ の信頼係数 95% の近似的な信頼区間を構成せよ．
+                        </p>
+                    </div>
+
+                    <div class="answer-block" id="q282-ans">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h3>Step 1：一様性の帰無仮説のもとでの当てはめ値</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">当てはめ値の公式</div>
+                            <p>
+                                $I \times J$ 分割表において，一様性の帰無仮説のもとでの当てはめ値（期待度数）$m_{ij}$ は次の式で与えられます：
+                            </p>
+                            <div class="formula-block">
+                                $$m_{ij} = \frac{x_{i\cdot}\, x_{\cdot j}}{x_{\cdot\cdot}}$$
+                            </div>
+                            <p>
+                                ここで $x_{i\cdot}$ は $i$ 行の合計，$x_{\cdot j}$ は $j$ 列の合計，$x_{\cdot\cdot}$ は総計です．
+                                この公式は「<strong>行周辺和 × 列周辺和 ÷ 総計</strong>」と覚えると便利です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">各セルの当てはめ値を計算する</div>
+                            <p>問28.1 の分割表の周辺和：行の合計は 10, 38；列の合計は 12, 36；総計は 48．</p>
+                            <div class="formula-block">
+                                $$m_{11} = \frac{10 \times 12}{48} = \frac{120}{48} = 2.5, \quad
+                                  m_{12} = \frac{10 \times 36}{48} = \frac{360}{48} = 7.5$$
+                                $$m_{21} = \frac{38 \times 12}{48} = \frac{456}{48} = 9.5, \quad
+                                  m_{22} = \frac{38 \times 36}{48} = \frac{1368}{48} = 28.5$$
+                            </div>
+                        </div>
+
+                        <p>観測度数と当てはめ値を並べると次の通りです：</p>
+                        <table class="data-table expected-table" style="max-width:520px; margin:0 auto;">
+                            <thead>
+                                <tr><th></th><th colspan="2">観測度数</th><th colspan="2">当てはめ値（期待度数）</th></tr>
+                                <tr><th></th><th>低体重児</th><th>コントロール</th><th>低体重児</th><th>コントロール</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>喫煙習慣あり</strong></td><td>4</td><td>6</td><td>2.5</td><td>7.5</td></tr>
+                                <tr><td><strong>喫煙習慣なし</strong></td><td>8</td><td>30</td><td>9.5</td><td>28.5</td></tr>
+                                <tr><td><strong>計</strong></td><td>12</td><td>36</td><td>12</td><td>36</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h3 style="margin-top:1.2em;">Step 2：適合度カイ二乗統計量 $\chi^2$</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">$2\times 2$ 分割表の $\chi^2$ の公式</div>
+                            <p>
+                                $2\times 2$ 分割表では，一般式
+                                $\chi^2 = \sum_{ij}(x_{ij}-m_{ij})^2/m_{ij}$ を変形すると，次の便利な表現が得られます：
+                            </p>
+                            <div class="formula-block">
+                                $$\chi^2 = \frac{x_{\cdot\cdot}(x_{11}x_{22} - x_{12}x_{21})^2}{x_{1\cdot}\,x_{2\cdot}\,x_{\cdot 1}\,x_{\cdot 2}}$$
+                            </div>
+                            <p>
+                                分子の $(x_{11}x_{22} - x_{12}x_{21})^2$ は<strong>対角積の差の2乗</strong>，分母は<strong>4つの周辺和の積</strong>です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">数値を代入して計算する</div>
+                            <p>$x_{11}=4,\; x_{12}=6,\; x_{21}=8,\; x_{22}=30$ を代入：</p>
+                            <div class="formula-block">
+                                $$x_{11}x_{22} - x_{12}x_{21} = 4\times 30 - 6\times 8 = 120 - 48 = 72$$
+                            </div>
+                            <div class="formula-block">
+                                $$\chi^2 = \frac{48 \times 72^2}{10 \times 38 \times 12 \times 36}
+                                = \frac{48 \times 5184}{164160}
+                                = \frac{248832}{164160}
+                                \approx 1.516$$
+                            </div>
+                        </div>
+
+                        <h3 style="margin-top:1.2em;">Step 3：逸脱度 $G^2$</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">逸脱度（尤度比検定統計量）の公式</div>
+                            <p>
+                                逸脱度 $G^2$ は，対数尤度比の2倍として定義されます：
+                            </p>
+                            <div class="formula-block">
+                                $$G^2 = 2\sum_{ij} x_{ij}\log\!\left(\frac{x_{ij}}{m_{ij}}\right)$$
+                            </div>
+                            <p>
+                                各セルで「観測値 × $\log$(観測値/期待値)」を計算し，その総和の2倍です．
+                                $x_{ij} = m_{ij}$ のセルでは $x_{ij}\log(x_{ij}/m_{ij}) = 0$ となります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">各セルの寄与を計算する</div>
+                            <table class="data-table calc-table" style="max-width:520px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>セル</th><th>$x_{ij}$</th><th>$m_{ij}$</th><th>$x_{ij}/m_{ij}$</th><th>$\log(x_{ij}/m_{ij})$</th><th>$x_{ij}\log(\cdots)$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>喫煙あり・低体重</td><td>4</td><td>2.5</td><td>1.6000</td><td>$\log 1.6 = 0.4700$</td><td>$4 \times 0.4700 = 1.8800$</td></tr>
+                                    <tr><td>喫煙あり・コントロール</td><td>6</td><td>7.5</td><td>0.8000</td><td>$\log 0.8 = -0.2231$</td><td>$6 \times (-0.2231) = -1.3389$</td></tr>
+                                    <tr><td>喫煙なし・低体重</td><td>8</td><td>9.5</td><td>0.8421</td><td>$\log 0.8421 = -0.1719$</td><td>$8 \times (-0.1719) = -1.3748$</td></tr>
+                                    <tr><td>喫煙なし・コントロール</td><td>30</td><td>28.5</td><td>1.0526</td><td>$\log 1.0526 = 0.0513$</td><td>$30 \times 0.0513 = 1.5388$</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="formula-block" style="margin-top:0.8em;">
+                                $$G^2 = 2\,(1.8800 - 1.3389 - 1.3748 + 1.5388)
+                                = 2 \times 0.7051
+                                \approx 1.4103$$
+                            </div>
+                        </div>
+
+                        <h3 style="margin-top:1.2em;">Step 4：仮説検定の判断</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">棄却域との比較</div>
+                            <p>
+                                帰無仮説 $H_0:\theta_1=\theta_2$（一様性，すなわちオッズ比 $\psi=1$）のもとで，
+                                $\chi^2$ および $G^2$ はいずれも漸近的に<strong>自由度 1 のカイ二乗分布</strong>に従います．
+                            </p>
+                            <p>
+                                有意水準 5% の両側棄却域は $\chi^2_{0.05}(1) = 3.84$ ですので：
+                            </p>
+                            <div class="formula-block">
+                                $$\chi^2 = 1.516 < 3.84, \quad G^2 = 1.4103 < 3.84$$
+                            </div>
+                            <p>
+                                いずれも棄却域に入らないため，<strong>有意水準 5% で帰無仮説は棄却されません</strong>（検定は有意ではない）．
+                            </p>
+                        </div>
+
+                        <h3 style="margin-top:1.2em;">Step 5：オッズ比 $\psi$ の 95% 信頼区間</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">標本オッズ比と対数オッズ比の標準誤差</div>
+                            <p>
+                                標本オッズ比は $\widehat{OR} = x_{11}x_{22}/(x_{12}x_{21})$ です：
+                            </p>
+                            <div class="formula-block">
+                                $$\widehat{OR} = \frac{4 \times 30}{6 \times 8} = \frac{120}{48} = 2.5$$
+                            </div>
+                            <p>
+                                標本対数オッズ比の標準誤差の近似値は：
+                            </p>
+                            <div class="formula-block">
+                                $$\widehat{SE}[\log\widehat{OR}] = \sqrt{\frac{1}{x_{11}} + \frac{1}{x_{12}} + \frac{1}{x_{21}} + \frac{1}{x_{22}}}$$
+                            </div>
+                            <p>
+                                これは各セルの観測度数の逆数の平方根です（標本サイズが大きいほど小さくなります）．数値を代入：
+                            </p>
+                            <div class="formula-block">
+                                $$\widehat{SE} = \sqrt{\frac{1}{4} + \frac{1}{6} + \frac{1}{8} + \frac{1}{30}}
+                                = \sqrt{\frac{30 + 20 + 15 + 4}{120}}
+                                = \sqrt{\frac{69}{120}}
+                                = \sqrt{0.575}
+                                \approx 0.758$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">対数オッズ比の 95% 信頼区間</div>
+                            <p>
+                                標本対数オッズ比は $\log(\widehat{OR}) = \log(2.5) \approx 0.916$．
+                                正規近似による 95% 信頼区間は：
+                            </p>
+                            <div class="formula-block">
+                                $$\log\widehat{OR} \pm 1.96 \times \widehat{SE}
+                                = 0.916 \pm 1.96 \times 0.758
+                                = 0.916 \pm 1.486
+                                = (-0.570,\; 2.402)$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">オッズ比 $\psi$ の 95% 信頼区間（指数変換）</div>
+                            <p>
+                                対数オッズ比の信頼区間を指数変換してオッズ比スケールに戻します：
+                            </p>
+                            <div class="formula-block">
+                                $$\left(e^{-0.570},\; e^{2.402}\right) = (0.566,\; 11.04)$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 結果のまとめと解釈</div>
+                            <table class="data-table" style="max-width:480px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>検定統計量</th><th>計算値</th><th>棄却域（$\alpha=0.05$）</th><th>判定</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$\chi^2$</td><td>1.516</td><td>$> 3.84$</td><td>有意でない</td></tr>
+                                    <tr><td>$G^2$</td><td>1.4103</td><td>$> 3.84$</td><td>有意でない</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.8em;">
+                                オッズ比 $\psi$ の 95% 信頼区間 $(0.566,\; 11.04)$ に $\psi = 1$ が含まれています．
+                                これは「帰無仮説 $\psi = 1$ が有意に棄却されなかった」という検定結果と整合しています．
+                            </p>
+                            <p>
+                                標本オッズ比 $\widehat{OR} = 2.5$ は 1 よりかなり大きいですが，標本サイズが小さい（合計 48 名）ため，
+                                統計的に有意とはいえない結果となっています．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 補足：対数オッズ比の標準誤差の導出</div>
+                            <p>
+                                $\log\widehat{OR} = \log x_{11} - \log x_{12} - \log x_{21} + \log x_{22}$ と書けます．
+                                各 $x_{ij}$ は（大標本では）近似的に正規分布に従い，その分散は二項分布の性質から
+                                $\text{Var}[\log x_{ij}] \approx 1/x_{ij}$ と近似できます．
+                                独立性の仮定のもとで分散を加算すると：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{Var}[\log\widehat{OR}] \approx \frac{1}{x_{11}} + \frac{1}{x_{12}} + \frac{1}{x_{21}} + \frac{1}{x_{22}}$$
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問28.3                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q283">
+                    <h2><i class="fas fa-question-circle"></i> 問28.3　グラフィカルモデルと条件付き独立性</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            無向独立グラフが図 28.1 で与えられるグラフィカルモデルについて，以下の問いに答えよ．
+                        </p>
+
+                        <div class="concept-box" style="margin:0.8em 0;">
+                            <div class="box-title"><i class="fas fa-project-diagram"></i> 図 28.1 ：4頂点の無向独立グラフ</div>
+                            <div class="graph-center">
+                                <svg width="280" height="200" viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg" aria-label="無向独立グラフ図28.1">
+                                    <!-- 枝：A-B -->
+                                    <line x1="60" y1="60" x2="140" y2="60" stroke="#3498db" stroke-width="2.5"/>
+                                    <!-- 枝：B-C -->
+                                    <line x1="140" y1="60" x2="140" y2="150" stroke="#3498db" stroke-width="2.5"/>
+                                    <!-- 枝：B-D -->
+                                    <line x1="140" y1="60" x2="220" y2="150" stroke="#3498db" stroke-width="2.5"/>
+                                    <!-- 枝：C-D -->
+                                    <line x1="140" y1="150" x2="220" y2="150" stroke="#3498db" stroke-width="2.5"/>
+                                    <!-- 頂点 A -->
+                                    <circle cx="60" cy="60" r="20" fill="#f0f6ff" stroke="#3498db" stroke-width="2"/>
+                                    <text x="60" y="65" text-anchor="middle" font-size="16" font-weight="700" fill="#2471a3">A</text>
+                                    <!-- 頂点 B -->
+                                    <circle cx="140" cy="60" r="20" fill="#f0f6ff" stroke="#3498db" stroke-width="2"/>
+                                    <text x="140" y="65" text-anchor="middle" font-size="16" font-weight="700" fill="#2471a3">B</text>
+                                    <!-- 頂点 C -->
+                                    <circle cx="140" cy="150" r="20" fill="#f0f6ff" stroke="#3498db" stroke-width="2"/>
+                                    <text x="140" y="155" text-anchor="middle" font-size="16" font-weight="700" fill="#2471a3">C</text>
+                                    <!-- 頂点 D -->
+                                    <circle cx="220" cy="150" r="20" fill="#f0f6ff" stroke="#3498db" stroke-width="2"/>
+                                    <text x="220" y="155" text-anchor="middle" font-size="16" font-weight="700" fill="#2471a3">D</text>
+                                    <!-- 枝なし（A-C, A-D）を点線で示さない：辺がないことがポイント -->
+                                </svg>
+                            </div>
+                            <p style="font-size:0.88em;color:#555;text-align:center;margin-top:4px;">
+                                枝（辺）：A–B，B–C，B–D，C–D　　枝なし：A–C，A–D
+                            </p>
+                        </div>
+
+                        <p>
+                            <strong>[1]</strong> 独立な因子は存在するか．
+                        </p>
+                        <p>
+                            <strong>[2]</strong> 因子 A と因子 C にはどのような条件付き独立性が成り立つか．
+                        </p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q283-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> グラフィカルモデルの性質の復習</div>
+                            <p>
+                                無向独立グラフ $G=(V,E)$ を持つグラフィカルモデルについて，
+                                因子の独立性は次の3つの性質で特徴づけられます：
+                            </p>
+                            <table class="data-table" style="max-width:560px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>性質</th><th>グラフの条件</th><th>独立性の結論</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><strong>性質1</strong></td><td>頂点 $A, B$ が連結でない</td><td>$A$ と $B$ は（周辺）独立：$A \perp\!\!\!\perp B$</td></tr>
+                                    <tr><td><strong>性質2</strong></td><td>$(A,B) \notin E$（辺がない）</td><td>$A \perp\!\!\!\perp B \mid V\setminus\{A,B\}$（他のすべての因子を条件付けて独立）</td></tr>
+                                    <tr><td><strong>性質3</strong></td><td>集合 $S \subset V$ が $A$ と $B$ を分離する</td><td>$A \perp\!\!\!\perp B \mid S$（$S$を条件付けて独立）</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">連結性の確認</div>
+                            <p>
+                                グラフ中の各頂点の隣接関係を確認します：
+                            </p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>A の隣接頂点：B（辺 A–B）</li>
+                                <li>B の隣接頂点：A，C，D（辺 A–B，B–C，B–D）</li>
+                                <li>C の隣接頂点：B，D（辺 B–C，C–D）</li>
+                                <li>D の隣接頂点：B，C（辺 B–D，C–D）</li>
+                            </ul>
+                            <p>
+                                任意の2頂点間に道（辺の列）が存在するかを確認します：
+                            </p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>A–B：直接つながっている ✓</li>
+                                <li>A–C：A–B–C の道 ✓</li>
+                                <li>A–D：A–B–D の道 ✓</li>
+                                <li>B–C, B–D, C–D：直接つながっている ✓</li>
+                            </ul>
+                            <p>
+                                <strong>4つの頂点はすべて互いに連結している</strong>ため，性質1の条件（連結でない頂点対が存在する）は満たされません．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 結論</div>
+                            <p>
+                                4つの頂点はすべて互いに連結しているので，<strong>独立な因子は存在しない（性質1）</strong>．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q283-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="step-box">
+                            <div class="step-title">性質2の適用：A と C の間に辺がない</div>
+                            <p>
+                                図 28.1 では，頂点 A と頂点 C の間に<strong>辺がありません</strong>（$(A,C) \notin E$）．
+                                したがって性質2より：
+                            </p>
+                            <div class="formula-block">
+                                $$A \perp\!\!\!\perp C \mid \{B, D\}$$
+                            </div>
+                            <p>
+                                すなわち，因子 A と因子 C は，<strong>他のすべての因子（B と D）を条件付けたとき，条件付き独立</strong>となります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">性質3の適用：{B} が A と C を分離する</div>
+                            <p>
+                                集合 $\{B\}$ が頂点 A と頂点 C を<strong>分離する</strong>かどうかを確認します．
+                            </p>
+                            <p>
+                                「$S$ が $a$ と $b$ を分離する」とは，$a$ から $b$ へ向かう任意の道が必ず $S$ の元を通ることをいいます．
+                            </p>
+                            <p>
+                                A から C への道を列挙します：
+                            </p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>A–B–C：<strong>B を通る</strong></li>
+                                <li>A–B–D–C：<strong>B を通る</strong></li>
+                            </ul>
+                            <p>
+                                A と C を結ぶすべての道が B を通るため，<strong>$\{B\}$ は A と C を分離します</strong>．
+                                したがって性質3より：
+                            </p>
+                            <div class="formula-block">
+                                $$A \perp\!\!\!\perp C \mid B$$
+                            </div>
+                            <p>
+                                すなわち，因子 A と因子 C は，<strong>因子 B のみを条件付けるだけで条件付き独立</strong>となります（D を条件付ける必要はありません）．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 結論</div>
+                            <p>
+                                因子 A と因子 C には，以下の2種類の条件付き独立性が成り立ちます：
+                            </p>
+                            <ol style="margin:0.6em 0 0.4em 1.5em;line-height:2.2;">
+                                <li>
+                                    <strong>性質2より：</strong>$A \perp\!\!\!\perp C \mid \{B, D\}$
+                                    <br>（他のすべての因子 B, D を条件付けて独立）
+                                </li>
+                                <li>
+                                    <strong>性質3より：</strong>$A \perp\!\!\!\perp C \mid B$
+                                    <br>（因子 B のみを条件付けても独立；D を条件付ける必要はない）
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 補足：グラフィカルモデルの背景</div>
+                            <p>
+                                図 28.1 のグラフのクリーク（極大完全部分グラフ）は $\{A,B\}$ と $\{B,C,D\}$ の2つです．
+                                対応するグラフィカルモデルの生成集合は $AB/BCD$ と表され，
+                                対数線形モデルとして次のように書かれます：
+                            </p>
+                            <div class="formula-block">
+                                $$\log\theta_{ijkl} = \mu + \alpha_i + \beta_j + \gamma_k + \delta_l
+                                + (\alpha\beta)_{ij} + (\beta\gamma)_{jk} + (\beta\delta)_{jl} + (\gamma\delta)_{kl} + (\beta\gamma\delta)_{jkl}$$
+                            </div>
+                            <p>
+                                このモデルでは，A と B の交互作用 $(\alpha\beta)_{ij}$ は存在しますが，
+                                A と C の交互作用 $(\alpha\gamma)_{ik}$ や A と D の交互作用 $(\alpha\delta)_{il}$ は存在しません（0 に固定）．
+                                これが条件付き独立性 $A\perp\!\!\!\perp C\mid\{B,D\}$，$A\perp\!\!\!\perp D\mid\{B,C\}$ に対応しています．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 第28章全体のまとめ</div>
+                            <p>第28章「分割表」の主要な流れ：</p>
+                            <ol style="margin:0.6em 0 0 1.5em;line-height:2.2;">
+                                <li><strong>研究デザインの確認：</strong>前向き研究 vs. 後向き研究。後向き研究では罹患率の推定は不可，オッズ比のみ推定可。</li>
+                                <li><strong>当てはめ値の計算：</strong>帰無仮説（一様性・独立性）のもとで $m_{ij} = x_{i\cdot}x_{\cdot j}/x_{\cdot\cdot}$。</li>
+                                <li><strong>適合度検定：</strong>$\chi^2 = \sum(x_{ij}-m_{ij})^2/m_{ij}$，逸脱度 $G^2 = 2\sum x_{ij}\log(x_{ij}/m_{ij})$，いずれも自由度1（$2\times2$の場合）のカイ二乗分布に漸近。</li>
+                                <li><strong>オッズ比の信頼区間：</strong>$\log\widehat{OR} \pm 1.96\sqrt{1/x_{11}+1/x_{12}+1/x_{21}+1/x_{22}}$ で構成し，指数変換。</li>
+                                <li><strong>グラフィカルモデル：</strong>無向独立グラフの辺の有無・連結性・分離集合から条件付き独立性を読み取る。</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

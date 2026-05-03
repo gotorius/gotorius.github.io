@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第32章 章末問題解説 - シミュレーション</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        /* 比較テーブル強調 */
+        .data-table .highlight-row td {
+            background: #f0f6ff;
+            color: #1a5a8a;
+            font-weight: 600;
+        }
+
+        /* 図解ボックス（2列）*/
+        .compare-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin: 0.8em 0;
+        }
+        .compare-cell {
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid #d0d8ef;
+            border-radius: 8px;
+            padding: 12px 16px;
+            background: #fafbff;
+        }
+        .compare-cell .cell-title {
+            font-weight: 700;
+            color: #2471a3;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第32章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 32 — 章末問題解説</span>
+            <h1>シミュレーション<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">モンテカルロ法・分散削減・制御変量法・ブートストラップ・ジャックナイフ</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter32.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第32章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q321">問32.1 問題</a></li>
+                            <li><a href="#q321-1">問32.1 [1] 解答</a></li>
+                            <li><a href="#q321-2">問32.1 [2] 解答</a></li>
+                            <li><a href="#comparison">2つの方法の比較</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第32章 概要                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第32章「シミュレーション」のキーポイント</div>
+                        <ul>
+                            <li><strong>モンテカルロ法（Monte Carlo method）：</strong>乱数を用いて積分や確率を近似する方法．大数の法則により，サンプル数を増やすほど推定精度が向上する．</li>
+                            <li><strong>単純モンテカルロ法（crude Monte Carlo）：</strong>$\theta = \int g(x)\,dx$ を推定するために，乱数 $U_1, \ldots, U_n \sim U(0,1)$ の標本平均 $\hat{\theta} = \frac{1}{n}\sum_{i=1}^n g(U_i)$ を用いる．</li>
+                            <li><strong>推定量の標準偏差：</strong>標本平均 $\bar{g}$ の標準偏差は $SD[\bar{g}] = \sigma/\sqrt{n}$（$\sigma^2 = V[g(U)]$）．標準偏差を半分にするにはサンプル数を4倍にする必要がある．</li>
+                            <li><strong>分散削減（variance reduction）：</strong>同じサンプル数でより小さい分散を実現する技法．推定の効率を大幅に改善できる．</li>
+                            <li><strong>制御変量法（control variate method）：</strong>積分値が解析的に分かる関数（制御変量）を利用して，推定する量の分散を減らす方法．$g(u)$ に近い解析的な主部 $h(u)$ を引き，$g(u)-h(u)$ の積分を推定する．</li>
+                            <li><strong>逆関数法（inverse transform method）：</strong>$U \sim U(0,1)$ から $X = F^{-1}(U)$ で任意の分布に従う乱数を生成する手法．</li>
+                            <li><strong>採択・棄却法（acceptance-rejection method）：</strong>提案分布 $g(x)$ と包絡関数 $Mg(x) \geq f(x)$ を用いて，目標分布 $f(x)$ からの乱数を生成する手法．採択率 $= 1/M$．</li>
+                            <li><strong>ブートストラップ法：</strong>観測データから復元抽出でリサンプリングを繰り返し，推定量の標準誤差やバイアスを近似する方法．</li>
+                            <li><strong>ジャックナイフ法：</strong>データを1つずつ抜いた $n$ 個の部分標本を用いて，推定量の標準誤差を近似する方法．</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問32.1                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q321">
+                    <h2><i class="fas fa-question-circle"></i> 問32.1　モンテカルロ法による円周率 $\pi$ の近似</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            半径1の円の第1象限の面積は $\pi/4$ であることを利用して円周率 $\pi$ の近似値を次の2通りの方法で求める．
+                        </p>
+
+                        <p>
+                            <strong>[1]</strong>　区間 $(0,1)$ 上の一様分布に従う確率変数 $U$ に対し，$\sqrt{1-U^2}$ の期待値は
+                        </p>
+                        <div class="formula-block">
+                            $$E\!\left[\sqrt{1-U^2}\right] = \int_0^1 \sqrt{1-u^2}\,du = \frac{\pi}{4}$$
+                        </div>
+                        <p>
+                            であるので，区間 $(0,1)$ 上の一様乱数を $n$ 個生成して $U_i,\, i=1,\ldots,n$ とし，
+                            $\sqrt{1-U_i^2}$ の標本平均を用いて
+                        </p>
+                        <div class="formula-block">
+                            $$\hat{\pi} = 4 \times \frac{1}{n}\sum_{i=1}^n \sqrt{1-U_i^2}$$
+                        </div>
+                        <p>
+                            とする．$\hat{\pi}$ の標準偏差を 0.01 程度とするためには何組の乱数が必要か．
+                        </p>
+
+                        <p style="margin-top:1.2em;">
+                            <strong>[2]</strong>　区間 $(0,1)$ で $1-u < \sqrt{1-u^2}$ であること，および，
+                        </p>
+                        <div class="formula-block">
+                            $$\int_0^1 (1-u)\,du = \frac{1}{2}, \qquad \int_0^1 \!\left(\frac{1}{2}-u\right)du = 0$$
+                        </div>
+                        <p>
+                            であることを利用して区間 $(0,1)$ 上の一様乱数を $n$ 個生成して $U_i,\, i=1,\ldots,n$ とし，
+                        </p>
+                        <div class="formula-block">
+                            $$\tilde{\pi} = 4 \times \frac{1}{n}\sum_{i=1}^n \left(\sqrt{1-U_i^2} - \left(\frac{1}{2}-U_i\right)\right)$$
+                        </div>
+                        <p>
+                            とする．$\tilde{\pi}$ の標準偏差を 0.01 程度とするためには何組の乱数が必要か．必要ならば次の積分値を用いてもよい．
+                        </p>
+                        <div class="formula-block">
+                            $$\int_0^1 \!\left(\sqrt{1-u^2}+u-\frac{1}{2}-\frac{\pi}{4}\right)^2 du
+                            = \frac{68-12\pi-3\pi^2}{48} = 0.0144$$
+                        </div>
+                    </div>
+
+                    <!-- ===== 解答 [1] ===== -->
+                    <div class="answer-block" id="q321-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 解法の方針</div>
+                            <p>
+                                $\hat{\pi} = 4 \times \overline{\sqrt{1-U^2}}$（標本平均の4倍）なので，
+                                $\hat{\pi}$ の分散は $V[\sqrt{1-U_i^2}]$ の分散を計算すれば求まります．
+                            </p>
+                            <p>
+                                $V[\hat{\pi}] = V\!\left[4\cdot\frac{1}{n}\sum_{i=1}^n\sqrt{1-U_i^2}\right]
+                                = \frac{16}{n}\,V\!\left[\sqrt{1-U^2}\right]$
+                            </p>
+                            <p>
+                                したがって，$SD[\hat{\pi}] = \dfrac{4}{\sqrt{n}}\sqrt{V\!\left[\sqrt{1-U^2}\right]}$ を 0.01 以下にするために必要な $n$ を求めます．
+                            </p>
+                        </div>
+
+                        <h3>$V\!\left[\sqrt{1-U^2}\right]$ の計算</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：$E\!\left[1-U^2\right]$ の計算</div>
+                            <p>
+                                $U \sim U(0,1)$ のとき，$E[U^2] = \int_0^1 u^2\,du = \dfrac{1}{3}$ なので：
+                            </p>
+                            <div class="formula-block">
+                                $$E\!\left[1-U^2\right] = 1 - E[U^2] = 1 - \frac{1}{3} = \frac{2}{3}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：分散の計算式を展開する</div>
+                            <p>
+                                分散の公式 $V[X] = E[X^2] - (E[X])^2$ を用います．
+                                $E\!\left[\sqrt{1-U^2}\right] = \pi/4$ が与えられているので：
+                            </p>
+                            <div class="formula-block">
+                                $$V\!\left[\sqrt{1-U^2}\right]
+                                = E\!\left[\left(\sqrt{1-U^2}\right)^2\right] - \left(E\!\left[\sqrt{1-U^2}\right]\right)^2
+                                = E\!\left[1-U^2\right] - \left(\frac{\pi}{4}\right)^2$$
+                            </div>
+                            <p>
+                                Step 1 の結果を代入すると：
+                            </p>
+                            <div class="formula-block">
+                                $$V\!\left[\sqrt{1-U^2}\right]
+                                = \frac{2}{3} - \left(\frac{\pi}{4}\right)^2
+                                \approx 0.6667 - 0.6169 = 0.0497 \approx 0.05$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 3：$n$ を求める</div>
+                            <p>
+                                $SD[\hat{\pi}] = \dfrac{4}{\sqrt{n}}\sqrt{0.05} = 0.01$ とおくと：
+                            </p>
+                            <div class="formula-block">
+                                $$\frac{16}{n} \times 0.05 = (0.01)^2 = 0.0001$$
+                            </div>
+                            <div class="formula-block">
+                                $$n = \frac{16 \times 0.05}{0.0001} = \frac{0.8}{0.0001} = \boldsymbol{8000}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>
+                                $n = \mathbf{8000}$ 組の乱数が必要．
+                            </p>
+                            <p style="margin-top:0.4em;">
+                                計算の流れをまとめると：
+                            </p>
+                            <div class="formula-block">
+                                $$V\!\left[\sqrt{1-U^2}\right] = \frac{2}{3} - \left(\frac{\pi}{4}\right)^2 \approx 0.05
+                                \;\Longrightarrow\;
+                                SD[\hat{\pi}] = \frac{4}{\sqrt{n}}\sqrt{0.05} = 0.01
+                                \;\Longrightarrow\;
+                                n = 8000$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== 解答 [2] ===== -->
+                    <div class="answer-block" id="q321-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> [2] の方法の「仕掛け」を理解する</div>
+                            <p>
+                                [2] では $\tilde{\pi}$ を次のように変形して分散を減らしています：
+                            </p>
+                            <div class="formula-block">
+                                $$\tilde{\pi} = 4 \times \frac{1}{n}\sum_{i=1}^n \left(\sqrt{1-U_i^2} - \left(\frac{1}{2}-U_i\right)\right)$$
+                            </div>
+                            <p>
+                                $\left(\dfrac{1}{2}-U_i\right)$ を引いているのは，<strong>制御変量法（control variate method）</strong>のアイデアです．
+                            </p>
+                            <p>
+                                なぜ引けるのか？　$\int_0^1\!\left(\frac{1}{2}-u\right)du = 0$ なので，
+                                $E\!\left[\frac{1}{2}-U\right] = 0$ です．つまり，
+                                <strong>期待値が0の量</strong>を足し引きしても推定量 $\tilde{\pi}$ の期待値は変わりません（$E[\tilde{\pi}] = \pi$）．
+                            </p>
+                            <p>
+                                しかし，$\sqrt{1-u^2}$ と $\left(\frac{1}{2}-u\right)$ には<strong>正の相関</strong>があるため，
+                                $\sqrt{1-U^2} - \left(\frac{1}{2}-U\right)$ の分散は $\sqrt{1-U^2}$ 単独の分散より小さくなります．
+                            </p>
+                        </div>
+
+                        <h3>$V\!\left[\sqrt{1-U^2} + U - \tfrac{1}{2}\right]$ の計算</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">問題の確率変数を整理する</div>
+                            <p>
+                                $\tilde{\pi}$ の標本内の各項 $\sqrt{1-U_i^2} - \left(\frac{1}{2}-U_i\right)
+                                = \sqrt{1-U_i^2} + U_i - \frac{1}{2}$ の期待値は：
+                            </p>
+                            <div class="formula-block">
+                                $$E\!\left[\sqrt{1-U^2} + U - \frac{1}{2}\right]
+                                = \underbrace{E\!\left[\sqrt{1-U^2}\right]}_{=\,\pi/4}
+                                + \underbrace{E[U]}_{=\,1/2} - \frac{1}{2}
+                                = \frac{\pi}{4}$$
+                            </div>
+                            <p>
+                                したがって $E[\tilde{\pi}] = 4 \times \pi/4 = \pi$ であり，推定量は不偏です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">分散を与えられた積分で求める</div>
+                            <p>
+                                分散の定義 $V[X] = E\!\left[(X - E[X])^2\right]$ より：
+                            </p>
+                            <div class="formula-block">
+                                $$V\!\left[\sqrt{1-U^2}+U-\frac{1}{2}\right]
+                                = E\!\left[\left(\sqrt{1-U^2}+U-\frac{1}{2}-\frac{\pi}{4}\right)^2\right]
+                                = \int_0^1\!\left(\sqrt{1-u^2}+u-\frac{1}{2}-\frac{\pi}{4}\right)^2 du$$
+                            </div>
+                            <p>
+                                問題で与えられた積分値を用いると：
+                            </p>
+                            <div class="formula-block">
+                                $$V\!\left[\sqrt{1-U^2}+U-\frac{1}{2}\right]
+                                = \frac{68-12\pi-3\pi^2}{48} = 0.0144$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$n$ を求める</div>
+                            <p>
+                                $\tilde{\pi} = 4 \times \dfrac{1}{n}\displaystyle\sum_{i=1}^n\left(\sqrt{1-U_i^2}+U_i-\frac{1}{2}\right)$ なので，
+                            </p>
+                            <div class="formula-block">
+                                $$V[\tilde{\pi}] = \frac{16}{n} \times 0.0144$$
+                            </div>
+                            <p>
+                                $SD[\tilde{\pi}] = \dfrac{4}{\sqrt{n}}\sqrt{0.0144} = 0.01$ とおくと：
+                            </p>
+                            <div class="formula-block">
+                                $$\frac{16}{n} \times 0.0144 = (0.01)^2 = 0.0001$$
+                            </div>
+                            <div class="formula-block">
+                                $$n = \frac{16 \times 0.0144}{0.0001} = \frac{0.2304}{0.0001} = \boldsymbol{2304}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>
+                                $n \approx \mathbf{2304}$ 組の乱数が必要．
+                            </p>
+                            <div class="formula-block">
+                                $$V\!\left[\sqrt{1-U^2}+U-\frac{1}{2}\right] = 0.0144
+                                \;\Longrightarrow\;
+                                SD[\tilde{\pi}] = \frac{4}{\sqrt{n}}\sqrt{0.0144} = 0.01
+                                \;\Longrightarrow\;
+                                n = 2304$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ===== 2つの方法の比較 ===== -->
+                    <div class="answer-block" id="comparison">
+                        <span class="prob-badge badge-a">2つの方法の比較</span>
+
+                        <h3>必要サンプル数・分散・効率の比較</h3>
+
+                        <table class="data-table" style="max-width:600px; margin:0 auto;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th>[1] 単純モンテカルロ</th>
+                                    <th>[2] 制御変量法</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>推定量の形</td>
+                                    <td>$4 \cdot \dfrac{1}{n}\displaystyle\sum\sqrt{1-U_i^2}$</td>
+                                    <td>$4 \cdot \dfrac{1}{n}\displaystyle\sum\!\left(\sqrt{1-U_i^2}+U_i-\tfrac{1}{2}\right)$</td>
+                                </tr>
+                                <tr>
+                                    <td>各項の分散</td>
+                                    <td>$V[\sqrt{1-U^2}] \approx 0.05$</td>
+                                    <td>$V[\sqrt{1-U^2}+U-\tfrac{1}{2}] = 0.0144$</td>
+                                </tr>
+                                <tr>
+                                    <td>$SD = 0.01$ にするための $n$</td>
+                                    <td>$n = 8000$</td>
+                                    <td>$n \approx 2304$</td>
+                                </tr>
+                                <tr class="highlight-row">
+                                    <td>相対効率</td>
+                                    <td colspan="2">$\dfrac{8000}{2304} \approx 3.47$（制御変量法が約3.5倍効率的）</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box" style="margin-top:1em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> なぜ制御変量法で分散が減るのか？</div>
+                            <p>
+                                直感的には，$\sqrt{1-u^2}$（第1象限の円弧）と $1-u$（直線）は同じ方向に増減するため，
+                                両者は正の相関を持ちます．$\sqrt{1-u^2}-(1/2-u) = \sqrt{1-u^2}+u-1/2$ では，
+                                この相関するノイズ成分を互いに打ち消し合うことができます．
+                            </p>
+                            <p>
+                                より形式的には，$h(u) = 1/2-u$ を制御変量と呼び，
+                                $\int_0^1 h(u)\,du = 0$（積分値が既知）を利用して，
+                                $\int_0^1 g(u)\,du$ の推定をより効率的に行うのが制御変量法の本質です．
+                            </p>
+                            <p>
+                                分散比を計算すると：
+                            </p>
+                            <div class="formula-block">
+                                $$\frac{V\!\left[\sqrt{1-U^2}+U-\tfrac{1}{2}\right]}{V\!\left[\sqrt{1-U^2}\right]}
+                                = \frac{0.0144}{0.05} = 0.288$$
+                            </div>
+                            <p>
+                                分散が約 $\mathbf{28.8\%}$ に削減されます．同じ標準偏差を達成するには，
+                                必要サンプル数も約 $0.288$ 倍（約3.5分の1）で済みます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 標準偏差の一般式（確認）</div>
+                            <p>
+                                $\hat{\pi} = 4\bar{g}$（$\bar{g}$ は標本平均）のとき，$SD[\hat{\pi}]$ の一般式は：
+                            </p>
+                            <div class="formula-block">
+                                $$SD[\hat{\pi}] = \frac{4}{\sqrt{n}}\sqrt{V[g(U)]}$$
+                            </div>
+                            <p>
+                                $SD[\hat{\pi}] \leq \varepsilon$ とするために必要な $n$ は：
+                            </p>
+                            <div class="formula-block">
+                                $$n \geq \frac{16\,V[g(U)]}{\varepsilon^2}$$
+                            </div>
+                            <p>
+                                今回は $\varepsilon = 0.01$ なので，$n \geq 16\,V[g(U)] / 0.0001 = 160000\,V[g(U)]$ となります．
+                            </p>
+                            <ul style="margin:0.4em 0 0 1.5em; line-height:2.2;">
+                                <li>[1]：$n \geq 160000 \times 0.05 = 8000$</li>
+                                <li>[2]：$n \geq 160000 \times 0.0144 = 2304$</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

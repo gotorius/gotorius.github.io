@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第26章 章末問題解説 - 多次元尺度法（MDS）</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+        .highlight-cell { font-weight: 700; }
+        .match-cell  { font-weight: 700; }
+        .calc-table th { background: #e8f0ff; }
+        .eigen-table th{ background: #f0f4ff; }
+        .coord-table th{ background: #f0f4ff; }
+        .dist-table th { background: #f0f4ff; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        /* 証明ボックス */
+        .proof-box {
+            border: 1.5px solid #8e44ad;
+            background: #faf0ff;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 0.8em 0;
+        }
+        .proof-box .proof-title {
+            color: #6c3483;
+            font-weight: 700;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+
+        /* 散布図 */
+        .scatter-center {
+            display: flex;
+            justify-content: center;
+            margin: 1em 0;
+        }
+
+        /* 行列表示 */
+        .matrix-display {
+            overflow-x: auto;
+            text-align: center;
+            margin: 0.6em 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第26章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 26 — 章末問題解説</span>
+            <h1>多次元尺度法（MDS）<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">計量MDS・二重中心化・固有値分解・座標の復元</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter26.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第26章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q261">問26.1 問題</a></li>
+                            <li><a href="#q261-1">問26.1 [1]</a></li>
+                            <li><a href="#q261-2">問26.1 [2]</a></li>
+                            <li><a href="#q261-3">問26.1 [3]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第26章 概要                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第26章「多次元尺度法（MDS）」のキーポイント</div>
+                        <p>
+                            <strong>多次元尺度法（Multi-Dimensional Scaling, MDS）</strong>は，
+                            個体間の<strong>非類似度（距離）データ</strong>が与えられたとき，
+                            その個体を<strong>低次元座標</strong>で表現する手法です．
+                        </p>
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.6em;">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 計量 MDS のアルゴリズム</div>
+                            <ol>
+                                <li><strong>距離の2乗行列 $D$</strong> を用意する（対角要素は0）</li>
+                                <li><strong>二重中心化</strong>で行列 $B$ を計算：
+                                    $$B = -\frac{1}{2}\left(I_n - \frac{1}{n}J_n\right)D\left(I_n - \frac{1}{n}J_n\right)$$
+                                </li>
+                                <li>$B$ の<strong>固有値分解</strong>を行い，正の固有値 $\lambda_1 \geq \lambda_2 \geq \cdots \geq \lambda_k > 0$ と対応する固有ベクトル $u_1, u_2, \ldots, u_k$ を求める</li>
+                                <li>次元数 $k$ を選び，<strong>座標行列</strong> $X = U_k \Lambda_k^{1/2}$ を求める（各個体の座標）</li>
+            　               </ol>
+                        </div>
+                        <div class="concept-box" style="border-left-color:#f39c12;margin-top:0.6em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 二重中心化の意味</div>
+                            <p>
+                                行列 $\left(I_n - \dfrac{1}{n}J_n\right)$ を左右から掛ける操作は，
+                                $D$ の<strong>各行の平均・各列の平均を0にする</strong>変換です（行平均と列平均の両方を引く）．
+                                これにより，距離の情報から座標の内積 $XX^T$ が復元できます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問26.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q261">
+                    <h2><i class="fas fa-pencil"></i> 問26.1 — 問題文（MDS による個体座標の復元）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            個体1, 2, 3, 4間の非類似度の2乗が以下のように与えられているとする：
+                        </p>
+                        <div class="formula-block">
+                            $$D = \begin{pmatrix} 0 & 5 & 5 & 16 \\ 5 & 0 & 4 & 5 \\ 5 & 4 & 0 & 5 \\ 16 & 5 & 5 & 0 \end{pmatrix}$$
+                        </div>
+                        <ol>
+                            <li>
+                                $\displaystyle B = -\frac{1}{2}\!\left(I_n - \frac{1}{n}J_n\right)\!D\!\left(I_n - \frac{1}{n}J_n\right)$ を計算し，
+                                $B$ の固有値およびノルム1に基準化された固有ベクトルを求めよ．
+                            </li>
+                            <li>
+                                次元数を1としたときの計量MDSによる各個体の座標を求めよ．
+                                また，得られた座標に基づいて個体間の距離の2乗を要素とする行列を計算し，
+                                $D$ をどの程度再現できているかを確認せよ．
+                            </li>
+                            <li>
+                                次元数を2としたときの計量MDSによる各個体の座標を求めよ．
+                                また，得られた座標に基づいて個体間の距離の2乗を要素とする行列を計算し，
+                                $D$ をどの程度再現できているかを確認せよ．
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問26.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q261-1">
+                    <h2><i class="fas fa-pencil"></i> 問26.1 [1] — 行列 B の計算と固有値・固有ベクトルの導出</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> B の計算方針：二重中心化の公式</div>
+                            <p>$n = 4$ なので，</p>
+                            <div class="formula-block">
+                                $$H = I_4 - \frac{1}{4}J_4 = I_4 - \frac{1}{4}\begin{pmatrix}1&1&1&1\\1&1&1&1\\1&1&1&1\\1&1&1&1\end{pmatrix}, \quad B = -\frac{1}{2}\,H D H$$
+                            </div>
+                            <p>
+                                ここで $H$ は<strong>中心化行列</strong>（centering matrix）と呼ばれ，ベクトルに掛けるとその平均を0にする行列です．
+                                また $H = H^T$，$H^2 = H$ という性質があります（幂等行列）．
+                            </p>
+                        </div>
+
+                        <h4>Step 1：$HD$ を計算する</h4>
+                        <div class="step-box">
+                            <div class="step-title">各行から行平均を引く操作</div>
+                            <p>$HD$ の各行 $i$ の成分は，$D$ の行 $i$ の各要素から「行 $i$ の平均」を引いた値です．</p>
+                            <p>$D$ の各行の平均：</p>
+                            <ul style="margin-top:4px;">
+                                <li>行1：$(0+5+5+16)/4 = 26/4 = 6.5$</li>
+                                <li>行2：$(5+0+4+5)/4 = 14/4 = 3.5$</li>
+                                <li>行3：$(5+4+0+5)/4 = 14/4 = 3.5$</li>
+                                <li>行4：$(16+5+5+0)/4 = 26/4 = 6.5$</li>
+                            </ul>
+                            <div class="formula-block">
+                                $$HD = \begin{pmatrix} 0-6.5 & 5-6.5 & 5-6.5 & 16-6.5 \\ 5-3.5 & 0-3.5 & 4-3.5 & 5-3.5 \\ 5-3.5 & 4-3.5 & 0-3.5 & 5-3.5 \\ 16-6.5 & 5-6.5 & 5-6.5 & 0-6.5 \end{pmatrix} = \begin{pmatrix} -6.5 & -1.5 & -1.5 & 9.5 \\ 1.5 & -3.5 & 0.5 & 1.5 \\ 1.5 & 0.5 & -3.5 & 1.5 \\ 9.5 & -1.5 & -1.5 & -6.5 \end{pmatrix}$$
+                            </div>
+                        </div>
+
+                        <h4>Step 2：$(HD)H = HDH$ を計算する（各列から列平均を引く）</h4>
+                        <div class="step-box">
+                            <div class="step-title">さらに各列から列平均を引く操作</div>
+                            <p>$HDH$ の各列 $j$ は，$HD$ の列 $j$ の各要素から「列 $j$ の平均」を引いた値です．</p>
+                            <p>$HD$ の各列の平均：</p>
+                            <ul style="margin-top:4px;">
+                                <li>列1：$(-6.5+1.5+1.5+9.5)/4 = 6/4 = 1.5$</li>
+                                <li>列2：$(-1.5-3.5+0.5-1.5)/4 = -6/4 = -1.5$</li>
+                                <li>列3：$(-1.5+0.5-3.5-1.5)/4 = -6/4 = -1.5$</li>
+                                <li>列4：$(9.5+1.5+1.5-6.5)/4 = 6/4 = 1.5$</li>
+                            </ul>
+                            <div class="formula-block">
+                                $$HDH = \begin{pmatrix} -6.5-1.5 & -1.5-(-1.5) & -1.5-(-1.5) & 9.5-1.5 \\ 1.5-1.5 & -3.5-(-1.5) & 0.5-(-1.5) & 1.5-1.5 \\ 1.5-1.5 & 0.5-(-1.5) & -3.5-(-1.5) & 1.5-1.5 \\ 9.5-1.5 & -1.5-(-1.5) & -1.5-(-1.5) & -6.5-1.5 \end{pmatrix} = \begin{pmatrix} -8 & 0 & 0 & 8 \\ 0 & -2 & 2 & 0 \\ 0 & 2 & -2 & 0 \\ 8 & 0 & 0 & -8 \end{pmatrix}$$
+                            </div>
+                        </div>
+
+                        <h4>Step 3：$B = -\dfrac{1}{2} HDH$ を計算する</h4>
+                        <div class="step-box">
+                            <div class="step-title">−1/2 を掛ける</div>
+                            <div class="formula-block">
+                                $$\boxed{B = -\frac{1}{2}HDH = \begin{pmatrix} 4 & 0 & 0 & -4 \\ 0 & 1 & -1 & 0 \\ 0 & -1 & 1 & 0 \\ -4 & 0 & 0 & 4 \end{pmatrix}}$$
+                            </div>
+                        </div>
+
+                        <h4>Step 4：B の固有値を求める</h4>
+                        <div class="step-box">
+                            <div class="step-title">B の構造を観察する</div>
+                            <p>
+                                $B$ は行列のランクが2（行1と行4が反比例，行2と行3が反比例）であることに気づきます．
+                                $B$ の各行の和が0（$B\mathbf{1} = \mathbf{0}$）なので，$\lambda=0$ は少なくとも1つの固有値です．
+                                実際，$B$ は対称行列なので直交固有ベクトルを持ちます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#9b59b6;">
+                            <div class="box-title"><i class="fas fa-calculator"></i> ブロック構造を利用した固有値の計算</div>
+                            <p>
+                                $B$ は2つの $2\times 2$ ブロックに分解できます：
+                                上左ブロック（行1,4と列1,4）と，中央ブロック（行2,3と列2,3）．
+                            </p>
+                            <p><strong>ブロック1：$\begin{pmatrix}4 & -4 \\ -4 & 4\end{pmatrix}$</strong> の固有値</p>
+                            <div class="formula-block">
+                                $$\det\begin{pmatrix}4-\lambda & -4 \\ -4 & 4-\lambda\end{pmatrix} = (4-\lambda)^2 - 16 = 0
+                                \implies \lambda^2 - 8\lambda = 0 \implies \lambda(\lambda-8) = 0$$
+                            </div>
+                            <p>→ 固有値 $\lambda = 8$ と $\lambda = 0$</p>
+
+                            <p style="margin-top:0.8em;"><strong>ブロック2：$\begin{pmatrix}1 & -1 \\ -1 & 1\end{pmatrix}$</strong> の固有値</p>
+                            <div class="formula-block">
+                                $$\det\begin{pmatrix}1-\lambda & -1 \\ -1 & 1-\lambda\end{pmatrix} = (1-\lambda)^2 - 1 = 0
+                                \implies \lambda^2 - 2\lambda = 0 \implies \lambda(\lambda-2) = 0$$
+                            </div>
+                            <p>→ 固有値 $\lambda = 2$ と $\lambda = 0$</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;margin-top:0.5em;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> B の固有値</div>
+                            <div class="formula-block">
+                                $$\lambda_1 = 8,\quad \lambda_2 = 2,\quad \lambda_3 = 0,\quad \lambda_4 = 0$$
+                            </div>
+                        </div>
+
+                        <h4>Step 5：固有ベクトルを求める（ノルム1に基準化）</h4>
+
+                        <div class="step-box">
+                            <div class="step-title">$\lambda_1 = 8$ の固有ベクトル</div>
+                            <p>$(B - 8I)v = 0$ を解く：</p>
+                            <div class="formula-block">
+                                $$(B - 8I) = \begin{pmatrix} -4 & 0 & 0 & -4 \\ 0 & -7 & -1 & 0 \\ 0 & -1 & -7 & 0 \\ -4 & 0 & 0 & -4 \end{pmatrix}$$
+                            </div>
+                            <p>行1より $-4v_1 - 4v_4 = 0 \Rightarrow v_1 = -v_4$．行2より $-7v_2 - v_3 = 0$，行3より $-v_2 - 7v_3 = 0$．これらから $v_2 = v_3 = 0$（非自明解は $7v_2 = -v_3$ かつ $v_2 = -7v_3 \Rightarrow v_2=v_3=0$）．</p>
+                            <p>$v_1 = 1, v_4 = -1, v_2 = v_3 = 0$（スケーリング前）．ノルム1に正規化：$\|v\| = \sqrt{2}$</p>
+                            <div class="formula-block">
+                                $$u_1 = \frac{1}{\sqrt{2}}\begin{pmatrix}1\\0\\0\\-1\end{pmatrix}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\lambda_2 = 2$ の固有ベクトル</div>
+                            <p>$(B - 2I)v = 0$ を解く：</p>
+                            <div class="formula-block">
+                                $$(B - 2I) = \begin{pmatrix} 2 & 0 & 0 & -4 \\ 0 & -1 & -1 & 0 \\ 0 & -1 & -1 & 0 \\ -4 & 0 & 0 & 2 \end{pmatrix}$$
+                            </div>
+                            <p>行1より $2v_1 - 4v_4 = 0 \Rightarrow v_1 = 2v_4$．行4より $-4v_1 + 2v_4 = 0 \Rightarrow v_1 = v_4/2$．これらが同時に成り立つのは $v_1 = v_4 = 0$ のとき．行2より $v_2 = -v_3$，$v_3 = 1$ とすると $v_2 = -1$．ノルム1に正規化：</p>
+                            <div class="formula-block">
+                                $$u_2 = \frac{1}{\sqrt{2}}\begin{pmatrix}0\\1\\-1\\0\end{pmatrix}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\lambda_{3,4} = 0$ の固有ベクトル（2つ）</div>
+                            <p>$Bv = 0$ を解く（$B$ の零空間）：</p>
+                            <p>ブロック1の $\lambda=0$ 固有ベクトル：$4v_1 - 4v_4 = 0 \Rightarrow v_1 = v_4$，$v_2=v_3=0$ → 正規化すると $\left(\dfrac{1}{\sqrt{2}}, 0, 0, \dfrac{1}{\sqrt{2}}\right)^T$</p>
+                            <p>ブロック2の $\lambda=0$ 固有ベクトル：$v_1=v_4=0$，$v_2 = v_3 = 1$ → 正規化すると $\left(0, \dfrac{1}{\sqrt{2}}, \dfrac{1}{\sqrt{2}}, 0\right)^T$</p>
+                            <div class="formula-block">
+                                $$u_3 = \frac{1}{\sqrt{2}}\begin{pmatrix}1\\0\\0\\1\end{pmatrix}, \quad u_4 = \frac{1}{\sqrt{2}}\begin{pmatrix}0\\1\\1\\0\end{pmatrix}$$
+                            </div>
+                            <p style="font-size:0.88em;color:#777;">（固有値0に対応する固有ベクトルは張る線形部分空間を変えなければ自由にとることができる）</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：固有値と固有ベクトルのまとめ</div>
+                            <table class="data-table eigen-table" style="max-width:520px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>固有値 $\lambda$</th><th>ノルム1の固有ベクトル $u$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>$\lambda_1 = 8$</td>
+                                        <td>$u_1 = \left(\dfrac{1}{\sqrt{2}}, 0, 0, -\dfrac{1}{\sqrt{2}}\right)^T$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\lambda_2 = 2$</td>
+                                        <td>$u_2 = \left(0, \dfrac{1}{\sqrt{2}}, -\dfrac{1}{\sqrt{2}}, 0\right)^T$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\lambda_3 = 0$</td>
+                                        <td>$u_3 = \left(\dfrac{1}{\sqrt{2}}, 0, 0, \dfrac{1}{\sqrt{2}}\right)^T$</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$\lambda_4 = 0$</td>
+                                        <td>$u_4 = \left(0, \dfrac{1}{\sqrt{2}}, \dfrac{1}{\sqrt{2}}, 0\right)^T$</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問26.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q261-2">
+                    <h2><i class="fas fa-pencil"></i> 問26.1 [2] — 次元数1の計量 MDS による座標</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 1次元 MDS の座標の求め方</div>
+                            <p>
+                                次元数 $k=1$ のとき，座標（スカラー）は<strong>最大固有値 $\lambda_1$ に対応する固有ベクトル $u_1$ を $\sqrt{\lambda_1}$ 倍</strong>したものです：
+                            </p>
+                            <div class="formula-block">
+                                $$x_i = u_{1i} \cdot \sqrt{\lambda_1} \quad (i=1,2,3,4)$$
+                            </div>
+                        </div>
+
+                        <h4>座標の計算</h4>
+                        <div class="step-box">
+                            <div class="step-title">$u_1 \cdot \sqrt{\lambda_1}$ を計算する</div>
+                            <p>$\lambda_1 = 8$ なので $\sqrt{\lambda_1} = \sqrt{8} = 2\sqrt{2}$</p>
+                            <div class="formula-block">
+                                $$\begin{pmatrix} x_1 \\ x_2 \\ x_3 \\ x_4 \end{pmatrix} = u_1 \cdot \sqrt{8} = \frac{1}{\sqrt{2}}\begin{pmatrix}1\\0\\0\\-1\end{pmatrix} \times 2\sqrt{2} = \begin{pmatrix}2\\0\\0\\-2\end{pmatrix}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 1次元MDS の座標</div>
+                            <p>
+                                個体1〜4の順に，座標は
+                                $x_1 = 2,\quad x_2 = 0,\quad x_3 = 0,\quad x_4 = -2$
+                            </p>
+                        </div>
+
+                        <h4>得られた座標から距離の2乗行列 $\tilde{D}$ を計算する</h4>
+                        <div class="step-box">
+                            <div class="step-title">$\tilde{d}_{ij} = (x_i - x_j)^2$</div>
+                            <table class="data-table dist-table" style="max-width:420px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>$(i,j)$</th><th>$x_i - x_j$</th><th>$\tilde{d}_{ij} = (x_i-x_j)^2$</th><th>元の $d_{ij}$</th><th>一致？</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>(1,2)</td><td>$2-0=2$</td><td>$4$</td><td>$5$</td><td>✗</td></tr>
+                                    <tr><td>(1,3)</td><td>$2-0=2$</td><td>$4$</td><td>$5$</td><td>✗</td></tr>
+                                    <tr><td>(1,4)</td><td>$2-(-2)=4$</td><td>$16$</td><td>$16$</td><td>✓</td></tr>
+                                    <tr><td>(2,3)</td><td>$0-0=0$</td><td>$0$</td><td>$4$</td><td>✗</td></tr>
+                                    <tr><td>(2,4)</td><td>$0-(-2)=2$</td><td>$4$</td><td>$5$</td><td>✗</td></tr>
+                                    <tr><td>(3,4)</td><td>$0-(-2)=2$</td><td>$4$</td><td>$5$</td><td>✗</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="formula-block" style="margin-top:0.8em;">
+                                $$\tilde{D} = \begin{pmatrix} 0 & 4 & 4 & 16 \\ 4 & 0 & 0 & 4 \\ 4 & 0 & 0 & 4 \\ 16 & 4 & 4 & 0 \end{pmatrix}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-times-circle" style="color:#e74c3c;"></i> 確認結果：1次元では完全再現できていない</div>
+                            <p>
+                                $\tilde{D} \neq D$ であり，元の距離行列 $D$ を<strong>完全には再現できていない</strong>．
+                                特に個体2と3の距離（$d_{23}=4$ が $\tilde{d}_{23}=0$ に）など，多くの成分が異なっている．
+                                これは，1次元では情報が不足しているためです（固有値 $\lambda_2=2$ の情報が失われている）．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問26.1 [3]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q261-3">
+                    <h2><i class="fas fa-pencil"></i> 問26.1 [3] — 次元数2の計量 MDS による座標</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 2次元 MDS の座標の求め方</div>
+                            <p>
+                                次元数 $k=2$ のとき，各個体の座標は2次元ベクトル $(x_{i1}, x_{i2})$ で表されます：
+                            </p>
+                            <div class="formula-block">
+                                $$x_{i1} = u_{1i} \cdot \sqrt{\lambda_1}, \quad x_{i2} = u_{2i} \cdot \sqrt{\lambda_2}$$
+                            </div>
+                            <p>行列形式では，$X = U_2 \Lambda_2^{1/2}$（$U_2 = [u_1, u_2]$，$\Lambda_2 = \mathrm{diag}(\lambda_1, \lambda_2)$）</p>
+                        </div>
+
+                        <h4>座標の計算</h4>
+                        <div class="step-box">
+                            <div class="step-title">$U_2 \Lambda_2^{1/2}$ を計算する</div>
+                            <p>$\sqrt{\lambda_1} = \sqrt{8} = 2\sqrt{2}$，$\sqrt{\lambda_2} = \sqrt{2}$</p>
+                            <div class="formula-block">
+                                $$X = \frac{1}{\sqrt{2}}\begin{pmatrix}1 & 0\\ 0 & 1\\ 0 & -1\\ -1 & 0\end{pmatrix}
+                                \begin{pmatrix}2\sqrt{2} & 0\\ 0 & \sqrt{2}\end{pmatrix}
+                                = \frac{1}{\sqrt{2}}\begin{pmatrix}2\sqrt{2} & 0\\ 0 & \sqrt{2}\\ 0 & -\sqrt{2}\\ -2\sqrt{2} & 0\end{pmatrix}
+                                = \begin{pmatrix}2 & 0\\ 0 & 1\\ 0 & -1\\ -2 & 0\end{pmatrix}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 2次元MDS の座標</div>
+                            <table class="data-table coord-table" style="max-width:300px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>個体</th><th>第1座標 $x_{i1}$</th><th>第2座標 $x_{i2}$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><b>1</b></td><td>$2$</td><td>$0$</td></tr>
+                                    <tr><td><b>2</b></td><td>$0$</td><td>$1$</td></tr>
+                                    <tr><td><b>3</b></td><td>$0$</td><td>$-1$</td></tr>
+                                    <tr><td><b>4</b></td><td>$-2$</td><td>$0$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 散布図 SVG -->
+                        <div class="scatter-center" style="margin-top:1em;">
+                            <svg width="280" height="280" viewBox="-20 -20 280 280" xmlns="http://www.w3.org/2000/svg"
+                                 aria-label="2次元MDS 散布図">
+                                <rect x="-20" y="-20" width="280" height="280" fill="#fafafa" rx="6"/>
+                                <!-- グリッド（目盛り間隔50px, 中心(120,120)） -->
+                                <line x1="0"   y1="70"  x2="240" y2="70"  stroke="#e8e8e8" stroke-width="0.8"/>
+                                <line x1="0"   y1="120" x2="240" y2="120" stroke="#aaa"    stroke-width="1.2"/>
+                                <line x1="0"   y1="170" x2="240" y2="170" stroke="#e8e8e8" stroke-width="0.8"/>
+                                <line x1="70"  y1="0"   x2="70"  y2="240" stroke="#e8e8e8" stroke-width="0.8"/>
+                                <line x1="120" y1="0"   x2="120" y2="240" stroke="#aaa"    stroke-width="1.2"/>
+                                <line x1="170" y1="0"   x2="170" y2="240" stroke="#e8e8e8" stroke-width="0.8"/>
+                                <line x1="20"  y1="0"   x2="20"  y2="240" stroke="#e8e8e8" stroke-width="0.8"/>
+                                <line x1="220" y1="0"   x2="220" y2="240" stroke="#e8e8e8" stroke-width="0.8"/>
+                                <!-- 軸ラベル -->
+                                <text x="232" y="124" font-size="11" fill="#555" text-anchor="start">第1軸</text>
+                                <text x="124" y="10"  font-size="11" fill="#555">第2軸</text>
+                                <!-- 目盛りラベル（スケール1unit=50px） -->
+                                <!-- x: -2→20, -1→70, 0→120, 1→170, 2→220 -->
+                                <text x="20"  y="133" font-size="9" fill="#888" text-anchor="middle">-2</text>
+                                <text x="70"  y="133" font-size="9" fill="#888" text-anchor="middle">-1</text>
+                                <text x="170" y="133" font-size="9" fill="#888" text-anchor="middle">1</text>
+                                <text x="220" y="133" font-size="9" fill="#888" text-anchor="middle">2</text>
+                                <!-- y: -2→220, -1→170, 0→120, 1→70, 2→20 -->
+                                <text x="113" y="73"  font-size="9" fill="#888" text-anchor="end">1</text>
+                                <text x="113" y="23"  font-size="9" fill="#888" text-anchor="end">2</text>
+                                <text x="113" y="173" font-size="9" fill="#888" text-anchor="end">-1</text>
+                                <text x="113" y="223" font-size="9" fill="#888" text-anchor="end">-2</text>
+                                <!-- 個体プロット -->
+                                <!-- 1: (2,0) → cx=220, cy=120 -->
+                                <circle cx="220" cy="120" r="7" fill="#e74c3c" stroke="#c0392b" stroke-width="1.5"/>
+                                <text x="222" y="112" font-size="13" fill="#c0392b" font-weight="700">1</text>
+                                <!-- 2: (0,1) → cx=120, cy=70 -->
+                                <circle cx="120" cy="70"  r="7" fill="#3498db" stroke="#2471a3" stroke-width="1.5"/>
+                                <text x="126" y="68"  font-size="13" fill="#2471a3" font-weight="700">2</text>
+                                <!-- 3: (0,-1) → cx=120, cy=170 -->
+                                <circle cx="120" cy="170" r="7" fill="#27ae60" stroke="#1e8449" stroke-width="1.5"/>
+                                <text x="126" y="180" font-size="13" fill="#1e8449" font-weight="700">3</text>
+                                <!-- 4: (-2,0) → cx=20, cy=120 -->
+                                <circle cx="20"  cy="120" r="7" fill="#9b59b6" stroke="#7d3c98" stroke-width="1.5"/>
+                                <text x="6"   y="112" font-size="13" fill="#7d3c98" font-weight="700">4</text>
+                                <!-- タイトル -->
+                                <text x="120" y="255" font-size="10" fill="#777" text-anchor="middle">図26.1　2次元MDS 座標プロット</text>
+                            </svg>
+                        </div>
+
+                        <h4>得られた座標から距離の2乗行列 $\tilde{D}$ を計算する</h4>
+                        <div class="step-box">
+                            <div class="step-title">$\tilde{d}_{ij} = \|x_i - x_j\|^2 = (x_{i1}-x_{j1})^2 + (x_{i2}-x_{j2})^2$</div>
+                            <table class="data-table dist-table" style="max-width:560px; margin:0 auto; font-size:0.88em;">
+                                <thead>
+                                    <tr><th>$(i,j)$</th><th>$x_i$</th><th>$x_j$</th><th>計算</th><th>$\tilde{d}_{ij}$</th><th>元の $d_{ij}$</th><th>一致？</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>(1,2)</td><td>$(2,0)$</td><td>$(0,1)$</td>
+                                        <td>$(2-0)^2+(0-1)^2 = 4+1$</td>
+                                        <td class="highlight-cell">$5$</td><td>$5$</td><td>✓</td>
+                                    </tr>
+                                    <tr>
+                                        <td>(1,3)</td><td>$(2,0)$</td><td>$(0,-1)$</td>
+                                        <td>$(2-0)^2+(0+1)^2 = 4+1$</td>
+                                        <td class="highlight-cell">$5$</td><td>$5$</td><td>✓</td>
+                                    </tr>
+                                    <tr>
+                                        <td>(1,4)</td><td>$(2,0)$</td><td>$(-2,0)$</td>
+                                        <td>$(2+2)^2+(0-0)^2 = 16+0$</td>
+                                        <td class="highlight-cell">$16$</td><td>$16$</td><td>✓</td>
+                                    </tr>
+                                    <tr>
+                                        <td>(2,3)</td><td>$(0,1)$</td><td>$(0,-1)$</td>
+                                        <td>$(0-0)^2+(1+1)^2 = 0+4$</td>
+                                        <td class="highlight-cell">$4$</td><td>$4$</td><td>✓</td>
+                                    </tr>
+                                    <tr>
+                                        <td>(2,4)</td><td>$(0,1)$</td><td>$(-2,0)$</td>
+                                        <td>$(0+2)^2+(1-0)^2 = 4+1$</td>
+                                        <td class="highlight-cell">$5$</td><td>$5$</td><td>✓</td>
+                                    </tr>
+                                    <tr>
+                                        <td>(3,4)</td><td>$(0,-1)$</td><td>$(-2,0)$</td>
+                                        <td>$(0+2)^2+(-1-0)^2 = 4+1$</td>
+                                        <td class="highlight-cell">$5$</td><td>$5$</td><td>✓</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="formula-block" style="margin-top:0.8em;">
+                                $$\tilde{D} = \begin{pmatrix} 0 & 5 & 5 & 16 \\ 5 & 0 & 4 & 5 \\ 5 & 4 & 0 & 5 \\ 16 & 5 & 5 & 0 \end{pmatrix} = D$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 確認結果：2次元で元の距離行列を完全に再現できている</div>
+                            <p>
+                                $\tilde{D} = D$ であり，元の距離行列 $D$ を<strong>完全に再現</strong>できている．
+                            </p>
+                            <p>
+                                これは，$B$ の正の固有値がちょうど2つ（$\lambda_1=8, \lambda_2=2$）であり，
+                                残りの固有値がすべて0であることに対応しています．
+                                つまり，このデータは<strong>真に2次元ユークリッド空間</strong>で表現できる構造を持っており，
+                                2次元MDS がその構造を完璧に復元しています．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 次元数の選び方と情報量の観点</div>
+                            <p>
+                                固有値 $\lambda_1 = 8, \lambda_2 = 2$ の<strong>累積寄与率</strong>を確認しましょう：
+                            </p>
+                            <table class="data-table calc-table" style="max-width:400px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>次元</th><th>固有値</th><th>寄与率</th><th>累積寄与率</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>1</td><td>$\lambda_1 = 8$</td><td>$8/10 = 80\%$</td><td>$80\%$</td></tr>
+                                    <tr><td>2</td><td>$\lambda_2 = 2$</td><td>$2/10 = 20\%$</td><td>$100\%$</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;">
+                                （正の固有値の合計 $= 8 + 2 = 10$）<br>
+                                1次元では固有値の80%の情報しか持てないため，$d_{23}=4$ など一部の距離が再現できませんでした．
+                                2次元にすることで100%の情報が使えるため，完全再現が実現しています．
+                            </p>
+                            <p>
+                                実際のデータ分析では，正の固有値がいくつあるかを確認し，
+                                <strong>累積寄与率が十分高くなる次元数（例：80〜90%以上）</strong>を選ぶことが一般的です．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#9b59b6;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 各個体の位置の解釈（図26.1）</div>
+                            <p>
+                                個体1（右端）と個体4（左端）は第1軸方向に距離2の位置に離れており，
+                                それらの距離の2乗は $d_{14} = 16$ と最大です．
+                                個体2（上）と個体3（下）は第2軸方向に距離1の位置に離れており，
+                                $d_{23} = 4$ は中程度の値です．
+                                これらの「位置関係」を視覚的に捉えることがMDSの目的です．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

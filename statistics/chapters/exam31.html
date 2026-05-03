@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第31章 章末問題解説 - ベイズ法</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        /* アルゴリズムボックス */
+        .algo-box {
+            background: #f8f9fa;
+            border: 1px solid #d0d8ef;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 0.8em 0;
+            font-size: 0.92em;
+        }
+        .algo-box p { margin: 0.25em 0; line-height: 1.8; }
+        .algo-step { margin-left: 1em; }
+        .algo-step-sub { margin-left: 2.2em; }
+
+        /* 図の説明ボックス */
+        .figure-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 0.8em 0;
+        }
+        .figure-cell {
+            flex: 1;
+            min-width: 200px;
+            border: 1px solid #d0d8ef;
+            border-radius: 8px;
+            padding: 10px 14px;
+            background: #fafbff;
+        }
+        .figure-cell.highlight {
+            border-color: #3498db;
+            background: #f0f6ff;
+        }
+        .figure-label {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第31章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 31 — 章末問題解説</span>
+            <h1>ベイズ法<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">事前分布・事後分布・ベイズ推定・MAP推定・MCMC・ギブス・サンプリング</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter31.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第31章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q311">問31.1 問題</a></li>
+                            <li><a href="#q311-1">問31.1 [1] 解答</a></li>
+                            <li><a href="#q311-2">問31.1 [2] 解答</a></li>
+                            <li><a href="#q312">問31.2 問題</a></li>
+                            <li><a href="#q312-1">問31.2 [1] 解答</a></li>
+                            <li><a href="#q312-2">問31.2 [2] 解答</a></li>
+                            <li><a href="#q313">問31.3 問題</a></li>
+                            <li><a href="#q313-1">問31.3 [1] 解答</a></li>
+                            <li><a href="#q313-2">問31.3 [2] 解答</a></li>
+                            <li><a href="#q313-3">問31.3 [3] 解答</a></li>
+                            <li><a href="#q314">問31.4 問題</a></li>
+                            <li><a href="#q314-1">問31.4 [1] 解答</a></li>
+                            <li><a href="#q314-2">問31.4 [2] 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第31章 概要                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第31章「ベイズ法」のキーポイント</div>
+                        <ul>
+                            <li><strong>事前分布 $\pi(\theta)$：</strong>データを観測する前のパラメータ $\theta$ に関する情報を確率分布で表したもの。</li>
+                            <li><strong>事後分布 $\pi(\theta|\boldsymbol{x})$：</strong>データ観測後のパラメータの分布。ベイズの定理より $\pi(\theta|\boldsymbol{x}) \propto f(\boldsymbol{x}|\theta)\,\pi(\theta)$（尤度 $\times$ 事前分布）。</li>
+                            <li><strong>ベイズ推定量：</strong>事後分布の<strong>期待値</strong>。二乗損失のベイズリスクを最小化する。</li>
+                            <li><strong>MAP推定量：</strong>事後分布の<strong>最頻値（モード）</strong>。周辺尤度を計算しなくても $f(\boldsymbol{x}|\theta)\pi(\theta)$ の最大化で求められる。</li>
+                            <li><strong>共役事前分布：</strong>事後分布が事前分布と同じ確率分布族に属するような事前分布。<br>例：二項分布 ↔ ベータ分布，ポアソン分布 ↔ ガンマ分布。</li>
+                            <li><strong>ガンマ分布 $Ga(a, 1/\beta)$：</strong>密度 $\pi(\lambda) = \dfrac{\beta^a}{\Gamma(a)}\lambda^{a-1}e^{-\beta\lambda}$，期待値 $= a/\beta$，モード $= (a-1)/\beta$。</li>
+                            <li><strong>ベイズ予測分布：</strong>$f(x_{n+1}|\boldsymbol{x}) = \int f(x_{n+1}|\theta)\,\pi(\theta|\boldsymbol{x})\,d\theta$。将来データの予測に用いる。</li>
+                            <li><strong>MH（メトロポリス・ヘイスティングス）アルゴリズム：</strong>提案分布からサンプル候補を生成し，採択確率 $\alpha = \min\!\{1, \pi(y)/\pi(x^{(t)})\}$（酔歩の場合）に基づいて採択・棄却を繰り返すMCMC法。</li>
+                            <li><strong>ギブス・サンプリング：</strong>多変量の場合に，各成分を完全条件付き分布から順番にサンプリングするMCMC法。提案分布の設定が不要。</li>
+                            <li><strong>稼動検査期間（burn-in）：</strong>初期値の影響を除去するために最初のサンプルを捨てる期間。</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問31.1                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q311">
+                    <h2><i class="fas fa-question-circle"></i> 問31.1　くじ引きのベイズ推定（ベータ分布）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            あるコンビニエンスストアチェーンでは，500円購入ごとに商品無料引換券が当たるくじを1枚引くことができる．
+                        </p>
+                        <p>
+                            大学でデータサイエンスを学ぶA君とBさんは，当たりが出る確率 $\theta$ をベイズ推定してみることにした．
+                            これまで一度もこのくじを引いたことのないA君は，区間 $(0,1)$ 上の一様分布 $U(0,1)$ を事前分布として用いた．
+                            何度もこのくじを引いたことのあるBさんは，過去の経験から $\theta$ の事前分布としてベータ分布 $Be(1,4)$ を用いた．
+                        </p>
+                        <p>
+                            また，$n$ 回くじを引いたときに当たりが出る数 $X$ は二項分布 $Bin(n,\theta)$ に従うとする．
+                        </p>
+                        <p>
+                            A君とBさんは2人でこのコンビニエンスストアチェーンで5000円の買い物をし，
+                            10枚のくじを引いたところ，<strong>3枚の当たりが出た</strong>（$n=10,\; X=3$）．
+                        </p>
+                        <p><strong>[1]</strong> A君の $\theta$ に関する事後分布と $\theta$ のベイズ推定量を求めよ．</p>
+                        <p><strong>[2]</strong> Bさんの $\theta$ に関する事後分布と $\theta$ のMAP推定量を求めよ．</p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q311-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> ベータ分布の性質（復習）</div>
+                            <p>
+                                $Be(a,b)$ の確率密度関数は $f(\theta) \propto \theta^{a-1}(1-\theta)^{b-1}$（$0 < \theta < 1$）であり，
+                            </p>
+                            <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
+                                <li>期待値 $= \dfrac{a}{a+b}$</li>
+                                <li>モード $= \dfrac{a-1}{a+b-2}$（$a>1, b>1$ のとき）</li>
+                            </ul>
+                            <p>
+                                また，$U(0,1) = Be(1,1)$ である（$a=b=1$ のとき一様分布になる）．
+                            </p>
+                        </div>
+
+                        <h3>事後分布の導出</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">尤度関数と事前分布</div>
+                            <p>
+                                $n=10$ 回中 $X=3$ 回当たりが出たときの尤度関数は，二項分布より：
+                            </p>
+                            <div class="formula-block">
+                                $$f(X=3|\theta) = \binom{10}{3}\theta^3(1-\theta)^7 \propto \theta^3(1-\theta)^7$$
+                            </div>
+                            <p>
+                                A君の事前分布は $U(0,1) = Be(1,1)$ なので，
+                                事前分布の確率密度関数は $\pi(\theta) \propto \theta^{1-1}(1-\theta)^{1-1} = 1$（定数）．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">ベイズの定理で事後分布を求める</div>
+                            <p>
+                                事後分布は「尤度 × 事前分布」に比例するので：
+                            </p>
+                            <div class="formula-block">
+                                $$\pi_A(\theta|X) \propto f(X|\theta)\,\pi(\theta)
+                                \propto \theta^3(1-\theta)^7 \times 1
+                                = \theta^{(3+1)-1}(1-\theta)^{(7+1)-1}$$
+                            </div>
+                            <p>
+                                これは $Be(a,b)$ の核（$\theta^{a-1}(1-\theta)^{b-1}$）の形であり，$a=4, b=8$ に対応します．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 結果</div>
+                            <p>
+                                <strong>事後分布：$Be(4, 8)$</strong>
+                            </p>
+                            <p>
+                                ベータ分布 $Be(a,b)$ の期待値は $a/(a+b)$ なので，
+                            </p>
+                            <div class="formula-block">
+                                $$\hat{\theta}_{\text{Bayes}} = \frac{4}{4+8} = \frac{4}{12} = \frac{1}{3}$$
+                            </div>
+                            <p>
+                                <strong>ベイズ推定量：$\hat{\theta}_{\text{Bayes}} = 1/3$</strong>
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 直感的な解釈</div>
+                            <p>
+                                A君の事前分布 $Be(1,1)$ は「過去のデータが 0回中0当たり」のような無情報な状態に対応します．
+                                データ $X=3/10$ を観測することで $Be(1+3,\; 1+7) = Be(4,8)$ に更新されます．
+                                ベイズ推定量 $1/3$ は，観測した当たり率 $3/10$ とほぼ等しくなります（事前分布が無情報なため）．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q311-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <h3>事後分布の導出</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">Bさんの事前分布：$Be(1,4)$</div>
+                            <p>
+                                $Be(1,4)$ の確率密度関数は $\pi(\theta) \propto \theta^{1-1}(1-\theta)^{4-1} = (1-\theta)^3$．
+                                これはBさんが「過去の経験上，当たりは出にくい（$\theta$ は小さいほどあり得る）」
+                                という事前情報をもっていることを意味します．
+                            </p>
+                            <p>
+                                なお，$Be(1,4)$ の期待値は $1/(1+4) = 1/5 = 0.2$ であり，
+                                当たり確率が20%程度という事前情報に対応しています．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">ベイズの定理で事後分布を求める</div>
+                            <p>
+                                事後分布は：
+                            </p>
+                            <div class="formula-block">
+                                $$\pi_B(\theta|X) \propto f(X|\theta)\,\pi(\theta)
+                                \propto \theta^3(1-\theta)^7 \times (1-\theta)^3
+                                = \theta^3(1-\theta)^{10}
+                                = \theta^{(3+1)-1}(1-\theta)^{(11)-1}$$
+                            </div>
+                            <p>
+                                （$a = 1+3 = 4$，$b = 4+7 = 11$）
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 結果</div>
+                            <p>
+                                <strong>事後分布：$Be(4, 11)$</strong>
+                            </p>
+                            <p>
+                                ベータ分布 $Be(a,b)$ のモードは $(a-1)/(a+b-2)$ なので，
+                            </p>
+                            <div class="formula-block">
+                                $$\hat{\theta}_{\text{MAP}} = \frac{4-1}{4+11-2} = \frac{3}{13} \approx 0.231$$
+                            </div>
+                            <p>
+                                <strong>MAP推定量：$\hat{\theta}_{\text{MAP}} = 3/13$</strong>
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> A君とBさんの比較</div>
+                            <table class="data-table" style="max-width:500px; margin:0 auto;">
+                                <thead>
+                                    <tr><th></th><th>A君</th><th>Bさん</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>事前分布</td><td>$Be(1,1) = U(0,1)$（無情報）</td><td>$Be(1,4)$（当たりにくいという事前知識）</td></tr>
+                                    <tr><td>事後分布</td><td>$Be(4,8)$</td><td>$Be(4,11)$</td></tr>
+                                    <tr><td>推定量</td><td>ベイズ推定量 $= 1/3 \approx 0.333$</td><td>MAP推定量 $= 3/13 \approx 0.231$</td></tr>
+                                    <tr><td>最尤推定量（参考）</td><td colspan="2">$\hat{\theta}_{ML} = 3/10 = 0.3$</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;">
+                                BさんのMAP推定量は「当たりにくい」という事前情報の影響で，最尤推定量 $0.3$ より小さい $0.231$ となっています．
+                                A君のベイズ推定量（$= 1/3$）は事前情報が無情報なため，観測当たり率 $0.3$ に近い値になっています．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問31.2                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q312">
+                    <h2><i class="fas fa-question-circle"></i> 問31.2　交通事故数のベイズ推定とベイズ予測（ガンマ・ポアソンモデル）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            $\boldsymbol{x} = (x_1, x_2, x_3, x_4, x_5)^\top$ はある市における5日間の交通事故数で，
+                            ポアソン分布からのデータ
+                        </p>
+                        <div class="formula-block">
+                            $$f(\boldsymbol{x}|\lambda) = \prod_{i=1}^{5}\frac{\lambda^{x_i}e^{-\lambda}}{x_i!}$$
+                        </div>
+                        <p>
+                            とする．ここでは，ガンマ分布 $Ga(2,\, 1/3)$ を事前分布として用いて，$\lambda$ をベイズ推定することを考える．
+                        </p>
+                        <div class="concept-box" style="margin:0.8em 0;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> ガンマ分布 $Ga(a, 1/\beta)$ の復習</div>
+                            <p>
+                                $Ga(a, 1/\beta)$（形状パラメータ $a$，尺度パラメータ $1/\beta$（レート $\beta$））の確率密度関数：
+                            </p>
+                            <div class="formula-block">
+                                $$\pi(\lambda) = \frac{\beta^a}{\Gamma(a)}\lambda^{a-1}e^{-\beta\lambda} \quad (\lambda > 0)$$
+                            </div>
+                            <p>期待値 $= a/\beta$，モード $= (a-1)/\beta$</p>
+                            <p>
+                                $Ga(2, 1/3)$：$a=2$，レート $\beta=3$。期待値 $= 2/3$，モード $= 1/3$。
+                            </p>
+                        </div>
+                        <p>
+                            <strong>[1]</strong> $\boldsymbol{x} = (5,3,4,1,2)^\top$ が観測されたときの $\lambda$ の事後分布と，その分布の確率密度関数を求めよ．
+                        </p>
+                        <p>
+                            <strong>[2]</strong> 6日目に観測されるデータ $x_6$ のベイズ予測分布の確率密度関数
+                            $f(x_6|\boldsymbol{x}) = \displaystyle\int_0^\infty f(x_6|\lambda)\,\pi(\lambda|\boldsymbol{x})\,d\lambda$
+                            を求めよ．
+                        </p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q312-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <h3>事後分布の導出</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">観測データの確認</div>
+                            <p>
+                                $\boldsymbol{x} = (5,3,4,1,2)^\top$ なので，
+                                $\sum_{i=1}^5 x_i = 5+3+4+1+2 = 15$，$n=5$．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">尤度関数の核</div>
+                            <p>
+                                ポアソン分布の尤度関数の $\lambda$ に依存する部分（核）を取り出します：
+                            </p>
+                            <div class="formula-block">
+                                $$f(\boldsymbol{x}|\lambda) = \prod_{i=1}^5 \frac{\lambda^{x_i}e^{-\lambda}}{x_i!}
+                                \propto \lambda^{\sum x_i}\,e^{-n\lambda}
+                                = \lambda^{15}\,e^{-5\lambda}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">事前分布の核</div>
+                            <p>
+                                $Ga(2, 1/3)$（レート $\beta=3$）の確率密度関数の核：
+                            </p>
+                            <div class="formula-block">
+                                $$\pi(\lambda) \propto \lambda^{2-1}\,e^{-3\lambda} = \lambda\,e^{-3\lambda}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">事後分布の核を計算する</div>
+                            <p>
+                                事後分布は「尤度 × 事前分布」に比例します：
+                            </p>
+                            <div class="formula-block">
+                                $$\pi(\lambda|\boldsymbol{x}) \propto \lambda^{15}\,e^{-5\lambda} \times \lambda\,e^{-3\lambda}
+                                = \lambda^{16}\,e^{-8\lambda}
+                                = \lambda^{(17)-1}\,e^{-8\lambda}$$
+                            </div>
+                            <p>
+                                これは $Ga(a,1/\beta)$ の核（$\lambda^{a-1}e^{-\beta\lambda}$）の形で，$a=17$，レート $\beta=8$（尺度 $1/8$）に対応します．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 結果</div>
+                            <p>
+                                <strong>事後分布：$Ga(17,\; 1/8)$</strong>（形状 $a=17$，レート $8$）
+                            </p>
+                            <p>
+                                事後分布の確率密度関数：
+                            </p>
+                            <div class="formula-block">
+                                $$\pi(\lambda|\boldsymbol{x}) = \frac{8^{17}}{\Gamma(17)}\lambda^{16}e^{-8\lambda}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 共役事前分布の更新則（一般化）</div>
+                            <p>
+                                ポアソン分布モデルに対して，$Ga(a, 1/\beta)$ は共役事前分布です．
+                                $n$ 個のデータ（和が $\sum x_i$）を観測すると，事後分布は次のように更新されます：
+                            </p>
+                            <div class="formula-block">
+                                $$Ga(a, 1/\beta) \xrightarrow{\text{データ}(n個,\,\sum x_i)} Ga\!\left(a + \sum x_i,\; \frac{1}{\beta + n}\right)$$
+                            </div>
+                            <p>
+                                今回: $Ga(2, 1/3) \to Ga(2+15,\; 1/(3+5)) = Ga(17,\; 1/8)$ ✓
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q312-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <h3>ベイズ予測分布の計算</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">積分の設定</div>
+                            <p>
+                                6日目のデータ $x_6$ は $\lambda$ が与えられたとき $Poisson(\lambda)$ に従うので，
+                                $f(x_6|\lambda) = \lambda^{x_6}e^{-\lambda}/x_6!$．
+                                事後分布は $Ga(17,1/8)$ なので：
+                            </p>
+                            <div class="formula-block">
+                                $$f(x_6|\boldsymbol{x}) = \int_0^\infty \frac{\lambda^{x_6}e^{-\lambda}}{x_6!}\cdot\frac{8^{17}}{\Gamma(17)}\lambda^{16}e^{-8\lambda}\,d\lambda
+                                = \frac{8^{17}}{x_6!\cdot\Gamma(17)}\int_0^\infty \lambda^{x_6+16}\,e^{-9\lambda}\,d\lambda$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">ガンマ積分を使って計算する</div>
+                            <p>
+                                ガンマ関数の公式 $\displaystyle\int_0^\infty \lambda^{k}\,e^{-\beta\lambda}\,d\lambda = \dfrac{\Gamma(k+1)}{\beta^{k+1}}$ を用います．
+                                ここでは $k = x_6 + 16$，$\beta = 9$ なので：
+                            </p>
+                            <div class="formula-block">
+                                $$\int_0^\infty \lambda^{x_6+16}\,e^{-9\lambda}\,d\lambda = \frac{\Gamma(17+x_6)}{9^{17+x_6}}$$
+                            </div>
+                            <p>
+                                したがって：
+                            </p>
+                            <div class="formula-block">
+                                $$f(x_6|\boldsymbol{x})
+                                = \frac{8^{17}}{x_6!\cdot\Gamma(17)}\cdot\frac{\Gamma(17+x_6)}{9^{17+x_6}}
+                                = \frac{\Gamma(17+x_6)}{x_6!\cdot\Gamma(17)}\cdot\left(\frac{8}{9}\right)^{17}\cdot\left(\frac{1}{9}\right)^{x_6}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 結果：負の二項分布</div>
+                            <div class="formula-block">
+                                $$f(x_6|\boldsymbol{x}) = \frac{\Gamma(17+x_6)}{x_6!\cdot\Gamma(17)}\left(\frac{8}{9}\right)^{17}\left(\frac{1}{9}\right)^{x_6}
+                                \quad (x_6 = 0, 1, 2, \ldots)$$
+                            </div>
+                            <p>
+                                これは<strong>負の二項分布（Negative Binomial distribution）$NB(17,\; 8/9)$</strong> と呼ばれる分布です．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 負の二項分布の解釈</div>
+                            <p>
+                                ガンマ・ポアソンモデルのベイズ予測分布は，一般に次の形の負の二項分布になります：
+                            </p>
+                            <div class="formula-block">
+                                $$NB(r, p):\quad P(X=k) = \frac{\Gamma(r+k)}{k!\,\Gamma(r)}\,p^r\,(1-p)^k$$
+                            </div>
+                            <p>
+                                ここでは $r=17$，$p=8/9$（成功確率），$1-p=1/9$．
+                                この分布はポアソン分布より裾が重く，<strong>λ のばらつき（不確実性）を考慮した予測分布</strong>となっています．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問31.3                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q313">
+                    <h2><i class="fas fa-question-circle"></i> 問31.3　メトロポリス・ヘイスティングス法（混合正規分布）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            目標分布が混合正規分布
+                            $\dfrac{1}{8}N(-5,1) + \dfrac{3}{4}N(0,1) + \dfrac{1}{8}N(5,1)$
+                            であるような，酔歩連鎖によるメトロポリス・ヘイスティングス法を用いて，
+                            乱数を10000個発生させることを考える．
+                        </p>
+
+                        <div class="algo-box">
+                            <p><strong>Step 0</strong>　初期値 $x^{(0)}$ を設定し，$t \leftarrow 0$ とする．また，$a > 0$ を1つ定める．</p>
+                            <p><strong>Step 1</strong>　$\varepsilon$ を $U(-a,a)$ から発生させ，$y = x^{(t)} + \varepsilon$ とする．</p>
+                            <p><strong>Step 2</strong>　$u$ を $U(0,1)$ から発生させ，
+                                $x^{(t+1)} = \begin{cases} y & (u \leq \alpha(x^{(t)}, y)) \\ x^{(t)} & (\text{それ以外}) \end{cases}$ とする．ただし，$\alpha(x^{(t)},y)$ は採択確率 (C) である．</p>
+                            <p><strong>Step 3</strong>　$t \leftarrow t+1$ とする．</p>
+                            <p><strong>Step 4</strong>　$t \leq 1000$ のときは $x^{(t)}$ を出力しない．$1000 < t \leq 11000$ のときは $x^{(t)}$ を $t-1000$ 番目の乱数として出力する．</p>
+                            <p><strong>Step 5</strong>　$t=11000$ なら終了，それ以外の場合は Step 1 に戻る．</p>
+                        </div>
+
+                        <p><strong>[1]</strong> 酔歩連鎖によるメトロポリス・ヘイスティングス法では，目標分布の確率密度関数が $\pi(x)$ のとき，更新確率 $\alpha(x^{(t)},y)$ は
+                            $\alpha(x^{(t)},y) = \min\!\left\{1,\, \dfrac{\pi(y)}{\pi(x^{(t)})}\right\}$
+                            と表される．$\varphi(\cdot)$ を標準正規分布の確率密度関数としたときに，Step 2 の採択確率 (C) を $\varphi(\cdot)$ を用いて表せ．</p>
+
+                        <p><strong>[2]</strong> 次の図の（ア）〜（エ）は，Step 0 で初期値を $x^{(0)}=0$，$a$ を $0.1, 1, 10, 100$ のいずれかに設定したときに得られた10000個の乱数のヒストグラムと時系列プロットの組合せである．（ア）〜（エ）に対応する $a$ の値はそれぞれいくつになるか．理由も含めて述べよ．</p>
+
+                        <p><strong>[3]</strong> Step 4 にあるように，$x^{(1)},\ldots,x^{(1000)}$ を出力に加えない理由を簡潔に説明せよ．</p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q313-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 目標分布の確率密度関数を確認する</div>
+                            <p>
+                                目標分布は $\pi(x) = \dfrac{1}{8}f_1(x) + \dfrac{3}{4}f_2(x) + \dfrac{1}{8}f_3(x)$，
+                                ここで $f_1(x) = N(-5,1)$，$f_2(x) = N(0,1)$，$f_3(x) = N(5,1)$ の密度関数．
+                            </p>
+                            <p>
+                                $N(\mu,1)$（分散1）の確率密度関数は $\dfrac{1}{\sqrt{2\pi}}e^{-(x-\mu)^2/2} = \varphi(x-\mu)$
+                                と書けます（$\varphi$ は標準正規分布の密度関数）．したがって：
+                            </p>
+                            <div class="formula-block">
+                                $$\pi(x) = \frac{1}{8}\varphi(x+5) + \frac{3}{4}\varphi(x) + \frac{1}{8}\varphi(x-5)$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">採択確率 (C) を求める</div>
+                            <p>
+                                酔歩連鎖のMH法での採択確率は $\alpha(x^{(t)}, y) = \min\!\left\{1,\, \dfrac{\pi(y)}{\pi(x^{(t)})}\right\}$ なので，
+                                $\pi(x)$ を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$\boxed{(C) = \min\!\left\{1,\; \frac{\dfrac{1}{8}\varphi(y+5) + \dfrac{3}{4}\varphi(y) + \dfrac{1}{8}\varphi(y-5)}{\dfrac{1}{8}\varphi(x^{(t)}+5) + \dfrac{3}{4}\varphi(x^{(t)}) + \dfrac{1}{8}\varphi(x^{(t)}-5)}\right\}}$$
+                            </div>
+                            <p>
+                                提案候補 $y$ の目標密度が現在値 $x^{(t)}$ の目標密度より大きい（$\pi(y) \geq \pi(x^{(t)})$）なら必ず採択し，
+                                小さい場合は確率 $\pi(y)/\pi(x^{(t)})$ で採択します．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q313-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> ステップ幅 $a$ の影響を理解する</div>
+                            <p>
+                                提案分布 $U(-a, a)$ は，現在値から「最大 $a$ だけ動く」候補を提案します．
+                                今回の目標分布は $x=-5, 0, +5$ に3つの山（ピーク間距離 $\approx 5$）を持ちます．
+                            </p>
+                            <table class="data-table" style="max-width:540px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>ステップ幅 $a$</th><th>特徴</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>$a$ が小さすぎる</strong><br>（$a=0.1$）</td>
+                                        <td>現在値からほとんど動けず，隣の山に移行できない<br>→ 時系列はほぼ一直線，ヒストグラムは1山だけ</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>$a$ が適切</strong><br>（$a=1, 10$）</td>
+                                        <td>ある程度動けて採択率も高い<br>→ 時系列は細かく動き，ヒストグラムは3山を表現</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>$a$ が大きすぎる</strong><br>（$a=100$）</td>
+                                        <td>候補が目標分布の密度の低い領域に飛ぶ → 採択率が低下<br>→ 時系列は長期間同値に張り付く，チェーンが混合しにくい</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h3>（ア）〜（エ）の対応</h3>
+
+                        <div class="figure-row">
+                            <div class="figure-cell">
+                                <div class="figure-label">（ア） $a = 1$</div>
+                                <p style="font-size:0.88em;">
+                                    ヒストグラムは3山が見えるが形が粗い．時系列プロットは適度に動いており，
+                                    隣の山に時折移行できている状態．$a=1$ のとき，3つの山の間の距離（$\approx 5$）より小さいが，
+                                    ある程度は移動できる．
+                                </p>
+                            </div>
+                            <div class="figure-cell highlight">
+                                <div class="figure-label">（イ） $a = 10$</div>
+                                <p style="font-size:0.88em;">
+                                    ヒストグラムは目標分布の3山をよく近似できており，
+                                    時系列プロットも各山間を頻繁に行き来している．
+                                    $a=10$ はピーク間距離の2倍程度で，最もバランスのよいステップ幅．
+                                </p>
+                            </div>
+                            <div class="figure-cell">
+                                <div class="figure-label">（ウ） $a = 100$</div>
+                                <p style="font-size:0.88em;">
+                                    ヒストグラムは一見3山を近似できているように見えるが，
+                                    時系列プロットを見ると長時間同じ値に留まっていることが多い（採択率が低い）．
+                                    $a=100$ では提案が遠すぎて却下されやすい．
+                                </p>
+                            </div>
+                            <div class="figure-cell">
+                                <div class="figure-label">（エ） $a = 0.1$</div>
+                                <p style="font-size:0.88em;">
+                                    ヒストグラムは1つの山（中央 $x \approx 0$ 付近）しか現れない．
+                                    時系列プロットは非常に細かく動いているが，隣の山（距離5）まで全く到達できていない．
+                                    $a=0.1$ ではステップが小さすぎる．
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>
+                                <strong>（ア）$a=1$，（イ）$a=10$，（ウ）$a=100$，（エ）$a=0.1$</strong>
+                            </p>
+                            <p>
+                                ポイント：3つの正規分布の期待値の差が10であるため，$a$ が $0.1 \to 1 \to 10$ と大きくなるにつれて安定度が増す．
+                                ただし $a=100$ はステップが大きすぎて採択率が低下し，時系列プロットで同じ値に留まることが多い（（ウ）がこれに対応）．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [3] -->
+                    <div class="answer-block" id="q313-3">
+                        <span class="prob-badge badge-a">[3] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え：稼動検査期間（burn-in period）</div>
+                            <p>
+                                <strong>繰り返し回数が少ない初期段階では，マルコフ連鎖が初期値の影響を受けているため．</strong>
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">詳細な説明</div>
+                            <p>
+                                MH法ではマルコフ連鎖を十分に長く動かすと，チェーンの分布は目標分布（定常分布）に近づきます．
+                                しかし，最初の段階（$t = 1, \ldots, 1000$）では，チェーンは初期値 $x^{(0)}=0$ の付近にいることが多く，
+                                目標分布からのサンプルと見なすことができません．
+                            </p>
+                            <p>
+                                この初期の段階を「稼動検査期間（burn-in period）」と呼び，
+                                この期間のサンプル $x^{(1)}, \ldots, x^{(1000)}$ は出力から除外します．
+                                $t > 1000$ になって初めて，チェーンが定常状態に十分近づいたと判断し，サンプルとして利用します．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問31.4                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q314">
+                    <h2><i class="fas fa-question-circle"></i> 問31.4　ギブス・サンプリング（2変量正規分布）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            目標分布が平均 $\boldsymbol{\mu} = (0,\, 2)^\top$，分散共分散行列
+                            $\Sigma = \begin{pmatrix}1 & 0.5 \\ 0.5 & 1\end{pmatrix}$
+                            である2次元正規分布 $N(\boldsymbol{\mu}, \Sigma)$ から，
+                            乱数 $(x, y)^\top$ をギブス・サンプリングを用いて10000個サンプリングする（稼動検査期間1000回）．
+                        </p>
+                        <p>
+                            この正規分布の確率密度関数 $f(x,y)$ は：
+                        </p>
+                        <div class="formula-block">
+                            $$f(x,y) = \frac{1}{2\pi\sqrt{1-0.5^2}}\exp\!\left(-\frac{x^2 - 2\cdot 0.5\,x(y-2)+(y-2)^2}{2(1-0.5^2)}\right)$$
+                        </div>
+                        <p>となることが知られている．</p>
+
+                        <div class="algo-box">
+                            <p><strong>Step 0</strong>　初期値を $(x^{(0)}, y^{(0)}) \leftarrow (0,0)$ と設定し，$t \leftarrow 0$ とする．</p>
+                            <p><strong>Step 1</strong>　完全条件付き分布から乱数を生成する．</p>
+                            <p class="algo-step">(1) $x^{(t+1)}$ を (A) から生成する．</p>
+                            <p class="algo-step">(2) $y^{(t+1)}$ を (B) から生成する．</p>
+                            <p><strong>Step 2</strong>　$t \leftarrow t+1$ とする．</p>
+                            <p><strong>Step 3</strong>　$t \leq 1000$ のときは $\boldsymbol{\theta}^{(t)}$ を出力しない．$1000 < t \leq 11000$ のときは $\boldsymbol{\theta}^{(t)}$ を $t-1000$ 番目のサンプルとして出力する．</p>
+                            <p><strong>Step 4</strong>　$t=11000$ なら終了，それ以外の場合は Step 1 に戻る．</p>
+                        </div>
+
+                        <p><strong>[1]</strong> (A) の確率分布を求めよ．</p>
+                        <p><strong>[2]</strong> (B) の確率分布を求めよ．</p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q314-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 2変量正規分布の条件付き分布（公式）</div>
+                            <p>
+                                $\begin{pmatrix}X \\ Y\end{pmatrix} \sim N\!\left(\begin{pmatrix}\mu_X \\ \mu_Y\end{pmatrix},\, \begin{pmatrix}\sigma_X^2 & \rho\sigma_X\sigma_Y \\ \rho\sigma_X\sigma_Y & \sigma_Y^2\end{pmatrix}\right)$
+                                のとき，$Y=y$ を与えた条件付き分布は：
+                            </p>
+                            <div class="formula-block">
+                                $$X|Y=y \;\sim\; N\!\left(\mu_X + \frac{\rho\sigma_X}{\sigma_Y}(y - \mu_Y),\;\; \sigma_X^2(1-\rho^2)\right)$$
+                            </div>
+                        </div>
+
+                        <h3>(A) の確率分布の導出：$x^{(t+1)} | y^{(t)}$</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">パラメータの確認</div>
+                            <p>
+                                目標分布のパラメータ：$\mu_X = 0$，$\mu_Y = 2$，$\sigma_X = \sigma_Y = 1$，$\rho = 0.5$
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$X | Y = y^{(t)}$ の条件付き期待値と分散</div>
+                            <p>
+                                条件付き期待値：
+                            </p>
+                            <div class="formula-block">
+                                $$\mu_{X|Y} = \mu_X + \frac{\rho\sigma_X}{\sigma_Y}(y^{(t)} - \mu_Y)
+                                = 0 + \frac{0.5 \times 1}{1}(y^{(t)} - 2)
+                                = \frac{1}{2}y^{(t)} - 1$$
+                            </div>
+                            <p>
+                                条件付き分散：
+                            </p>
+                            <div class="formula-block">
+                                $$\sigma_{X|Y}^2 = \sigma_X^2(1-\rho^2)
+                                = 1 \times (1 - 0.5^2)
+                                = 1 - 0.25 = \frac{3}{4}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え：(A) の確率分布</div>
+                            <div class="formula-block">
+                                $$x^{(t+1)} \mid y^{(t)} \;\sim\; N\!\left(\frac{1}{2}y^{(t)} - 1,\;\; \frac{3}{4}\right)$$
+                            </div>
+                            <p>
+                                すなわち，(A) は正規分布 $N\!\left(\dfrac{1}{2}y^{(t)} - 1,\, \dfrac{3}{4}\right)$ である．
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q314-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <h3>(B) の確率分布の導出：$y^{(t+1)} | x^{(t+1)}$</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">$Y | X = x^{(t+1)}$ の条件付き期待値と分散</div>
+                            <p>
+                                対称的に，$X=x$ を与えた条件付き分布は：
+                            </p>
+                            <div class="formula-block">
+                                $$Y|X=x \;\sim\; N\!\left(\mu_Y + \frac{\rho\sigma_Y}{\sigma_X}(x - \mu_X),\;\; \sigma_Y^2(1-\rho^2)\right)$$
+                            </div>
+                            <p>
+                                条件付き期待値：
+                            </p>
+                            <div class="formula-block">
+                                $$\mu_{Y|X} = \mu_Y + \frac{\rho\sigma_Y}{\sigma_X}(x^{(t+1)} - \mu_X)
+                                = 2 + \frac{0.5 \times 1}{1}(x^{(t+1)} - 0)
+                                = \frac{1}{2}x^{(t+1)} + 2$$
+                            </div>
+                            <p>
+                                条件付き分散：
+                            </p>
+                            <div class="formula-block">
+                                $$\sigma_{Y|X}^2 = \sigma_Y^2(1-\rho^2) = \frac{3}{4}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え：(B) の確率分布</div>
+                            <div class="formula-block">
+                                $$y^{(t+1)} \mid x^{(t+1)} \;\sim\; N\!\left(\frac{1}{2}x^{(t+1)} + 2,\;\; \frac{3}{4}\right)$$
+                            </div>
+                            <p>
+                                すなわち，(B) は正規分布 $N\!\left(\dfrac{1}{2}x^{(t+1)} + 2,\, \dfrac{3}{4}\right)$ である．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> ギブス・サンプリングの手順まとめ</div>
+                            <p>
+                                各反復 $t$ では次の2ステップを交互に行います：
+                            </p>
+                            <ol style="margin:0.6em 0 0 1.5em;line-height:2.2;">
+                                <li>$y^{(t)}$ を所与として，$x^{(t+1)} \sim N\!\left(\dfrac{1}{2}y^{(t)} - 1,\, \dfrac{3}{4}\right)$ から生成</li>
+                                <li>$x^{(t+1)}$ を所与として，$y^{(t+1)} \sim N\!\left(\dfrac{1}{2}x^{(t+1)} + 2,\, \dfrac{3}{4}\right)$ から生成</li>
+                            </ol>
+                            <p>
+                                これらの条件付き正規分布は標準的な分布なので，乱数生成が容易です．
+                                この交互更新を繰り返すことで，マルコフ連鎖の定常分布（目標分布 $N(\boldsymbol{\mu},\Sigma)$）からのサンプルが得られます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 第31章全体のまとめ</div>
+                            <p>第31章「ベイズ法」の主要な流れ：</p>
+                            <ol style="margin:0.6em 0 0 1.5em;line-height:2.2;">
+                                <li><strong>ベイズ推定の基本：</strong>事後分布 $\propto$ 尤度 $\times$ 事前分布。事後分布の期待値 → ベイズ推定量，モード → MAP推定量。</li>
+                                <li><strong>共役事前分布：</strong>二項分布 ↔ ベータ分布（$Be(a,b) \to Be(a+X, b+n-X)$），ポアソン分布 ↔ ガンマ分布（$Ga(a,1/\beta) \to Ga(a+\sum x_i, 1/(\beta+n))$）。</li>
+                                <li><strong>ベイズ予測分布：</strong>事後分布で $\lambda$ を積分消去して将来データの分布を求める。ガンマ・ポアソンモデルでは負の二項分布が得られる。</li>
+                                <li><strong>MH（酔歩連鎖）法：</strong>採択確率 $\alpha = \min\{1, \pi(y)/\pi(x^{(t)})\}$。ステップ幅 $a$ は小さすぎると探索不足，大きすぎると採択率低下。</li>
+                                <li><strong>ギブス・サンプリング：</strong>多変量分布に対して完全条件付き分布から交互にサンプリング。提案分布が不要で実装が容易。</li>
+                                <li><strong>稼動検査期間（burn-in）：</strong>初期値の影響を除去するための期間。この期間のサンプルは捨てる。</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

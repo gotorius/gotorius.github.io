@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第5章 章末問題解説 - 離散型分布</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        .blank-box {
+            display: inline-block;
+            border: 2px solid #3498db;
+            border-radius: 4px;
+            padding: 2px 14px;
+            font-weight: 700;
+            color: #2471a3;
+            background: #f0f6ff;
+            font-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第5章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 5 — 章末問題解説</span>
+            <h1>離散型分布<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">二項分布・超幾何分布・ポアソン分布・クーポン収集問題</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter5.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第5章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q51">問5.1 問題</a></li>
+                            <li><a href="#q51-1">問5.1 [1] 解答</a></li>
+                            <li><a href="#q51-2">問5.1 [2] 解答</a></li>
+                            <li><a href="#q52">問5.2 問題</a></li>
+                            <li><a href="#q52-ans">問5.2 解答</a></li>
+                            <li><a href="#q53">問5.3 問題</a></li>
+                            <li><a href="#q53-1">問5.3 [1] 解答</a></li>
+                            <li><a href="#q53-2">問5.3 [2] 解答</a></li>
+                            <li><a href="#q53-3">問5.3 [3] 解答</a></li>
+                            <li><a href="#q54">問5.4 問題</a></li>
+                            <li><a href="#q54-ans">問5.4 解答</a></li>
+                            <li><a href="#q55">問5.5 問題</a></li>
+                            <li><a href="#q55-1">問5.5 [1] 解答</a></li>
+                            <li><a href="#q55-2">問5.5 [2] 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第5章 概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第5章「離散型分布」のキーポイント</div>
+                        <ul>
+                            <li><strong>二項分布 $\mathrm{Bin}(n,p)$：</strong>独立なベルヌーイ試行を $n$ 回行ったときの成功回数．期待値 $np$，分散 $npq$．再生性あり（同じ $p$ の独立な二項の和は二項分布）．</li>
+                            <li><strong>超幾何分布 $\mathrm{HG}(N,M,n)$：</strong>$N$ 個中 $M$ 個が特定種の母集団から，非復元無作為抽出で $n$ 個を選ぶときの特定種の数．$P(Y=y)=\dfrac{\binom{M}{y}\binom{N-M}{n-y}}{\binom{N}{n}}$</li>
+                            <li><strong>ポアソン分布 $\mathrm{Po}(\lambda)$：</strong>稀な事象の発生回数．期待値 $=$ 分散 $= \lambda$．再生性あり（独立な $\mathrm{Po}(\lambda_1)$ と $\mathrm{Po}(\lambda_2)$ の和は $\mathrm{Po}(\lambda_1+\lambda_2)$）．</li>
+                            <li><strong>幾何分布 $\mathrm{Geo}(p)$：</strong>初めて成功するまでの失敗回数．期待値 $q/p$，分散 $q/p^2$．</li>
+                            <li><strong>クーポン収集問題：</strong>$n$ 種類のカードを集めるまでの購入回数の期待値 $= \displaystyle\sum_{k=0}^{n-1}\frac{n}{n-k}$</li>
+                            <li><strong>共分散と分散の展開：</strong>$V[X_1+\cdots+X_m]=\displaystyle\sum_i V[X_i]+\sum_{i\neq j}\mathrm{Cov}[X_i,X_j]$</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問5.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q51">
+                    <h2><i class="fas fa-question-circle"></i> 問5.1　ウイルス検査と二項分布</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある研究機関では，ウイルスに関する研究を行っている．多くのウイルスを検査し，滅多に現れないウイルス A を発見し，その性質を研究するのがこの機関の仕事である．
+                            検査するウイルスの全株数を $n$ とする．$n$ 株のウイルスの検査は独立に行われ，いずれの検査においても，ウイルス A の発見率は一定値 $p$ であるとする．
+                        </p>
+                        <p><strong>[1]</strong>　$n$ 株のウイルスのなかにウイルス A が少なくとも 1 株はみつかる確率 $\beta$ を求める式を，$p$ と $n$ を用いて示せ．</p>
+                        <p><strong>[2]</strong>　$p$ の値が 0 に十分近いとき，$\log(1-p) \approx -p$ の近似が成り立つ．これを用いて，$p=1/5000$，$\beta=0.98$ のときの $n$ の値を求めよ．ただし，$\log(0.02)\approx -3.9$ であり，$\log$ は自然対数である．</p>
+                    </div>
+
+                    <!-- [1] -->
+                    <div class="answer-block" id="q51-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 少なくとも1株：余事象で考える</div>
+                            <p>
+                                「少なくとも 1 株みつかる確率」を直接計算するのは大変ですが，<strong>余事象（1 株もみつからない確率）</strong>を使えば簡単に求められます：
+                            </p>
+                            <div class="formula-block">
+                                $$\beta = P(\text{少なくとも1株みつかる}) = 1 - P(\text{1株もみつからない})$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">二項分布を利用する</div>
+                            <p>
+                                各株の検査は独立で，1 株でウイルス A が発見される確率が $p$，発見されない確率が $1-p$ です．
+                                $n$ 株のうちウイルス A が見つかる株数を $Y$ とすると，$Y \sim \mathrm{Bin}(n, p)$．
+                            </p>
+                            <div class="formula-block">
+                                $$P(\text{1株もみつからない}) = P(Y = 0) = \binom{n}{0} p^0 (1-p)^n = (1-p)^n$$
+                            </div>
+                            <div class="formula-block">
+                                $$\beta = P(Y \geq 1) = 1 - P(Y = 0) = 1 - (1-p)^n$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$\beta = 1 - (1-p)^n$$
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- [2] -->
+                    <div class="answer-block" id="q51-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> $\log(1-p) \approx -p$ の近似とは</div>
+                            <p>
+                                テイラー展開より，$p$ が 0 に近いとき $\log(1-p) \approx -p$ が成り立ちます．
+                                これにより $(1-p)^n$ を含む方程式を $n$ について解けるようになります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：$\beta = 0.98$ の条件を整理する</div>
+                            <div class="formula-block">
+                                $$0.98 = 1 - (1 - 1/5000)^n$$
+                            </div>
+                            <div class="formula-block">
+                                $$(1 - 1/5000)^n = 1 - 0.98 = 0.02$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：両辺の自然対数をとる</div>
+                            <div class="formula-block">
+                                $$n \log\!\left(1 - \frac{1}{5000}\right) = \log(0.02)$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 3：近似 $\log(1-p) \approx -p$ を適用する</div>
+                            <p>
+                                $p = 1/5000$ は十分 0 に近いので，$\log(1-1/5000) \approx -1/5000$ とおきます：
+                            </p>
+                            <div class="formula-block">
+                                $$n \times \left(-\frac{1}{5000}\right) \approx \log(0.02) \approx -3.9$$
+                            </div>
+                            <div class="formula-block">
+                                $$n \approx \frac{-3.9}{-1/5000} = 3.9 \times 5000 = 19500$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$n \approx 19500$</p>
+                            <p style="font-size:0.92em;">
+                                直感的には「発見率が 1/5000 と非常に低いが，19500 株を検査すれば 98% の確率でウイルス A を少なくとも 1 株発見できる」ということです．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問5.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q52">
+                    <h2><i class="fas fa-question-circle"></i> 問5.2　超幾何分布の確率関数</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>A 町に住む 40 歳代前半の男女から 79 人を無作為に選び，就業者と非就業者の数を集計したところ，次のようになった．</p>
+                        <table class="data-table" style="max-width:360px; margin:12px auto;">
+                            <thead>
+                                <tr><th></th><th>就業者</th><th>非就業者</th><th>計</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>男性</strong></td><td>40</td><td>2</td><td>42</td></tr>
+                                <tr><td><strong>女性</strong></td><td>26</td><td>11</td><td>37</td></tr>
+                                <tr><td><strong>計</strong></td><td>66</td><td>13</td><td>79</td></tr>
+                            </tbody>
+                        </table>
+                        <p>
+                            表の 79 人から 25 人を無作為に選ぶ．その 25 人のうち，男性で就業者の人数 $X$ は超幾何分布に従う．
+                            $X$ の確率関数 $P(X=x)$ を求めよ．
+                        </p>
+                    </div>
+
+                    <div class="answer-block" id="q52-ans">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 超幾何分布の設定を整理する</div>
+                            <p>
+                                超幾何分布 $\mathrm{HG}(N, M, n)$ は「$N$ 個中 $M$ 個が特定種の母集団から，<strong>非復元無作為抽出</strong>で $n$ 個を選ぶときの特定種の数 $Y$」の分布です．
+                            </p>
+                            <table class="data-table" style="max-width:400px; margin:0 auto;">
+                                <thead><tr><th>記号</th><th>意味</th><th>今回の値</th></tr></thead>
+                                <tbody>
+                                    <tr><td>$N$</td><td>母集団の総数</td><td>$79$</td></tr>
+                                    <tr><td>$M$</td><td>特定種（男性就業者）の数</td><td>$40$</td></tr>
+                                    <tr><td>$N-M$</td><td>それ以外の数</td><td>$39$</td></tr>
+                                    <tr><td>$n$</td><td>抽出数</td><td>$25$</td></tr>
+                                    <tr><td>$Y$</td><td>抽出中の特定種の数</td><td>$X$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">確率関数の公式を適用する</div>
+                            <p>
+                                79 人から 25 人を選ぶ方法の総数：$\binom{79}{25}$
+                            </p>
+                            <p>
+                                $X = x$ となる（男性就業者 $x$ 人，それ以外 $25-x$ 人が選ばれる）方法の数：$\binom{40}{x} \times \binom{39}{25-x}$
+                            </p>
+                            <div class="formula-block">
+                                $$P(X = x) = \frac{\displaystyle\binom{40}{x}\binom{39}{25-x}}{\displaystyle\binom{79}{25}}, \quad 0 \leq x \leq 25$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$P(X = x) = \frac{{}_{40}C_x \times {}_{39}C_{25-x}}{{}_{79}C_{25}}, \quad 0 \leq x \leq 25$$
+                            </div>
+                            <p style="font-size:0.92em;">
+                                $X$ が超幾何分布 $\mathrm{HG}(79, 40, 25)$ に従うので，$E[X] = 25 \times 40/79 \approx 12.7$，
+                                $V[X] = 25 \times (40/79) \times (39/79) \times (54/78) \approx 3.38$ となります．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問5.3                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q53">
+                    <h2><i class="fas fa-question-circle"></i> 問5.3　非復元抽出と分散・共分散の計算</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある 9 人のグループのうち 3 人は関東地方出身者，他の 6 人は関東地方以外の出身者であった．
+                            この 9 人のなかから無作為非復元抽出によって選ばれた 4 人の標本を $X_i$（$i=1,2,3,4$）とおく．
+                            ただし，$i$ 番目の人が関東地方出身者のとき $X_i = 1$，$i$ 番目の人が関東地方以外の出身者のとき $X_i = 0$ である．
+                        </p>
+                        <p><strong>[1]</strong>　$X_i^2$ の期待値 $E[X_i^2]$ を求めよ．</p>
+                        <p><strong>[2]</strong>　$X_i$，$X_j$，$i \neq j$ に対し $E[X_i X_j]$ を求めよ．</p>
+                        <p><strong>[3]</strong>　標本平均 $\bar{X} = \dfrac{1}{4}\displaystyle\sum_{i=1}^{4} X_i$ の分散 $V[\bar{X}]$ を求めよ．</p>
+                    </div>
+
+                    <!-- [1] -->
+                    <div class="answer-block" id="q53-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> $X_i$ の分布を確認する</div>
+                            <p>
+                                9 人から 4 人を非復元無作為抽出するとき，$i$ 番目に選ばれた人が関東出身の確率を求めます．
+                                <strong>非復元抽出でも，特定の順位 $i$ に関東出身者が来る確率は対称性から $3/9$ です</strong>（どの順位でも同じ確率）．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$E[X_i]$ を求める</div>
+                            <p>
+                                $X_i$ は 0 または 1 しかとらないので，$X_i^2 = X_i$（ベルヌーイ確率変数の性質）．
+                            </p>
+                            <div class="formula-block">
+                                $$P(X_i = 1) = \frac{3}{9} = \frac{1}{3}$$
+                            </div>
+                            <p style="font-size:0.9em;">
+                                厳密には：$i$ 番目に関東出身者が選ばれる場合の数は ${}_3P_1 \times {}_{8}P_3$（関東1人を $i$ 番目に，残り8人から3人を順列），全体は ${}_9P_4$．
+                                $P(X_i=1) = \dfrac{3 \times {}_8P_3}{{}_9P_4} = \dfrac{3 \times 336}{3024} = \dfrac{1008}{3024} = \dfrac{1}{3}$
+                            </p>
+                            <div class="formula-block">
+                                $$E[X_i^2] = E[X_i] = P(X_i = 1) = \frac{1}{3}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$E[X_i^2] = \dfrac{1}{3}$</p>
+                        </div>
+                    </div>
+
+                    <!-- [2] -->
+                    <div class="answer-block" id="q53-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="step-box">
+                            <div class="step-title">$E[X_i X_j]$ を求める（$i \neq j$）</div>
+                            <p>
+                                $X_i X_j = 1$ となるのは $X_i = 1$ かつ $X_j = 1$，すなわち「$i$ 番目も $j$ 番目も関東出身者が選ばれる」場合だけです（それ以外は 0）．
+                            </p>
+                            <div class="formula-block">
+                                $$E[X_i X_j] = 1 \times P(X_i=1 \text{ かつ } X_j=1) + 0 \times \cdots = P(X_i=1,\; X_j=1)$$
+                            </div>
+                            <p>
+                                $i$ 番目に関東出身者が，$j$ 番目にも（別の）関東出身者が選ばれる確率：
+                            </p>
+                            <div class="formula-block">
+                                $$P(X_i=1,\; X_j=1) = \frac{{}_3P_2 \times {}_7P_2}{{}_9P_4} = \frac{3 \times 2 \times 7 \times 6}{9 \times 8 \times 7 \times 6} = \frac{6}{72} = \frac{1}{12}$$
+                            </div>
+                            <p style="font-size:0.9em;">
+                                別の計算方法：$P(X_j=1 \mid X_i=1) = 2/8 = 1/4$（$i$ 番目で関東1人使ったので，残り8人中関東2人），
+                                $P(X_i=1) = 1/3$ なので，$P(X_i=1, X_j=1) = (1/3) \times (1/4) = 1/12$
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$E[X_i X_j] = \dfrac{1}{12}$（$i \neq j$）</p>
+                        </div>
+                    </div>
+
+                    <!-- [3] -->
+                    <div class="answer-block" id="q53-3">
+                        <span class="prob-badge badge-a">[3] 解答・解説</span>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：$V[X_i]$ と $\mathrm{Cov}[X_i, X_j]$ を求める</div>
+                            <p>
+                                $V[X_i] = E[X_i^2] - (E[X_i])^2 = \dfrac{1}{3} - \left(\dfrac{1}{3}\right)^2 = \dfrac{1}{3} - \dfrac{1}{9} = \dfrac{2}{9}$
+                            </p>
+                            <p>
+                                $\mathrm{Cov}[X_i, X_j] = E[X_i X_j] - E[X_i]E[X_j] = \dfrac{1}{12} - \dfrac{1}{3}\times\dfrac{1}{3} = \dfrac{1}{12} - \dfrac{1}{9} = \dfrac{3-4}{36} = -\dfrac{1}{36}$
+                            </p>
+                            <p>
+                                共分散が<strong>負</strong>になることは自然です：$i$ 番目に関東出身者が選ばれると，$j$ 番目に関東出身者が選ばれる確率が下がる（非復元抽出の影響）ためです．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：$V[X_1+X_2+X_3+X_4]$ を求める</div>
+                            <p>
+                                分散の展開公式 $V\!\left[\sum_i X_i\right] = \sum_i V[X_i] + \displaystyle\sum_{i \neq j}\mathrm{Cov}[X_i, X_j]$ を使います．
+                            </p>
+                            <p>
+                                $i$ が 4 種類なので $i \neq j$ のペアは $4 \times 3 = 12$ 組あります：
+                            </p>
+                            <div class="formula-block">
+                                $$V[X_1+\cdots+X_4] = 4 \times \frac{2}{9} + 12 \times \left(-\frac{1}{36}\right) = \frac{8}{9} - \frac{12}{36} = \frac{8}{9} - \frac{1}{3} = \frac{8-3}{9} = \frac{5}{9}$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 3：$V[\bar{X}]$ を求める</div>
+                            <div class="formula-block">
+                                $$V[\bar{X}] = V\!\left[\frac{X_1+\cdots+X_4}{4}\right] = \frac{1}{4^2} V[X_1+\cdots+X_4] = \frac{1}{16} \times \frac{5}{9} = \frac{5}{144}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$V[\bar{X}] = \dfrac{5}{144}$</p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 計算の流れまとめ</div>
+                            <table class="data-table" style="max-width:500px; margin:0 auto;">
+                                <thead><tr><th>量</th><th>値</th><th>導出</th></tr></thead>
+                                <tbody>
+                                    <tr><td>$E[X_i]$</td><td>$1/3$</td><td>対称性より $3/9$</td></tr>
+                                    <tr><td>$E[X_i^2]$</td><td>$1/3$</td><td>$X_i^2 = X_i$（0-1変数）</td></tr>
+                                    <tr><td>$V[X_i]$</td><td>$2/9$</td><td>$1/3 - (1/3)^2$</td></tr>
+                                    <tr><td>$E[X_iX_j]$</td><td>$1/12$</td><td>$(1/3) \times (2/8)$</td></tr>
+                                    <tr><td>$\mathrm{Cov}[X_i,X_j]$</td><td>$-1/36$</td><td>$1/12 - (1/3)^2$</td></tr>
+                                    <tr><td>$V[\bar{X}]$</td><td>$5/144$</td><td>$(5/9)/16$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問5.4                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q54">
+                    <h2><i class="fas fa-question-circle"></i> 問5.4　ポアソン分布の再生性と条件付き分布</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            あるサッカーの試合において，チーム T1 があげた得点 $X$ およびチーム T2 があげた得点 $Y$ がそれぞれ独立に平均 1.5 および 3 のポアソン分布に従うと仮定する．次の空欄に当てはまる数値または用語を答えよ．
+                        </p>
+                        <p><strong>[1]</strong>　2 チームの合計得点 $X+Y$ の従う分布は，平均が <span class="blank-box">ア</span>，分散が <span class="blank-box">イ</span> のポアソン分布である．</p>
+                        <p><strong>[2]</strong>　2 チームの合計得点 $X+Y$ が 5 であるという条件のもとで，チーム T1 の得点 $X$ が平均 <span class="blank-box">ウ</span> の <span class="blank-box">エ</span> 分布に従う．</p>
+                    </div>
+
+                    <div class="answer-block" id="q54-ans">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h3>[1]：ポアソン分布の再生性</h3>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> ポアソン分布の再生性</div>
+                            <p>
+                                独立な $X \sim \mathrm{Po}(\lambda_1)$，$Y \sim \mathrm{Po}(\lambda_2)$ に対して，
+                                <strong>$X + Y \sim \mathrm{Po}(\lambda_1 + \lambda_2)$</strong> が成り立ちます（再生性）．
+                            </p>
+                            <p>
+                                ポアソン分布の期待値 = 分散 = $\lambda$ なので，$X+Y$ の期待値も分散もともに $\lambda_1 + \lambda_2$ です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">数値を代入する</div>
+                            <p>
+                                $X \sim \mathrm{Po}(1.5)$，$Y \sim \mathrm{Po}(3)$，$X$ と $Y$ は独立なので：
+                            </p>
+                            <div class="formula-block">
+                                $$X + Y \sim \mathrm{Po}(1.5 + 3) = \mathrm{Po}(4.5)$$
+                            </div>
+                            <p>平均 $= 4.5$，分散 $= 4.5$</p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>ア：<strong>4.5</strong>，イ：<strong>4.5</strong></p>
+                        </div>
+
+                        <h3>[2]：条件付き分布（ポアソン → 二項）</h3>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> ポアソン分布の条件付き分布の定理</div>
+                            <p>
+                                $X \sim \mathrm{Po}(\lambda_1)$，$Y \sim \mathrm{Po}(\lambda_2)$，$X \perp Y$ のとき，
+                                <strong>$X+Y=n$ を条件とした $X$ の分布は二項分布 $\mathrm{Bin}\!\left(n,\dfrac{\lambda_1}{\lambda_1+\lambda_2}\right)$</strong> に従います．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">条件付き確率を計算して確認する</div>
+                            <p>$P(X=x \mid X+Y=5)$ を計算します：</p>
+                            <div class="formula-block">
+                                $$P(X=x \mid X+Y=5) = \frac{P(X=x,\; Y=5-x)}{P(X+Y=5)}
+                                = \frac{P(X=x)\cdot P(Y=5-x)}{P(X+Y=5)}$$
+                            </div>
+                            <p>
+                                各確率を代入します：
+                            </p>
+                            <div class="formula-block">
+                                $$= \frac{\dfrac{e^{-1.5}\cdot 1.5^x}{x!} \cdot \dfrac{e^{-3}\cdot 3^{5-x}}{(5-x)!}}{\dfrac{e^{-4.5}\cdot 4.5^5}{5!}}$$
+                            </div>
+                            <div class="formula-block">
+                                $$= \frac{5!}{x!\,(5-x)!}\cdot\frac{1.5^x \cdot 3^{5-x}}{4.5^5}
+                                = \binom{5}{x} \left(\frac{1.5}{4.5}\right)^x \left(\frac{3}{4.5}\right)^{5-x}$$
+                            </div>
+                            <div class="formula-block">
+                                $$= \binom{5}{x} \left(\frac{1}{3}\right)^x \left(\frac{2}{3}\right)^{5-x}$$
+                            </div>
+                            <p>
+                                これは $\mathrm{Bin}(5, 1/3)$ の確率関数です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">条件付き期待値を求める</div>
+                            <p>
+                                $\mathrm{Bin}(5, 1/3)$ の期待値は $5 \times \dfrac{1}{3} = \dfrac{5}{3}$ です．
+                            </p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>ウ：<strong>$5/3$</strong>，エ：<strong>二項</strong>（$\mathrm{Bin}(5, 1/3)$）</p>
+                            <p style="font-size:0.92em; margin-top:0.4em;">
+                                直感的には「合計5点のうち，T1が取った割合の期待値は $1.5/(1.5+3) = 1/3$ なので，平均5点中1/3の$5/3$点」と理解できます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問5.5                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q55">
+                    <h2><i class="fas fa-question-circle"></i> 問5.5　クーポン収集問題</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            あるお菓子を買うと，4 種類のアニメキャラクターのカードのうち 1 つが等確率でおまけとして付いてくる．
+                        </p>
+                        <p><strong>[1]</strong>　無作為復元を仮定できるとき，4 種類すべてのカードを揃えるまでに必要な購入回数の期待値を求めよ．</p>
+                        <p>
+                            <strong>[2]</strong>　4 種類のカードをすべて集めた後，お菓子を買うのをやめていたが，新しい種類のカード 1 枚が追加されたため再び購入をはじめた．この場合に，はじめの 4 種類と追加の 1 種類の，5 種類すべてを揃えるのに必要な購入回数の期待値を $x$ とする．一方，はじめから 5 種類が発売されていた場合に，5 種類すべてを揃えるまでに必要な購入回数の期待値を $y$ とする．購入回数の期待値の差 $x - y$ の値を求めよ．ただし，いずれの購入時期においても等確率無作為復元抽出を仮定してよい．
+                        </p>
+                    </div>
+
+                    <!-- [1] -->
+                    <div class="answer-block" id="q55-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> クーポン収集問題のアイデア</div>
+                            <p>
+                                「$k$ 種類集めた後，$k+1$ 種目の新しいカードを得るまでの購入回数」に分解して考えます．
+                                $k$ 種類すでに持っているとき，次に新しい種類が出る確率は $p_k = \dfrac{4-k}{4}$（残り $4-k$ 種類 / 全4種類）．
+                            </p>
+                            <p>
+                                この購入回数は成功確率 $p_k$ の<strong>幾何分布</strong>に従い，期待値は $1/p_k = \dfrac{4}{4-k}$ です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">各段階の期待値を求めて合計する</div>
+                            <table class="data-table" style="max-width:520px; margin:0 auto 10px;">
+                                <thead>
+                                    <tr><th>段階</th><th>持っている種類数 $k$</th><th>新種が出る確率 $p_k$</th><th>この段階の期待値 $1/p_k$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>第1種目</td><td>0</td><td>$4/4 = 1$</td><td>$4/4 = 1$</td></tr>
+                                    <tr><td>第2種目</td><td>1</td><td>$3/4$</td><td>$4/3$</td></tr>
+                                    <tr><td>第3種目</td><td>2</td><td>$2/4$</td><td>$4/2 = 2$</td></tr>
+                                    <tr><td>第4種目</td><td>3</td><td>$1/4$</td><td>$4/1 = 4$</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="formula-block">
+                                $$\text{合計} = \sum_{k=0}^{3}\frac{4}{4-k} = \frac{4}{4} + \frac{4}{3} + \frac{4}{2} + \frac{4}{1} = 1 + \frac{4}{3} + 2 + 4 = 7 + \frac{4}{3} = \frac{21+4}{3} = \frac{25}{3}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>4 種類すべて揃えるまでの購入回数の期待値 $= \dfrac{25}{3} \approx 8.33$ 回</p>
+                        </div>
+                    </div>
+
+                    <!-- [2] -->
+                    <div class="answer-block" id="q55-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> $x$ と $y$ の違いを整理する</div>
+                            <ul>
+                                <li><strong>$x$（4種類→5種類追加シナリオ）：</strong>まず 4 種類を揃えてから購入をやめ，5 種目が追加されてから再び購入．追加後のカードは全 5 種類から等確率に出る．<br>→ 再開後に 5 種目を得るまでの期待値 $+ 4$ 種類を揃えるまでの期待値</li>
+                                <li><strong>$y$（5種類最初からシナリオ）：</strong>最初から 5 種類があって，5 種類すべてを揃えるまでの期待値</li>
+                            </ul>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$x$ を求める</div>
+                            <p>
+                                4 種類を揃えてから再購入を始めるとき，5 種目を得るまでの確率は $1/5$（5種類中1種類なので），期待値は $5$．
+                            </p>
+                            <div class="formula-block">
+                                $$x = \underbrace{\frac{25}{3}}_{\text{4種類を揃えるまで}} + \underbrace{5}_{\text{5種目を得るまで}} = \frac{25}{3} + \frac{15}{3} = \frac{40}{3} \approx 13.33$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$y$ を求める</div>
+                            <p>
+                                最初から 5 種類がある場合の期待値：$\displaystyle\sum_{k=0}^{4}\frac{5}{5-k}$
+                            </p>
+                            <table class="data-table" style="max-width:520px; margin:0 auto 10px;">
+                                <thead>
+                                    <tr><th>段階</th><th>$k$</th><th>$p_k = (5-k)/5$</th><th>$1/p_k = 5/(5-k)$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>第1種目</td><td>0</td><td>$5/5=1$</td><td>$5/5=1$</td></tr>
+                                    <tr><td>第2種目</td><td>1</td><td>$4/5$</td><td>$5/4$</td></tr>
+                                    <tr><td>第3種目</td><td>2</td><td>$3/5$</td><td>$5/3$</td></tr>
+                                    <tr><td>第4種目</td><td>3</td><td>$2/5$</td><td>$5/2$</td></tr>
+                                    <tr><td>第5種目</td><td>4</td><td>$1/5$</td><td>$5/1=5$</td></tr>
+                                </tbody>
+                            </table>
+                            <div class="formula-block">
+                                $$y = \frac{5}{5}+\frac{5}{4}+\frac{5}{3}+\frac{5}{2}+\frac{5}{1}
+                                = 1 + \frac{5}{4} + \frac{5}{3} + \frac{5}{2} + 5$$
+                            </div>
+                            <p>通分（分母を 12 に統一）：</p>
+                            <div class="formula-block">
+                                $$= \frac{12}{12} + \frac{15}{12} + \frac{20}{12} + \frac{30}{12} + \frac{60}{12} = \frac{137}{12} \approx 11.42$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$x - y$ を計算する</div>
+                            <div class="formula-block">
+                                $$x - y = \frac{40}{3} - \frac{137}{12} = \frac{160}{12} - \frac{137}{12} = \frac{23}{12} \approx 1.92$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>$x - y = \dfrac{23}{12} \approx 1.92$</p>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 結果の解釈：後追いシナリオが損</div>
+                            <p>
+                                $x - y \approx 1.92 > 0$ なので，<strong>5種目が後から追加されるシナリオ（$x$）の方が，最初から5種類あるシナリオ（$y$）より約1.92回多く購入が必要</strong>です．
+                            </p>
+                            <p>
+                                なぜでしょうか？4種類を揃えた後に5種目を集め直す場合，5種目を得るまでの確率は $1/5 = 0.2$（期待5回）ですが，もし最初から5種類あったなら4種類揃えた後の5種目を得る平均5回の部分が，すでに揃えた段階で他の種類を入手できた機会を使わずに済んでいたはずです．
+                            </p>
+                            <table class="data-table" style="max-width:420px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>シナリオ</th><th>期待購入回数</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$x$：4種類→後追いで5種目</td><td>$40/3 \approx 13.33$</td></tr>
+                                    <tr><td>$y$：最初から5種類</td><td>$137/12 \approx 11.42$</td></tr>
+                                    <tr><td>差 $x-y$</td><td>$23/12 \approx 1.92$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第23章 章末問題解説 - 判別分析</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.8em 0;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 5px 10px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+        .highlight-row { background: #fffbe6 !important; font-weight: 600; }
+        .calc-table th  { background: #e8f0ff; }
+        .interp-table th{ background: #e8f4e8; }
+        .badge-correct { background: #27ae60; color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 0.82em; font-weight: 700; }
+        .badge-wrong   { background: #e74c3c; color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 0.82em; font-weight: 700; }
+
+        /* 散布図 SVG コンテナ */
+        .scatter-wrap {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1em 0;
+        }
+        .scatter-wrap svg {
+            width: 240px;
+            height: 240px;
+            font-family: 'Noto Sans JP', sans-serif;
+        }
+        .scatter-label {
+            text-align: center;
+            font-size: 0.85em;
+            color: #555;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第23章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 23 — 章末問題解説</span>
+            <h1>判別分析<br><small style="font-size:0.65em;color:var(--gray-500);">線形・正準・2次判別分析 / SVM</small></h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter23.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第23章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q231">問23.1 問題</a></li>
+                            <li><a href="#q231-1">問23.1 [1]</a></li>
+                            <li><a href="#q231-2">問23.1 [2]</a></li>
+                            <li><a href="#q232">問23.2 問題</a></li>
+                            <li><a href="#q232-a">問23.2 解答</a></li>
+                            <li><a href="#q233">問23.3 問題</a></li>
+                            <li><a href="#q233-1">問23.3 [1]</a></li>
+                            <li><a href="#q233-2">問23.3 [2]</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第23章概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第23章「判別分析」のキーポイント</div>
+                        <p>判別分析は，新しいデータがどのグループ（クラス）に属するかを判定する手法です．</p>
+                        <table class="data-table interp-table" style="margin-top:8px;">
+                            <thead><tr><th>手法</th><th>概要</th><th>特徴</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>フィッシャーの線形判別分析</strong></td>
+                                    <td>グループ間分散をグループ内分散で割った比（分離度）を最大化する方向を求める</td>
+                                    <td>線形境界のみ．解釈しやすい</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>正準判別分析</strong></td>
+                                    <td>3群以上に対応した線形判別の拡張．射影軸 $LD_1, LD_2, \ldots$ を求める</td>
+                                    <td>低次元への可視化に便利</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>2次判別分析（QDA）</strong></td>
+                                    <td>各クラスの正規分布を仮定し，事後確率の対数比を判別関数とする</td>
+                                    <td>2次の判別境界．LDAより柔軟</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>ソフトマージン SVM</strong></td>
+                                    <td>マージン最大化でサポートベクターを用いた判別境界を学習する</td>
+                                    <td>カーネルで非線形境界も対応可</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q231">
+                    <h2><i class="fas fa-pencil"></i> 問23.1 — 問題文（線形判別 vs ガウシアンカーネル SVM）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            2群（クラス）の2次元データを，フィッシャーの線形判別分析と，ガウシアンカーネルを用いたソフトマージン SVM によって判別する．
+                            それぞれの方法で得られた判別境界を図23.3 (a) と (b) に示す．
+                            図に示したものと同じ分布に従うテストデータを判別したときの判別の正答率は，<strong>線形判別分析では 0.845，SVM では 0.815</strong> であった．
+                        </p>
+
+                        <!-- 判別境界概略 SVG -->
+                        <div class="scatter-wrap">
+                            <div>
+                                <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-label="線形判別境界">
+                                    <rect width="240" height="240" fill="#fafafa" rx="4"/>
+                                    <!-- 軸 -->
+                                    <line x1="30" y1="210" x2="220" y2="210" stroke="#aaa" stroke-width="1"/>
+                                    <line x1="30" y1="30"  x2="30"  y2="210" stroke="#aaa" stroke-width="1"/>
+                                    <text x="225" y="214" font-size="10" fill="#777">x₁</text>
+                                    <text x="33"  y="26"  font-size="10" fill="#777">x₂</text>
+                                    <!-- ○ 群（右上側） -->
+                                    <circle cx="130" cy="80"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="155" cy="70"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="145" cy="95"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="170" cy="90"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="160" cy="110" r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="185" cy="75"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="175" cy="130" r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="200" cy="100" r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="120" cy="60"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="190" cy="120" r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <!-- + 群（左下側） -->
+                                    <text x="56"  y="172" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="73"  y="185" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="45"  y="160" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="65"  y="155" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="85"  y="170" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="50"  y="185" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="95"  y="190" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="80"  y="145" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="40"  y="145" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="100" y="158" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <!-- 線形境界（直線） -->
+                                    <line x1="40" y1="60" x2="210" y2="200" stroke="#333" stroke-width="2" stroke-dasharray="4,3"/>
+                                </svg>
+                                <div class="scatter-label">(a) 線形判別分析による判別境界</div>
+                            </div>
+                            <div>
+                                <svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg" aria-label="SVM判別境界">
+                                    <rect width="240" height="240" fill="#fafafa" rx="4"/>
+                                    <line x1="30" y1="210" x2="220" y2="210" stroke="#aaa" stroke-width="1"/>
+                                    <line x1="30" y1="30"  x2="30"  y2="210" stroke="#aaa" stroke-width="1"/>
+                                    <text x="225" y="214" font-size="10" fill="#777">x₁</text>
+                                    <text x="33"  y="26"  font-size="10" fill="#777">x₂</text>
+                                    <!-- ○ 群 -->
+                                    <circle cx="130" cy="80"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="155" cy="70"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="145" cy="95"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="170" cy="90"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="160" cy="110" r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="185" cy="75"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="175" cy="130" r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="200" cy="100" r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="120" cy="60"  r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <circle cx="190" cy="120" r="4" fill="none" stroke="#2980b9" stroke-width="1.5"/>
+                                    <!-- + 群 -->
+                                    <text x="56"  y="172" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="73"  y="185" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="45"  y="160" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="65"  y="155" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="85"  y="170" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="50"  y="185" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="95"  y="190" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="80"  y="145" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="40"  y="145" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <text x="100" y="158" font-size="11" fill="#e74c3c" font-weight="600">+</text>
+                                    <!-- 非線形境界（曲線状） -->
+                                    <path d="M50,55 Q110,200 210,190" stroke="#333" stroke-width="1.8" fill="none" stroke-dasharray="4,3"/>
+                                    <path d="M60,45 Q120,210 215,178" stroke="#333" stroke-width="1" fill="none" stroke-dasharray="2,3" opacity="0.5"/>
+                                    <path d="M40,65 Q100,190 205,202" stroke="#333" stroke-width="1" fill="none" stroke-dasharray="2,3" opacity="0.5"/>
+                                </svg>
+                                <div class="scatter-label">(b) SVM による判別境界</div>
+                            </div>
+                        </div>
+
+                        <ol>
+                            <li>通常，図23.3 のようなデータに対してよりよい判別精度が期待できるのはフィッシャーの線形判別分析とガウシアンカーネルを用いたソフトマージン SVM のどちらであるか，理由とともに答えよ．</li>
+                            <li>問題に示した正答率や図23.3 (a), (b) のような結果になった理由と，ガウシアンカーネルを用いたソフトマージン SVM の精度を高くするための方法を議論せよ．</li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q231-1">
+                    <h2><i class="fas fa-pencil"></i> 問23.1 [1] — どちらの手法が高精度か</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 2つの手法の特徴をおさらいする</div>
+                            <table class="data-table interp-table">
+                                <thead><tr><th>手法</th><th>判別境界の形</th><th>向いているデータ</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>線形判別分析（LDA）</strong></td>
+                                        <td>直線（2次元），平面（3次元以上）</td>
+                                        <td>2群が直線で（ほぼ）分離できる場合</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>ガウシアンカーネル SVM</strong></td>
+                                        <td>曲線・複雑な非線形境界</td>
+                                        <td>2群が直線で分離できない場合</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4>図23.3 のデータを見て判断する</h4>
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> データの構造を読む</div>
+                            <p>
+                                図23.3 のデータを見ると，○群と＋群が入り混じっており，<strong>直線1本で2群をきれいに分離することができません</strong>．
+                                2群の境界は直線ではなく，曲線的な分離が必要なことがデータから明らかです．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 答え：ガウシアンカーネルを用いたソフトマージン SVM</div>
+                            <p>
+                                2群が線形な判別直線（平面）で分離できないことが明らかなので，<strong>非線形判別曲面を当てはめることが可能なガウシアンカーネルを用いた SVM</strong> がよりよい判別精度を実現できると考えられる．
+                            </p>
+                            <p>
+                                ガウシアンカーネルを使うと，元の特徴空間では直線で分けられないデータでも，
+                                高次元の特徴空間に写像することで線形分離が可能になります．
+                                これが非線形な判別境界（図23.3 (b) の曲線状の境界）を作れる理由です．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q231-2">
+                    <h2><i class="fas fa-pencil"></i> 問23.1 [2] — 実際の結果の理由と改善策</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 問題の状況を整理する</div>
+                            <p>
+                                本来ならSVMのほうが高精度なはずなのに，実際は：
+                            </p>
+                            <ul>
+                                <li>線形判別分析：正答率 <strong>0.845</strong>（より高い）</li>
+                                <li>ガウシアンカーネル SVM：正答率 <strong>0.815</strong>（より低い）</li>
+                            </ul>
+                            <p>なぜこのような逆転が起きたのでしょうか？</p>
+                        </div>
+
+                        <h4>① 結果の理由：過学習（オーバーフィッティング）</h4>
+                        <div class="concept-box" style="border-left-color:#e74c3c;">
+                            <div class="box-title"><i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i> 過学習とは？</div>
+                            <p>
+                                <strong>過学習（overfitting）</strong>とは，モデルが学習データに対して「適合しすぎ」てしまい，
+                                未知のテストデータに対する精度が低下する現象です．
+                            </p>
+                            <p>
+                                図23.3 (b) のように，SVMの判別境界が学習データに沿って複雑な形になっている場合，
+                                学習データの<strong>ノイズや外れ値まで覚えてしまっている</strong>可能性があります．
+                                そのため，テストデータには対応できず精度が落ちます．
+                            </p>
+                            <svg viewBox="0 0 480 160" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:480px;display:block;margin:0.8em auto;" aria-label="過学習の概念図">
+                                <rect width="480" height="160" fill="#f8f9fa" rx="6"/>
+                                <!-- 左：適切なモデル -->
+                                <text x="120" y="20" font-size="12" fill="#333" text-anchor="middle" font-weight="600">適切な複雑さのモデル</text>
+                                <circle cx="70"  cy="60" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <circle cx="90"  cy="50" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <circle cx="110" cy="65" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <circle cx="130" cy="55" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <circle cx="150" cy="70" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <text x="70"  y="110" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="85"  y="125" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="105" cy="130" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="105" y="130" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="130" y="120" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="150" y="135" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <line x1="60" y1="90" x2="165" y2="90" stroke="#333" stroke-width="2" stroke-dasharray="5,3"/>
+                                <text x="120" y="152" font-size="11" fill="#27ae60" text-anchor="middle">✓ テストデータにも対応できる</text>
+                                <!-- 右：過学習モデル -->
+                                <text x="360" y="20" font-size="12" fill="#333" text-anchor="middle" font-weight="600">過学習したモデル</text>
+                                <circle cx="310" cy="60" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <circle cx="330" cy="50" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <circle cx="350" cy="65" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <circle cx="370" cy="55" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <circle cx="390" cy="70" r="5" fill="none" stroke="#2980b9" stroke-width="2"/>
+                                <text x="310" y="110" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="325" y="125" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="345" y="130" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="370" y="120" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <text x="390" y="135" font-size="12" fill="#e74c3c" font-weight="600">+</text>
+                                <path d="M300,95 Q315,82 325,100 Q335,75 345,95 Q360,70 380,90 Q390,80 400,88" stroke="#c0392b" stroke-width="2" fill="none" stroke-dasharray="5,3"/>
+                                <text x="360" y="152" font-size="11" fill="#e74c3c" text-anchor="middle">✗ 学習データにしか合わない</text>
+                            </svg>
+                        </div>
+
+                        <h4>② 理由のまとめ</h4>
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> なぜ SVM の精度が低くなったか</div>
+                            <p>
+                                線形判別分析による判別のほうが精度が高くなっていることから，
+                                <strong>ガウシアンカーネルのパラメータやソフトマージンパラメータが適切に設定されていない</strong>ため，
+                                学習データに過学習してしまい，テストデータに対する予測精度が低くなってしまっていると考えられる．
+                            </p>
+                            <p>
+                                具体的には，ガウシアンカーネルの幅パラメータ $\gamma$（バンド幅）が大きすぎる場合や，
+                                ソフトマージンのペナルティパラメータ $C$ が大きすぎる場合に過学習が起きやすくなります．
+                            </p>
+                        </div>
+
+                        <h4>③ SVM の精度を高くするための方法</h4>
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 改善策：クロスバリデーションによるパラメータ選択</div>
+                            <p>
+                                ガウシアンカーネルを用いたソフトマージン SVM の性能を向上させるためには，
+                                たとえば<strong>クロスバリデーション（交差検証）</strong>を用いて，
+                                カーネルのパラメータ（ガウシアンカーネルの幅 $\gamma$）や
+                                ソフトマージンのパラメータ（$C$）を適切な値に設定する方法が考えられる．
+                            </p>
+                            <table class="data-table" style="max-width:440px;">
+                                <thead><tr><th>パラメータ</th><th>値が大きい場合</th><th>値が小さい場合</th></tr></thead>
+                                <tbody>
+                                    <tr>
+                                        <td>$\gamma$（カーネル幅）</td>
+                                        <td>局所的な境界（過学習リスク高）</td>
+                                        <td>滑らかな境界（汎化性能高）</td>
+                                    </tr>
+                                    <tr>
+                                        <td>$C$（マージンペナルティ）</td>
+                                        <td>誤分類を許さない（過学習リスク）</td>
+                                        <td>誤分類を許容する（汎化性能高）</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;">
+                                クロスバリデーションでは，学習データをいくつかの折（fold）に分割し，
+                                1つを検証用・残りを訓練用として精度を評価し，その平均が最高になるパラメータの組み合わせを選びます（グリッドサーチ等）．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.2 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q232">
+                    <h2><i class="fas fa-pencil"></i> 問23.2 — 問題文（正準判別分析によるアルファベット分類）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            さまざまなフォントで表示された文字の画像にノイズを加えたものから，16種類の画像特徴量を用いて，
+                            記された文字が英語アルファベット E, F, Q のどれであるかを正準判別分析によって分類する．
+                            簡単のため，16種類の特徴量から5種類を選び，個々のサンプルを5次元ベクトルとして扱う．
+                            各群のデータはすべて50点である．あらかじめ各群で共分散行列を単位行列に白色化して，
+                            正準判別分析により射影軸 $LD_1, LD_2$ を求め，$(LD_1, LD_2)$ 軸に射影したデータをプロットした（図23.4）．
+                        </p>
+                        <p>$LD_1, LD_2$ に対応する射影軸はそれぞれ</p>
+                        <div class="formula-block">
+                            $$w_1 = \begin{pmatrix}-0.1\\-0.1\\0.2\\0.4\\0.9\end{pmatrix}, \quad w_2 = \begin{pmatrix}0.0\\0.2\\-0.2\\0.9\\-0.3\end{pmatrix}$$
+                        </div>
+                        <p>であった．また，クラス E, F, Q それぞれに属する5次元データの平均はそれぞれ</p>
+                        <div class="formula-block">
+                            $$\bar{x}_1 = \begin{pmatrix}1.2\\1.4\\0.3\\6.0\\4.6\end{pmatrix},\quad \bar{x}_2 = \begin{pmatrix}1.4\\1.4\\0.3\\0.7\\2.1\end{pmatrix},\quad \bar{x}_3 = \begin{pmatrix}0.8\\0.3\\1.6\\3.6\\9.2\end{pmatrix}$$
+                        </div>
+                        <p>
+                            であった．ここで，アルファベット L を表すサンプル
+                            $x_L = (2.5,\ -1.1,\ 0.0,\ -0.8,\ 1.0)^T$ を軸 $LD_1, LD_2$ に射影したものを図23.4に◇で示した．
+                        </p>
+                        <p>
+                            新しい観測サンプルを，$LD_1, LD_2$ 平面における重心が最も近いような群に分類するとすると，
+                            この新しく観測した L に対応するサンプルは E, F, Q のどの群に分類されるか．
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.2 解答                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q232-a">
+                    <h2><i class="fas fa-pencil"></i> 問23.2 — 解答（最近傍重心法による分類）</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 解法の方針：3ステップ</div>
+                            <ol>
+                                <li>各クラス（E, F, Q）の重心 $\bar{x}_1, \bar{x}_2, \bar{x}_3$ を $LD_1, LD_2$ 平面に射影する</li>
+                                <li>サンプル $x_L$ を $LD_1, LD_2$ 平面に射影する</li>
+                                <li>射影した $x_L$ から各重心までの<strong>ユークリッド距離</strong>を計算し，最も近い群に分類する</li>
+                            </ol>
+                        </div>
+
+                        <h4>ステップ1：各クラスの重心を射影する</h4>
+                        <p>射影先の座標は $( w_1^T \bar{x}_k,\ w_2^T \bar{x}_k )$（内積を計算するだけです）．</p>
+
+                        <p style="font-weight:600;">クラス E（$\bar{x}_1$）の射影：</p>
+                        <div class="formula-block">
+                            $$w_1^T \bar{x}_1 = (-0.1)(1.2)+(-0.1)(1.4)+(0.2)(0.3)+(0.4)(6.0)+(0.9)(4.6)$$
+                            $$= -0.12 - 0.14 + 0.06 + 2.40 + 4.14 = 6.34$$
+                        </div>
+                        <div class="formula-block">
+                            $$w_2^T \bar{x}_1 = (0.0)(1.2)+(0.2)(1.4)+(-0.2)(0.3)+(0.9)(6.0)+(-0.3)(4.6)$$
+                            $$= 0 + 0.28 - 0.06 + 5.40 - 1.38 = 4.24$$
+                        </div>
+                        <p>→ クラス E の重心の射影点：$(6.34,\ 4.24)$</p>
+
+                        <p style="font-weight:600;margin-top:0.8em;">クラス F（$\bar{x}_2$）の射影：</p>
+                        <div class="formula-block">
+                            $$w_1^T \bar{x}_2 = (-0.1)(1.4)+(-0.1)(1.4)+(0.2)(0.3)+(0.4)(0.7)+(0.9)(2.1)$$
+                            $$= -0.14 - 0.14 + 0.06 + 0.28 + 1.89 = 1.95$$
+                        </div>
+                        <div class="formula-block">
+                            $$w_2^T \bar{x}_2 = (0.0)(1.4)+(0.2)(1.4)+(-0.2)(0.3)+(0.9)(0.7)+(-0.3)(2.1)$$
+                            $$= 0 + 0.28 - 0.06 + 0.63 - 0.63 = 0.22$$
+                        </div>
+                        <p>→ クラス F の重心の射影点：$(1.95,\ 0.22)$</p>
+
+                        <p style="font-weight:600;margin-top:0.8em;">クラス Q（$\bar{x}_3$）の射影：</p>
+                        <div class="formula-block">
+                            $$w_1^T \bar{x}_3 = (-0.1)(0.8)+(-0.1)(0.3)+(0.2)(1.6)+(0.4)(3.6)+(0.9)(9.2)$$
+                            $$= -0.08 - 0.03 + 0.32 + 1.44 + 8.28 = 9.93$$
+                        </div>
+                        <div class="formula-block">
+                            $$w_2^T \bar{x}_3 = (0.0)(0.8)+(0.2)(0.3)+(-0.2)(1.6)+(0.9)(3.6)+(-0.3)(9.2)$$
+                            $$= 0 + 0.06 - 0.32 + 3.24 - 2.76 = 0.22$$
+                        </div>
+                        <p>→ クラス Q の重心の射影点：$(9.93,\ 0.22)$</p>
+
+                        <h4>ステップ2：サンプル $x_L$ を射影する</h4>
+                        <div class="formula-block">
+                            $$w_1^T x_L = (-0.1)(2.5)+(-0.1)(-1.1)+(0.2)(0.0)+(0.4)(-0.8)+(0.9)(1.0)$$
+                            $$= -0.25 + 0.11 + 0 - 0.32 + 0.90 = 0.44$$
+                        </div>
+                        <div class="formula-block">
+                            $$w_2^T x_L = (0.0)(2.5)+(0.2)(-1.1)+(-0.2)(0.0)+(0.9)(-0.8)+(-0.3)(1.0)$$
+                            $$= 0 - 0.22 + 0 - 0.72 - 0.30 = -1.24$$
+                        </div>
+                        <p>→ $x_L$ の射影点：$(0.44,\ -1.24)$</p>
+
+                        <h4>ステップ3：各重心までの距離を計算する</h4>
+
+                        <div class="formula-block">
+                            $$d_E = \sqrt{(6.34-0.44)^2+(4.24-(-1.24))^2} = \sqrt{5.90^2+5.48^2} = \sqrt{34.81+30.03} = \sqrt{64.84} \approx 8.05$$
+                        </div>
+                        <div class="formula-block">
+                            $$d_F = \sqrt{(1.95-0.44)^2+(0.22-(-1.24))^2} = \sqrt{1.51^2+1.46^2} = \sqrt{2.28+2.13} = \sqrt{4.41} \approx 2.10$$
+                        </div>
+                        <div class="formula-block">
+                            $$d_Q = \sqrt{(9.93-0.44)^2+(0.22-(-1.24))^2} = \sqrt{9.49^2+1.46^2} = \sqrt{90.06+2.13} = \sqrt{92.19} \approx 9.60$$
+                        </div>
+
+                        <table class="data-table" style="max-width:300px;">
+                            <thead><tr><th>クラス</th><th>射影点</th><th>距離</th></tr></thead>
+                            <tbody>
+                                <tr><td>E</td><td>$(6.34,\ 4.24)$</td><td>$\approx 8.05$</td></tr>
+                                <tr class="highlight-row"><td><strong>F</strong></td><td>$(1.95,\ 0.22)$</td><td>$\approx \mathbf{2.10}$（最小）</td></tr>
+                                <tr><td>Q</td><td>$(9.93,\ 0.22)$</td><td>$\approx 9.60$</td></tr>
+                            </tbody>
+                        </table>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：群 F に分類される</div>
+                            <p>
+                                $x_L$ の射影点 $(0.44,\ -1.24)$ から最も近い重心は <strong>F の重心 $(1.95,\ 0.22)$</strong>（距離 $\approx 2.10$）であるため，
+                                このサンプルは<strong>群 F</strong> に分類される．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.3 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q233">
+                    <h2><i class="fas fa-pencil"></i> 問23.3 — 問題文（2次判別分析）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            それぞれ平均が $\mu_1 = (2,2)^T$，$\mu_2 = (0,0)^T$，分散共分散行列が
+                        </p>
+                        <div class="formula-block">
+                            $$\Sigma_1 = \begin{pmatrix}0.8 & 0\\0 & 0.5\end{pmatrix},\quad \Sigma_2 = \begin{pmatrix}0.4 & 0\\0 & 0.25\end{pmatrix}$$
+                        </div>
+                        <p>
+                            で与えられる2次元正規分布に従う2クラスの2次元データを考える．クラス1のサンプルサイズは100，クラス2のサンプルサイズは200とする．
+                        </p>
+                        <ol>
+                            <li>
+                                2次判別分析を用いて，入力 $x$ からクラスラベルを予測するとする．クラスラベル $y$ で条件付けた $x$ の分布の対数比
+                                $$f_q(x) = \log\frac{P(y=1|x)}{P(y=-1|x)}$$
+                                で2クラス判別のための判別関数を構成する．$P(x|y=1)$ および $P(x|y=-1)$ をそれぞれ正規分布 $N(\mu_1,\Sigma_1)$，$N(\mu_2,\Sigma_2)$ の確率密度関数に基づいて表されるとしたとき，この判別器は $x$ の2次関数
+                                $$f(x) = x^T A x + b^T x + c, \quad A\in\mathbb{R}^{2\times 2},\ b\in\mathbb{R}^2$$
+                                として表すことができる．$y=1,-1$ それぞれの事前分布を $\pi_1,\pi_2$ として，行列 $A$，ベクトル $b$ および実数 $c$ を，$\Sigma_j,\mu_j,\pi_j,\ j=1,2$ を用いて表せ．
+                            </li>
+                            <li>
+                                正規分布の母数と事前分布 $\pi_j$ は観測データを用いた標本平均などで置き換えて実際の判別関数を構成する．$\mu_j$ はクラス $j$ の標本平均，$\Sigma_j$ はクラス $j$ の標本分散共分散行列，クラス $j$ のサンプルサイズを $n_j$ として $\pi_j$ を $n_j/(n_1+n_2)$ で置き換える．
+                                簡単のため，標本平均，標本分散共分散行列がすべて母集団のものと一致するとき，点 $(1,1)$ と点 $(0,1)$ はそれぞれクラス1，クラス2のどちらに分類されるか，判別関数の正負を計算して答えよ．
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.3 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q233-1">
+                    <h2><i class="fas fa-pencil"></i> 問23.3 [1] — 2次判別関数の導出</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 解法の方針：ベイズの定理 + 正規分布の密度関数を展開する</div>
+                            <p>
+                                ベイズの定理より，
+                            </p>
+                            <div class="formula-block">
+                                $$P(y=1|x) = \frac{P(x|y=1)\pi_1}{P(x)}$$
+                            </div>
+                            <p>したがって対数比は：</p>
+                            <div class="formula-block">
+                                $$f_q(x) = \log\frac{P(y=1|x)}{P(y=-1|x)} = \log\frac{P(x|y=1)\pi_1}{P(x|y=-1)\pi_2}$$
+                            </div>
+                            <p>
+                                $P(x|y=k)$ が正規分布 $N(\mu_k,\Sigma_k)$ の密度関数（以下 $\phi_k(x)$ と書く）であるとき，
+                            </p>
+                            <div class="formula-block">
+                                $$\phi_k(x) = \frac{1}{(2\pi)^{p/2}|\Sigma_k|^{1/2}} \exp\!\left(-\frac{1}{2}(x-\mu_k)^T\Sigma_k^{-1}(x-\mu_k)\right)$$
+                            </div>
+                        </div>
+
+                        <h4>Step 1：対数比を展開する</h4>
+                        <div class="formula-block">
+                            $$f_q(x) = \log\frac{\phi_1(x)\pi_1}{\phi_2(x)\pi_2}$$
+                        </div>
+                        <div class="formula-block">
+                            $$= \log\frac{\pi_1}{\pi_2} + \log\frac{|\Sigma_1|^{-1/2}}{|\Sigma_2|^{-1/2}} - \frac{1}{2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1) + \frac{1}{2}(x-\mu_2)^T\Sigma_2^{-1}(x-\mu_2)$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#f39c12;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 指数部分を整理するコツ</div>
+                            <p>2次形式の展開：$(x-\mu)^T\Sigma^{-1}(x-\mu) = x^T\Sigma^{-1}x - 2\mu^T\Sigma^{-1}x + \mu^T\Sigma^{-1}\mu$</p>
+                        </div>
+
+                        <h4>Step 2：2次・1次・定数項に整理する</h4>
+                        <p>クラス1に関する2次形式の展開：</p>
+                        <div class="formula-block">
+                            $$-\frac{1}{2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1) = -\frac{1}{2}x^T\Sigma_1^{-1}x + \mu_1^T\Sigma_1^{-1}x - \frac{1}{2}\mu_1^T\Sigma_1^{-1}\mu_1$$
+                        </div>
+                        <p>クラス2に関する2次形式の展開：</p>
+                        <div class="formula-block">
+                            $$+\frac{1}{2}(x-\mu_2)^T\Sigma_2^{-1}(x-\mu_2) = +\frac{1}{2}x^T\Sigma_2^{-1}x - \mu_2^T\Sigma_2^{-1}x + \frac{1}{2}\mu_2^T\Sigma_2^{-1}\mu_2$$
+                        </div>
+                        <p>合算すると：</p>
+                        <div class="formula-block">
+                            $$f_q(x) = x^T\underbrace{\frac{1}{2}(-\Sigma_1^{-1}+\Sigma_2^{-1})}_{=A}x + \underbrace{(\mu_1^T\Sigma_1^{-1} - \mu_2^T\Sigma_2^{-1})}_{=b^T}x + \underbrace{\frac{1}{2}(\mu_2^T\Sigma_2^{-1}\mu_2 - \mu_1^T\Sigma_1^{-1}\mu_1) + \log\frac{|\Sigma_2|^{1/2}}{|\Sigma_1|^{1/2}} + \log\frac{\pi_1}{\pi_2}}_{=c}$$
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結果</div>
+                            <div class="formula-block">
+                                $$A = \frac{1}{2}(-\Sigma_1^{-1}+\Sigma_2^{-1})$$
+                            </div>
+                            <div class="formula-block">
+                                $$b = \Sigma_1^{-1}\mu_1 - \Sigma_2^{-1}\mu_2$$
+                            </div>
+                            <div class="formula-block">
+                                $$c = \frac{1}{2}(\mu_2^T\Sigma_2^{-1}\mu_2 - \mu_1^T\Sigma_1^{-1}\mu_1) + \log\frac{|\Sigma_2|^{1/2}}{|\Sigma_1|^{1/2}} + \log\frac{\pi_1}{\pi_2}$$
+                            </div>
+                            <p>
+                                $f_q(x) > 0$ ならクラス1（$y=1$），$f_q(x) < 0$ ならクラス2（$y=-1$）に分類されます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 線形判別（LDA）との違い</div>
+                            <p>
+                                もし $\Sigma_1 = \Sigma_2$（両クラスの分散共分散行列が等しい）ならば，$A = (-\Sigma^{-1}+\Sigma^{-1})/2 = 0$ となり，
+                                2次項が消えて<strong>線形判別関数（LDA）</strong>になります．
+                                クラス間の分散が異なる場合に2次判別分析が必要となります．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.3 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q233-2">
+                    <h2><i class="fas fa-pencil"></i> 問23.3 [2] — 判別関数への代入と分類</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <h4>Step 1：各値を確認する</h4>
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 事前分布 $\pi_j$ の計算</div>
+                            <p>$n_1 = 100$，$n_2 = 200$，$n_1 + n_2 = 300$ なので：</p>
+                            <div class="formula-block">
+                                $$\pi_1 = \frac{100}{300} = \frac{1}{3}, \quad \pi_2 = \frac{200}{300} = \frac{2}{3}$$
+                            </div>
+                        </div>
+
+                        <h4>Step 2：$A$ を計算する</h4>
+                        <p>
+                            $\Sigma_1 = \text{diag}(0.8, 0.5)$ なので $\Sigma_1^{-1} = \text{diag}(1/0.8,\ 1/0.5) = \text{diag}(1.25,\ 2)$
+                        </p>
+                        <p>
+                            $\Sigma_2 = \text{diag}(0.4, 0.25)$ なので $\Sigma_2^{-1} = \text{diag}(1/0.4,\ 1/0.25) = \text{diag}(2.5,\ 4)$
+                        </p>
+                        <div class="formula-block">
+                            $$A = \frac{1}{2}(-\Sigma_1^{-1}+\Sigma_2^{-1}) = \frac{1}{2}\left(-\begin{pmatrix}1.25&0\\0&2\end{pmatrix}+\begin{pmatrix}2.5&0\\0&4\end{pmatrix}\right) = \frac{1}{2}\begin{pmatrix}1.25&0\\0&2\end{pmatrix} = \begin{pmatrix}0.625&0\\0&1\end{pmatrix}$$
+                        </div>
+
+                        <h4>Step 3：$b$ を計算する</h4>
+                        <p>$\mu_1 = (2,2)^T$，$\mu_2 = (0,0)^T$ なので：</p>
+                        <div class="formula-block">
+                            $$b = \Sigma_1^{-1}\mu_1 - \Sigma_2^{-1}\mu_2 = \begin{pmatrix}1.25&0\\0&2\end{pmatrix}\begin{pmatrix}2\\2\end{pmatrix} - \begin{pmatrix}2.5&0\\0&4\end{pmatrix}\begin{pmatrix}0\\0\end{pmatrix} = \begin{pmatrix}2.5\\4\end{pmatrix}$$
+                        </div>
+
+                        <h4>Step 4：$c$ を計算する</h4>
+                        <p>各項を順に求めます：</p>
+                        <div class="formula-block">
+                            $$\mu_1^T\Sigma_1^{-1}\mu_1 = (2,2)\begin{pmatrix}1.25&0\\0&2\end{pmatrix}\begin{pmatrix}2\\2\end{pmatrix} = 2\times 1.25\times 2 + 2\times 2\times 2 = 5 + 8 = 13$$
+                        </div>
+                        <div class="formula-block">
+                            $$\mu_2^T\Sigma_2^{-1}\mu_2 = (0,0)\begin{pmatrix}2.5&0\\0&4\end{pmatrix}\begin{pmatrix}0\\0\end{pmatrix} = 0$$
+                        </div>
+                        <div class="formula-block">
+                            \frac{1}{2}(\mu_2^T\Sigma_2^{-1}\mu_2 - \mu_1^T\Sigma_1^{-1}\mu_1) = \frac{1}{2}(0 - 13) = -6.5
+                        </div>
+                        <p>次に $\log\frac{|\Sigma_2|^{1/2}}{|\Sigma_1|^{1/2}} = \frac{1}{2}\log\frac{|\Sigma_2|}{|\Sigma_1|}$ を計算します：</p>
+                        <div class="formula-block">
+                            $$\frac{|\Sigma_2|}{|\Sigma_1|} = \left|\Sigma_2\Sigma_1^{-1}\right| = \left|\begin{pmatrix}0.4&0\\0&0.25\end{pmatrix}\begin{pmatrix}1.25&0\\0&2\end{pmatrix}\right| = \left|\begin{pmatrix}0.5&0\\0&0.5\end{pmatrix}\right| = 0.5\times 0.5 = 0.25$$
+                        </div>
+                        <div class="formula-block">
+                            $$\log\frac{|\Sigma_2|^{1/2}}{|\Sigma_1|^{1/2}} = \frac{1}{2}\log 0.25 = \frac{1}{2}(-\log 4) = -\frac{\log 4}{2} \approx -0.693$$
+                        </div>
+                        <p>最後に：</p>
+                        <div class="formula-block">
+                            $$\log\frac{\pi_1}{\pi_2} = \log\frac{1/3}{2/3} = \log\frac{1}{2} = -\log 2 \approx -0.693$$
+                        </div>
+                        <p>すべて合算：</p>
+                        <div class="formula-block">
+                            $$c = -6.5 + (-0.693) + (-0.693) \approx -7.886 \approx -8$$
+                        </div>
+
+                        <h4>Step 5：判別関数のまとめ</h4>
+                        <div class="formula-block">
+                            $$f(x) = x^T\begin{pmatrix}0.625&0\\0&1\end{pmatrix}x + \begin{pmatrix}2.5\\4\end{pmatrix}^T x - 8$$
+                        </div>
+
+                        <h4>Step 6：点 $(1,1)$ と $(0,1)$ に代入する</h4>
+
+                        <div class="concept-box" style="border-left-color:#2980b9;">
+                            <div class="box-title"><i class="fas fa-calculator"></i> 点 $(1,1)$ の場合</div>
+                            <div class="formula-block">
+                                $$f\!\begin{pmatrix}1\\1\end{pmatrix} = (1,1)\begin{pmatrix}0.625&0\\0&1\end{pmatrix}\begin{pmatrix}1\\1\end{pmatrix} + (2.5,4)\begin{pmatrix}1\\1\end{pmatrix} - 8$$
+                            </div>
+                            <div class="formula-block">
+                                $$= (0.625\times 1 + 1\times 1) + (2.5 + 4) - 8 = 1.625 + 6.5 - 8 = 0.125 > 0$$
+                            </div>
+                            <p>$f > 0$ なので<strong>クラス1に分類</strong>される．</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#8e44ad;">
+                            <div class="box-title"><i class="fas fa-calculator"></i> 点 $(0,1)$ の場合</div>
+                            <div class="formula-block">
+                                $$f\!\begin{pmatrix}0\\1\end{pmatrix} = (0,1)\begin{pmatrix}0.625&0\\0&1\end{pmatrix}\begin{pmatrix}0\\1\end{pmatrix} + (2.5,4)\begin{pmatrix}0\\1\end{pmatrix} - 8$$
+                            </div>
+                            <div class="formula-block">
+                                $$= (0 + 1\times 1) + (0 + 4) - 8 = 1 + 4 - 8 = -3 < 0$$
+                            </div>
+                            <p>$f < 0$ なので<strong>クラス2に分類</strong>される．</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p>点 $(1,1)$ は<strong>クラス1</strong>，点 $(0,1)$ は<strong>クラス2</strong>に分類される．</p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 直感的な確認</div>
+                            <p>
+                                クラス1の中心は $\mu_1 = (2,2)$，クラス2の中心は $\mu_2 = (0,0)$ です．
+                                点 $(1,1)$ はちょうど2つの中心の中間あたりにありますが，
+                                クラス1の分散がクラス2より大きいため，$(1,1)$ はクラス1の広い分布の中に含まれやすく，クラス1に分類されます．
+                            </p>
+                            <p>
+                                点 $(0,1)$ はクラス2の中心 $(0,0)$ に近いですが，$x_2$ 方向の成分だけが1あります．
+                                クラス2は分散が小さく中心 $(0,0)$ に密集しているので，$(0,1)$ はクラス2の分布に属しやすく，クラス2に分類されます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

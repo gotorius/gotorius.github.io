@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第27章 章末問題解説 - 時系列解析</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+        .calc-table th { background: #e8f0ff; }
+
+        /* ステップボックス */
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+
+        /* 証明ボックス */
+        .proof-box {
+            border: 1.5px solid #8e44ad;
+            background: #faf0ff;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin: 0.8em 0;
+        }
+        .proof-box .proof-title {
+            color: #6c3483;
+            font-weight: 700;
+            font-size: 0.95em;
+            margin-bottom: 8px;
+        }
+
+        /* 時系列グラフ */
+        .ts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin: 1em auto;
+            max-width: 640px;
+        }
+        .ts-grid figure {
+            margin: 0;
+            text-align: center;
+        }
+        .ts-grid figcaption {
+            font-size: 0.82em;
+            color: #555;
+            margin-top: 4px;
+        }
+
+        /* ACF/PACFグラフ */
+        .acf-grid {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1em 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第27章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 27 — 章末問題解説</span>
+            <h1>時系列解析<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">AR過程・MA過程・定常性・DW比・AIC・モデル選択</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter27.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第27章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q271">問27.1 問題</a></li>
+                            <li><a href="#q271-1">問27.1 [1]</a></li>
+                            <li><a href="#q271-2">問27.1 [2]</a></li>
+                            <li><a href="#q272">問27.2</a></li>
+                            <li><a href="#q273">問27.3 問題</a></li>
+                            <li><a href="#q273-1">問27.3 [1]</a></li>
+                            <li><a href="#q273-2">問27.3 [2]</a></li>
+                            <li><a href="#q274">問27.4</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第27章 概要                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第27章「時系列解析」のキーポイント</div>
+
+                        <h4 style="margin-top:0.5em;">■ AR過程（自己回帰過程）</h4>
+                        <p>
+                            現在の値が過去の値の線形結合と誤差項で表されるモデルを<strong>AR（AutoRegressive）過程</strong>といいます．
+                        </p>
+                        <div class="formula-block">
+                            $$\text{AR}(p): \quad Y_t = \phi_0 + \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + U_t$$
+                        </div>
+                        <table class="data-table" style="max-width:520px; margin:0 auto;">
+                            <thead><tr><th>パラメータ</th><th>意味</th><th>AR(1)での具体的な影響</th></tr></thead>
+                            <tbody>
+                                <tr><td>$\phi_1 \in (-1,1)$</td><td>定常AR(1)</td><td>過去の値に引き寄せられる</td></tr>
+                                <tr><td>$0 < \phi_1 < 1$</td><td>正の自己相関</td><td>なめらかな変動（惰性が続く）</td></tr>
+                                <tr><td>$-1 < \phi_1 < 0$</td><td>負の自己相関</td><td>上下に激しく振動する</td></tr>
+                                <tr><td>$\phi_1 = 1$</td><td>単位根（非定常）</td><td>ランダムウォーク，分散が時間とともに増大</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin-top:1em;">■ MA過程（移動平均過程）</h4>
+                        <div class="formula-block">
+                            $$\text{MA}(q): \quad Y_t = \mu + U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2} + \cdots + \theta_q U_{t-q}$$
+                        </div>
+                        <p>
+                            MA($q$)過程の自己共分散 $\gamma_h$ は<strong>$|h| > q$ で0</strong>になります（有限ラグ後に切断）．
+                        </p>
+
+                        <h4 style="margin-top:1em;">■ ACF・PACF によるモデル識別</h4>
+                        <table class="data-table" style="max-width:500px; margin:0 auto;">
+                            <thead><tr><th>モデル</th><th>標本自己相関（ACF）</th><th>標本偏自己相関（PACF）</th></tr></thead>
+                            <tbody>
+                                <tr><td>AR($p$)</td><td>次数とともに減衰（無限に続く）</td><td>ラグ$p$以降で0になる（突然切断）</td></tr>
+                                <tr><td>MA($q$)</td><td>ラグ$q$以降で0になる（突然切断）</td><td>次数とともに減衰（無限に続く）</td></tr>
+                                <tr><td>ARMA</td><td>減衰（無限に続く）</td><td>減衰（無限に続く）</td></tr>
+                            </tbody>
+                        </table>
+
+                        <h4 style="margin-top:1em;">■ DW比（Durbin-Watson 統計量）</h4>
+                        <div class="formula-block">
+                            $$DW = \frac{\displaystyle\sum_{t=2}^{T}(e_t - e_{t-1})^2}{\displaystyle\sum_{t=1}^{T}e_t^2} \approx 2(1 - \hat{\rho}_1)$$
+                        </div>
+                        <p>
+                            ここで $\hat{\rho}_1$ は残差の1次自己相関係数の推定値です．
+                            <strong>正の自己相関</strong>（$\hat{\rho}_1 > 0$）があるとDW比は0に近く，
+                            <strong>自己相関なし</strong>（$\hat{\rho}_1 \approx 0$）のとき DW $\approx 2$，
+                            <strong>負の自己相関</strong>（$\hat{\rho}_1 < 0$）があると4に近くなります．
+                        </p>
+
+                        <h4 style="margin-top:1em;">■ AIC（赤池情報量基準）</h4>
+                        <div class="formula-block">
+                            $$\text{AIC} = -2\log\hat{L} + 2k$$
+                        </div>
+                        <p>
+                            $\hat{L}$ は最大化された尤度，$k$ はパラメータ数です．
+                            <strong>AICが最も小さいモデルが最良</strong>とみなされます（小さいほど良いモデル）．
+                        </p>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.1 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q271">
+                    <h2><i class="fas fa-pencil"></i> 問27.1 — 問題文（AR(1)過程のグラフ識別とOLS推定量の性質）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            AR(1)過程
+                        </p>
+                        <div class="formula-block">
+                            $$Y_t = 2(1 - \phi_1) + \phi_1\,Y_{t-1} + U_t, \qquad \{U_t\} \overset{\text{i.i.d.}}{\sim} N(0,\,1) \tag{27.1}$$
+                        </div>
+                        <p>
+                            に対して，パラメータ $\phi_1$ を $-0.8,\ 0,\ 0.7,\ 1$ と変えて時系列データをシミュレーションした．
+                            それぞれのシミュレーション結果のグラフ（時点 $t$ を横軸，$Y_t$ を縦軸）が図27.1の (a)〜(d) である．
+                        </p>
+
+                        <!-- 4つの時系列グラフ SVG -->
+                        <div class="ts-grid">
+                            <!-- (a) φ1=0.7: なめらかな変動 -->
+                            <figure>
+                                <svg width="240" height="130" viewBox="0 0 240 130" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="240" height="130" fill="#fafafa" rx="4"/>
+                                    <line x1="20" y1="10" x2="20" y2="110" stroke="#ccc" stroke-width="1"/>
+                                    <line x1="20" y1="65" x2="230" y2="65" stroke="#ccc" stroke-width="1"/>
+                                    <!-- なめらかなカーブ（正の自己相関） -->
+                                    <polyline fill="none" stroke="#3498db" stroke-width="1.6"
+                                        points="20,65 30,58 40,50 50,44 60,40 70,38 80,42 90,50 100,60 110,68 120,74 130,76 140,74 150,68 160,60 170,55 180,52 190,54 200,60 210,67 220,73 230,75"/>
+                                    <text x="120" y="125" font-size="10" fill="#444" text-anchor="middle">(a)</text>
+                                    <text x="28" y="22" font-size="9" fill="#3498db">なめらかな波</text>
+                                </svg>
+                                <figcaption>グラフ (a)</figcaption>
+                            </figure>
+
+                            <!-- (b) φ1=0: ホワイトノイズ -->
+                            <figure>
+                                <svg width="240" height="130" viewBox="0 0 240 130" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="240" height="130" fill="#fafafa" rx="4"/>
+                                    <line x1="20" y1="10" x2="20" y2="110" stroke="#ccc" stroke-width="1"/>
+                                    <line x1="20" y1="65" x2="230" y2="65" stroke="#ccc" stroke-width="1"/>
+                                    <!-- ランダムノイズ（独立） -->
+                                    <polyline fill="none" stroke="#27ae60" stroke-width="1.6"
+                                        points="20,65 30,50 40,75 50,55 60,80 70,45 80,70 90,60 100,82 110,48 120,68 130,52 140,78 150,58 160,72 170,42 180,68 190,54 200,76 210,60 220,50 230,72"/>
+                                    <text x="120" y="125" font-size="10" fill="#444" text-anchor="middle">(b)</text>
+                                    <text x="28" y="22" font-size="9" fill="#27ae60">ランダムノイズ</text>
+                                </svg>
+                                <figcaption>グラフ (b)</figcaption>
+                            </figure>
+
+                            <!-- (c) φ1=1: 非定常（下降トレンド） -->
+                            <figure>
+                                <svg width="240" height="130" viewBox="0 0 240 130" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="240" height="130" fill="#fafafa" rx="4"/>
+                                    <line x1="20" y1="10" x2="20" y2="110" stroke="#ccc" stroke-width="1"/>
+                                    <line x1="20" y1="65" x2="230" y2="65" stroke="#ccc" stroke-width="1"/>
+                                    <!-- ランダムウォーク（非定常，下降気味） -->
+                                    <polyline fill="none" stroke="#e74c3c" stroke-width="1.6"
+                                        points="20,32 30,28 40,34 50,30 60,38 70,46 80,54 90,62 100,68 110,75 120,80 130,86 140,80 150,88 160,94 170,98 180,92 190,98 200,104 210,100 220,107 230,111"/>
+                                    <text x="120" y="125" font-size="10" fill="#444" text-anchor="middle">(c)</text>
+                                    <text x="28" y="22" font-size="9" fill="#e74c3c">下降トレンド</text>
+                                </svg>
+                                <figcaption>グラフ (c)</figcaption>
+                            </figure>
+
+                            <!-- (d) φ1=-0.8: 激しい上下変動 -->
+                            <figure>
+                                <svg width="240" height="130" viewBox="0 0 240 130" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="240" height="130" fill="#fafafa" rx="4"/>
+                                    <line x1="20" y1="10" x2="20" y2="110" stroke="#ccc" stroke-width="1"/>
+                                    <line x1="20" y1="65" x2="230" y2="65" stroke="#ccc" stroke-width="1"/>
+                                    <!-- 上下に激しく振動（負の自己相関） -->
+                                    <polyline fill="none" stroke="#9b59b6" stroke-width="1.6"
+                                        points="20,65 30,38 40,88 50,40 60,90 70,38 80,86 90,42 100,84 110,40 120,88 130,44 140,82 150,42 160,84 170,40 180,86 190,44 200,82 210,42 220,86 230,44"/>
+                                    <text x="120" y="125" font-size="10" fill="#444" text-anchor="middle">(d)</text>
+                                    <text x="28" y="22" font-size="9" fill="#9b59b6">激しい上下変動</text>
+                                </svg>
+                                <figcaption>グラフ (d)</figcaption>
+                            </figure>
+                        </div>
+                        <p style="text-align:center;font-size:0.82em;color:#777;">図27.1　AR(1)過程のシミュレーション（各グラフは概略）</p>
+
+                        <ol>
+                            <li>グラフ (a)〜(d) はそれぞれ $\phi_1 = -0.8,\ 0,\ 0.7,\ 1$ のうちどれに対応するか答えよ．</li>
+                            <li>
+                                式 (27.1) の $Y_t$ を被説明変数，$Y_{t-1}$ を説明変数とする回帰モデルを考え，
+                                誤差項が AR(1) 過程に従うとした場合，OLS（最小二乗法）推定量の性質について述べよ．
+                                また，残差の正の自己相関が存在するとき DW 比はどのような値をとるか述べよ．
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.1 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q271-1">
+                    <h2><i class="fas fa-pencil"></i> 問27.1 [1] — AR(1)のグラフ識別</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> AR(1)過程のパラメータと時系列の見た目</div>
+                            <p>
+                                AR(1)過程 $Y_t = \phi_0 + \phi_1 Y_{t-1} + U_t$ において，
+                                パラメータ $\phi_1$ の値によって時系列の性質が大きく異なります．
+                            </p>
+                        </div>
+
+                        <h4>各 $\phi_1$ 値の特徴と識別ポイント</h4>
+
+                        <div class="step-box">
+                            <div class="step-title">$\phi_1 = 1$（単位根・非定常過程）→ グラフ (c)</div>
+                            <p>
+                                $\phi_1 = 1$ のとき，モデルは $Y_t = 2(1-1) + 1 \cdot Y_{t-1} + U_t = Y_{t-1} + U_t$ となり，
+                                これは<strong>ランダムウォーク</strong>（+ドリフトなし）です．
+                            </p>
+                            <p>
+                                <strong>特徴：</strong>分散が時間とともに際限なく大きくなる（非定常）．
+                                平均への引き戻しが起こらないため，一方向に<strong>漂い続ける（トレンドが見られる）</strong>傾向があります．
+                                グラフ (c) は時間が進むにつれて下降し続けており，単位根の特徴に一致します．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\phi_1 = 0.7$（正の自己相関・定常）→ グラフ (a)</div>
+                            <p>
+                                $|\phi_1| < 1$ なので定常過程です．$\phi_1 > 0$ のとき，<strong>正の自己相関</strong>があります．
+                                「今の値が大きければ次の値も大きい傾向がある」ため，<strong>なめらかに上下する波のような</strong>形になります．
+                            </p>
+                            <p>
+                                <strong>特徴：</strong>隣り合う時点の値が似ており，変化が緩やかです．
+                                グラフ (a) はなめらかな波形を示しており，$\phi_1 = 0.7$ の特徴と一致します．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\phi_1 = 0$（ホワイトノイズ）→ グラフ (b)</div>
+                            <p>
+                                $\phi_1 = 0$ のとき，$Y_t = 2 + U_t$ となり，$\{Y_t\}$ は互いに独立な確率変数の列（<strong>ホワイトノイズ</strong>）になります．
+                            </p>
+                            <p>
+                                <strong>特徴：</strong>隣り合う時点の値に相関がなく，<strong>上下にばらばらに変動</strong>します．
+                                グラフ (b) は連続性のないランダムな変動を示しており，$\phi_1 = 0$ の特徴と一致します．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">$\phi_1 = -0.8$（負の自己相関・定常）→ グラフ (d)</div>
+                            <p>
+                                $|\phi_1| < 1$ なので定常過程です．$\phi_1 < 0$ のとき，<strong>負の自己相関</strong>があります．
+                                「今の値が大きければ次の値は小さくなる傾向がある」ため，<strong>上下に激しく振動する</strong>ジグザグなパターンになります．
+                            </p>
+                            <p>
+                                <strong>特徴：</strong>隣り合う時点の値が反対の方向に動き，変化が激しいです．
+                                グラフ (d) は1時点ごとに上下を繰り返す激しいジグザグを示しており，$\phi_1 = -0.8$ の特徴と一致します．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：グラフとパラメータの対応</div>
+                            <table class="data-table" style="max-width:440px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>グラフ</th><th>$\phi_1$</th><th>特徴</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>(a)</td><td>$\phi_1 = 0.7$</td><td>正の自己相関，なめらかな波</td></tr>
+                                    <tr><td>(b)</td><td>$\phi_1 = 0$</td><td>自己相関なし，ホワイトノイズ</td></tr>
+                                    <tr><td>(c)</td><td>$\phi_1 = 1$</td><td>単位根（非定常），一方向に漂う</td></tr>
+                                    <tr><td>(d)</td><td>$\phi_1 = -0.8$</td><td>負の自己相関，ジグザグな激しい変動</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 補足：定常性と自己相関の直感的理解</div>
+                            <p>
+                                AR(1)過程 $Y_t = \phi_0 + \phi_1 Y_{t-1} + U_t$ において：
+                            </p>
+                            <ul>
+                                <li>
+                                    <strong>定常条件：$|\phi_1| < 1$</strong>
+                                    — 過去の影響が指数的に減衰するため，平均・分散・自己共分散が時間に依存しない定常状態が保たれます．
+                                </li>
+                                <li>
+                                    <strong>$\phi_1$ が0に近いほど</strong>ホワイトノイズに近く，<strong>1に近いほど</strong>変動が持続します（なめらか）．
+                                </li>
+                                <li>
+                                    <strong>$\phi_1 = 1$（単位根）</strong>では，ショック（誤差 $U_t$）の影響が永久に残り続けるため，分散が時間とともに増大し定常でなくなります．
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.1 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q271-2">
+                    <h2><i class="fas fa-pencil"></i> 問27.1 [2] — OLS推定量の性質と DW 比</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 問題の設定</div>
+                            <p>
+                                回帰モデル $Y_t = \beta_0 + \beta_1 Y_{t-1} + \varepsilon_t$ において，
+                                誤差項 $\varepsilon_t$ が AR(1) 過程
+                                $\varepsilon_t = \rho\,\varepsilon_{t-1} + e_t$（$|\rho| < 1$，$e_t \sim \text{i.i.d.}(0,\sigma^2)$）
+                                に従う場合を考えます．
+                            </p>
+                        </div>
+
+                        <h4>OLS推定量の性質</h4>
+
+                        <div class="step-box">
+                            <div class="step-title">不偏性（Unbiasedness）：OLS は不偏推定量か？</div>
+                            <p>
+                                OLS（最小二乗法）推定量 $\hat{\beta}$ は，誤差項に自己相関があっても，
+                                誤差項の期待値が0（$E[\varepsilon_t] = 0$）であれば<strong>不偏推定量</strong>です：
+                            </p>
+                            <div class="formula-block">
+                                $$E[\hat{\beta}] = \beta$$
+                            </div>
+                            <p style="font-size:0.9em;color:#555;">
+                                ただし，この不偏性は厳密には有限サンプルでは成立せず，大標本（漸近的）な意味での一致性に言い換えることが多いです．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">有効性（Efficiency）：OLS は最も分散が小さいか？</div>
+                            <p>
+                                <strong>有効推定量ではありません</strong>（BLUE = 最良線形不偏推定量ではない）．
+                            </p>
+                            <p>
+                                ガウス・マルコフの定理によれば，「誤差項が互いに独立で等分散」という条件のもとで，
+                                OLS が線形不偏推定量クラスで最も分散が小さい（BLUE）ことが保証されます．
+                                しかし，誤差項に自己相関（$\varepsilon_t = \rho\,\varepsilon_{t-1} + e_t$）がある場合，この条件が破れるため，
+                                <strong>OLS は不偏だが BLUE ではなく，GLS（一般化最小二乗法）の方がより小さい分散</strong>を持ちます．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">分散の過小推定と t 検定・F 検定への影響</div>
+                            <p>
+                                正の自己相関（$\rho > 0$）がある場合，<strong>OLS の標準誤差が過小推定</strong>されます．
+                                その結果，t統計量が実際より大きく見え，有意でない係数を有意と判断する
+                                <strong>偽の有意性（見せかけの有意性）</strong>が生じる危険があります．
+                            </p>
+                        </div>
+
+                        <h4>正の自己相関と DW 比</h4>
+
+                        <div class="step-box">
+                            <div class="step-title">DW 比の値域と自己相関の関係</div>
+                            <p>
+                                DW 比の近似式 $DW \approx 2(1 - \hat{\rho}_1)$ から，
+                            </p>
+                            <table class="data-table" style="max-width:420px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>残差の自己相関</th><th>$\hat{\rho}_1$ の値</th><th>DW 比の値</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>正の自己相関</td><td>$\hat{\rho}_1 \approx +1$</td><td>$DW \approx 0$（0に近い）</td></tr>
+                                    <tr><td>自己相関なし</td><td>$\hat{\rho}_1 \approx 0$</td><td>$DW \approx 2$（2に近い）</td></tr>
+                                    <tr><td>負の自己相関</td><td>$\hat{\rho}_1 \approx -1$</td><td>$DW \approx 4$（4に近い）</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;">
+                                したがって，<strong>残差に正の自己相関が存在するとき，DW 比は 0 に近い値</strong>をとります．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p>
+                                <strong>① OLS 推定量の性質：</strong>
+                                誤差項が AR(1) 過程に従う場合，OLS 推定量は（漸近的に）<strong>不偏推定量</strong>ではあるが，
+                                ガウス・マルコフの定理の条件（独立等分散）が成立しないため，
+                                線形不偏推定量クラスで<strong>最小分散（BLUE）ではない（有効でない）</strong>．
+                                GLS が OLS より効率的な推定量となる．
+                            </p>
+                            <p style="margin-top:0.4em;">
+                                <strong>② DW 比：</strong>
+                                残差に<strong>正の自己相関</strong>が存在するとき，DW 比は<strong>0 に近い値</strong>をとる．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.2                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q272">
+                    <h2><i class="fas fa-pencil"></i> 問27.2 — MA(2)過程の自己共分散の計算</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            MA(2)過程
+                        </p>
+                        <div class="formula-block">
+                            $$Y_t = U_t + \theta_1\,U_{t-1} + \theta_2\,U_{t-2}, \qquad \{U_t\} \overset{\text{i.i.d.}}{\sim} (0,\,\sigma^2) \tag{27.2}$$
+                        </div>
+                        <p>
+                            について，ラグ $h$（$h = 0, 1, 2$ および $h > 2$）の自己共分散 $\gamma_h = \mathrm{Cov}(Y_t,\,Y_{t-h})$ を求めよ．
+                        </p>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> 計算の基本方針</div>
+                            <p>
+                                MA(2)は平均0なので $\gamma_h = E[Y_t\,Y_{t-h}]$ と書けます．
+                                $\{U_t\}$ が i.i.d.$(0, \sigma^2)$ であることから：
+                            </p>
+                            <ul>
+                                <li>$E[U_t^2] = \sigma^2$</li>
+                                <li>$E[U_t\,U_s] = 0 \quad (t \neq s)$</li>
+                            </ul>
+                            <p>
+                                $Y_t = U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2}$ を代入し展開して，<strong>添字が一致する項だけ</strong>が $\sigma^2$ として残ります．
+                            </p>
+                        </div>
+
+                        <h4>$\gamma_0$（分散）の計算</h4>
+                        <div class="step-box">
+                            <div class="step-title">$\gamma_0 = E[Y_t^2]$</div>
+                            <div class="formula-block">
+                                $$\gamma_0 = E\!\left[(U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2})^2\right]$$
+                            </div>
+                            <p>展開すると：</p>
+                            <div class="formula-block">
+                                $$= E[U_t^2] + \theta_1^2\,E[U_{t-1}^2] + \theta_2^2\,E[U_{t-2}^2]
+                                + 2\theta_1\underbrace{E[U_t U_{t-1}]}_{=0} + 2\theta_2\underbrace{E[U_t U_{t-2}]}_{=0} + 2\theta_1\theta_2\underbrace{E[U_{t-1}U_{t-2}]}_{=0}$$
+                            </div>
+                            <p>クロス項はすべて0なので：</p>
+                            <div class="formula-block">
+                                $$\boxed{\gamma_0 = (1 + \theta_1^2 + \theta_2^2)\,\sigma^2}$$
+                            </div>
+                        </div>
+
+                        <h4>$\gamma_1$（ラグ1の自己共分散）の計算</h4>
+                        <div class="step-box">
+                            <div class="step-title">$\gamma_1 = E[Y_t\,Y_{t-1}]$</div>
+                            <div class="formula-block">
+                                $$\gamma_1 = E\!\left[(U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2})(U_{t-1} + \theta_1 U_{t-2} + \theta_2 U_{t-3})\right]$$
+                            </div>
+                            <p>
+                                この積を展開したとき，添字が一致する（非ゼロになる）組み合わせだけを拾います：
+                            </p>
+                            <ul>
+                                <li>$\theta_1\,E[U_{t-1}^2] = \theta_1\,\sigma^2$（$U_{t-1}$ 同士）</li>
+                                <li>$\theta_2 \cdot \theta_1\,E[U_{t-2}^2] = \theta_1\theta_2\,\sigma^2$（$U_{t-2}$ 同士）</li>
+                                <li>その他の組み合わせはすべて添字が異なり0</li>
+                            </ul>
+                            <div class="formula-block">
+                                $$\boxed{\gamma_1 = (\theta_1 + \theta_1\theta_2)\,\sigma^2 = \theta_1(1+\theta_2)\,\sigma^2}$$
+                            </div>
+                        </div>
+
+                        <h4>$\gamma_2$（ラグ2の自己共分散）の計算</h4>
+                        <div class="step-box">
+                            <div class="step-title">$\gamma_2 = E[Y_t\,Y_{t-2}]$</div>
+                            <div class="formula-block">
+                                $$\gamma_2 = E\!\left[(U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2})(U_{t-2} + \theta_1 U_{t-3} + \theta_2 U_{t-4})\right]$$
+                            </div>
+                            <p>
+                                添字が一致する組み合わせは $U_{t-2}$ 同士のみ：
+                            </p>
+                            <ul>
+                                <li>$\theta_2\,E[U_{t-2}^2] = \theta_2\,\sigma^2$（$U_{t-2}$ 同士）</li>
+                            </ul>
+                            <div class="formula-block">
+                                $$\boxed{\gamma_2 = \theta_2\,\sigma^2}$$
+                            </div>
+                        </div>
+
+                        <h4>$\gamma_h$（$h > 2$）の計算</h4>
+                        <div class="step-box">
+                            <div class="step-title">$\gamma_h = 0 \quad (h > 2)$</div>
+                            <p>
+                                $h > 2$ のとき，$Y_t = U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2}$ と
+                                $Y_{t-h} = U_{t-h} + \theta_1 U_{t-h-1} + \theta_2 U_{t-h-2}$ では，
+                                使っている $U$ の添字が完全に重ならないため，
+                            </p>
+                            <div class="formula-block">
+                                $$\boxed{\gamma_h = 0 \quad (h > 2)}$$
+                            </div>
+                            <p style="font-size:0.9em;color:#555;">
+                                これは MA($q$) 過程の一般的な性質であり，「ラグが $q$ を超えると自己共分散は0」（$q$ 次での切断）となります．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：MA(2)の自己共分散まとめ</div>
+                            <table class="data-table" style="max-width:420px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>ラグ $h$</th><th>$\gamma_h$</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>$h = 0$</td><td>$(1+\theta_1^2+\theta_2^2)\,\sigma^2$</td></tr>
+                                    <tr><td>$h = 1$</td><td>$\theta_1(1+\theta_2)\,\sigma^2$</td></tr>
+                                    <tr><td>$h = 2$</td><td>$\theta_2\,\sigma^2$</td></tr>
+                                    <tr><td>$h > 2$</td><td>$0$</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;font-size:0.9em;color:#555;">
+                                ※ 対称性 $\gamma_{-h} = \gamma_h$ より，ラグが負の場合も同様です．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 補足：自己相関係数との関係</div>
+                            <p>
+                                自己相関係数 $\rho_h = \gamma_h / \gamma_0$ は：
+                            </p>
+                            <div class="formula-block">
+                                $$\rho_1 = \frac{\theta_1(1+\theta_2)}{1+\theta_1^2+\theta_2^2}, \quad
+                                \rho_2 = \frac{\theta_2}{1+\theta_1^2+\theta_2^2}, \quad
+                                \rho_h = 0 \;(h > 2)$$
+                            </div>
+                            <p>
+                                MA($q$) 過程の<strong>標本 ACF（自己相関関数）はラグ $q$ 以降で完全に0</strong>になるため，
+                                ACF のパターンから MA 過程の次数を識別することができます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.3 問題文                                              -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q273">
+                    <h2><i class="fas fa-pencil"></i> 問27.3 — 問題文（ACF・PACF によるモデル選択と DW 比）</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある回帰モデルの残差に対して標本自己相関（ACF）と標本偏自己相関（PACF）を計算したところ，
+                            図27.7のような結果が得られた（破線は有意水準の閾値を示す）．
+                        </p>
+
+                        <!-- ACF/PACFグラフ SVG -->
+                        <div class="acf-grid">
+                            <!-- ACF -->
+                            <figure style="text-align:center;">
+                                <svg width="280" height="160" viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="280" height="160" fill="#fafafa" rx="4"/>
+                                    <text x="140" y="14" font-size="10" fill="#333" text-anchor="middle" font-weight="700">ACF（自己相関関数）</text>
+                                    <!-- y軸 -->
+                                    <line x1="35" y1="18" x2="35" y2="145" stroke="#888" stroke-width="1"/>
+                                    <!-- x軸（0ライン） -->
+                                    <line x1="35" y1="80" x2="270" y2="80" stroke="#888" stroke-width="1"/>
+                                    <!-- 有意水準境界線 -->
+                                    <line x1="35" y1="55" x2="270" y2="55" stroke="#e74c3c" stroke-width="0.8" stroke-dasharray="4,3"/>
+                                    <line x1="35" y1="105" x2="270" y2="105" stroke="#e74c3c" stroke-width="0.8" stroke-dasharray="4,3"/>
+                                    <text x="32" y="58" font-size="7" fill="#e74c3c" text-anchor="end">+2/√T</text>
+                                    <text x="32" y="108" font-size="7" fill="#e74c3c" text-anchor="end">−2/√T</text>
+                                    <!-- y軸ラベル -->
+                                    <text x="32" y="82" font-size="8" fill="#666" text-anchor="end">0</text>
+                                    <text x="32" y="22" font-size="8" fill="#666" text-anchor="end">1</text>
+                                    <!-- x軸ラベル（ラグ） -->
+                                    <text x="140" y="155" font-size="9" fill="#666" text-anchor="middle">ラグ h</text>
+                                    <!-- 各ラグのバー: スケール 1→80px, 0→140px（y=80がゼロライン, -1→140） -->
+                                    <!-- h=0は通常省略または1 -->
+                                    <!-- h=1: ACF≈0.691, bar high（有意） -->
+                                    <rect x="48"  y="38" width="14" height="42" fill="#3498db" opacity="0.8"/>
+                                    <text x="55"  y="148" font-size="8" fill="#444" text-anchor="middle">1</text>
+                                    <!-- h=2: ACF≈0.211, bar middle（有意） -->
+                                    <rect x="75"  y="66" width="14" height="14" fill="#3498db" opacity="0.8"/>
+                                    <text x="82"  y="148" font-size="8" fill="#444" text-anchor="middle">2</text>
+                                    <!-- h=3: ACF≈-0.02, small（非有意） -->
+                                    <rect x="102" y="80" width="14" height="2" fill="#3498db" opacity="0.4"/>
+                                    <text x="109" y="148" font-size="8" fill="#444" text-anchor="middle">3</text>
+                                    <!-- h=4: ACF≈0.00 -->
+                                    <rect x="129" y="79" width="14" height="1" fill="#3498db" opacity="0.3"/>
+                                    <text x="136" y="148" font-size="8" fill="#444" text-anchor="middle">4</text>
+                                    <!-- h=5: ACF≈-0.01 -->
+                                    <rect x="156" y="80" width="14" height="1" fill="#3498db" opacity="0.3"/>
+                                    <text x="163" y="148" font-size="8" fill="#444" text-anchor="middle">5</text>
+                                    <!-- h=6: ACF≈0.01 -->
+                                    <rect x="183" y="79" width="14" height="1" fill="#3498db" opacity="0.3"/>
+                                    <text x="190" y="148" font-size="8" fill="#444" text-anchor="middle">6</text>
+                                    <!-- h=7: ACF≈0 -->
+                                    <rect x="210" y="80" width="14" height="1" fill="#3498db" opacity="0.3"/>
+                                    <text x="217" y="148" font-size="8" fill="#444" text-anchor="middle">7</text>
+                                </svg>
+                                <figcaption>図27.7 (左)　ACF</figcaption>
+                            </figure>
+
+                            <!-- PACF -->
+                            <figure style="text-align:center;">
+                                <svg width="280" height="160" viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+                                    <rect width="280" height="160" fill="#fafafa" rx="4"/>
+                                    <text x="140" y="14" font-size="10" fill="#333" text-anchor="middle" font-weight="700">PACF（偏自己相関関数）</text>
+                                    <!-- y軸 -->
+                                    <line x1="35" y1="18" x2="35" y2="145" stroke="#888" stroke-width="1"/>
+                                    <!-- x軸（0ライン） -->
+                                    <line x1="35" y1="80" x2="270" y2="80" stroke="#888" stroke-width="1"/>
+                                    <!-- 有意水準境界線 -->
+                                    <line x1="35" y1="55" x2="270" y2="55" stroke="#e74c3c" stroke-width="0.8" stroke-dasharray="4,3"/>
+                                    <line x1="35" y1="105" x2="270" y2="105" stroke="#e74c3c" stroke-width="0.8" stroke-dasharray="4,3"/>
+                                    <text x="32" y="58" font-size="7" fill="#e74c3c" text-anchor="end">+2/√T</text>
+                                    <text x="32" y="108" font-size="7" fill="#e74c3c" text-anchor="end">−2/√T</text>
+                                    <!-- y軸ラベル -->
+                                    <text x="32" y="82" font-size="8" fill="#666" text-anchor="end">0</text>
+                                    <text x="32" y="22" font-size="8" fill="#666" text-anchor="end">1</text>
+                                    <!-- x軸ラベル（ラグ） -->
+                                    <text x="140" y="155" font-size="9" fill="#666" text-anchor="middle">ラグ h</text>
+                                    <!-- PACF h=1: 有意（大） -->
+                                    <rect x="48"  y="38" width="14" height="42" fill="#e74c3c" opacity="0.8"/>
+                                    <text x="55"  y="148" font-size="8" fill="#444" text-anchor="middle">1</text>
+                                    <!-- PACF h=2: 有意（中） -->
+                                    <rect x="75"  y="56" width="14" height="24" fill="#e74c3c" opacity="0.8"/>
+                                    <text x="82"  y="148" font-size="8" fill="#444" text-anchor="middle">2</text>
+                                    <!-- PACF h=3: ほぼ0（非有意） -->
+                                    <rect x="102" y="79" width="14" height="1" fill="#e74c3c" opacity="0.3"/>
+                                    <text x="109" y="148" font-size="8" fill="#444" text-anchor="middle">3</text>
+                                    <!-- PACF h=4: ほぼ0 -->
+                                    <rect x="129" y="80" width="14" height="1" fill="#e74c3c" opacity="0.3"/>
+                                    <text x="136" y="148" font-size="8" fill="#444" text-anchor="middle">4</text>
+                                    <!-- PACF h=5: ほぼ0 -->
+                                    <rect x="156" y="79" width="14" height="1" fill="#e74c3c" opacity="0.3"/>
+                                    <text x="163" y="148" font-size="8" fill="#444" text-anchor="middle">5</text>
+                                    <!-- PACF h=6: ほぼ0 -->
+                                    <rect x="183" y="80" width="14" height="1" fill="#e74c3c" opacity="0.3"/>
+                                    <text x="190" y="148" font-size="8" fill="#444" text-anchor="middle">6</text>
+                                    <!-- PACF h=7: ほぼ0 -->
+                                    <rect x="210" y="80" width="14" height="1" fill="#e74c3c" opacity="0.3"/>
+                                    <text x="217" y="148" font-size="8" fill="#444" text-anchor="middle">7</text>
+                                </svg>
+                                <figcaption>図27.7 (右)　PACF</figcaption>
+                            </figure>
+                        </div>
+
+                        <p>
+                            この結果において，標本自己相関係数は $\hat{\rho}_1 = 0.691$，$\hat{\rho}_2 = 0.211$ であった．
+                        </p>
+
+                        <ol>
+                            <li>ACF と PACF のパターンから，残差にはどのような自己回帰モデルが適切か判断し，理由とともに答えよ．</li>
+                            <li>
+                                上記の $\hat{\rho}_1 = 0.691$ の値を使い，DW 比の近似値を求めよ．
+                                なお，DW 比の近似式として $DW \approx 2(1 - \hat{\rho}_1)$ を用いること．
+                            </li>
+                        </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.3 [1]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q273-1">
+                    <h2><i class="fas fa-pencil"></i> 問27.3 [1] — ACF・PACF からのモデル識別</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> ACF と PACF の読み方（識別ルール）</div>
+                            <table class="data-table" style="max-width:520px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>モデル</th><th>ACF（自己相関関数）</th><th>PACF（偏自己相関関数）</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>AR($p$)</strong></td>
+                                        <td>指数的・振動的に<strong>減衰</strong>（無限に続く）</td>
+                                        <td>ラグ $p$ で<strong>突然切断</strong>（$p+1$ 次以降は0）</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>MA($q$)</strong></td>
+                                        <td>ラグ $q$ で<strong>突然切断</strong>（$q+1$ 次以降は0）</td>
+                                        <td>指数的・振動的に<strong>減衰</strong>（無限に続く）</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4>図27.7 の ACF・PACF パターンを分析する</h4>
+
+                        <div class="step-box">
+                            <div class="step-title">ACF のパターン確認</div>
+                            <p>
+                                ラグ $h=1, 2$ では有意水準の閾値（破線）を超えており，ラグ3以降は閾値内に収まっています．
+                                しかし，ラグ1→2と値が減衰しており，<strong>指数的に減衰するパターン</strong>と解釈できます．
+                                ACF がラグとともに徐々に減衰（滑らかに0に近づく）するのは<strong>AR過程</strong>の特徴です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">PACF のパターン確認（決定的な判断材料）</div>
+                            <p>
+                                PACF は<strong>ラグ $h=1$ と $h=2$ で有意</strong>（閾値を超える），
+                                <strong>ラグ $h=3$ 以降はほぼ0</strong>（閾値内に収まる）．
+                            </p>
+                            <p>
+                                これは <strong>AR($p$) 過程の PACF の典型的パターン</strong>です：
+                                「ラグ $p$ まで有意で，ラグ $p+1$ 以降は突然0になる（切断される）」．
+                            </p>
+                            <p>
+                                今回は <strong>ラグ2で切断</strong>されているので，<strong>$p = 2$</strong> と判断されます．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p>
+                                <strong>適切なモデル：AR(2)過程</strong>
+                            </p>
+                            <p>
+                                理由：
+                            </p>
+                            <ul>
+                                <li><strong>ACF</strong> がラグとともに徐々に減衰している（AR過程の特徴）</li>
+                                <li><strong>PACF</strong> がラグ2まで有意でラグ3以降は0になっている（次数 $p=2$ での切断 = AR(2)の特徴）</li>
+                            </ul>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 補足：PACF の定義と直感的意味</div>
+                            <p>
+                                <strong>偏自己相関（Partial Autocorrelation）</strong>とは，
+                                ラグ $h$ の相関を「中間のラグ（1〜$h-1$）の影響を取り除いた」純粋な相関です．
+                            </p>
+                            <p>
+                                AR($p$) 過程では，ラグ $p+1$ 以降の PACF は理論上完全に0になります（回帰に余計な変数を加えても係数が0になる）．
+                                このため，PACF の「切断点」を見ることで AR の次数を識別できます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.3 [2]                                                -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q273-2">
+                    <h2><i class="fas fa-pencil"></i> 問27.3 [2] — DW 比の近似値の計算</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> DW 比の近似式</div>
+                            <p>
+                                DW 比は残差 $e_t$ の1次自己相関係数 $\hat{\rho}_1$ と次の近似関係にあります：
+                            </p>
+                            <div class="formula-block">
+                                $$DW \approx 2(1 - \hat{\rho}_1)$$
+                            </div>
+                            <p style="font-size:0.9em;color:#555;">
+                                ※ これは，DW 統計量の定義式 $DW = \sum(e_t - e_{t-1})^2 / \sum e_t^2$ を展開すると，
+                                分子 $\approx 2\sum e_t^2 - 2\sum e_t e_{t-1}$，
+                                よって $DW \approx 2 - 2\hat{\rho}_1 = 2(1-\hat{\rho}_1)$ と近似できることによります．
+                            </p>
+                        </div>
+
+                        <h4>計算</h4>
+                        <div class="step-box">
+                            <div class="step-title">$\hat{\rho}_1 = 0.691$ を代入する</div>
+                            <div class="formula-block">
+                                $$DW \approx 2(1 - \hat{\rho}_1) = 2(1 - 0.691) = 2 \times 0.309 = 0.618$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <div class="formula-block" style="font-size:1.05em;">
+                                $$DW \approx 2(1 - 0.691) = \boldsymbol{0.618}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#e74c3c;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i> この値の意味</div>
+                            <p>
+                                $DW \approx 0.618$ は2よりかなり小さい値です（理想値は2）．
+                                DW 統計量の一般的な判断基準では：
+                            </p>
+                            <ul>
+                                <li>$DW \approx 2$：自己相関なし（理想）</li>
+                                <li>$DW \lesssim 1.5$：<strong>正の自己相関が疑われる（棄却域に入る可能性）</strong></li>
+                                <li>$DW \approx 0.618$ は正の自己相関が存在することを強く示唆しており，
+                                    モデルに問題がある（AR過程での補正が必要）ことを意味します．
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.4                                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q274">
+                    <h2><i class="fas fa-pencil"></i> 問27.4 — AIC によるモデル選択</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            AR($p$) 過程について $p = 0, 1, 2, 3, 4$ の各モデルの AIC（赤池情報量基準）を計算したところ，
+                            下表の結果が得られた．AIC に基づいて最適なモデルを選べ．
+                        </p>
+                        <table class="data-table" style="max-width:360px; margin:0 auto;">
+                            <thead>
+                                <tr><th>モデル</th><th>AIC</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>AR(0)</td><td>$-1.171$</td></tr>
+                                <tr><td>AR(1)</td><td>$-4.720$</td></tr>
+                                <tr><td>AR(2)</td><td>$-4.764$</td></tr>
+                                <tr><td><strong>AR(3)</strong></td><td><strong>$-4.771$</strong></td></tr>
+                                <tr><td>AR(4)</td><td>$-4.766$</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="answer-block">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-info-circle"></i> AIC（赤池情報量基準）の選択基準</div>
+                            <p>
+                                AIC は<strong>値が小さいほど良いモデル</strong>（適合度が高くパラメータ数のペナルティを考慮したバランスが良い）です．
+                            </p>
+                            <div class="formula-block">
+                                $$\text{AIC} = -2\log\hat{L} + 2k$$
+                            </div>
+                            <p>
+                                第1項 $-2\log\hat{L}$ はモデルの当てはまり（小さいほど良い），
+                                第2項 $2k$ はパラメータ数 $k$ に対するペナルティ（多すぎる過適合を防ぐ）です．
+                            </p>
+                        </div>
+
+                        <h4>各モデルの AIC を比較する</h4>
+
+                        <div class="step-box">
+                            <div class="step-title">AIC の値を昇順に確認する</div>
+                            <table class="data-table calc-table" style="max-width:420px; margin:0 auto;">
+                                <thead>
+                                    <tr><th>モデル</th><th>AIC</th><th>最小か？</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>AR(0)</td><td>$-1.171$</td><td>—（最大）</td></tr>
+                                    <tr><td>AR(1)</td><td>$-4.720$</td><td>—</td></tr>
+                                    <tr><td>AR(2)</td><td>$-4.764$</td><td>—</td></tr>
+                                    <tr style="background:#f0f4ff;font-weight:700;"><td>AR(3)</td><td>$-4.771$</td><td>✓ 最小</td></tr>
+                                    <tr><td>AR(4)</td><td>$-4.766$</td><td>—（AR(3)より大きい）</td></tr>
+                                </tbody>
+                            </table>
+                            <p style="margin-top:0.6em;">
+                                5つのモデルの中で AIC が最小（$= -4.771$）なのは <strong>AR(3)</strong> です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">AR(3) から AR(4) にすると AIC が増える理由</div>
+                            <p>
+                                AR(3) から AR(4) にすると，パラメータが1つ増えるため，ペナルティ項 $2k$ が $+2$ 増加します．
+                                一方，$-2\log\hat{L}$（対数尤度の改善）がその $+2$ を上回らないため，
+                                AR(4) の AIC は AR(3) より大きくなっています．
+                            </p>
+                            <p>
+                                つまり，ラグ4の係数を加えてもモデルの当てはまりがほとんど改善せず，
+                                <strong>余分なパラメータによるペナルティの方が大きい</strong>ということを意味します（過適合）．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#27ae60;">
+                            <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
+                            <p>
+                                AIC が最小（$-4.771$）となる <strong>AR(3)</strong> が最適なモデルとして選択される．
+                            </p>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 補足：AIC の理解を深める</div>
+                            <p>
+                                AIC はモデルの「真の分布」と「推定した分布」の乖離を測る<strong>カルバック・ライブラー情報量</strong>の
+                                推定量に基づいています（赤池弘次, 1974）．
+                            </p>
+                            <p>
+                                AR($p$) 過程のパラメータ数（切片＋$p$個の係数＋分散 = $p+2$）のペナルティを考慮しているため，
+                                不必要に複雑なモデル（過適合）を避け，予測精度が高いモデルを選べます．
+                            </p>
+                            <p>
+                                なお，AIC と似た基準に <strong>BIC（ベイズ情報量基準）</strong> があります．
+                                BIC は $2k$ の代わりに $k\log T$ をペナルティとして使うため，
+                                サンプルサイズ $T$ が大きいほどより簡単なモデルを選ぶ傾向があります．
+                            </p>
+                            <table class="data-table" style="max-width:420px; margin:0.6em auto;">
+                                <thead><tr><th>基準</th><th>ペナルティ</th><th>特徴</th></tr></thead>
+                                <tbody>
+                                    <tr><td>AIC</td><td>$2k$</td><td>サンプルサイズに依存しない</td></tr>
+                                    <tr><td>BIC</td><td>$k\log T$</td><td>大標本では罰則が強くなる（よりシンプルなモデルを好む）</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="concept-box" style="border-left-color:#9b59b6;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 章全体のまとめ</div>
+                            <p>
+                                第27章で学んだ時系列解析の主要な流れを整理します：
+                            </p>
+                            <ol>
+                                <li><strong>モデルの設定：</strong>AR($p$)，MA($q$)，ARMA($p$,$q$) などの確率的時系列モデル</li>
+                                <li><strong>定常性の確認：</strong>単位根検定（$\phi_1 = 1$ かどうか）や時系列グラフの観察</li>
+                                <li><strong>次数の識別：</strong>ACF・PACF のパターンから AR/MA の次数を推測</li>
+                                <li><strong>モデル選択：</strong>AIC・BIC などの情報量基準で最適次数を決定</li>
+                                <li><strong>残差診断：</strong>DW 比で残差の自己相関を確認（自己相関があれば再モデル化）</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

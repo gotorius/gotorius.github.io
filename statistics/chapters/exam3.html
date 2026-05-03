@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>第3章 章末問題解説 - 分布の特性値</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../exam-chapter.css">
+    <style>
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9em;
+            margin: 0.6em auto;
+        }
+        .data-table th {
+            background: #f0f4ff;
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #d0d8ef;
+            font-weight: 600;
+        }
+        .data-table td {
+            padding: 6px 12px;
+            text-align: center;
+            border: 1px solid #e0e6f0;
+        }
+        .data-table tr:nth-child(even) { background: #f8f9fa; }
+
+        .step-box {
+            border-left: 4px solid #3498db;
+            background: #f0f6ff;
+            border-radius: 0 6px 6px 0;
+            padding: 10px 16px;
+            margin: 0.8em 0;
+        }
+        .step-box .step-title {
+            font-weight: 700;
+            color: #2471a3;
+            font-size: 0.95em;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="../../index.html" class="nav-logo">R.Goto</a>
+            <ul class="nav-menu">
+                <li><a href="../../index.html">Home</a></li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                    </ul>
+                </li>
+                <li class="nav-dropdown">
+                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
+                    <ul class="nav-dropdown-menu">
+                        <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <button class="nav-toggle" aria-label="メニュー">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <header class="chapter-hero">
+        <div class="container">
+            <div class="chapter-breadcrumb">
+                <a href="../../index.html">Portfolio</a>
+                <i class="fas fa-chevron-right"></i>
+                <a href="../index.html">統計学ノート</a>
+                <i class="fas fa-chevron-right"></i>
+                <span>第3章 章末問題解説</span>
+            </div>
+            <span class="chapter-label">CHAPTER 3 — 章末問題解説</span>
+            <h1>分布の特性値<br>
+                <small style="font-size:0.65em;color:var(--gray-500);">変動係数・加重平均・幾何平均・調和平均・分散の加法性</small>
+            </h1>
+            <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
+                <a href="chapter3.html" class="ec-link-btn">
+                    <i class="fas fa-book-open"></i> 第3章 学習ノートへ
+                </a>
+                <a href="../index.html" class="ec-link-btn ec-link-btn--ghost">
+                    <i class="fas fa-grid"></i> 章一覧へ戻る
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="chapter-body">
+        <div class="container">
+            <div class="chapter-layout">
+
+                <!-- ====== サイドバー目次 ====== -->
+                <aside class="chapter-toc-sidebar">
+                    <div class="toc-box">
+                        <h2><i class="fas fa-list"></i>問題一覧</h2>
+                        <ol>
+                            <li><a href="#q31">問3.1 問題</a></li>
+                            <li><a href="#q31-1">問3.1 [1] 解答</a></li>
+                            <li><a href="#q31-2">問3.1 [2] 解答</a></li>
+                            <li><a href="#q32">問3.2 問題</a></li>
+                            <li><a href="#q32-1">問3.2 [1] 解答</a></li>
+                            <li><a href="#q32-2">問3.2 [2] 解答</a></li>
+                            <li><a href="#q32-3">問3.2 [3] 解答</a></li>
+                            <li><a href="#q33">問3.3 問題</a></li>
+                            <li><a href="#q33-ans">問3.3 解答</a></li>
+                        </ol>
+                    </div>
+                </aside>
+
+                <div class="chapter-content">
+
+                <!-- ======================================================== -->
+                <!-- 第3章 概要                                                 -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="overview">
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-book-open"></i> 第3章「分布の特性値」のキーポイント</div>
+                        <ul>
+                            <li><strong>変動係数（CV）：</strong>$\dfrac{\sqrt{V[X]}}{E[X]}$（単位を持たないスケール不変な散らばりの指標）</li>
+                            <li><strong>加重平均：</strong>各値に重み $w_i$（売上数・割合など）をかけた平均．$\bar{x}_w = \displaystyle\sum_i w_i x_i \,/\sum_i w_i$</li>
+                            <li><strong>幾何平均：</strong>$n$ 個の値の積の $1/n$ 乗．$(x_1 \times \cdots \times x_n)^{1/n}$．乗率・伸び率の平均に適す．</li>
+                            <li><strong>調和平均：</strong>逆数の算術平均の逆数．$n\,/\sum(1/x_i)$．速度（距離÷時間）の平均に適す．</li>
+                            <li><strong>分散の加法性：</strong>独立な確率変数 $X, Y$ に対して $V[X \pm Y] = V[X] + V[Y]$，$V[aX] = a^2 V[X]$</li>
+                            <li><strong>共分散が含まれる場合：</strong>$V[X + Y] = V[X] + V[Y] + 2\,\mathrm{Cov}[X, Y]$</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問3.1                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q31">
+                    <h2><i class="fas fa-question-circle"></i> 問3.1　変動係数と標準偏差</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            ある種の動物 50 匹の体重を調べたところ，平均は 60 kg，標準偏差は 12 kg であった．
+                            この 50 匹を 1 カ月間，餌を替えて飼育したところ，体重の平均は 65 kg に増えたが，
+                            変動係数に変化はなかった．
+                        </p>
+                        <p><strong>[1]</strong>　この 50 匹の餌を替える前の体重の変動係数を求めよ．</p>
+                        <p><strong>[2]</strong>　この 50 匹を 1 カ月間，餌を替えて飼育した後の体重の標準偏差を求めよ．</p>
+                    </div>
+
+                    <!-- 解答 [1] -->
+                    <div class="answer-block" id="q31-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 変動係数（CV）とは</div>
+                            <p>
+                                標準偏差は「単位をもつ」ため，異なる対象や異なるスケールの散らばりを直接比較できません．
+                                そこで，平均に対する散らばりの相対的な大きさを表す指標として<strong>変動係数（coefficient of variation; CV）</strong>が使われます：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{CV} = \frac{\text{標準偏差}}{\text{平均}} = \frac{\sqrt{V[X]}}{E[X]}$$
+                            </div>
+                            <p>変動係数は無次元（単位なし）なので，体重・身長・価格など異なる量でも比較できます．</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">定義に数値を代入する</div>
+                            <p>
+                                餌を替える前の体重：平均 $= 60\,\text{kg}$，標準偏差 $= 12\,\text{kg}$
+                            </p>
+                            <div class="formula-block">
+                                $$\text{CV} = \frac{12}{60} = 0.2$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>変動係数 $= 0.2$（20%）</p>
+                        </div>
+                    </div>
+
+                    <!-- 解答 [2] -->
+                    <div class="answer-block" id="q31-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 「変動係数に変化がない」の意味</div>
+                            <p>
+                                変動係数が変わらないとは，飼育後も「平均に対する標準偏差の割合」が同じ $0.2$ であることを意味します．
+                                したがって，<strong>飼育後の標準偏差 = 変動係数 × 飼育後の平均</strong>という式が立てられます．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">飼育後の標準偏差を求める</div>
+                            <p>
+                                飼育後の平均 $= 65\,\text{kg}$，変動係数 $= 0.2$ より：
+                            </p>
+                            <div class="formula-block">
+                                $$\text{標準偏差} = 0.2 \times 65 = 13\,\text{kg}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>飼育後の標準偏差 $= 13\,\text{kg}$</p>
+                            <p style="font-size:0.92em;">
+                                直感的には「体重が全体的に 60 kg → 65 kg に増えた（約 8.3% 増）ので，
+                                散らばり具合も同じ割合で 12 kg → 13 kg に増えた」と解釈できます．
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問3.2                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q32">
+                    <h2><i class="fas fa-question-circle"></i> 問3.2　加重平均・幾何平均・調和平均の使い分け</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>次の各問いにおける平均について，<strong>加重平均（加重算術平均），幾何平均，調和平均</strong>のなかから最も適切な平均を選び，その値を求めよ．</p>
+                        <p><strong>[1]</strong>　片道 48 km の道のりを，行きは時速 8 km で，帰りは時速 12 km で往復した．このとき，往復の平均時速を求めよ．</p>
+                        <p><strong>[2]</strong>　ある大学の食堂には定食が 3 種類あり，A 定食は 600 円，B 定食は 700 円，C 定食は 500 円である．1 週間の売上げ数を調べたところ，A 定食は 500 食，B 定食は 700 食，C 定食は 800 食の売上げがあった．定食 1 食に使われた平均金額を求めよ．</p>
+                        <p><strong>[3]</strong>　消費者物価指数の 4 年間の伸び率が，1.15，0.98，1.03，0.99 であった．この 4 年間の 1 年あたりの平均伸び率を小数点以下第 2 位まで求めよ．</p>
+                    </div>
+
+                    <!-- 3つの平均の概要 -->
+                    <div class="concept-box">
+                        <div class="box-title"><i class="fas fa-map-pin"></i> 3つの平均の使い分け</div>
+                        <table class="data-table">
+                            <thead>
+                                <tr><th>平均の種類</th><th>定義</th><th>使う場面</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>加重平均</strong></td>
+                                    <td>$\displaystyle\frac{\sum w_i x_i}{\sum w_i}$</td>
+                                    <td>各値に重み（頻度・割合など）がある場合</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>幾何平均</strong></td>
+                                    <td>$(x_1 \times \cdots \times x_n)^{1/n}$</td>
+                                    <td>比率・乗率・伸び率の平均</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>調和平均</strong></td>
+                                    <td>$\dfrac{n}{\displaystyle\sum \frac{1}{x_i}}$</td>
+                                    <td>「距離÷速度＝時間」のように単価が時間に対応する場合</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- [1] 調和平均 -->
+                    <div class="answer-block" id="q32-1">
+                        <span class="prob-badge badge-a">[1] 解答・解説（調和平均）</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> なぜ調和平均を使うのか</div>
+                            <p>
+                                「平均時速」とは「<strong>同じ距離を往復したとき，全体の距離÷全体の時間</strong>」で求まります．
+                                速度が異なる区間を同じ距離進む場合，<strong>調和平均</strong>が適切です．
+                            </p>
+                            <p>
+                                算術平均 $(8+12)/2 = 10$ km/時とすると誤りになります．なぜなら，遅い速度（8 km/時）の区間では<strong>より多くの時間</strong>がかかるため，単純平均は遅い側を過小評価するからです．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">全体の距離と時間を計算する</div>
+                            <p>往復の総距離：$48 \times 2 = 96$ km</p>
+                            <p>行きにかかる時間：$48 \div 8 = 6$ 時間</p>
+                            <p>帰りにかかる時間：$48 \div 12 = 4$ 時間</p>
+                            <p>合計所要時間：$6 + 4 = 10$ 時間</p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">平均時速を求める</div>
+                            <div class="formula-block">
+                                $$\text{平均時速} = \frac{96}{10} = 9.6\;\text{km/時間}$$
+                            </div>
+                            <p>これは調和平均の公式で確認できます：</p>
+                            <div class="formula-block">
+                                $$\frac{2}{\dfrac{1}{8} + \dfrac{1}{12}}
+                                = \frac{2}{\dfrac{3}{24} + \dfrac{2}{24}}
+                                = \frac{2}{\dfrac{5}{24}}
+                                = \frac{48}{5} = 9.6$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>調和平均を用いる．往復の平均時速 $= 9.6$ km/時間</p>
+                        </div>
+                    </div>
+
+                    <!-- [2] 加重平均 -->
+                    <div class="answer-block" id="q32-2">
+                        <span class="prob-badge badge-a">[2] 解答・解説（加重平均）</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> なぜ加重平均を使うのか</div>
+                            <p>
+                                「定食 1 食あたりの平均金額」は，各定食が<strong>売れた数の割合</strong>を重みとして計算する加重平均が適切です．
+                            </p>
+                            <p>
+                                単純算術平均 $(600+700+500)/3 = 600$ 円では，売れた数の違いが無視されてしまいます．
+                                実際には B・C 定食のほうが多く売れているため，正確な平均は 600 円より小さくなります．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">加重平均を計算する</div>
+                            <table class="data-table" style="max-width:420px; margin:0 auto 10px;">
+                                <thead>
+                                    <tr><th>定食</th><th>価格（円）</th><th>売上数（食）</th><th>売上金額（円）</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>A</td><td>600</td><td>500</td><td>300,000</td></tr>
+                                    <tr><td>B</td><td>700</td><td>700</td><td>490,000</td></tr>
+                                    <tr><td>C</td><td>500</td><td>800</td><td>400,000</td></tr>
+                                    <tr><td><strong>合計</strong></td><td>—</td><td><strong>2,000</strong></td><td><strong>1,190,000</strong></td></tr>
+                                </tbody>
+                            </table>
+                            <div class="formula-block">
+                                $$\text{加重平均} = \frac{500 \times 600 + 700 \times 700 + 800 \times 500}{500 + 700 + 800}
+                                = \frac{1{,}190{,}000}{2{,}000} = 595\;\text{円}$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>加重平均を用いる．定食 1 食に使われた平均金額 $= 595$ 円</p>
+                        </div>
+                    </div>
+
+                    <!-- [3] 幾何平均 -->
+                    <div class="answer-block" id="q32-3">
+                        <span class="prob-badge badge-a">[3] 解答・解説（幾何平均）</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> なぜ幾何平均を使うのか</div>
+                            <p>
+                                伸び率（比率）の平均には<strong>幾何平均</strong>が適切です．
+                            </p>
+                            <p>
+                                たとえば，2 年間の伸び率が 2 倍・3 倍であれば，2 年後の値は $2 \times 3 = 6$ 倍になります．
+                                「1 年あたりの平均伸び率」とは，毎年同じ倍率 $r$ を掛けて 2 年後に 6 倍になる $r$ のことであり，
+                                これは $r^2 = 6$，すなわち $r = \sqrt{6}$（幾何平均）です．
+                            </p>
+                            <p>
+                                算術平均 $(2+3)/2 = 2.5$ とすると，$2.5^2 = 6.25 \neq 6$ となり，誤りです．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">4 年間の積を求める</div>
+                            <div class="formula-block">
+                                $$1.15 \times 0.98 \times 1.03 \times 0.99 = 1.149202\ldots$$
+                            </div>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">4 乗根をとる（幾何平均）</div>
+                            <div class="formula-block">
+                                $$r = \sqrt[4]{1.149202} = (1.149202)^{1/4} \approx 1.034\ldots \approx 1.04$$
+                            </div>
+                            <p>確認：$1.04^4 = 1.1699\ldots \approx 1.17$（元の積 1.1492 と近い値）</p>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <p>幾何平均を用いる．1 年あたりの平均伸び率 $\approx 1.04$（小数点以下第 2 位まで）</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問3.3                                                      -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q33">
+                    <h2><i class="fas fa-question-circle"></i> 問3.3　サンドイッチの厚さの分散</h2>
+
+                    <div class="example-block">
+                        <span class="prob-badge badge-q">問題</span>
+                        <p>
+                            あるサンドイッチ工場の生産工程では，2 枚のパンと 1 枚のハムからなるサンドイッチを生産している．
+                            サンドイッチの大きさは 100（mm）× 50（mm）である．
+                            原料となるパンとハムは，前工程から次のサイズで送られてくる：
+                        </p>
+                        <table class="data-table" style="max-width:380px; margin:0 auto 12px;">
+                            <thead>
+                                <tr><th></th><th>大きさ（mm×mm）</th><th>厚さ（mm）</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td><strong>パン</strong></td><td>100 × 100</td><td>$X$</td></tr>
+                                <tr><td><strong>ハム</strong></td><td>100 × 50</td><td>$Y$</td></tr>
+                            </tbody>
+                        </table>
+                        <p>ただし，$X, Y$ はそれぞれ期待値と分散が</p>
+                        <div class="formula-block">
+                            $$E[X] = 10, \quad V[X] = 0.5^2 = 0.25$$
+                            $$E[Y] = 3,  \quad V[Y] = 0.4^2 = 0.16$$
+                        </div>
+                        <p>の確率変数である．同一のパン内，ハム内での厚さのばらつきは無視してよい．</p>
+                        <p>このサンドイッチの生産工程について，次の 2 つの方法を考える：</p>
+                        <ul>
+                            <li><strong>方法 1：</strong>前工程から送られてくるパンを大量に溜めておく．次に，大量に溜めてあるパンのなかから 2 枚をランダムに抜き出し，ランダムに選んだハムを 1 枚はさんでサンドイッチを作成する．</li>
+                            <li><strong>方法 2：</strong>前工程から送られてくるパンからランダムに 1 枚を選び，それを 100 × 50 の大きさに半分に切断し，その間にランダムに選んだハムを 1 枚はさんでサンドイッチを作成する．</li>
+                        </ul>
+                        <p>方法 1 で生産するサンドイッチの厚さを $Z_1$，方法 2 で生産するサンドイッチの厚さを $Z_2$ とする．$Z_1$ と $Z_2$ の分散 $V[Z_1], V[Z_2]$ をそれぞれ求めよ．</p>
+                    </div>
+
+                    <div class="answer-block" id="q33-ans">
+                        <span class="prob-badge badge-a">解答・解説</span>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-map-pin"></i> 方法 1 と方法 2 の違いを整理する</div>
+                            <p>
+                                2 つの方法で「どのパンを使うか」が異なります：
+                            </p>
+                            <ul>
+                                <li>
+                                    <strong>方法 1：</strong>大量のパンから <em>独立に 2 枚</em>を選ぶ．
+                                    → 2 枚のパンは異なる個体なので，それぞれの厚さ $X_a$，$X_b$ は<strong>互いに独立</strong>な確率変数．
+                                </li>
+                                <li>
+                                    <strong>方法 2：</strong><em>1 枚のパン</em>を半分に切って使う．
+                                    → 2 枚のパンは同一個体なので，どちらも厚さ $X$（<strong>同じ値</strong>）になる．
+                                </li>
+                            </ul>
+                        </div>
+
+                        <h3>方法 1：$V[Z_1]$ の計算</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：$Z_1$ を確率変数で表す</div>
+                            <p>
+                                独立に選んだ 2 枚のパンの厚さを $X_a$，$X_b$，ハムの厚さを $Y$ とすると，
+                                サンドイッチの厚さは：
+                            </p>
+                            <div class="formula-block">
+                                $$Z_1 = X_a + X_b + Y$$
+                            </div>
+                            <p>
+                                ここで $X_a$，$X_b$ は $X$ と同じ分布に従い，$X_a$，$X_b$，$Y$ は互いに独立です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：独立な確率変数の分散の加法性を適用する</div>
+                            <p>
+                                <strong>独立な確率変数の分散の加法性：</strong>$V[X_a + X_b + Y] = V[X_a] + V[X_b] + V[Y]$
+                            </p>
+                            <div class="formula-block">
+                                $$V[Z_1] = V[X_a] + V[X_b] + V[Y]
+                                = 0.25 + 0.25 + 0.16 = 0.66$$
+                            </div>
+                        </div>
+
+                        <h3>方法 2：$V[Z_2]$ の計算</h3>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 1：$Z_2$ を確率変数で表す</div>
+                            <p>
+                                1 枚のパン（厚さ $X$）を半分に切るので，2 枚のパンはどちらも<strong>同じ厚さ $X$</strong>になります．
+                                ハムの厚さを $Y$（$X$ と独立）とすると：
+                            </p>
+                            <div class="formula-block">
+                                $$Z_2 = X + X + Y = 2X + Y$$
+                            </div>
+                            <p>
+                                方法 1 と異なり，2 枚のパンが <em>同一個体</em>（$X_a = X_b = X$）である点が重要です．
+                            </p>
+                        </div>
+
+                        <div class="step-box">
+                            <div class="step-title">Step 2：分散の定数倍の公式を適用する</div>
+                            <p>
+                                $V[aX] = a^2 V[X]$ と，$X$・$Y$ の独立性から：
+                            </p>
+                            <div class="formula-block">
+                                $$V[Z_2] = V[2X + Y] = V[2X] + V[Y]
+                                = 4\,V[X] + V[Y]
+                                = 4 \times 0.25 + 0.16 = 1.00 + 0.16 = 1.16$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="formula-block">
+                                $$V[Z_1] = 0.66, \qquad V[Z_2] = 1.16$$
+                            </div>
+                        </div>
+
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 結果の解釈：方法 1 の方がばらつきが小さい</div>
+                            <p>
+                                $V[Z_1] = 0.66 &lt; V[Z_2] = 1.16$ なので，<strong>方法 1 の方がサンドイッチの厚さのばらつきが小さい</strong>です．
+                            </p>
+                            <p>
+                                なぜでしょうか？方法 2 では 1 枚のパンを使うため，そのパンが厚い/薄いと 2 枚のパンの厚さが<strong>同時に</strong>大きく/小さくなります（相関あり）．
+                                一方，方法 1 では 2 枚を独立に選ぶため，一方が厚くても他方が薄い可能性があり，<strong>打ち消し合い</strong>が起きます．
+                            </p>
+                            <table class="data-table" style="max-width:500px; margin:0 auto;">
+                                <thead>
+                                    <tr><th></th><th>方法 1（$Z_1 = X_a + X_b + Y$）</th><th>方法 2（$Z_2 = 2X + Y$）</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td>パンの選び方</td><td>独立に 2 枚</td><td>同一個体 1 枚を半分に</td></tr>
+                                    <tr><td>分散</td><td>$0.25 + 0.25 + 0.16 = 0.66$</td><td>$4 \times 0.25 + 0.16 = 1.16$</td></tr>
+                                    <tr><td>標準偏差</td><td>$\sqrt{0.66} \approx 0.81\,\text{mm}$</td><td>$\sqrt{1.16} \approx 1.08\,\text{mm}$</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                </div><!-- /chapter-content -->
+            </div><!-- /chapter-layout -->
+        </div><!-- /container -->
+    </main>
+
+    <footer class="stat-footer">
+        <div class="container">
+            <p>&copy; 2026 R.Goto - 統計学学習ノート</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    { left: '$$', right: '$$', display: true },
+                    { left: '$',  right: '$',  display: false }
+                ],
+                throwOnError: false
+            });
+
+            const navToggle = document.querySelector('.nav-toggle');
+            const navMenu   = document.querySelector('.nav-menu');
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', () => {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+                document.addEventListener('click', (e) => {
+                    if (!navToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
