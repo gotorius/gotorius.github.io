@@ -159,4 +159,16 @@ function setupPager(chNum) {
             next.classList.add('disabled');
         }
     }
+
+    // 章末問題解説ページが存在する場合はリンクを追加
+    const EXAM_CHAPTERS = [1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32];
+    const pager = document.querySelector('.chapter-pager');
+    const pagerHome = pager && pager.querySelector('.pager-home');
+    if (pager && pagerHome && EXAM_CHAPTERS.includes(chNum)) {
+        const examLink = document.createElement('a');
+        examLink.href = `exam${chNum}.html`;
+        examLink.className = 'pager-home';
+        examLink.innerHTML = '<i class="fas fa-pen-to-square"></i> 章末問題解説';
+        pagerHome.insertAdjacentElement('afterend', examLink);
+    }
 }
