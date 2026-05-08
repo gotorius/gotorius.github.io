@@ -66,12 +66,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -120,6 +122,7 @@
                             <li><a href="#q232">問23.2 問題</a></li>
                             <li><a href="#q232-a">問23.2 解答</a></li>
                             <li><a href="#q233">問23.3 問題</a></li>
+                            <li><a href="#q233-easy">問23.3 わかりやすく解説</a></li>
                             <li><a href="#q233-1">問23.3 [1]</a></li>
                             <li><a href="#q233-2">問23.3 [2]</a></li>
                         </ol>
@@ -583,6 +586,235 @@
                                 簡単のため，標本平均，標本分散共分散行列がすべて母集団のものと一致するとき，点 $(1,1)$ と点 $(0,1)$ はそれぞれクラス1，クラス2のどちらに分類されるか，判別関数の正負を計算して答えよ．
                             </li>
                         </ol>
+                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問23.3 わかりやすく解説                                     -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q233-easy">
+                    <h2><i class="fas fa-lightbulb"></i> 問23.3 — わかりやすく解説（一から丁寧に）</h2>
+
+                    <div class="concept-box" style="border-left-color:#6c3483;">
+                        <div class="box-title"><i class="fas fa-question-circle"></i> そもそも「判別分析」って何をしたいの？</div>
+                        <p>
+                            目的はシンプルです。<strong>「新しいデータが届いたとき、それがクラス1とクラス2のどちらに属するかを判定したい」</strong>ということです。
+                        </p>
+                        <p>
+                            この問題のイメージ：
+                        </p>
+                        <ul style="margin-left:1.2em;list-style:disc;">
+                            <li><strong>クラス1</strong>：中心が $(2,2)$ あたりにまとまっているデータ群</li>
+                            <li><strong>クラス2</strong>：中心が $(0,0)$ あたりにまとまっているデータ群</li>
+                        </ul>
+                        <p style="margin-top:0.6em;">
+                            2Dの散布図を想像すると、右上に固まったグループと左下に固まったグループがあります。
+                            そこへ未知の点 $(1,1)$ が来たとき「どっちのグループ？」と判定するのがタスクです。
+                        </p>
+                    </div>
+
+                    <div class="concept-box" style="border-left-color:#2980b9;">
+                        <div class="box-title"><i class="fas fa-question-circle"></i> なぜ「2次」判別なの？「線形」じゃダメ？</div>
+                        <p>
+                            線形判別（LDA）は「境界が直線」です。2つのグループが直線で綺麗に分かれるなら十分ですが、
+                            この問題では<strong>2つのクラスの分散（広がり方）が違います</strong>。
+                        </p>
+                        <table class="data-table" style="max-width:400px;margin-top:0.6em;">
+                            <thead><tr><th></th><th>クラス1</th><th>クラス2</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>平均 $\mu$</strong></td><td>$(2,2)^T$</td><td>$(0,0)^T$</td></tr>
+                                <tr><td><strong>分散 $\Sigma$</strong></td><td>$\begin{pmatrix}0.8&0\\0&0.5\end{pmatrix}$（広め）</td><td>$\begin{pmatrix}0.4&0\\0&0.25\end{pmatrix}$（狭め）</td></tr>
+                                <tr><td><strong>サンプル数</strong></td><td>100</td><td>200</td></tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top:0.8em;">
+                            $\Sigma_2$ は $\Sigma_1$ のちょうど半分の分散です。つまりクラス2はクラス1より<strong>中心付近に密集</strong>しています。
+                            分散が違うと境界は「曲線（楕円）」になります。これを扱えるのが<strong>2次判別分析（QDA）</strong>です。
+                        </p>
+                        <!-- SVG：2クラスの楕円分布イメージ -->
+                        <svg viewBox="0 0 320 220" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:0.8em auto;" aria-label="2クラスの分布イメージ">
+                            <rect width="320" height="220" fill="#fafafa" rx="6"/>
+                            <!-- 軸 -->
+                            <line x1="30" y1="190" x2="300" y2="190" stroke="#bbb" stroke-width="1.2"/>
+                            <line x1="30" y1="190" x2="30"  y2="20"  stroke="#bbb" stroke-width="1.2"/>
+                            <text x="305" y="194" font-size="11" fill="#888">$x_1$</text>
+                            <text x="34"  y="17"  font-size="11" fill="#888">$x_2$</text>
+                            <!-- 軸ラベル 0,1,2,3 -->
+                            <text x="27"  y="192" font-size="10" fill="#aaa" text-anchor="end">0</text>
+                            <text x="107" y="202" font-size="10" fill="#aaa" text-anchor="middle">1</text>
+                            <text x="187" y="202" font-size="10" fill="#aaa" text-anchor="middle">2</text>
+                            <text x="267" y="202" font-size="10" fill="#aaa" text-anchor="middle">3</text>
+                            <text x="20"  y="112" font-size="10" fill="#aaa" text-anchor="middle">1</text>
+                            <text x="20"  y="32"  font-size="10" fill="#aaa" text-anchor="middle">2</text>
+                            <!-- グリッド補助線 -->
+                            <line x1="107" y1="25" x2="107" y2="190" stroke="#eee" stroke-width="1"/>
+                            <line x1="187" y1="25" x2="187" y2="190" stroke="#eee" stroke-width="1"/>
+                            <line x1="267" y1="25" x2="267" y2="190" stroke="#eee" stroke-width="1"/>
+                            <line x1="30"  y1="110" x2="295" y2="110" stroke="#eee" stroke-width="1"/>
+                            <line x1="30"  y1="30"  x2="295" y2="30"  stroke="#eee" stroke-width="1"/>
+                            <!-- クラス2：中心(0,0)→座標(30,190)、分散小 楕円 -->
+                            <ellipse cx="30" cy="190" rx="28" ry="18" fill="rgba(231,76,60,0.12)" stroke="#e74c3c" stroke-width="1.8" stroke-dasharray="4,2"/>
+                            <circle cx="30" cy="190" r="4" fill="#e74c3c"/>
+                            <text x="10" y="178" font-size="11" fill="#c0392b" font-weight="700">クラス2</text>
+                            <text x="10" y="168" font-size="10" fill="#c0392b">中心:(0,0)</text>
+                            <text x="10" y="158" font-size="10" fill="#c0392b">分散：小</text>
+                            <!-- クラス1：中心(2,2)→座標(187,30)、分散大 楕円 -->
+                            <ellipse cx="187" cy="30" rx="52" ry="33" fill="rgba(41,128,185,0.12)" stroke="#2980b9" stroke-width="1.8" stroke-dasharray="4,2"/>
+                            <circle cx="187" cy="30" r="4" fill="#2980b9"/>
+                            <text x="200" y="24" font-size="11" fill="#1a6fa0" font-weight="700">クラス1</text>
+                            <text x="200" y="36" font-size="10" fill="#1a6fa0">中心:(2,2)</text>
+                            <text x="200" y="48" font-size="10" fill="#1a6fa0">分散：大</text>
+                            <!-- 点(1,1) -->
+                            <circle cx="107" cy="110" r="5" fill="#f39c12"/>
+                            <text x="112" y="108" font-size="11" fill="#e67e22" font-weight="700">(1,1)</text>
+                            <!-- 点(0,1) -->
+                            <circle cx="30" cy="110" r="5" fill="#8e44ad"/>
+                            <text x="35" y="108" font-size="11" fill="#8e44ad" font-weight="700">(0,1)</text>
+                        </svg>
+                        <p style="font-size:0.9em;color:#555;text-align:center;">クラス1（青・大きな楕円）とクラス2（赤・小さな楕円）の分布イメージ</p>
+                    </div>
+
+                    <div class="concept-box" style="border-left-color:#27ae60;">
+                        <div class="box-title"><i class="fas fa-key"></i> 問[1]の核心：「確率の比」で判断する</div>
+                        <p>ある点 $x$ が来たとき、次の値の正負で判断します：</p>
+                        <div class="formula-block">
+                            $$f_q(x) = \log\frac{P(\text{クラス1} | x)}{P(\text{クラス2} | x)}$$
+                        </div>
+                        <table class="data-table" style="max-width:420px;">
+                            <thead><tr><th>$f_q(x)$ の値</th><th>意味</th><th>判定</th></tr></thead>
+                            <tbody>
+                                <tr><td>$> 0$</td><td>クラス1の確率の方が高い</td><td><strong style="color:#2980b9;">クラス1</strong></td></tr>
+                                <tr><td>$= 0$</td><td>どちらとも言えない</td><td>判別境界</td></tr>
+                                <tr><td>$< 0$</td><td>クラス2の確率の方が高い</td><td><strong style="color:#e74c3c;">クラス2</strong></td></tr>
+                            </tbody>
+                        </table>
+                        <p style="margin-top:0.8em;">
+                            「クラス1らしさ ÷ クラス2らしさ」の対数、と直感的に捉えると分かりやすいです。
+                        </p>
+                    </div>
+
+                    <div class="concept-box" style="border-left-color:#f39c12;">
+                        <div class="box-title"><i class="fas fa-sitemap"></i> ベイズの定理→正規分布を代入→展開する流れ</div>
+                        <p><strong>ステップ①：ベイズの定理を使う</strong></p>
+                        <p>$P(x)$ が分子・分母で共通なので打ち消されて：</p>
+                        <div class="formula-block">
+                            $$f_q(x) = \log\frac{P(x|\text{クラス1}) \cdot \pi_1}{P(x|\text{クラス2}) \cdot \pi_2}$$
+                        </div>
+                        <p style="margin-top:0.8em;"><strong>ステップ②：正規分布の式を代入する</strong></p>
+                        <p>正規分布の密度関数を代入して対数を取ると、$(2\pi)$ の部分が共通で消えます。</p>
+                        <div class="formula-block">
+                            $$f_q(x) = \log\frac{\pi_1}{\pi_2} + \log\frac{|\Sigma_1|^{-1/2}}{|\Sigma_2|^{-1/2}} - \frac{1}{2}(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1) + \frac{1}{2}(x-\mu_2)^T\Sigma_2^{-1}(x-\mu_2)$$
+                        </div>
+                        <p style="margin-top:0.8em;"><strong>ステップ③：$(x-\mu)^T\Sigma^{-1}(x-\mu)$ を展開する</strong></p>
+                        <p>普通の $(x-a)^2 = x^2 - 2ax + a^2$ と同じ構造です：</p>
+                        <div class="formula-block">
+                            $$(x-\mu)^T\Sigma^{-1}(x-\mu) = \underbrace{x^T\Sigma^{-1}x}_{\text{2次}} - \underbrace{2\mu^T\Sigma^{-1}x}_{\text{1次}} + \underbrace{\mu^T\Sigma^{-1}\mu}_{\text{定数}}$$
+                        </div>
+                        <p style="margin-top:0.8em;"><strong>ステップ④：$x$ の次数ごとにまとめると</strong></p>
+                        <div class="formula-block">
+                            $$f_q(x) = \underbrace{x^T \cdot \frac{1}{2}(-\Sigma_1^{-1}+\Sigma_2^{-1}) \cdot x}_{x^T A x} + \underbrace{(\Sigma_1^{-1}\mu_1 - \Sigma_2^{-1}\mu_2)^T x}_{b^T x} + \underbrace{\text{定数}}_{c}$$
+                        </div>
+                        <p>
+                            <strong>ポイント：</strong> $A$ にクラスごとの $\Sigma^{-1}$ の差が入るので「2次項」が残ります。
+                            もし $\Sigma_1 = \Sigma_2$ なら $A=0$ になって<strong>線形判別（LDA）に退化</strong>します。
+                        </p>
+                    </div>
+
+                    <div class="concept-box" style="border-left-color:#2980b9;">
+                        <div class="box-title"><i class="fas fa-calculator"></i> 問[2]の計算の流れを直感的に理解する</div>
+                        <p>
+                            具体的な数値を代入して $A$、$b$、$c$ を求め、最後に点を代入するだけです。
+                            対角行列の逆行列は「各対角成分を逆数にするだけ」なので：
+                        </p>
+                        <div class="formula-block">
+                            $$\Sigma_1^{-1} = \begin{pmatrix}1/0.8&0\\0&1/0.5\end{pmatrix} = \begin{pmatrix}1.25&0\\0&2\end{pmatrix}, \quad \Sigma_2^{-1} = \begin{pmatrix}1/0.4&0\\0&1/0.25\end{pmatrix} = \begin{pmatrix}2.5&0\\0&4\end{pmatrix}$$
+                        </div>
+                        <p>最終的に得られる判別関数は：</p>
+                        <div class="formula-block">
+                            $$f(x_1, x_2) = 0.625x_1^2 + x_2^2 + 2.5x_1 + 4x_2 - 7.886$$
+                        </div>
+                        <p>この式に点を代入して正負を見るだけです：</p>
+                        <table class="data-table" style="max-width:460px;">
+                            <thead><tr><th>点</th><th>$f$ の計算</th><th>符号</th><th>判定</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td>$(1,1)$</td>
+                                    <td>$0.625 + 1 + 2.5 + 4 - 7.886 = 0.239$</td>
+                                    <td>$> 0$</td>
+                                    <td><strong style="color:#2980b9;">クラス1</strong></td>
+                                </tr>
+                                <tr>
+                                    <td>$(0,1)$</td>
+                                    <td>$0 + 1 + 0 + 4 - 7.886 = -2.886$</td>
+                                    <td>$< 0$</td>
+                                    <td><strong style="color:#e74c3c;">クラス2</strong></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="concept-box" style="border-left-color:#27ae60;">
+                        <div class="box-title"><i class="fas fa-eye"></i> 直感的に納得できる？</div>
+                        <!-- SVG：点の位置と各クラス中心の関係 -->
+                        <svg viewBox="0 0 320 240" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;display:block;margin:0.6em auto;" aria-label="点の分類イメージ">
+                            <rect width="320" height="240" fill="#fafafa" rx="6"/>
+                            <line x1="40" y1="200" x2="300" y2="200" stroke="#bbb" stroke-width="1.2"/>
+                            <line x1="40" y1="200" x2="40"  y2="20"  stroke="#bbb" stroke-width="1.2"/>
+                            <text x="305" y="204" font-size="11" fill="#888">$x_1$</text>
+                            <text x="44"  y="17"  font-size="11" fill="#888">$x_2$</text>
+                            <!-- 軸目盛 0,1,2 -->
+                            <text x="37"  y="203" font-size="10" fill="#ccc" text-anchor="end">0</text>
+                            <text x="130" y="213" font-size="10" fill="#ccc" text-anchor="middle">1</text>
+                            <text x="220" y="213" font-size="10" fill="#ccc" text-anchor="middle">2</text>
+                            <text x="28"  y="112" font-size="10" fill="#ccc" text-anchor="middle">1</text>
+                            <text x="28"  y="22"  font-size="10" fill="#ccc" text-anchor="middle">2</text>
+                            <line x1="130" y1="20" x2="130" y2="200" stroke="#eee" stroke-width="1"/>
+                            <line x1="220" y1="20" x2="220" y2="200" stroke="#eee" stroke-width="1"/>
+                            <line x1="40"  y1="110" x2="295" y2="110" stroke="#eee" stroke-width="1"/>
+                            <line x1="40"  y1="20"  x2="295" y2="20"  stroke="#eee" stroke-width="1"/>
+                            <!-- クラス2の分布（狭い楕円）中心(0,0)→(40,200) -->
+                            <ellipse cx="40" cy="200" rx="26" ry="17" fill="rgba(231,76,60,0.13)" stroke="#e74c3c" stroke-width="1.8" stroke-dasharray="4,2"/>
+                            <circle cx="40" cy="200" r="5" fill="#e74c3c"/>
+                            <text x="50" y="198" font-size="11" fill="#c0392b" font-weight="700">$\mu_2=(0,0)$</text>
+                            <!-- クラス1の分布（広い楕円）中心(2,2)→(220,20) -->
+                            <ellipse cx="220" cy="20" rx="55" ry="32" fill="rgba(41,128,185,0.13)" stroke="#2980b9" stroke-width="1.8" stroke-dasharray="4,2"/>
+                            <circle cx="220" cy="20" r="5" fill="#2980b9"/>
+                            <text x="230" y="18" font-size="11" fill="#1a6fa0" font-weight="700">$\mu_1=(2,2)$</text>
+                            <!-- 点(1,1)→(130,110) -->
+                            <circle cx="130" cy="110" r="7" fill="#f39c12" stroke="#e67e22" stroke-width="1.5"/>
+                            <text x="138" y="106" font-size="12" fill="#e67e22" font-weight="700">(1,1)</text>
+                            <text x="138" y="120" font-size="10" fill="#e67e22">→クラス1 ✓</text>
+                            <!-- 点(0,1)→(40,110) -->
+                            <circle cx="40" cy="110" r="7" fill="#8e44ad" stroke="#6c3483" stroke-width="1.5"/>
+                            <text x="50" y="106" font-size="12" fill="#8e44ad" font-weight="700">(0,1)</text>
+                            <text x="50" y="120" font-size="10" fill="#8e44ad">→クラス2 ✓</text>
+                        </svg>
+                        <ul style="margin-left:1.2em;list-style:disc;">
+                            <li style="margin-bottom:0.5em;">
+                                <strong>点 $(1,1)$</strong>：2つの中心の中間あたりにありますが、クラス1は分散が大きく広く広がっているため $(1,1)$ もクラス1の分布に含まれやすい
+                                → <strong style="color:#2980b9;">クラス1</strong>
+                            </li>
+                            <li>
+                                <strong>点 $(0,1)$</strong>：クラス2の中心 $(0,0)$ に近く、クラス2は分散が小さく密集しているため $(0,1)$ はクラス2の分布に入りやすい。
+                                さらにクラス2のサンプル数が2倍多い（$\pi_2 = 2/3$）という事前確率の影響もある
+                                → <strong style="color:#e74c3c;">クラス2</strong>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="concept-box" style="border-left-color:#7f8c8d;">
+                        <div class="box-title"><i class="fas fa-stream"></i> 問23.3 全体の流れのまとめ</div>
+                        <table class="data-table">
+                            <thead><tr><th>ステップ</th><th>やること</th><th>ポイント</th></tr></thead>
+                            <tbody>
+                                <tr><td><strong>1</strong></td><td>確率の対数比 $f_q(x)$ を設定</td><td>正なら→クラス1、負なら→クラス2</td></tr>
+                                <tr><td><strong>2</strong></td><td>ベイズの定理で $P(x)$ を消す</td><td>$P(x|\text{クラス})\times\pi$ の比に変換</td></tr>
+                                <tr><td><strong>3</strong></td><td>正規分布の式を代入して対数を取る</td><td>$(2\pi)^{p/2}$ が消えて指数部分が残る</td></tr>
+                                <tr><td><strong>4</strong></td><td>2次形式を $x$ の2次・1次・定数に整理</td><td>$f = x^TAx + b^Tx + c$ の形に</td></tr>
+                                <tr><td><strong>5</strong></td><td>具体的な数値を代入して $A,b,c$ を計算</td><td>対角行列の逆行列は各成分の逆数</td></tr>
+                                <tr><td><strong>6</strong></td><td>判定したい点を $f$ に代入</td><td>正ならクラス1、負ならクラス2</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </section>
 

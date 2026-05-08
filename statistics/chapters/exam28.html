@@ -32,21 +32,6 @@
         .calc-table th { background: #e8f0ff; }
         .expected-table th { background: #f0f4ff; }
 
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         /* グラフコンテナ */
         .graph-center {
             display: flex;
@@ -89,12 +74,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -267,8 +254,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">標本オッズ比の計算</div>
+                            <h4 class="step-title">標本オッズ比の計算</h4>
                             <p>
                                 低体重児群における「喫煙あり」のオッズ：
                             </p>
@@ -289,8 +275,7 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">後向き研究のオッズ比 ＝ 前向き研究のオッズ比（ベイズの定理）</div>
+                            <h4 class="step-title">後向き研究のオッズ比 ＝ 前向き研究のオッズ比（ベイズの定理）</h4>
                             <p>
                                 後向き研究での母数 $\pi_j = P(\text{喫煙あり} \mid B_j)$（$j=1$：低体重児群，$j=2$：コントロール群）について，
                                 ベイズの定理を用いると：
@@ -303,10 +288,8 @@
                             <p>
                                 つまり，後向き研究で求めたオッズ比は，前向き研究のオッズ比 $\psi = \theta_1(1-\theta_2)/(\theta_2(1-\theta_1))$ に等しくなります．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">希少事象における相対リスクの近似</div>
+                            <h4 class="step-title">希少事象における相対リスクの近似</h4>
                             <p>
                                 低体重児の出生率 $\theta_1, \theta_2$ がいずれも非常に小さい（希少事象）とき，
                                 $1-\theta_1 \approx 1$，$1-\theta_2 \approx 1$ と近似できるので：
@@ -318,7 +301,6 @@
                                 したがって，標本オッズ比 2.5 は，喫煙習慣がある母親の低体重児の出生率が，
                                 喫煙習慣がない母親のそれの<strong>約 2.5 倍</strong>であるという相対リスクの推定値として使えます．
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> まとめ：後向き研究で推定できること・できないこと</div>
@@ -342,7 +324,6 @@
                                 後向き研究ではオッズ比だけを推定でき，希少事象の仮定のもとで相対リスクの推定値として利用できます．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -365,8 +346,7 @@
 
                         <h3>Step 1：一様性の帰無仮説のもとでの当てはめ値</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">当てはめ値の公式</div>
+                            <h4 class="step-title">当てはめ値の公式</h4>
                             <p>
                                 $I \times J$ 分割表において，一様性の帰無仮説のもとでの当てはめ値（期待度数）$m_{ij}$ は次の式で与えられます：
                             </p>
@@ -379,15 +359,13 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">各セルの当てはめ値を計算する</div>
+                            <h4 class="step-title">各セルの当てはめ値を計算する</h4>
                             <p>問28.1 の分割表の周辺和：行の合計は 10, 38；列の合計は 12, 36；総計は 48．</p>
                             <div class="formula-block">
                                 $$m_{11} = \frac{10 \times 12}{48} = \frac{120}{48} = 2.5, \quad
                                   m_{12} = \frac{10 \times 36}{48} = \frac{360}{48} = 7.5$$
                                 $$m_{21} = \frac{38 \times 12}{48} = \frac{456}{48} = 9.5, \quad
                                   m_{22} = \frac{38 \times 36}{48} = \frac{1368}{48} = 28.5$$
-                            </div>
                         </div>
 
                         <p>観測度数と当てはめ値を並べると次の通りです：</p>
@@ -405,8 +383,7 @@
 
                         <h3 style="margin-top:1.2em;">Step 2：適合度カイ二乗統計量 $\chi^2$</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">$2\times 2$ 分割表の $\chi^2$ の公式</div>
+                            <h4 class="step-title">$2\times 2$ 分割表の $\chi^2$ の公式</h4>
                             <p>
                                 $2\times 2$ 分割表では，一般式
                                 $\chi^2 = \sum_{ij}(x_{ij}-m_{ij})^2/m_{ij}$ を変形すると，次の便利な表現が得られます：
@@ -417,10 +394,8 @@
                             <p>
                                 分子の $(x_{11}x_{22} - x_{12}x_{21})^2$ は<strong>対角積の差の2乗</strong>，分母は<strong>4つの周辺和の積</strong>です．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">数値を代入して計算する</div>
+                            <h4 class="step-title">数値を代入して計算する</h4>
                             <p>$x_{11}=4,\; x_{12}=6,\; x_{21}=8,\; x_{22}=30$ を代入：</p>
                             <div class="formula-block">
                                 $$x_{11}x_{22} - x_{12}x_{21} = 4\times 30 - 6\times 8 = 120 - 48 = 72$$
@@ -431,12 +406,10 @@
                                 = \frac{248832}{164160}
                                 \approx 1.516$$
                             </div>
-                        </div>
 
                         <h3 style="margin-top:1.2em;">Step 3：逸脱度 $G^2$</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">逸脱度（尤度比検定統計量）の公式</div>
+                            <h4 class="step-title">逸脱度（尤度比検定統計量）の公式</h4>
                             <p>
                                 逸脱度 $G^2$ は，対数尤度比の2倍として定義されます：
                             </p>
@@ -447,10 +420,8 @@
                                 各セルで「観測値 × $\log$(観測値/期待値)」を計算し，その総和の2倍です．
                                 $x_{ij} = m_{ij}$ のセルでは $x_{ij}\log(x_{ij}/m_{ij}) = 0$ となります．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">各セルの寄与を計算する</div>
+                            <h4 class="step-title">各セルの寄与を計算する</h4>
                             <table class="data-table calc-table" style="max-width:520px; margin:0 auto;">
                                 <thead>
                                     <tr><th>セル</th><th>$x_{ij}$</th><th>$m_{ij}$</th><th>$x_{ij}/m_{ij}$</th><th>$\log(x_{ij}/m_{ij})$</th><th>$x_{ij}\log(\cdots)$</th></tr>
@@ -466,13 +437,11 @@
                                 $$G^2 = 2\,(1.8800 - 1.3389 - 1.3748 + 1.5388)
                                 = 2 \times 0.7051
                                 \approx 1.4103$$
-                            </div>
                         </div>
 
                         <h3 style="margin-top:1.2em;">Step 4：仮説検定の判断</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">棄却域との比較</div>
+                            <h4 class="step-title">棄却域との比較</h4>
                             <p>
                                 帰無仮説 $H_0:\theta_1=\theta_2$（一様性，すなわちオッズ比 $\psi=1$）のもとで，
                                 $\chi^2$ および $G^2$ はいずれも漸近的に<strong>自由度 1 のカイ二乗分布</strong>に従います．
@@ -486,12 +455,10 @@
                             <p>
                                 いずれも棄却域に入らないため，<strong>有意水準 5% で帰無仮説は棄却されません</strong>（検定は有意ではない）．
                             </p>
-                        </div>
 
                         <h3 style="margin-top:1.2em;">Step 5：オッズ比 $\psi$ の 95% 信頼区間</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">標本オッズ比と対数オッズ比の標準誤差</div>
+                            <h4 class="step-title">標本オッズ比と対数オッズ比の標準誤差</h4>
                             <p>
                                 標本オッズ比は $\widehat{OR} = x_{11}x_{22}/(x_{12}x_{21})$ です：
                             </p>
@@ -514,10 +481,8 @@
                                 = \sqrt{0.575}
                                 \approx 0.758$$
                             </div>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">対数オッズ比の 95% 信頼区間</div>
+                            <h4 class="step-title">対数オッズ比の 95% 信頼区間</h4>
                             <p>
                                 標本対数オッズ比は $\log(\widehat{OR}) = \log(2.5) \approx 0.916$．
                                 正規近似による 95% 信頼区間は：
@@ -527,17 +492,14 @@
                                 = 0.916 \pm 1.96 \times 0.758
                                 = 0.916 \pm 1.486
                                 = (-0.570,\; 2.402)$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">オッズ比 $\psi$ の 95% 信頼区間（指数変換）</div>
+                            <h4 class="step-title">オッズ比 $\psi$ の 95% 信頼区間（指数変換）</h4>
                             <p>
                                 対数オッズ比の信頼区間を指数変換してオッズ比スケールに戻します：
                             </p>
                             <div class="formula-block">
                                 $$\left(e^{-0.570},\; e^{2.402}\right) = (0.566,\; 11.04)$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -573,7 +535,6 @@
                                 $$\text{Var}[\log\widehat{OR}] \approx \frac{1}{x_{11}} + \frac{1}{x_{12}} + \frac{1}{x_{21}} + \frac{1}{x_{22}}$$
                             </div>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -650,8 +611,7 @@
                             </table>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">連結性の確認</div>
+                            <h4 class="step-title">連結性の確認</h4>
                             <p>
                                 グラフ中の各頂点の隣接関係を確認します：
                             </p>
@@ -681,14 +641,12 @@
                                 4つの頂点はすべて互いに連結しているので，<strong>独立な因子は存在しない（性質1）</strong>．
                             </p>
                         </div>
-                    </div>
 
                     <!-- 解答 [2] -->
                     <div class="answer-block" id="q283-2">
                         <span class="prob-badge badge-a">[2] 解答・解説</span>
 
-                        <div class="step-box">
-                            <div class="step-title">性質2の適用：A と C の間に辺がない</div>
+                            <h4 class="step-title">性質2の適用：A と C の間に辺がない</h4>
                             <p>
                                 図 28.1 では，頂点 A と頂点 C の間に<strong>辺がありません</strong>（$(A,C) \notin E$）．
                                 したがって性質2より：
@@ -701,8 +659,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">性質3の適用：{B} が A と C を分離する</div>
+                            <h4 class="step-title">性質3の適用：{B} が A と C を分離する</h4>
                             <p>
                                 集合 $\{B\}$ が頂点 A と頂点 C を<strong>分離する</strong>かどうかを確認します．
                             </p>
@@ -726,7 +683,6 @@
                             <p>
                                 すなわち，因子 A と因子 C は，<strong>因子 B のみを条件付けるだけで条件付き独立</strong>となります（D を条件付ける必要はありません）．
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 結論</div>
@@ -774,7 +730,6 @@
                                 <li><strong>グラフィカルモデル：</strong>無向独立グラフの辺の有無・連結性・分離集合から条件付き独立性を読み取る。</li>
                             </ol>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

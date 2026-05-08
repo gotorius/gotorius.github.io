@@ -29,20 +29,6 @@
             border: 1px solid #e0e6f0;
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
-
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
     </style>
 </head>
 <body>
@@ -55,12 +41,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -172,11 +160,9 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$\theta = 1$ を代入する</div>
+                            <h4 class="step-title">$\theta = 1$ を代入する</h4>
                             <div class="formula-block">
                                 $$E[Y] = E[e^X] = m(1) = \exp\!\left(\mu \cdot 1 + \frac{\sigma^2 \cdot 1^2}{2}\right) = \exp\!\left(\mu + \frac{\sigma^2}{2}\right)$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -199,15 +185,12 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$\theta = 2$ を代入して $E[Y^2]$ を求める</div>
+                            <h4 class="step-title">$\theta = 2$ を代入して $E[Y^2]$ を求める</h4>
                             <div class="formula-block">
                                 $$E[Y^2] = E[e^{2X}] = m(2) = \exp\!\left(\mu \cdot 2 + \frac{\sigma^2 \cdot 2^2}{2}\right) = \exp\!\left(2\mu + 2\sigma^2\right)$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">分散の公式 $V[Y] = E[Y^2] - (E[Y])^2$ を適用する</div>
+                            <h4 class="step-title">分散の公式 $V[Y] = E[Y^2] - (E[Y])^2$ を適用する</h4>
                             <div class="formula-block">
                                 $$V[Y] = \exp(2\mu + 2\sigma^2) - \left[\exp\!\left(\mu + \frac{\sigma^2}{2}\right)\right]^2$$
                             </div>
@@ -232,7 +215,6 @@
                                 対数正規分布は株価・所得・人口などの右に裾の長いデータをモデル化するのによく使われます．
                             </p>
                         </div>
-                    </div>
 
                     <!-- 解答 [3] -->
                     <div class="answer-block" id="q41-3">
@@ -254,8 +236,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：逆関数の微分を求める</div>
+                            <h4 class="step-title">Step 1：逆関数の微分を求める</h4>
                             <p>
                                 $Y = e^X$ より $X = \log Y$（$y > 0$ の範囲で定義）．$y$ で微分すると：
                             </p>
@@ -268,8 +249,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：変数変換の公式を適用する</div>
+                            <h4 class="step-title">Step 2：変数変換の公式を適用する</h4>
                             <p>
                                 $f_X(x) = \dfrac{1}{\sqrt{2\pi}\,\sigma}\exp\!\left[-\dfrac{(x-\mu)^2}{2\sigma^2}\right]$ に $x = \log y$ を代入し，$\dfrac{1}{y}$ をかけます：
                             </p>
@@ -279,7 +259,6 @@
                             <div class="formula-block">
                                 $$= \frac{1}{\sqrt{2\pi}\,\sigma\, y}\exp\!\left[-\frac{(\log y - \mu)^2}{2\sigma^2}\right]$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -303,7 +282,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -345,8 +323,7 @@
 
                         <h3>方法：変数変換 $Z = X+Y$，$W = Y$ を利用する</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：補助変数を導入して同時密度を書く</div>
+                            <h4 class="step-title">Step 1：補助変数を導入して同時密度を書く</h4>
                             <p>
                                 $Z = X + Y$，$W = Y$ と置くと，逆変換は $X = Z - W$，$Y = W$ です．
                             </p>
@@ -362,8 +339,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：$W$ の積分範囲を確認する</div>
+                            <h4 class="step-title">Step 2：$W$ の積分範囲を確認する</h4>
                             <p>
                                 $X \geq 0$ かつ $Y \geq 0$ という制約があります．
                                 $W = Y \geq 0$ かつ $X = Z - W \geq 0$（つまり $W \leq Z$）なので，
@@ -371,11 +347,9 @@
                             </p>
                             <div class="formula-block">
                                 $$0 \leq W \leq z$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 3：$W$ について積分して $Z$ の周辺密度を求める</div>
+                            <h4 class="step-title">Step 3：$W$ について積分して $Z$ の周辺密度を求める</h4>
                             <div class="formula-block">
                                 $$f_Z(z) = \int_0^z \lambda^2 e^{-\lambda z}\, dw$$
                             </div>
@@ -385,7 +359,6 @@
                             <div class="formula-block">
                                 $$= \lambda^2 e^{-\lambda z} \int_0^z dw = \lambda^2 e^{-\lambda z} \cdot z = \lambda^2 z e^{-\lambda z}$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -442,7 +415,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

@@ -30,21 +30,6 @@
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
 
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         /* 確率ツリー */
         .prob-tree {
             background: #f8f9fa;
@@ -67,12 +52,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -182,8 +169,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">数値を当てはめる</div>
+                            <h4 class="step-title">数値を当てはめる</h4>
                             <p>問題の設定を整理します：</p>
                             <ul style="margin:0.4em 0 0.4em 1.5em;line-height:2;">
                                 <li>女子の比率：$P(A_1) = 0.4$，男子の比率：$P(A_2) = 0.6$（女子でなければ男子なので $1-0.4$）</li>
@@ -193,7 +179,6 @@
                             <div class="formula-block">
                                 $$P(B) = \underbrace{0.5 \times 0.4}_{\text{女子が合格}} + \underbrace{0.4 \times 0.6}_{\text{男子が合格}}
                                 = 0.20 + 0.24 = 0.44$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -221,14 +206,12 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">数値を代入する</div>
+                            <h4 class="step-title">数値を代入する</h4>
                             <p>
                                 $P(S|W) = 0.5$，$P(W) = 0.4$，$P(S) = 0.44$（[1] の結果）を代入します：
                             </p>
                             <div class="formula-block">
                                 $$P(W|S) = \frac{0.5 \times 0.4}{0.44} = \frac{0.20}{0.44} = \frac{20}{44} = \frac{5}{11}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -273,8 +256,7 @@
 
                         <h3>確率関数の特定</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：条件を整理して $P(X=1), P(X=2)$ の値を絞り込む</div>
+                            <h4 class="step-title">Step 1：条件を整理して $P(X=1), P(X=2)$ の値を絞り込む</h4>
                             <p>
                                 6面のサイコロに 1, 2, 3 が書かれており，各面の確率は 1/6 です．
                                 $P(X=1) = P(X=2)$ とし，この共通の値を $p$ とおきます．
@@ -297,8 +279,7 @@
                             </ul>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：「期待値が 2 より大」の条件で絞り込む</div>
+                            <h4 class="step-title">Step 2：「期待値が 2 より大」の条件で絞り込む</h4>
                             <p>
                                 $p = 2/6 = 1/3$ の場合（1, 2, 3 が各 2 面ずつ）：
                             </p>
@@ -319,20 +300,16 @@
                                     <tr><td>$p(x)$</td><td>$1/6$</td><td>$1/6$</td><td>$4/6$</td><td>$1$</td></tr>
                                 </tbody>
                             </table>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 3：期待値の計算</div>
+                            <h4 class="step-title">Step 3：期待値の計算</h4>
                             <div class="formula-block">
                                 $$E[X] = 1 \times \frac{1}{6} + 2 \times \frac{1}{6} + 3 \times \frac{4}{6}
                                 = \frac{1}{6} + \frac{2}{6} + \frac{12}{6}
                                 = \frac{15}{6} = \frac{5}{2}$$
                             </div>
                             <p>確かに $5/2 = 2.5 > 2$ なので条件を満たします．</p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 4：分散の計算（$V[X] = E[X^2] - \mu^2$）</div>
+                            <h4 class="step-title">Step 4：分散の計算（$V[X] = E[X^2] - \mu^2$）</h4>
                             <p>
                                 まず $E[X^2]$ を求めます：
                             </p>
@@ -351,7 +328,6 @@
                                 = \frac{82}{12} - \frac{75}{12}
                                 = \frac{7}{12}$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -359,7 +335,6 @@
                                 期待値：$E[X] = \dfrac{5}{2}$，　分散：$V[X] = \dfrac{7}{12}$
                             </p>
                         </div>
-                    </div>
 
                     <!-- 解答 [2] -->
                     <div class="answer-block" id="q112-2">
@@ -382,8 +357,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$P(Y \leq 2)$ を計算する</div>
+                            <h4 class="step-title">$P(Y \leq 2)$ を計算する</h4>
                             <p>
                                 1回の投げで $X \leq 2$（1か2が出る）確率は：
                             </p>
@@ -400,11 +374,9 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">余事象で $P(Y=3)$ を求める</div>
+                            <h4 class="step-title">余事象で $P(Y=3)$ を求める</h4>
                             <div class="formula-block">
                                 $$P(Y=3) = 1 - P(Y \leq 2) = 1 - \frac{1}{9} = \frac{8}{9}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -415,7 +387,6 @@
                                 2回のうち少なくとも1回は3が出る確率が $8/9 \approx 89\%$ と高くなることは自然です．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -455,8 +426,7 @@
                             <p>求める確率は $P(X|Y_1)$（検査 1 が陽性のとき，本当に病気である確率）．</p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：問題の数値を確率に対応させる</div>
+                            <h4 class="step-title">Step 1：問題の数値を確率に対応させる</h4>
                             <table class="data-table" style="max-width:500px; margin:0 auto;">
                                 <thead>
                                     <tr><th>確率</th><th>意味</th><th>値</th></tr>
@@ -470,8 +440,7 @@
                             </table>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：検査 1 が陽性になる全確率 $P(Y_1)$ を求める</div>
+                            <h4 class="step-title">Step 2：検査 1 が陽性になる全確率 $P(Y_1)$ を求める</h4>
                             <p>
                                 全確率の定理を適用します：
                             </p>
@@ -484,10 +453,8 @@
                                 注：$0.0099 = 0.99 \times 0.01$ と $0.0198 = 0.02 \times 0.99$ という2つの項をよく見ると，
                                 実は <strong>$0.99 \times (0.01 + 0.02)$</strong> と因数分解できます（次の Step で利用します）．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 3：ベイズの定理で事後確率を計算する</div>
+                            <h4 class="step-title">Step 3：ベイズの定理で事後確率を計算する</h4>
                             <div class="formula-block">
                                 $$P(X|Y_1) = \frac{P(Y_1|X)\,P(X)}{P(Y_1)}
                                 = \frac{0.99 \times 0.01}{0.99 \times 0.01 + 0.02 \times 0.99}$$
@@ -498,7 +465,6 @@
                             <div class="formula-block">
                                 $$P(X|Y_1)= \frac{0.01}{0.01 + 0.02} = \frac{0.01}{0.03} = \frac{1}{3}$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -528,7 +494,6 @@
                                 偽陽性（病気でないのに陽性）が多くなる理由は，<strong>病気でない人の数が圧倒的に多い</strong>からです．
                             </p>
                         </div>
-                    </div>
 
                     <!-- 解答 [2] -->
                     <div class="answer-block" id="q113-2">
@@ -549,18 +514,15 @@
                             </ul>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：$P(Y_2|Y_1)$ を全確率の定理で求める</div>
+                            <h4 class="step-title">Step 1：$P(Y_2|Y_1)$ を全確率の定理で求める</h4>
                             <div class="formula-block">
                                 $$P(Y_2|Y_1) = P(Y_2|X,\,Y_1)\,P(X|Y_1) + P(Y_2|X^c,\,Y_1)\,P(X^c|Y_1)$$
                                 $$= 0.9 \times \frac{1}{3} + 0.1 \times \frac{2}{3}
                                 = \frac{0.9}{3} + \frac{0.2}{3}
                                 = \frac{1.1}{3}$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：ベイズの定理を再適用する</div>
+                            <h4 class="step-title">Step 2：ベイズの定理を再適用する</h4>
                             <div class="formula-block">
                                 $$P(X|Y_1,\,Y_2) = \frac{P(Y_2|X,\,Y_1)\,P(X|Y_1)}{P(Y_2|Y_1)}
                                 = \frac{0.9 \times \dfrac{1}{3}}{\dfrac{1.1}{3}}
@@ -602,7 +564,6 @@
                                 この「証拠を積み重ねることで確率を更新する」考え方がベイズ推論の本質です．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

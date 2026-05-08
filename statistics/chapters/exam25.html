@@ -36,21 +36,6 @@
         .calc-table th  { background: #e8f0ff; }
         .derive-table th{ background: #e8f0ff; }
 
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         /* グラフ SVG コンテナ */
         .graph-wrap {
             display: flex;
@@ -79,9 +64,9 @@
 
         /* 証明ブロック */
         .proof-box {
-            border: 1.5px solid #8e44ad;
-            background: #faf0ff;
-            border-radius: 8px;
+            border-left: 4px solid #8e44ad;
+            background: #f8f9fa;
+            border-radius: 0 6px 6px 0;
             padding: 14px 18px;
             margin: 0.8em 0;
         }
@@ -110,12 +95,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -400,28 +387,22 @@
                         </div>
 
                         <h4>計算手順</h4>
-                        <div class="step-box">
-                            <div class="step-title">Step 1：$(-0.92)^2$ を計算する</div>
+                            <h4 class="step-title">Step 1：$(-0.92)^2$ を計算する</h4>
                             <p>$(-0.92)^2 = 0.8464$</p>
                         </div>
-                        <div class="step-box">
-                            <div class="step-title">Step 2：$|\text{ア}|^2$ を求める</div>
+                            <h4 class="step-title">Step 2：$|\text{ア}|^2$ を求める</h4>
                             <p>
                                 $|\text{ア}|^2 = 0.8545 - 0.8464 = 0.0081$
                             </p>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-title">Step 3：$|\text{ア}|$ を計算する</div>
+                            <h4 class="step-title">Step 3：$|\text{ア}|$ を計算する</h4>
                             <p>
                                 $|\text{ア}| = \sqrt{0.0081} = 0.09$
                             </p>
-                        </div>
 
                         <div class="concept-box" style="border-left-color:#27ae60;">
                             <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
                             <div class="formula-block" style="font-size:1.05em;">
                                 $$|\text{ア}| = \sqrt{0.8545 - 0.92^2} = \sqrt{0.8545 - 0.8464} = \sqrt{0.0081} = \boldsymbol{0.09}$$
-                            </div>
                         </div>
 
                         <div class="concept-box" style="border-left-color:#3498db;margin-top:0.8em;">
@@ -476,18 +457,13 @@
                         </div>
 
                         <h4>希望するコーヒーの条件を因子得点で表す</h4>
-                        <div class="step-box">
-                            <div class="step-title">「酸味は強くない」</div>
+                            <h4 class="step-title">「酸味は強くない」</h4>
                             <p>第1因子の<strong>正の方向が「酸味が強い」</strong>なので，酸味が強くないということは<strong>第1因子のスコアが小さい（左方向）</strong></p>
                         </div>
-                        <div class="step-box">
-                            <div class="step-title">「苦みが強い」</div>
+                            <h4 class="step-title">「苦みが強い」</h4>
                             <p>第1因子の<strong>負の方向が「苦みが強い」</strong>なので，苦みが強いということは<strong>第1因子のスコアが負に大きい（さらに左方向）</strong></p>
-                        </div>
-                        <div class="step-box">
-                            <div class="step-title">「コクのある味わい」</div>
+                            <h4 class="step-title">「コクのある味わい」</h4>
                             <p>第2因子の<strong>正の方向が「コクがある」</strong>なので，<strong>第2因子のスコアが大きい（上方向）</strong></p>
-                        </div>
 
                         <div class="concept-box" style="border-left-color:#e74c3c;margin-top:0.8em;">
                             <div class="box-title"><i class="fas fa-map-marker-alt" style="color:#e74c3c;"></i> 因子スコアプロットで探す位置</div>
@@ -518,7 +494,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -620,8 +595,7 @@
 
                         <h4>■ a と b の導出（第1式 $Y = aX + bW + u$ から）</h4>
 
-                        <div class="step-box">
-                            <div class="step-title">第1式の両辺に X を掛けて期待値を取る</div>
+                            <h4 class="step-title">第1式の両辺に X を掛けて期待値を取る</h4>
                             <div class="formula-block">
                                 $$\mathrm{E}[YX] = a\,\mathrm{E}[X^2] + b\,\mathrm{E}[WX] + \mathrm{E}[uX]$$
                                 $$\rho_{xy} = a \cdot 1 + b \cdot 0 + 0$$
@@ -632,8 +606,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">第1式の両辺に W を掛けて期待値を取る</div>
+                            <h4 class="step-title">第1式の両辺に W を掛けて期待値を取る</h4>
                             <div class="formula-block">
                                 $$\mathrm{E}[YW] = a\,\mathrm{E}[XW] + b\,\mathrm{E}[W^2] + \mathrm{E}[uW]$$
                                 $$\rho_{yw} = a \cdot 0 + b \cdot 1 + 0$$
@@ -642,30 +615,24 @@
                             <p style="font-size:0.9em;color:#555;">
                                 ・$\mathrm{E}[W^2]=1$（標準化），$\mathrm{E}[XW]=0$（$X \perp W$），$\mathrm{E}[uW]=0$（$u \perp W$）
                             </p>
-                        </div>
 
                         <h4 style="margin-top:1em;">■ c と d の導出（第2式 $Z = cX + dY + v$ から）</h4>
 
-                        <div class="step-box">
-                            <div class="step-title">第2式の両辺に X を掛けて期待値を取る</div>
+                            <h4 class="step-title">第2式の両辺に X を掛けて期待値を取る</h4>
                             <div class="formula-block">
                                 $$\mathrm{E}[ZX] = c\,\mathrm{E}[X^2] + d\,\mathrm{E}[YX] + \mathrm{E}[vX]$$
                                 $$\rho_{xz} = c \cdot 1 + d \cdot \rho_{xy} + 0$$
                                 $$\therefore\quad \rho_{xz} = c + d\rho_{xy} \qquad \cdots\,(*) $$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">第2式の両辺に Y を掛けて期待値を取る</div>
+                            <h4 class="step-title">第2式の両辺に Y を掛けて期待値を取る</h4>
                             <div class="formula-block">
                                 $$\mathrm{E}[ZY] = c\,\mathrm{E}[XY] + d\,\mathrm{E}[Y^2] + \mathrm{E}[vY]$$
                                 $$\rho_{yz} = c\rho_{xy} + d \cdot 1 + 0$$
                                 $$\therefore\quad \rho_{yz} = c\rho_{xy} + d \qquad \cdots\,(**)$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">連立方程式 (*), (**) を解く</div>
+                            <h4 class="step-title">連立方程式 (*), (**) を解く</h4>
                             <p>$(*)$ より $c = \rho_{xz} - d\rho_{xy}$ を $(**)$ に代入する：</p>
                             <div class="formula-block">
                                 $$\rho_{yz} = (\rho_{xz} - d\rho_{xy})\rho_{xy} + d = \rho_{xz}\rho_{xy} + d(1 - \rho_{xy}^2)$$
@@ -678,7 +645,6 @@
                                 = \frac{\rho_{xz}(1-\rho_{xy}^2) - \rho_{xy}\rho_{yz} + \rho_{xy}^2\rho_{xz}}{1 - \rho_{xy}^2}$$
                                 $$\therefore\quad \boxed{c = \frac{\rho_{xz} - \rho_{xy}\rho_{yz}}{1 - \rho_{xy}^2}}$$
                             </div>
-                        </div>
 
                         <div class="concept-box" style="border-left-color:#27ae60;">
                             <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：パス係数のまとめ</div>
@@ -694,7 +660,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -776,15 +741,12 @@
                                 モラルグラフとは，有向グラフ（DAG）を無向グラフに変換したものです．
                                 グラフィカルモデルにおいて<strong>条件付き独立性</strong>を読み取るために用いられます．
             　                </p>
-                            <div class="step-box">
-                                <div class="step-title">手順1：「結婚」— 共通の子ノードを持つ親ノード同士を無向辺で結ぶ</div>
+                                <h4 class="step-title">手順1：「結婚」— 共通の子ノードを持つ親ノード同士を無向辺で結ぶ</h4>
                                 <p>各ノードの親ノード（そのノードへの矢印の出発点）を確認し，2人以上の親を持つノードがあれば，その親たちを辺で結びます．</p>
                             </div>
-                            <div class="step-box">
-                                <div class="step-title">手順2：「モラル化」— すべての有向辺を無向辺に変換する</div>
+                                <h4 class="step-title">手順2：「モラル化」— すべての有向辺を無向辺に変換する</h4>
                                 <p>矢印の向きを消去し，単純な辺（無向辺）にします．</p>
                             </div>
-                        </div>
 
                         <h4>元のパス図の辺と親ノードを確認する</h4>
                         <table class="data-table derive-table" style="max-width:400px; margin:0 auto;">
@@ -898,7 +860,6 @@
                                 $W$ と $Z$ のパスが遮断されます．すなわち，<strong>$X, Y$ を与えた下で $W \perp Z$</strong> であることがわかります．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

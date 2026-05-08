@@ -29,20 +29,6 @@
             border: 1px solid #e0e6f0;
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
-
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
     </style>
 </head>
 <body>
@@ -55,12 +41,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -168,14 +156,12 @@
                             <p>変動係数は無次元（単位なし）なので，体重・身長・価格など異なる量でも比較できます．</p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">定義に数値を代入する</div>
+                            <h4 class="step-title">定義に数値を代入する</h4>
                             <p>
                                 餌を替える前の体重：平均 $= 60\,\text{kg}$，標準偏差 $= 12\,\text{kg}$
                             </p>
                             <div class="formula-block">
                                 $$\text{CV} = \frac{12}{60} = 0.2$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -196,14 +182,12 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">飼育後の標準偏差を求める</div>
+                            <h4 class="step-title">飼育後の標準偏差を求める</h4>
                             <p>
                                 飼育後の平均 $= 65\,\text{kg}$，変動係数 $= 0.2$ より：
                             </p>
                             <div class="formula-block">
                                 $$\text{標準偏差} = 0.2 \times 65 = 13\,\text{kg}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -273,16 +257,14 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">全体の距離と時間を計算する</div>
+                            <h4 class="step-title">全体の距離と時間を計算する</h4>
                             <p>往復の総距離：$48 \times 2 = 96$ km</p>
                             <p>行きにかかる時間：$48 \div 8 = 6$ 時間</p>
                             <p>帰りにかかる時間：$48 \div 12 = 4$ 時間</p>
                             <p>合計所要時間：$6 + 4 = 10$ 時間</p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">平均時速を求める</div>
+                            <h4 class="step-title">平均時速を求める</h4>
                             <div class="formula-block">
                                 $$\text{平均時速} = \frac{96}{10} = 9.6\;\text{km/時間}$$
                             </div>
@@ -293,13 +275,11 @@
                                 = \frac{2}{\dfrac{5}{24}}
                                 = \frac{48}{5} = 9.6$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
                             <p>調和平均を用いる．往復の平均時速 $= 9.6$ km/時間</p>
                         </div>
-                    </div>
 
                     <!-- [2] 加重平均 -->
                     <div class="answer-block" id="q32-2">
@@ -316,8 +296,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">加重平均を計算する</div>
+                            <h4 class="step-title">加重平均を計算する</h4>
                             <table class="data-table" style="max-width:420px; margin:0 auto 10px;">
                                 <thead>
                                     <tr><th>定食</th><th>価格（円）</th><th>売上数（食）</th><th>売上金額（円）</th></tr>
@@ -332,7 +311,6 @@
                             <div class="formula-block">
                                 $$\text{加重平均} = \frac{500 \times 600 + 700 \times 700 + 800 \times 500}{500 + 700 + 800}
                                 = \frac{1{,}190{,}000}{2{,}000} = 595\;\text{円}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -360,15 +338,12 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">4 年間の積を求める</div>
+                            <h4 class="step-title">4 年間の積を求める</h4>
                             <div class="formula-block">
                                 $$1.15 \times 0.98 \times 1.03 \times 0.99 = 1.149202\ldots$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">4 乗根をとる（幾何平均）</div>
+                            <h4 class="step-title">4 乗根をとる（幾何平均）</h4>
                             <div class="formula-block">
                                 $$r = \sqrt[4]{1.149202} = (1.149202)^{1/4} \approx 1.034\ldots \approx 1.04$$
                             </div>
@@ -379,7 +354,6 @@
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
                             <p>幾何平均を用いる．1 年あたりの平均伸び率 $\approx 1.04$（小数点以下第 2 位まで）</p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -440,8 +414,7 @@
 
                         <h3>方法 1：$V[Z_1]$ の計算</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：$Z_1$ を確率変数で表す</div>
+                            <h4 class="step-title">Step 1：$Z_1$ を確率変数で表す</h4>
                             <p>
                                 独立に選んだ 2 枚のパンの厚さを $X_a$，$X_b$，ハムの厚さを $Y$ とすると，
                                 サンドイッチの厚さは：
@@ -454,21 +427,18 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：独立な確率変数の分散の加法性を適用する</div>
+                            <h4 class="step-title">Step 2：独立な確率変数の分散の加法性を適用する</h4>
                             <p>
                                 <strong>独立な確率変数の分散の加法性：</strong>$V[X_a + X_b + Y] = V[X_a] + V[X_b] + V[Y]$
                             </p>
                             <div class="formula-block">
                                 $$V[Z_1] = V[X_a] + V[X_b] + V[Y]
                                 = 0.25 + 0.25 + 0.16 = 0.66$$
-                            </div>
                         </div>
 
                         <h3>方法 2：$V[Z_2]$ の計算</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：$Z_2$ を確率変数で表す</div>
+                            <h4 class="step-title">Step 1：$Z_2$ を確率変数で表す</h4>
                             <p>
                                 1 枚のパン（厚さ $X$）を半分に切るので，2 枚のパンはどちらも<strong>同じ厚さ $X$</strong>になります．
                                 ハムの厚さを $Y$（$X$ と独立）とすると：
@@ -479,10 +449,8 @@
                             <p>
                                 方法 1 と異なり，2 枚のパンが <em>同一個体</em>（$X_a = X_b = X$）である点が重要です．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：分散の定数倍の公式を適用する</div>
+                            <h4 class="step-title">Step 2：分散の定数倍の公式を適用する</h4>
                             <p>
                                 $V[aX] = a^2 V[X]$ と，$X$・$Y$ の独立性から：
                             </p>
@@ -490,7 +458,6 @@
                                 $$V[Z_2] = V[2X + Y] = V[2X] + V[Y]
                                 = 4\,V[X] + V[Y]
                                 = 4 \times 0.25 + 0.16 = 1.00 + 0.16 = 1.16$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -520,7 +487,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

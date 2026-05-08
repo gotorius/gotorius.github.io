@@ -30,21 +30,6 @@
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
 
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         /* 選択肢ブロック */
         .choice-block {
             border: 1px solid #d0d8ef;
@@ -90,12 +75,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -308,8 +295,7 @@
 
                         <h3>Aさんの分析の評価：$\bar{y}_A$ について</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">なぜ $\bar{y}_A$ は $\mu_Y$ を過小評価するのか？</div>
+                            <h4 class="step-title">なぜ $\bar{y}_A$ は $\mu_Y$ を過小評価するのか？</h4>
                             <p>
                                 Aさんは，<strong>2回とも受験した50人</strong>，すなわち「1回目の点数が基準 $c$ 以下だった学生」だけで
                                 2回目の平均を計算しています．
@@ -327,8 +313,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">イメージ（散布図で考える）</div>
+                            <h4 class="step-title">イメージ（散布図で考える）</h4>
                             <p>
                                 散布図上で考えると，1回目の点数 $x$ が高い領域（右側）のデータが
                                 すべて削除されているような状況です：
@@ -342,12 +327,10 @@
                                     <tr><td>分布の右端・上端付近のデータ</td><td>散布図の「外側」の点が削除され，残ったデータは中心に偏る</td></tr>
                                 </tbody>
                             </table>
-                        </div>
 
                         <h3>Aさんの分析の評価：$r_A$ について</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">なぜ $r_A$ は $\rho$ を過小評価するのか？（トランケーションの効果）</div>
+                            <h4 class="step-title">なぜ $r_A$ は $\rho$ を過小評価するのか？（トランケーションの効果）</h4>
                             <p>
                                 相関係数は，散布図での「データの広がりの方向への密集度」を測る指標です．
                                 データが全範囲にわたって散らばっているほど，相関係数は大きく計算されます．
@@ -361,10 +344,8 @@
                                 左下部分に集中します．このように<strong>分布の広がりが失われる</strong>と，
                                 相関係数の値は真の値より小さく計算されます（過小評価）．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">トランケーションと相関係数の過小評価（直感的説明）</div>
+                            <h4 class="step-title">トランケーションと相関係数の過小評価（直感的説明）</h4>
                             <p>
                                 例として，身長と体重の散布図を考えます．全身長の範囲でデータが取られていれば高い相関が観察されます．
                                 しかし，身長が高い人だけを除外すると（右端を切り落とす），
@@ -373,7 +354,6 @@
                             <p>
                                 この問題でも同様のことが起きており，$r_A < \rho$（過小評価）となります．
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え：⑤</div>
@@ -386,7 +366,6 @@
                             </ul>
                             <p>過大評価（②④）ではなく過小評価（③⑤）であることに注意．$\rho > 0$ のときのトランケーションは「下方向」ではなく，分布端の切り落としによる相関の縮小をもたらす．</p>
                         </div>
-                    </div>
 
                 <!-- ======================================================== -->
                 <!-- 問29.1 [2] 解答                                            -->
@@ -408,8 +387,7 @@
 
                         <h3>$\bar{y}_B$ の評価：偏りなく推定できる理由</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">2変量正規分布の性質：回帰直線の不変性</div>
+                            <h4 class="step-title">2変量正規分布の性質：回帰直線の不変性</h4>
                             <p>
                                 全学生の点数が2変量正規分布 $N_2(\mu_X, \mu_Y, \sigma_X^2, \sigma_Y^2, \rho\sigma_X\sigma_Y)$ に従うとしたとき，
                                 $X$ を与えた条件のもとでの $Y$ の条件付き分布は：
@@ -427,8 +405,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$\bar{y}_B$ が不偏である理由</div>
+                            <h4 class="step-title">$\bar{y}_B$ が不偏である理由</h4>
                             <p>
                                 65組の疑似データの $y$ 方向の平均を計算します：
                             </p>
@@ -441,12 +418,10 @@
                                 「もし受験したとしたときの $y_i$ の期待値」を正しく推定しています．
                                 したがって，65組の $y$ の平均 $\bar{y}_B$ は母平均 $\mu_Y$ を<strong>偏りなく推定</strong>します．
                             </p>
-                        </div>
 
                         <h3>$r_B$ の評価：過大評価となる理由</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">回帰予測値にはばらつきがない</div>
+                            <h4 class="step-title">回帰予測値にはばらつきがない</h4>
                             <p>
                                 真の関係では，$x$ が同じ値でも $y$ には確率的なばらつきがあります．
                                 2変量正規分布では，$X=x$ のもとで $Y$ は残差分散 $\sigma_Y^2(1-\rho^2)$ を持ちます：
@@ -458,10 +433,8 @@
                                 ところが，Bさんが補完に使った予測値 $\hat{y}_i = a + bx_i$ は
                                 <strong>回帰直線上の点だけ</strong>であり，残差 $\varepsilon$ に相当するランダムな変動が含まれていません．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">なぜ相関係数が過大評価されるのか？（直感的説明）</div>
+                            <h4 class="step-title">なぜ相関係数が過大評価されるのか？（直感的説明）</h4>
                             <p>
                                 補完された15組の $(x_i, \hat{y}_i)$ は，<strong>すべてが回帰直線上にぴったり乗っています</strong>．
                                 回帰直線上にある点は，$x$ と $y$ が完全に線形の関係（相関係数 $= 1$）を持ちます．
@@ -472,10 +445,8 @@
                                 65点全体で見たとき，点が実際より直線にきれいに揃っているように見えます．
                                 その結果，$r_B > \rho$（過大評価）となります．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">数式で確認する（イメージ）</div>
+                            <h4 class="step-title">数式で確認する（イメージ）</h4>
                             <p>
                                 相関係数は「$x$ の変動と $y$ の変動の共変動 / （$x$ の標準偏差 $\times$ $y$ の標準偏差）」で計算されます．
                                 補完された $\hat{y}_i = a + bx_i$ は $x_i$ と完全に連動しているため：
@@ -485,7 +456,6 @@
                                 <li>$y$ の標準偏差 $S_y$ は過小評価（回帰予測値のばらつきは $y$ の実際のばらつきより小さい）</li>
                                 <li>結果として $r_B = S_{xy}/(S_x S_y)$ の分母が小さくなり，<strong>$r_B$ は過大評価</strong></li>
                             </ul>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え：②</div>
@@ -538,7 +508,6 @@
                                 <li><strong>多重代入法：</strong>補完値に確率的なばらつきを加えることで，標準誤差の過小評価も含めた偏りを除去する高度な手法。</li>
                             </ol>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

@@ -30,20 +30,6 @@
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
 
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         .blank-box {
             display: inline-block;
             border: 2px solid #3498db;
@@ -66,12 +52,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -185,8 +173,7 @@
                             <p>ここで $z=(X-\mu)/\sigma$ は標準化得点（$z$ スコア）です．</p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">A 君（85 点）の偏差値</div>
+                            <h4 class="step-title">A 君（85 点）の偏差値</h4>
                             <div class="formula-block">
                                 $$z_A = \frac{85 - 65}{10} = \frac{20}{10} = 2$$
                             </div>
@@ -195,21 +182,18 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">B 君（60 点）の偏差値</div>
+                            <h4 class="step-title">B 君（60 点）の偏差値</h4>
                             <div class="formula-block">
                                 $$z_B = \frac{60 - 65}{10} = \frac{-5}{10} = -0.5$$
                             </div>
                             <div class="formula-block">
                                 $$\text{偏差値}_B = 50 + 10 \times (-0.5) = 45$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
                             <p>A 君の偏差値 $= 70$，B 君の偏差値 $= 45$</p>
                         </div>
-                    </div>
 
                     <!-- [2] 人数 -->
                     <div class="answer-block" id="q61-2">
@@ -225,8 +209,7 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">標準正規分布の確率を計算する</div>
+                            <h4 class="step-title">標準正規分布の確率を計算する</h4>
                             <p>
                                 $\Phi(-0.5) = 1 - \Phi(0.5) = 1 - 0.6915 = 0.3085$（$\Phi$ は左側の面積）
                             </p>
@@ -241,18 +224,15 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">人数を求める</div>
+                            <h4 class="step-title">人数を求める</h4>
                             <div class="formula-block">
                                 $$1000 \times 0.6687 \approx 669\;\text{人}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
                             <p>おおよそ $669$ 人</p>
                         </div>
-                    </div>
 
                     <!-- [3] 四分位範囲 -->
                     <div class="answer-block" id="q61-3">
@@ -269,8 +249,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$N(65, 10^2)$ の四分位数を求める</div>
+                            <h4 class="step-title">$N(65, 10^2)$ の四分位数を求める</h4>
                             <p>
                                 $X \sim N(65, 10^2)$ において，$P(X \leq x_{0.25}) = 0.25$ となる $x_{0.25}$ は：
                             </p>
@@ -288,11 +267,9 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">四分位範囲を求める</div>
+                            <h4 class="step-title">四分位範囲を求める</h4>
                             <div class="formula-block">
                                 $$\text{IQR} = x_{0.75} - x_{0.25} = 71.75 - 58.25 = 2 \times 0.675 \times 10 = 13.5 \approx 14\;\text{点}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -303,7 +280,6 @@
                                 ここでは $\sigma = 10$ なので，IQR $= 1.35 \times 10 = 13.5$ 点となります．
                             </p>
                         </div>
-                    </div>
 
                     <!-- [4] 切断期待値 -->
                     <div class="answer-block" id="q61-4">
@@ -323,8 +299,7 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$E[Z \mid Z \geq 0]$ を計算する</div>
+                            <h4 class="step-title">$E[Z \mid Z \geq 0]$ を計算する</h4>
                             <p>
                                 $Z \sim N(0,1)$，$Z \geq 0$ に切断したときの期待値：
                             </p>
@@ -339,11 +314,9 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">元の得点スケールに戻す</div>
+                            <h4 class="step-title">元の得点スケールに戻す</h4>
                             <div class="formula-block">
                                 $$E[X \mid X \geq 65] = 65 + 10 \times 0.798 = 65 + 7.98 \approx 73\;\text{点}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -354,7 +327,6 @@
                                 これは，切断された正規分布では上側の裾が省かれるため，平均が上方にシフトするためです．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -392,18 +364,14 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">数値を代入して共分散を求める</div>
+                            <h4 class="step-title">数値を代入して共分散を求める</h4>
                             <div class="formula-block">
                                 $$\mathrm{Cov}[L, R] = \frac{150^2 - 80^2 - 90^2}{2} = \frac{22500 - 6400 - 8100}{2} = \frac{8000}{2} = 4000$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">相関係数を求める</div>
+                            <h4 class="step-title">相関係数を求める</h4>
                             <div class="formula-block">
                                 $$\rho = \frac{\mathrm{Cov}[L, R]}{\sigma_L \cdot \sigma_R} = \frac{4000}{80 \times 90} = \frac{4000}{7200} \approx 0.556 \approx 0.56$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -433,8 +401,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$X$ = Listening，$Y$ = Reading として代入する</div>
+                            <h4 class="step-title">$X$ = Listening，$Y$ = Reading として代入する</h4>
                             <table class="data-table" style="max-width:420px; margin:0 auto 10px;">
                                 <thead><tr><th>記号</th><th>意味</th><th>値</th></tr></thead>
                                 <tbody>
@@ -462,7 +429,6 @@
                                 ただし相関係数が 1 でないため，Listening が 30 点高くても Reading が同じだけ高くなるわけではない点に注意が必要です．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -499,8 +465,7 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$S(t) = e^{-\lambda t}$ を微分する</div>
+                            <h4 class="step-title">$S(t) = e^{-\lambda t}$ を微分する</h4>
                             <p>
                                 $t \geq 0$ のとき，$F(t) = 1 - e^{-\lambda t}$ を $t$ で微分します：
                             </p>
@@ -519,14 +484,12 @@
                             </div>
                             <p style="font-size:0.92em;">これはパラメータ $\lambda$ の指数分布の確率密度関数です．</p>
                         </div>
-                    </div>
 
                     <!-- [2] -->
                     <div class="answer-block" id="q63-2">
                         <span class="prob-badge badge-a">[2] 解答・解説</span>
 
-                        <div class="step-box">
-                            <div class="step-title">平均 $E[T]$ を求める（部分積分）</div>
+                            <h4 class="step-title">平均 $E[T]$ を求める（部分積分）</h4>
                             <div class="formula-block">
                                 $$E[T] = \int_0^\infty t \lambda e^{-\lambda t}\,dt$$
                             </div>
@@ -542,8 +505,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">上側 25% 点を求める</div>
+                            <h4 class="step-title">上側 25% 点を求める</h4>
                             <p>
                                 上側 25% 点 $t_{0.25}$ とは，$P(T > t_{0.25}) = 0.25$，すなわち $S(t_{0.25}) = 1/4$ を満たす $t$ です：
                             </p>
@@ -557,13 +519,11 @@
                             <div class="formula-block">
                                 $$t_{0.25} = \frac{\log 4}{\lambda}$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
                             <p>平均 $= \dfrac{1}{\lambda}$，上側 25% 点 $= \dfrac{\log 4}{\lambda}$</p>
                         </div>
-                    </div>
 
                     <!-- [3] -->
                     <div class="answer-block" id="q63-3">
@@ -579,14 +539,12 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">上側 25% 点の推定値を求める</div>
+                            <h4 class="step-title">上側 25% 点の推定値を求める</h4>
                             <p>
                                 $\hat{\lambda} = 1/3$ を [2] で求めた上側 25% 点の公式に代入します：
                             </p>
                             <div class="formula-block">
                                 $$\hat{t}_{0.25} = \frac{\log 4}{\hat{\lambda}} = \log 4 \times \frac{1}{\hat{\lambda}} = \log 4 \times \bar{T} = 1.4 \times 3.0 = 4.2\;\text{年}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -627,20 +585,16 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">A さん（文系，67 点）の偏差値</div>
+                            <h4 class="step-title">A さん（文系，67 点）の偏差値</h4>
                             <p>文系の平均 $\mu = 65$，標準偏差 $\sigma = 4$ を使用：</p>
                             <div class="formula-block">
                                 $$\text{偏差値}_A = 50 + 10 \times \frac{67 - 65}{4} = 50 + 10 \times \frac{2}{4} = 50 + 5 = 55$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">B さん（理系，82 点）の偏差値</div>
+                            <h4 class="step-title">B さん（理系，82 点）の偏差値</h4>
                             <p>理系の平均 $\mu = 85$，標準偏差 $\sigma = 3$ を使用：</p>
                             <div class="formula-block">
                                 $$\text{偏差値}_B = 50 + 10 \times \frac{82 - 85}{3} = 50 + 10 \times \frac{-3}{3} = 50 - 10 = 40$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -670,8 +624,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：文系の合格確率 $P_{\text{文}}(X \geq 60)$ を求める</div>
+                            <h4 class="step-title">Step 1：文系の合格確率 $P_{\text{文}}(X \geq 60)$ を求める</h4>
                             <p>文系 $X \sim N(65, 4^2)$：</p>
                             <div class="formula-block">
                                 $$P_{\text{文}}(X \geq 60) = P\!\left(Z \geq \frac{60-65}{4}\right) = P(Z \geq -1.25) = \Phi(1.25) \approx 0.8944$$
@@ -681,8 +634,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：理系の合格確率 $P_{\text{理}}(X \geq 60)$ を求める</div>
+                            <h4 class="step-title">Step 2：理系の合格確率 $P_{\text{理}}(X \geq 60)$ を求める</h4>
                             <p>理系 $X \sim N(85, 3^2)$：</p>
                             <div class="formula-block">
                                 $$P_{\text{理}}(X \geq 60) = P\!\left(Z \geq \frac{60-85}{3}\right) = P(Z \geq -8.33) \approx 1.0000$$
@@ -690,10 +642,8 @@
                             <p style="font-size:0.9em;">
                                 平均 85 点から 25 点も下の 60 点は，$z = -8.33$ という極端な値なので，ほぼ 100% の理系学生が 60 点以上です．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 3：混合確率を計算する</div>
+                            <h4 class="step-title">Step 3：混合確率を計算する</h4>
                             <div class="formula-block">
                                 $$P(X \geq 60) = \frac{3}{5} \times 0.8944 + \frac{2}{5} \times 1.0000$$
                             </div>
@@ -706,7 +656,6 @@
                                 $= 1 - \left[\dfrac{3}{5} \times 0.1056 + \dfrac{2}{5} \times 0\right]$
                                 $= 1 - 0.0634 = 0.9366$
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -729,7 +678,6 @@
                                 合格率が低い文系でも約 89% が合格しており，理系はほぼ全員合格するため，全体の合格率は 94% という高い値になっています．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

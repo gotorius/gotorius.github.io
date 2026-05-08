@@ -30,21 +30,6 @@
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
 
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         /* 比較テーブル強調 */
         .data-table .highlight-row td {
             background: #f0f6ff;
@@ -84,12 +69,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -233,18 +220,15 @@
 
                         <h3>$V\!\left[\sqrt{1-U^2}\right]$ の計算</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：$E\!\left[1-U^2\right]$ の計算</div>
+                            <h4 class="step-title">Step 1：$E\!\left[1-U^2\right]$ の計算</h4>
                             <p>
                                 $U \sim U(0,1)$ のとき，$E[U^2] = \int_0^1 u^2\,du = \dfrac{1}{3}$ なので：
                             </p>
                             <div class="formula-block">
                                 $$E\!\left[1-U^2\right] = 1 - E[U^2] = 1 - \frac{1}{3} = \frac{2}{3}$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：分散の計算式を展開する</div>
+                            <h4 class="step-title">Step 2：分散の計算式を展開する</h4>
                             <p>
                                 分散の公式 $V[X] = E[X^2] - (E[X])^2$ を用います．
                                 $E\!\left[\sqrt{1-U^2}\right] = \pi/4$ が与えられているので：
@@ -264,8 +248,7 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 3：$n$ を求める</div>
+                            <h4 class="step-title">Step 3：$n$ を求める</h4>
                             <p>
                                 $SD[\hat{\pi}] = \dfrac{4}{\sqrt{n}}\sqrt{0.05} = 0.01$ とおくと：
                             </p>
@@ -275,7 +258,6 @@
                             <div class="formula-block">
                                 $$n = \frac{16 \times 0.05}{0.0001} = \frac{0.8}{0.0001} = \boldsymbol{8000}$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -293,7 +275,6 @@
                                 n = 8000$$
                             </div>
                         </div>
-                    </div>
 
                     <!-- ===== 解答 [2] ===== -->
                     <div class="answer-block" id="q321-2">
@@ -323,8 +304,7 @@
 
                         <h3>$V\!\left[\sqrt{1-U^2} + U - \tfrac{1}{2}\right]$ の計算</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">問題の確率変数を整理する</div>
+                            <h4 class="step-title">問題の確率変数を整理する</h4>
                             <p>
                                 $\tilde{\pi}$ の標本内の各項 $\sqrt{1-U_i^2} - \left(\frac{1}{2}-U_i\right)
                                 = \sqrt{1-U_i^2} + U_i - \frac{1}{2}$ の期待値は：
@@ -340,8 +320,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">分散を与えられた積分で求める</div>
+                            <h4 class="step-title">分散を与えられた積分で求める</h4>
                             <p>
                                 分散の定義 $V[X] = E\!\left[(X - E[X])^2\right]$ より：
                             </p>
@@ -357,10 +336,8 @@
                                 $$V\!\left[\sqrt{1-U^2}+U-\frac{1}{2}\right]
                                 = \frac{68-12\pi-3\pi^2}{48} = 0.0144$$
                             </div>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$n$ を求める</div>
+                            <h4 class="step-title">$n$ を求める</h4>
                             <p>
                                 $\tilde{\pi} = 4 \times \dfrac{1}{n}\displaystyle\sum_{i=1}^n\left(\sqrt{1-U_i^2}+U_i-\frac{1}{2}\right)$ なので，
                             </p>
@@ -376,7 +353,6 @@
                             <div class="formula-block">
                                 $$n = \frac{16 \times 0.0144}{0.0001} = \frac{0.2304}{0.0001} = \boldsymbol{2304}$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -391,7 +367,6 @@
                                 n = 2304$$
                             </div>
                         </div>
-                    </div>
 
                     <!-- ===== 2つの方法の比較 ===== -->
                     <div class="answer-block" id="comparison">

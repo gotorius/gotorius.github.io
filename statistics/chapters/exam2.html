@@ -29,21 +29,6 @@
             border: 1px solid #e0e6f0;
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
-
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
     </style>
 </head>
 <body>
@@ -56,12 +41,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -171,8 +158,7 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：二重積分を計算する</div>
+                            <h4 class="step-title">Step 1：二重積分を計算する</h4>
                             <p>
                                 $f(x,y) = c(x+y)$ を代入します：
                             </p>
@@ -194,18 +180,15 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：$c$ を求める</div>
+                            <h4 class="step-title">Step 2：$c$ を求める</h4>
                             <div class="formula-block">
                                 $$c \times 1 = 1 \implies c = 1$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
                             <p>$c = 1$，すなわち $f(x,y) = x + y \quad (0 \leq x \leq 1,\; 0 \leq y \leq 1)$</p>
                         </div>
-                    </div>
 
                     <!-- 解答 [2] -->
                     <div class="answer-block" id="q211-2">
@@ -225,8 +208,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$y$ について積分する</div>
+                            <h4 class="step-title">$y$ について積分する</h4>
                             <p>
                                 $f(x,y) = x+y$ を $0 \leq y \leq 1$ で積分します：
                             </p>
@@ -235,7 +217,6 @@
                                 = \left[xy + \frac{y^2}{2}\right]_0^1
                                 = x \cdot 1 + \frac{1}{2} - 0
                                 = x + \frac{1}{2}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -266,14 +247,12 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">分子・分母を代入する</div>
+                            <h4 class="step-title">分子・分母を代入する</h4>
                             <p>
                                 $f(x,y) = x+y$，$f_X(x) = x+\dfrac{1}{2}$ を代入します：
                             </p>
                             <div class="formula-block">
                                 $$f_{Y|X}(y|x) = \frac{x+y}{x+\dfrac{1}{2}}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -330,8 +309,7 @@
 
                         <h3>Step 1：確率母関数 $G(s)$ の計算</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">確率母関数の定義を適用する</div>
+                            <h4 class="step-title">確率母関数の定義を適用する</h4>
                             <p>
                                 確率母関数は $G(s) = E[s^X] = \displaystyle\sum_{x=0}^\infty s^x p(x)$ です．$p(x) = p(1-p)^x$ を代入します：
                             </p>
@@ -350,8 +328,7 @@
 
                         <h3>Step 2：$G'(s)$ と $G''(s)$ を計算して $s=1$ を代入</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">1階微分 $G'(s)$ を求め，$G'(1)$ を計算する</div>
+                            <h4 class="step-title">1階微分 $G'(s)$ を求め，$G'(1)$ を計算する</h4>
                             <p>
                                 商の微分則（または合成関数の微分）を用います：
                             </p>
@@ -367,10 +344,8 @@
                             <p>
                                 確率母関数の性質から $G'(1) = E[X]$ なので，<strong>期待値 $E[X] = \dfrac{1-p}{p}$</strong>
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">2階微分 $G''(s)$ を求め，$G''(1)$ を計算する</div>
+                            <h4 class="step-title">2階微分 $G''(s)$ を求め，$G''(1)$ を計算する</h4>
                             <div class="formula-block">
                                 $$G''(s) = \frac{2p(1-p)^2}{\bigl(1-(1-p)s\bigr)^3}$$
                             </div>
@@ -380,12 +355,10 @@
                             <div class="formula-block">
                                 $$G''(1) = \frac{2p(1-p)^2}{p^3} = \frac{2(1-p)^2}{p^2}$$
                             </div>
-                        </div>
 
                         <h3>Step 3：分散の公式で $V[X]$ を求める</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">確率母関数による分散の公式を適用する</div>
+                            <h4 class="step-title">確率母関数による分散の公式を適用する</h4>
                             <p>
                                 確率母関数による分散の公式は：
                             </p>
@@ -414,7 +387,6 @@
                             <div class="formula-block">
                                 $$V[X] = \frac{1-p}{p^2}$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -436,7 +408,6 @@
                                 また $p$ が小さいほど（成功しにくいほど），期待値・分散ともに大きくなります．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -473,8 +444,7 @@
 
                         <h3>Step 1：モーメント母関数 $m(\theta)$ の計算</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">定義に従って積分する</div>
+                            <h4 class="step-title">定義に従って積分する</h4>
                             <p>
                                 モーメント母関数は $m(\theta) = E[e^{\theta X}]$ です．$f(x) = \lambda e^{-\lambda x}$ を代入します：
                             </p>
@@ -493,8 +463,7 @@
 
                         <h3>Step 2：$m'(\theta)$ を求めて期待値を得る</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">1階微分 $m'(\theta)$ を計算し，$\theta=0$ を代入</div>
+                            <h4 class="step-title">1階微分 $m'(\theta)$ を計算し，$\theta=0$ を代入</h4>
                             <p>
                                 $m(\theta) = \lambda(\lambda-\theta)^{-1}$ を $\theta$ で微分します：
                             </p>
@@ -510,12 +479,10 @@
                             <p>
                                 モーメント母関数の性質から $m'(0) = E[X]$ なので，<strong>期待値 $E[X] = \dfrac{1}{\lambda}$</strong>
                             </p>
-                        </div>
 
                         <h3>Step 3：$m''(\theta)$ を求めて $E[X^2]$ を得る</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">2階微分 $m''(\theta)$ を計算し，$\theta=0$ を代入</div>
+                            <h4 class="step-title">2階微分 $m''(\theta)$ を計算し，$\theta=0$ を代入</h4>
                             <div class="formula-block">
                                 $$m''(\theta) = \frac{2\lambda}{(\lambda-\theta)^3}$$
                             </div>
@@ -528,16 +495,13 @@
                             <p>
                                 モーメント母関数の性質から $m''(0) = E[X^2]$ なので，$E[X^2] = \dfrac{2}{\lambda^2}$
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 4：分散を計算する</div>
+                            <h4 class="step-title">Step 4：分散を計算する</h4>
                             <p>
                                 分散の公式 $V[X] = E[X^2] - (E[X])^2$ を用います：
                             </p>
                             <div class="formula-block">
                                 $$V[X] = \frac{2}{\lambda^2} - \left(\frac{1}{\lambda}\right)^2 = \frac{2}{\lambda^2} - \frac{1}{\lambda^2} = \frac{1}{\lambda^2}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -591,7 +555,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

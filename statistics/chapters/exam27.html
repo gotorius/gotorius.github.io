@@ -31,26 +31,11 @@
         .data-table tr:nth-child(even) { background: #f8f9fa; }
         .calc-table th { background: #e8f0ff; }
 
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         /* 証明ボックス */
         .proof-box {
-            border: 1.5px solid #8e44ad;
-            background: #faf0ff;
-            border-radius: 8px;
+            border-left: 4px solid #8e44ad;
+            background: #f8f9fa;
+            border-radius: 0 6px 6px 0;
             padding: 14px 18px;
             margin: 0.8em 0;
         }
@@ -99,12 +84,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -153,6 +140,7 @@
                             <li><a href="#q272">問27.2</a></li>
                             <li><a href="#q273">問27.3 問題</a></li>
                             <li><a href="#q273-1">問27.3 [1]</a></li>
+                            <li><a href="#q273-1-easy">問27.3 [1] わかりやすく解説</a></li>
                             <li><a href="#q273-2">問27.3 [2]</a></li>
                             <li><a href="#q274">問27.4</a></li>
                         </ol>
@@ -338,8 +326,7 @@
 
                         <h4>各 $\phi_1$ 値の特徴と識別ポイント</h4>
 
-                        <div class="step-box">
-                            <div class="step-title">$\phi_1 = 1$（単位根・非定常過程）→ グラフ (c)</div>
+                            <h4 class="step-title">$\phi_1 = 1$（単位根・非定常過程）→ グラフ (c)</h4>
                             <p>
                                 $\phi_1 = 1$ のとき，モデルは $Y_t = 2(1-1) + 1 \cdot Y_{t-1} + U_t = Y_{t-1} + U_t$ となり，
                                 これは<strong>ランダムウォーク</strong>（+ドリフトなし）です．
@@ -351,8 +338,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$\phi_1 = 0.7$（正の自己相関・定常）→ グラフ (a)</div>
+                            <h4 class="step-title">$\phi_1 = 0.7$（正の自己相関・定常）→ グラフ (a)</h4>
                             <p>
                                 $|\phi_1| < 1$ なので定常過程です．$\phi_1 > 0$ のとき，<strong>正の自己相関</strong>があります．
                                 「今の値が大きければ次の値も大きい傾向がある」ため，<strong>なめらかに上下する波のような</strong>形になります．
@@ -361,10 +347,8 @@
                                 <strong>特徴：</strong>隣り合う時点の値が似ており，変化が緩やかです．
                                 グラフ (a) はなめらかな波形を示しており，$\phi_1 = 0.7$ の特徴と一致します．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$\phi_1 = 0$（ホワイトノイズ）→ グラフ (b)</div>
+                            <h4 class="step-title">$\phi_1 = 0$（ホワイトノイズ）→ グラフ (b)</h4>
                             <p>
                                 $\phi_1 = 0$ のとき，$Y_t = 2 + U_t$ となり，$\{Y_t\}$ は互いに独立な確率変数の列（<strong>ホワイトノイズ</strong>）になります．
                             </p>
@@ -372,10 +356,8 @@
                                 <strong>特徴：</strong>隣り合う時点の値に相関がなく，<strong>上下にばらばらに変動</strong>します．
                                 グラフ (b) は連続性のないランダムな変動を示しており，$\phi_1 = 0$ の特徴と一致します．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$\phi_1 = -0.8$（負の自己相関・定常）→ グラフ (d)</div>
+                            <h4 class="step-title">$\phi_1 = -0.8$（負の自己相関・定常）→ グラフ (d)</h4>
                             <p>
                                 $|\phi_1| < 1$ なので定常過程です．$\phi_1 < 0$ のとき，<strong>負の自己相関</strong>があります．
                                 「今の値が大きければ次の値は小さくなる傾向がある」ため，<strong>上下に激しく振動する</strong>ジグザグなパターンになります．
@@ -384,7 +366,6 @@
                                 <strong>特徴：</strong>隣り合う時点の値が反対の方向に動き，変化が激しいです．
                                 グラフ (d) は1時点ごとに上下を繰り返す激しいジグザグを示しており，$\phi_1 = -0.8$ の特徴と一致します．
                             </p>
-                        </div>
 
                         <div class="concept-box" style="border-left-color:#27ae60;">
                             <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：グラフとパラメータの対応</div>
@@ -419,7 +400,6 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -443,8 +423,7 @@
 
                         <h4>OLS推定量の性質</h4>
 
-                        <div class="step-box">
-                            <div class="step-title">不偏性（Unbiasedness）：OLS は不偏推定量か？</div>
+                            <h4 class="step-title">不偏性（Unbiasedness）：OLS は不偏推定量か？</h4>
                             <p>
                                 OLS（最小二乗法）推定量 $\hat{\beta}$ は，誤差項に自己相関があっても，
                                 誤差項の期待値が0（$E[\varepsilon_t] = 0$）であれば<strong>不偏推定量</strong>です：
@@ -457,8 +436,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">有効性（Efficiency）：OLS は最も分散が小さいか？</div>
+                            <h4 class="step-title">有効性（Efficiency）：OLS は最も分散が小さいか？</h4>
                             <p>
                                 <strong>有効推定量ではありません</strong>（BLUE = 最良線形不偏推定量ではない）．
                             </p>
@@ -468,21 +446,17 @@
                                 しかし，誤差項に自己相関（$\varepsilon_t = \rho\,\varepsilon_{t-1} + e_t$）がある場合，この条件が破れるため，
                                 <strong>OLS は不偏だが BLUE ではなく，GLS（一般化最小二乗法）の方がより小さい分散</strong>を持ちます．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">分散の過小推定と t 検定・F 検定への影響</div>
+                            <h4 class="step-title">分散の過小推定と t 検定・F 検定への影響</h4>
                             <p>
                                 正の自己相関（$\rho > 0$）がある場合，<strong>OLS の標準誤差が過小推定</strong>されます．
                                 その結果，t統計量が実際より大きく見え，有意でない係数を有意と判断する
                                 <strong>偽の有意性（見せかけの有意性）</strong>が生じる危険があります．
                             </p>
-                        </div>
 
                         <h4>正の自己相関と DW 比</h4>
 
-                        <div class="step-box">
-                            <div class="step-title">DW 比の値域と自己相関の関係</div>
+                            <h4 class="step-title">DW 比の値域と自己相関の関係</h4>
                             <p>
                                 DW 比の近似式 $DW \approx 2(1 - \hat{\rho}_1)$ から，
                             </p>
@@ -499,7 +473,6 @@
                             <p style="margin-top:0.6em;">
                                 したがって，<strong>残差に正の自己相関が存在するとき，DW 比は 0 に近い値</strong>をとります．
                             </p>
-                        </div>
 
                         <div class="concept-box" style="border-left-color:#27ae60;">
                             <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
@@ -515,7 +488,6 @@
                                 残差に<strong>正の自己相関</strong>が存在するとき，DW 比は<strong>0 に近い値</strong>をとる．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -556,8 +528,7 @@
                         </div>
 
                         <h4>$\gamma_0$（分散）の計算</h4>
-                        <div class="step-box">
-                            <div class="step-title">$\gamma_0 = E[Y_t^2]$</div>
+                            <h4 class="step-title">$\gamma_0 = E[Y_t^2]$</h4>
                             <div class="formula-block">
                                 $$\gamma_0 = E\!\left[(U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2})^2\right]$$
                             </div>
@@ -573,8 +544,7 @@
                         </div>
 
                         <h4>$\gamma_1$（ラグ1の自己共分散）の計算</h4>
-                        <div class="step-box">
-                            <div class="step-title">$\gamma_1 = E[Y_t\,Y_{t-1}]$</div>
+                            <h4 class="step-title">$\gamma_1 = E[Y_t\,Y_{t-1}]$</h4>
                             <div class="formula-block">
                                 $$\gamma_1 = E\!\left[(U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2})(U_{t-1} + \theta_1 U_{t-2} + \theta_2 U_{t-3})\right]$$
                             </div>
@@ -589,11 +559,9 @@
                             <div class="formula-block">
                                 $$\boxed{\gamma_1 = (\theta_1 + \theta_1\theta_2)\,\sigma^2 = \theta_1(1+\theta_2)\,\sigma^2}$$
                             </div>
-                        </div>
 
                         <h4>$\gamma_2$（ラグ2の自己共分散）の計算</h4>
-                        <div class="step-box">
-                            <div class="step-title">$\gamma_2 = E[Y_t\,Y_{t-2}]$</div>
+                            <h4 class="step-title">$\gamma_2 = E[Y_t\,Y_{t-2}]$</h4>
                             <div class="formula-block">
                                 $$\gamma_2 = E\!\left[(U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2})(U_{t-2} + \theta_1 U_{t-3} + \theta_2 U_{t-4})\right]$$
                             </div>
@@ -606,11 +574,9 @@
                             <div class="formula-block">
                                 $$\boxed{\gamma_2 = \theta_2\,\sigma^2}$$
                             </div>
-                        </div>
 
                         <h4>$\gamma_h$（$h > 2$）の計算</h4>
-                        <div class="step-box">
-                            <div class="step-title">$\gamma_h = 0 \quad (h > 2)$</div>
+                            <h4 class="step-title">$\gamma_h = 0 \quad (h > 2)$</h4>
                             <p>
                                 $h > 2$ のとき，$Y_t = U_t + \theta_1 U_{t-1} + \theta_2 U_{t-2}$ と
                                 $Y_{t-h} = U_{t-h} + \theta_1 U_{t-h-1} + \theta_2 U_{t-h-2}$ では，
@@ -622,7 +588,6 @@
                             <p style="font-size:0.9em;color:#555;">
                                 これは MA($q$) 過程の一般的な性質であり，「ラグが $q$ を超えると自己共分散は0」（$q$ 次での切断）となります．
                             </p>
-                        </div>
 
                         <div class="concept-box" style="border-left-color:#27ae60;">
                             <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論：MA(2)の自己共分散まとめ</div>
@@ -657,7 +622,6 @@
                                 ACF のパターンから MA 過程の次数を識別することができます．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -812,8 +776,7 @@
 
                         <h4>図27.7 の ACF・PACF パターンを分析する</h4>
 
-                        <div class="step-box">
-                            <div class="step-title">ACF のパターン確認</div>
+                            <h4 class="step-title">ACF のパターン確認</h4>
                             <p>
                                 ラグ $h=1, 2$ では有意水準の閾値（破線）を超えており，ラグ3以降は閾値内に収まっています．
                                 しかし，ラグ1→2と値が減衰しており，<strong>指数的に減衰するパターン</strong>と解釈できます．
@@ -821,8 +784,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">PACF のパターン確認（決定的な判断材料）</div>
+                            <h4 class="step-title">PACF のパターン確認（決定的な判断材料）</h4>
                             <p>
                                 PACF は<strong>ラグ $h=1$ と $h=2$ で有意</strong>（閾値を超える），
                                 <strong>ラグ $h=3$ 以降はほぼ0</strong>（閾値内に収まる）．
@@ -834,7 +796,6 @@
                             <p>
                                 今回は <strong>ラグ2で切断</strong>されているので，<strong>$p = 2$</strong> と判断されます．
                             </p>
-                        </div>
 
                         <div class="concept-box" style="border-left-color:#27ae60;">
                             <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
@@ -861,7 +822,322 @@
                                 このため，PACF の「切断点」を見ることで AR の次数を識別できます．
                             </p>
                         </div>
-                    </div>
+                </section>
+
+                <!-- ======================================================== -->
+                <!-- 問27.3 [1] わかりやすく解説                               -->
+                <!-- ======================================================== -->
+                <section class="content-section section-anchor" id="q273-1-easy">
+                    <h2><i class="fas fa-lightbulb"></i> 問27.3 [1] わかりやすく解説 — ACF・PACF からのモデル識別</h2>
+
+                    <div class="answer-block">
+                        <span class="prob-badge" style="background:#7c3aed;color:#fff;">超わかりやすく解説</span>
+
+                        <!-- ──────────────────────────────────── -->
+                        <!-- 1. ACF とは何か？ -->
+                        <!-- ──────────────────────────────────── -->
+                        <div class="concept-box" style="border-left-color:#3498db;">
+                            <div class="box-title"><i class="fas fa-wave-square"></i> まず「ACF（自己相関関数）」って何？</div>
+                            <p>
+                                ACF とは「<strong>今日の値と $h$ 日前の値が，どれくらい似ているか</strong>」を数値化したものです．
+                            </p>
+                            <p>
+                                たとえば気温を例にとると：
+                            </p>
+                            <ul>
+                                <li>$h=1$（1日前）の ACF が高い → <em>昨日暑ければ今日も暑い傾向がある</em></li>
+                                <li>$h=7$（7日前）の ACF が高い → <em>1週間前と今週の気温が似ている（季節性）</em></li>
+                            </ul>
+                            <p style="margin-top:0.6em;color:#c0392b;font-weight:600;">
+                                ⚠️ ACF の弱点：「間接的な影響」も含まれてしまう！
+                            </p>
+                            <p>
+                                $Y_t$ と $Y_{t-2}$ の間に相関がある場合，それが「$Y_{t-2}$ が $Y_t$ に直接影響している」のか，
+                                それとも「$Y_{t-2} \to Y_{t-1} \to Y_t$ という連鎖の結果」なのかを区別できません．
+                            </p>
+                        </div>
+
+                        <!-- ──────────────────────────────────── -->
+                        <!-- 2. PACF とは何か？ -->
+                        <!-- ──────────────────────────────────── -->
+                        <div class="concept-box" style="border-left-color:#e74c3c;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-filter"></i> 「PACF（偏自己相関関数）」って何？　── 中間の影響を取り除いた純粋な相関</div>
+                            <p>
+                                PACF は「<strong>ラグ 1〜$h-1$ の影響を取り除いた上で，$h$ 期前との純粋な相関</strong>」です．
+                            </p>
+
+                            <!-- 直感の図解 -->
+                            <div style="text-align:center;margin:0.8em 0;">
+                                <svg width="480" height="110" viewBox="0 0 480 110" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- 背景 -->
+                                    <rect width="480" height="110" fill="#fff9f9" rx="6"/>
+                                    <!-- タイトル -->
+                                    <text x="240" y="16" font-size="11" fill="#333" text-anchor="middle" font-weight="700">ACF vs PACF のイメージ（ラグ2の場合）</text>
+                                    <!-- 時点ノード -->
+                                    <circle cx="60"  cy="60" r="20" fill="#fde8e8" stroke="#e74c3c" stroke-width="2"/>
+                                    <text x="60"  cy="60" font-size="11" fill="#c0392b" text-anchor="middle" dominant-baseline="middle" y="60">$Y_{t-2}$</text>
+                                    <circle cx="240" cy="60" r="20" fill="#e8f4ff" stroke="#3498db" stroke-width="2"/>
+                                    <text x="240" cy="60" font-size="11" fill="#1a6fa0" text-anchor="middle" dominant-baseline="middle" y="60">$Y_{t-1}$</text>
+                                    <circle cx="420" cy="60" r="20" fill="#e8ffe8" stroke="#27ae60" stroke-width="2"/>
+                                    <text x="420" cy="60" font-size="11" fill="#196f3d" text-anchor="middle" dominant-baseline="middle" y="60">$Y_t$</text>
+                                    <!-- ACF の矢印（間接も含む大きな矢印） -->
+                                    <path d="M 80 45 Q 240 10 400 45" fill="none" stroke="#9b59b6" stroke-width="2" marker-end="url(#arr-p)"/>
+                                    <text x="240" y="22" font-size="9" fill="#7d3c98" text-anchor="middle">ACF(h=2)：直接＋間接の合計の相関</text>
+                                    <!-- 間接ルート矢印 -->
+                                    <line x1="82" y1="60" x2="218" y2="60" stroke="#3498db" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-b)"/>
+                                    <line x1="262" y1="60" x2="398" y2="60" stroke="#3498db" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr-b)"/>
+                                    <text x="150" y="76" font-size="8" fill="#3498db" text-anchor="middle">間接経路</text>
+                                    <text x="330" y="76" font-size="8" fill="#3498db" text-anchor="middle">間接経路</text>
+                                    <!-- PACF ラベル -->
+                                    <text x="240" y="100" font-size="9" fill="#c0392b" text-anchor="middle">PACF(h=2)：間接経路($Y_{t-1}$経由)を取り除いた「直接だけの相関」</text>
+                                    <!-- マーカー定義 -->
+                                    <defs>
+                                        <marker id="arr-p" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 7 3.5, 0 7" fill="#9b59b6"/>
+                                        </marker>
+                                        <marker id="arr-b" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto">
+                                            <polygon points="0 0, 7 3.5, 0 7" fill="#3498db"/>
+                                        </marker>
+                                    </defs>
+                                </svg>
+                            <p>
+                                わかりやすく言うと：
+                                「$Y_{t-2}$ が $Y_t$ に影響しているように見えても，それが単に『$Y_{t-1}$ を経由しているだけ』なら，
+                                PACF(h=2) はほぼ0になる．<strong>直接的な影響がある場合だけ大きな値</strong>になる．」
+                            </p>
+                        </div>
+
+                        <!-- ──────────────────────────────────── -->
+                        <!-- 3. 識別ルール -->
+                        <!-- ──────────────────────────────────── -->
+                        <div class="concept-box" style="border-left-color:#f39c12;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-table"></i> 識別ルール（これを丸暗記するより仕組みを理解しよう！）</div>
+
+                            <!-- AR/MAの特徴をビジュアルで比較 -->
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0.8em 0;">
+
+                                <!-- AR(p) -->
+                                <div style="border-left:4px solid #3498db;border-radius:0 6px 6px 0;padding:12px;background:#f8f9fa;">
+                                    <p style="font-weight:700;color:#1a5276;margin:0 0 8px;"><i class="fas fa-redo" style="color:#3498db;"></i> AR($p$) 過程</p>
+                                    <p style="font-size:0.88em;margin:0 0 6px;">
+                                        $Y_t = \phi_1 Y_{t-1} + \cdots + \phi_p Y_{t-p} + U_t$
+                                    </p>
+                                    <p style="font-size:0.85em;color:#555;">
+                                        「過去 $p$ 期分が直接影響する」モデル
+                                    </p>
+                                    <hr style="border-color:#b8d4f0;margin:6px 0;"/>
+                                    <p style="font-size:0.9em;margin:4px 0;">
+                                        <strong style="color:#e74c3c;">PACF：ラグ $p$ で突然ゼロに（切断）</strong><br/>
+                                        <span style="font-size:0.82em;color:#555;">→ 直接影響はラグ $p$ まで，それ以降はゼロ</span>
+                                    </p>
+                                    <p style="font-size:0.9em;margin:4px 0;">
+                                        <strong style="color:#3498db;">ACF：ゆっくり減衰（なかなかゼロにならない）</strong><br/>
+                                        <span style="font-size:0.82em;color:#555;">→ 間接影響が連鎖するため，遠い過去まで尾を引く</span>
+                                    </p>
+                                    <!-- ACFグラフ概略 -->
+                                    <svg width="160" height="70" viewBox="0 0 160 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:6px auto 0;">
+                                        <rect width="160" height="70" fill="#fafcff" rx="3"/>
+                                        <line x1="14" y1="35" x2="150" y2="35" stroke="#aaa" stroke-width="0.8"/>
+                                        <line x1="14" y1="8"  x2="14"  y2="62" stroke="#aaa" stroke-width="0.8"/>
+                                        <!-- 有意水準 -->
+                                        <line x1="14" y1="20" x2="150" y2="20" stroke="#e74c3c" stroke-width="0.6" stroke-dasharray="3,2"/>
+                                        <line x1="14" y1="50" x2="150" y2="50" stroke="#e74c3c" stroke-width="0.6" stroke-dasharray="3,2"/>
+                                        <!-- ACF bars（指数的減衰） -->
+                                        <rect x="22" y="12" width="10" height="23" fill="#3498db" opacity="0.8"/>
+                                        <rect x="40" y="22" width="10" height="13" fill="#3498db" opacity="0.7"/>
+                                        <rect x="58" y="28" width="10" height="7"  fill="#3498db" opacity="0.6"/>
+                                        <rect x="76" y="31" width="10" height="4"  fill="#3498db" opacity="0.5"/>
+                                        <rect x="94" y="33" width="10" height="2"  fill="#3498db" opacity="0.4"/>
+                                        <rect x="112" y="34" width="10" height="1" fill="#3498db" opacity="0.3"/>
+                                        <rect x="130" y="35" width="10" height="1" fill="#3498db" opacity="0.3"/>
+                                        <text x="80" y="67" font-size="8" fill="#1a5276" text-anchor="middle">ACF：ゆっくり減衰</text>
+                                    </svg>
+                                    <!-- PACFグラフ概略 -->
+                                    <svg width="160" height="70" viewBox="0 0 160 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto 0;">
+                                        <rect width="160" height="70" fill="#fafcff" rx="3"/>
+                                        <line x1="14" y1="35" x2="150" y2="35" stroke="#aaa" stroke-width="0.8"/>
+                                        <line x1="14" y1="8"  x2="14"  y2="62" stroke="#aaa" stroke-width="0.8"/>
+                                        <line x1="14" y1="20" x2="150" y2="20" stroke="#e74c3c" stroke-width="0.6" stroke-dasharray="3,2"/>
+                                        <line x1="14" y1="50" x2="150" y2="50" stroke="#e74c3c" stroke-width="0.6" stroke-dasharray="3,2"/>
+                                        <!-- PACF bars（p=2で切断） -->
+                                        <rect x="22" y="12" width="10" height="23" fill="#e74c3c" opacity="0.8"/>
+                                        <rect x="40" y="14" width="10" height="21" fill="#e74c3c" opacity="0.8"/>
+                                        <rect x="58" y="34" width="10" height="1"  fill="#e74c3c" opacity="0.3"/>
+                                        <rect x="76" y="34" width="10" height="1"  fill="#e74c3c" opacity="0.3"/>
+                                        <rect x="94" y="35" width="10" height="1"  fill="#e74c3c" opacity="0.3"/>
+                                        <rect x="112" y="35" width="10" height="1" fill="#e74c3c" opacity="0.3"/>
+                                        <rect x="130" y="35" width="10" height="1" fill="#e74c3c" opacity="0.3"/>
+                                        <text x="80" y="67" font-size="8" fill="#c0392b" text-anchor="middle">PACF：ラグ2で突然ゼロ</text>
+                                    </svg>
+
+                                <!-- MA(q) -->
+                                <div style="border-left:4px solid #27ae60;border-radius:0 6px 6px 0;padding:12px;background:#f8f9fa;">
+                                    <p style="font-weight:700;color:#196f3d;margin:0 0 8px;"><i class="fas fa-random" style="color:#27ae60;"></i> MA($q$) 過程</p>
+                                    <p style="font-size:0.88em;margin:0 0 6px;">
+                                        $Y_t = U_t + \theta_1 U_{t-1} + \cdots + \theta_q U_{t-q}$
+                                    </p>
+                                    <p style="font-size:0.85em;color:#555;">
+                                        「過去 $q$ 期分の誤差が影響する」モデル
+                                    </p>
+                                    <hr style="border-color:#a9dfbf;margin:6px 0;"/>
+                                    <p style="font-size:0.9em;margin:4px 0;">
+                                        <strong style="color:#27ae60;">ACF：ラグ $q$ で突然ゼロに（切断）</strong><br/>
+                                        <span style="font-size:0.82em;color:#555;">→ 共通する誤差項がなくなるため相関がゼロに</span>
+                                    </p>
+                                    <p style="font-size:0.9em;margin:4px 0;">
+                                        <strong style="color:#8e44ad;">PACF：ゆっくり減衰（なかなかゼロにならない）</strong><br/>
+                                        <span style="font-size:0.82em;color:#555;">→ ACFがゆっくり減衰するAR(&infin;)と等価だから</span>
+                                    </p>
+                                    <!-- ACFグラフ概略（切断） -->
+                                    <svg width="160" height="70" viewBox="0 0 160 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:6px auto 0;">
+                                        <rect width="160" height="70" fill="#fafffc" rx="3"/>
+                                        <line x1="14" y1="35" x2="150" y2="35" stroke="#aaa" stroke-width="0.8"/>
+                                        <line x1="14" y1="8"  x2="14"  y2="62" stroke="#aaa" stroke-width="0.8"/>
+                                        <line x1="14" y1="20" x2="150" y2="20" stroke="#e74c3c" stroke-width="0.6" stroke-dasharray="3,2"/>
+                                        <line x1="14" y1="50" x2="150" y2="50" stroke="#e74c3c" stroke-width="0.6" stroke-dasharray="3,2"/>
+                                        <!-- ACF bars（q=2で切断） -->
+                                        <rect x="22" y="12" width="10" height="23" fill="#27ae60" opacity="0.8"/>
+                                        <rect x="40" y="14" width="10" height="21" fill="#27ae60" opacity="0.8"/>
+                                        <rect x="58" y="34" width="10" height="1"  fill="#27ae60" opacity="0.3"/>
+                                        <rect x="76" y="34" width="10" height="1"  fill="#27ae60" opacity="0.3"/>
+                                        <rect x="94" y="35" width="10" height="1"  fill="#27ae60" opacity="0.3"/>
+                                        <rect x="112" y="35" width="10" height="1" fill="#27ae60" opacity="0.3"/>
+                                        <rect x="130" y="35" width="10" height="1" fill="#27ae60" opacity="0.3"/>
+                                        <text x="80" y="67" font-size="8" fill="#196f3d" text-anchor="middle">ACF：ラグ2で突然ゼロ</text>
+                                    </svg>
+                                    <!-- PACFグラフ概略（減衰） -->
+                                    <svg width="160" height="70" viewBox="0 0 160 70" xmlns="http://www.w3.org/2000/svg" style="display:block;margin:4px auto 0;">
+                                        <rect width="160" height="70" fill="#fafffc" rx="3"/>
+                                        <line x1="14" y1="35" x2="150" y2="35" stroke="#aaa" stroke-width="0.8"/>
+                                        <line x1="14" y1="8"  x2="14"  y2="62" stroke="#aaa" stroke-width="0.8"/>
+                                        <line x1="14" y1="20" x2="150" y2="20" stroke="#e74c3c" stroke-width="0.6" stroke-dasharray="3,2"/>
+                                        <line x1="14" y1="50" x2="150" y2="50" stroke="#e74c3c" stroke-width="0.6" stroke-dasharray="3,2"/>
+                                        <!-- PACF bars（指数的減衰） -->
+                                        <rect x="22" y="12" width="10" height="23" fill="#8e44ad" opacity="0.8"/>
+                                        <rect x="40" y="22" width="10" height="13" fill="#8e44ad" opacity="0.7"/>
+                                        <rect x="58" y="28" width="10" height="7"  fill="#8e44ad" opacity="0.6"/>
+                                        <rect x="76" y="31" width="10" height="4"  fill="#8e44ad" opacity="0.5"/>
+                                        <rect x="94" y="33" width="10" height="2"  fill="#8e44ad" opacity="0.4"/>
+                                        <rect x="112" y="34" width="10" height="1" fill="#8e44ad" opacity="0.3"/>
+                                        <rect x="130" y="35" width="10" height="1" fill="#8e44ad" opacity="0.3"/>
+                                        <text x="80" y="67" font-size="8" fill="#6c3483" text-anchor="middle">PACF：ゆっくり減衰</text>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <!-- 覚え方のコツ -->
+                            <div style="border-left:4px solid #e6a817;border-radius:0 6px 6px 0;padding:10px 14px;margin-top:0.6em;background:#f8f9fa;">
+                                <p style="font-weight:700;color:#7d6608;margin:0 0 4px;"><i class="fas fa-star"></i> 覚え方のコツ</p>
+                                <p style="margin:0;font-size:0.92em;">
+                                    <strong>「切断（カットオフ）しているほうが，そのモデルの次数」</strong>
+                                </p>
+                                <ul style="font-size:0.9em;margin:4px 0 0;">
+                                    <li><strong>PACF がラグ $p$ で切断</strong> → AR(<strong>$p$</strong>)</li>
+                                    <li><strong>ACF がラグ $q$ で切断</strong> → MA(<strong>$q$</strong>)</li>
+                                    <li><strong>両方ともゆっくり減衰</strong> → ARMA（混合モデル）</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- ──────────────────────────────────── -->
+                        <!-- 4. なぜそうなるの？（直感的理由） -->
+                        <!-- ──────────────────────────────────── -->
+                        <div class="concept-box" style="border-left-color:#9b59b6;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-question-circle"></i> なぜ AR($p$) の PACF はラグ $p$ で切断されるの？</div>
+                            <p>
+                                AR($p$) モデルを回帰式として見てみましょう：
+                            </p>
+                            <div class="formula-block">
+                                $$Y_t = \phi_1 Y_{t-1} + \phi_2 Y_{t-2} + \cdots + \phi_p Y_{t-p} + U_t$$
+                            </div>
+                            <p>
+                                <strong>AR($p$) の「直接の原因」はラグ $p$ まで</strong>しかありません．
+                                ラグ $p+1$ 以降は，すでに $Y_{t-1}, \ldots, Y_{t-p}$ に含まれる間接的な情報しかなく，
+                                それらをコントロール（偏）したら「直接の影響」はゼロになります．
+                            </p>
+                            <p>
+                                具体的に AR(2) で考えると：
+                            </p>
+                                <h4 class="step-title">AR(2) の PACF がラグ3以降ゼロになる理由</h4>
+                                <ul>
+                                    <li>$Y_t$ に直接影響しているのは $Y_{t-1}$ と $Y_{t-2}$ だけ（モデルの定義より）</li>
+                                    <li>$Y_{t-3}$ が $Y_t$ に相関があるように見えるのは，$Y_{t-3} \to Y_{t-2} \to Y_t$ や $Y_{t-3} \to Y_{t-1} \to Y_t$ という<strong>連鎖の結果（間接影響）</strong></li>
+                                    <li>$Y_{t-1}, Y_{t-2}$ の影響をコントロール（偏）すると，$Y_{t-3}$ は $Y_t$ と無関係になる</li>
+                                    <li>よって <strong>PACF($h=3$) = 0</strong></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- ──────────────────────────────────── -->
+                        <!-- 5. この問題への適用 -->
+                        <!-- ──────────────────────────────────── -->
+                        <div class="concept-box" style="border-left-color:#27ae60;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-search"></i> この問題（図27.7）に当てはめてみよう！</div>
+
+                            <p>図27.7 の ACF・PACF を見ると：</p>
+
+                            <table class="data-table" style="max-width:520px;margin:0 auto;">
+                                <thead>
+                                    <tr><th></th><th>ラグ1</th><th>ラグ2</th><th>ラグ3以降</th><th>パターン</th></tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>ACF</strong></td>
+                                        <td>有意（大）<br/>$\hat{\rho}_1 = 0.691$</td>
+                                        <td>有意（小）<br/>$\hat{\rho}_2 = 0.211$</td>
+                                        <td>ほぼゼロ</td>
+                                        <td>ラグが増えるにつれて<strong>徐々に減衰</strong></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>PACF</strong></td>
+                                        <td>有意（大）</td>
+                                        <td>有意</td>
+                                        <td><strong>突然ゼロ</strong></td>
+                                        <td>ラグ2まで有意 → ラグ3で<strong>切断</strong></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <div style="margin-top:0.8em;">
+                                    <h4 class="step-title">STEP 1：PACF を見る（最重要！）</h4>
+                                    <p>
+                                        PACF がラグ3以降で突然ゼロ → <strong>「PACF がラグ2で切断」</strong><br/>
+                                        → AR($p$) 型，次数は $p = 2$
+                                    </p>
+                                </div>
+                                    <h4 class="step-title">STEP 2：ACF で確認する</h4>
+                                    <p>
+                                        ACF は $0.691 \to 0.211 \to \approx 0$ と徐々に減衰している → <strong>AR 過程の ACF パターンと一致</strong>（MA 過程なら突然ゼロになるはず）
+                                    </p>
+                                </div>
+                                    <h4 class="step-title">STEP 3：結論</h4>
+                                    <p>
+                                        <strong style="color:#196f3d;font-size:1.1em;">→ AR(2) 過程が適切</strong>
+                                    </p>
+                                    <p>
+                                        残差に AR(2) 過程の自己相関が残っているので，
+                                        回帰モデルに $Y_{t-1}$ と $Y_{t-2}$ を説明変数として追加するか，
+                                        ARMA モデルで明示的に扱う必要があります．
+                                    </p>
+                                </div>
+                            </div>
+
+                        <!-- ──────────────────────────────────── -->
+                        <!-- 6. よくある混乱ポイント -->
+                        <!-- ──────────────────────────────────── -->
+                        <div class="concept-box" style="border-left-color:#e74c3c;margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-exclamation-triangle" style="color:#e74c3c;"></i> よくある混乱ポイント</div>
+                                <h4 class="step-title">Q：この問題の ACF もラグ3以降ゼロに見えるから MA(2) じゃないの？</h4>
+                                <p>
+                                    <strong>A：「ゆっくり減衰」と「突然ゼロ」を区別しましょう！</strong>
+                                </p>
+                                <ul>
+                                    <li>$0.691 \to 0.211 \to \approx 0$ という変化は，<strong>比率（$0.211/0.691 \approx 0.31$）</strong>から見ると指数的に減衰しています</li>
+                                    <li>MA(2) の ACF は「ラグ3でピタッとゼロ」ですが，AR(2) では「まだ少し残っている（はずだが測定誤差でゼロに見える）」という違いがあります</li>
+                                    <li><strong>最終判断は PACF</strong> で行います：PACF がラグ2で突然ゼロ → AR(2)，ACF がラグ2で突然ゼロ → MA(2)</li>
+                                </ul>
+                            </div>
+
                 </section>
 
                 <!-- ======================================================== -->
@@ -889,11 +1165,9 @@
                         </div>
 
                         <h4>計算</h4>
-                        <div class="step-box">
-                            <div class="step-title">$\hat{\rho}_1 = 0.691$ を代入する</div>
+                            <h4 class="step-title">$\hat{\rho}_1 = 0.691$ を代入する</h4>
                             <div class="formula-block">
                                 $$DW \approx 2(1 - \hat{\rho}_1) = 2(1 - 0.691) = 2 \times 0.309 = 0.618$$
-                            </div>
                         </div>
 
                         <div class="concept-box" style="border-left-color:#27ae60;">
@@ -965,8 +1239,7 @@
 
                         <h4>各モデルの AIC を比較する</h4>
 
-                        <div class="step-box">
-                            <div class="step-title">AIC の値を昇順に確認する</div>
+                            <h4 class="step-title">AIC の値を昇順に確認する</h4>
                             <table class="data-table calc-table" style="max-width:420px; margin:0 auto;">
                                 <thead>
                                     <tr><th>モデル</th><th>AIC</th><th>最小か？</th></tr>
@@ -984,8 +1257,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">AR(3) から AR(4) にすると AIC が増える理由</div>
+                            <h4 class="step-title">AR(3) から AR(4) にすると AIC が増える理由</h4>
                             <p>
                                 AR(3) から AR(4) にすると，パラメータが1つ増えるため，ペナルティ項 $2k$ が $+2$ 増加します．
                                 一方，$-2\log\hat{L}$（対数尤度の改善）がその $+2$ を上回らないため，
@@ -995,7 +1267,6 @@
                                 つまり，ラグ4の係数を加えてもモデルの当てはまりがほとんど改善せず，
                                 <strong>余分なパラメータによるペナルティの方が大きい</strong>ということを意味します（過適合）．
                             </p>
-                        </div>
 
                         <div class="concept-box" style="border-left-color:#27ae60;">
                             <div class="box-title"><i class="fas fa-check-circle" style="color:#27ae60;"></i> 結論</div>
@@ -1041,7 +1312,6 @@
                                 <li><strong>残差診断：</strong>DW 比で残差の自己相関を確認（自己相関があれば再モデル化）</li>
                             </ol>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

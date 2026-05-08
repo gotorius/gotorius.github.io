@@ -31,21 +31,6 @@
         .data-table tr:nth-child(even) { background: #f8f9fa; }
         .data-table .min-row { background: #f0f6ff; font-weight: 700; }
         .data-table .min-row td { color: #1a5a8a; }
-
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
     </style>
 </head>
 <body>
@@ -58,12 +43,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -193,8 +180,7 @@
 
                         <h3>Step 1：$\hat{\boldsymbol{\beta}}$ を代入する</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">残差平方和 $S_e$ の定義</div>
+                            <h4 class="step-title">残差平方和 $S_e$ の定義</h4>
                             <p>
                                 最尤推定量 $\hat{\boldsymbol{\beta}} = (X^\top X)^{-1}X^\top\boldsymbol{y}$ を代入すると，
                                 残差 $\boldsymbol{y} - X\hat{\boldsymbol{\beta}}$ の二乗ノルムが残差平方和 $S_e$ に一致します：
@@ -209,21 +195,18 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$\hat{\boldsymbol{\beta}}$ を代入した後の尤度</div>
+                            <h4 class="step-title">$\hat{\boldsymbol{\beta}}$ を代入した後の尤度</h4>
                             <p>
                                 $\hat{\boldsymbol{\beta}}$ を代入すると，尤度は $\sigma^2$ のみの関数になります：
                             </p>
                             <div class="formula-block">
                                 $$L(\sigma^2) = (2\pi)^{-n/2}(\sigma^2)^{-n/2}
                                   \exp\!\left(-\frac{S_e}{2\sigma^2}\right)$$
-                            </div>
                         </div>
 
                         <h3>Step 2：$\hat{\sigma}^2 = S_e/n$ を代入する</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">最尤推定量 $\hat{\sigma}^2$ の代入</div>
+                            <h4 class="step-title">最尤推定量 $\hat{\sigma}^2$ の代入</h4>
                             <p>
                                 $\hat{\sigma}^2 = S_e/n$ を代入します：
                             </p>
@@ -237,12 +220,10 @@
                             <div class="formula-block">
                                 $$\frac{S_e}{2 \cdot S_e/n} = \frac{S_e \cdot n}{2 S_e} = \frac{n}{2}$$
                             </div>
-                        </div>
 
                         <h3>Step 3：式 (30.2) の形にまとめる</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">$(2\pi)^{-n/2}$ と $(S_e/n)^{-n/2}$ を合わせる</div>
+                            <h4 class="step-title">$(2\pi)^{-n/2}$ と $(S_e/n)^{-n/2}$ を合わせる</h4>
                             <p>
                                 $(2\pi)^{-n/2} \cdot (S_e/n)^{-n/2} = \left(2\pi \cdot \frac{S_e}{n}\right)^{-n/2} = \left(\frac{2\pi S_e}{n}\right)^{-n/2}$
                                 なので：
@@ -253,7 +234,6 @@
                             <p>
                                 これが式 (30.2) です．$\blacksquare$
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-lightbulb"></i> 式 (30.2) から AIC の式を導く</div>
@@ -280,7 +260,6 @@
                                 $$\text{AIC}(p) = n\left(\log S_e^{(p)} + \log\frac{2\pi}{n} + 1\right) + 2(p+2)$$
                             </div>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -349,8 +328,7 @@
 
                         <h3>Step 1：AIC・BIC の式を確認する</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">重回帰分析における AIC(k) と BIC(k) の公式</div>
+                            <h4 class="step-title">重回帰分析における AIC(k) と BIC(k) の公式</h4>
                             <p>
                                 問30.1 の結果より，説明変数を $k$ 個選んだときの残差平方和を $S_e^{(k)}$ とおくと：
                             </p>
@@ -365,8 +343,7 @@
 
                         <h3>Step 2：共通部分を先に計算する</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">$\log(2\pi/n)$ を計算する</div>
+                            <h4 class="step-title">$\log(2\pi/n)$ を計算する</h4>
                             <p>
                                 $\log\dfrac{2\pi}{n} = \log 2\pi - \log n = 1.838 - \log 20$
                             </p>
@@ -384,12 +361,10 @@
                                 = 20\bigl(\log S_e^{(k)} - 1.158 + 1\bigr)
                                 = 20\bigl(\log S_e^{(k)} - 0.158\bigr)$$
                             </div>
-                        </div>
 
                         <h3>Step 3：ペナルティ項を確認する</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">説明変数の個数 $k$ に応じたペナルティ</div>
+                            <h4 class="step-title">説明変数の個数 $k$ に応じたペナルティ</h4>
                             <table class="data-table" style="max-width:420px; margin:0 auto;">
                                 <thead>
                                     <tr><th>説明変数の個数 $k$</th><th>AIC ペナルティ $2(k+2)$</th><th>BIC ペナルティ $(k+2)\log 20$</th></tr>
@@ -401,32 +376,25 @@
                                     <tr><td>$k=3$（3変数）</td><td>$2\times 5 = 10$</td><td>$5\times 2.996 = 14.980$</td></tr>
                                 </tbody>
                             </table>
-                        </div>
 
                         <h3>Step 4：各組合せの AIC・BIC を計算する</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">計算例：説明変数「なし」（$k=0$，$\log S_e = 10.881$）</div>
+                            <h4 class="step-title">計算例：説明変数「なし」（$k=0$，$\log S_e = 10.881$）</h4>
                             <div class="formula-block">
                                 $$\text{AIC}(0) = 20\times(10.881 - 0.158) + 4 = 20\times 10.723 + 4 = 214.460 + 4 = 218.460$$
                                 $$\text{BIC}(0) = 20\times(10.881 - 0.158) + 5.992 = 214.460 + 5.992 = 220.452$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">計算例：説明変数 $x_1, x_3$（$k=2$，$\log S_e = 10.176$）</div>
+                            <h4 class="step-title">計算例：説明変数 $x_1, x_3$（$k=2$，$\log S_e = 10.176$）</h4>
                             <div class="formula-block">
                                 $$\text{AIC}(2) = 20\times(10.176 - 0.158) + 8 = 20\times 10.018 + 8 = 200.360 + 8 = 208.360$$
                                 $$\text{BIC}(2) = 20\times(10.176 - 0.158) + 11.984 = 200.360 + 11.984 = 212.344$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">計算例：説明変数 $x_2$（$k=1$，$\log S_e = 10.320$）</div>
+                            <h4 class="step-title">計算例：説明変数 $x_2$（$k=1$，$\log S_e = 10.320$）</h4>
                             <div class="formula-block">
                                 $$\text{AIC}(1) = 20\times(10.320 - 0.158) + 6 = 20\times 10.162 + 6 = 203.240 + 6 = 209.240$$
                                 $$\text{BIC}(1) = 20\times(10.320 - 0.158) + 8.988 = 203.240 + 8.988 = 212.228$$
-                            </div>
                         </div>
 
                         <h3>Step 5：全組合せの結果一覧（表 30.3）</h3>
@@ -463,8 +431,7 @@
 
                         <h3 style="margin-top:1.2em;">Step 6：結果の解釈とAIC・BICの違い</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">なぜ AIC と BIC で選ばれる変数が異なるのか？</div>
+                            <h4 class="step-title">なぜ AIC と BIC で選ばれる変数が異なるのか？</h4>
                             <p>
                                 AIC は $2(k+2)$，BIC は $(k+2)\log n$ をペナルティとして用います．
                                 $n=20$ では $\log 20 = 2.996 \approx 3.0$ なので，
@@ -473,10 +440,8 @@
                             <p>
                                 そのため，BIC はより少ない変数のモデルを選ぼうとする傾向があります．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">数値で確認する：$x_2$ vs $x_1, x_3$</div>
+                            <h4 class="step-title">数値で確認する：$x_2$ vs $x_1, x_3$</h4>
                             <table class="data-table" style="max-width:500px; margin:0 auto;">
                                 <thead>
                                     <tr><th>指標</th><th>$x_2$（$k=1$）</th><th>$x_1, x_3$（$k=2$）</th><th>差</th></tr>
@@ -498,7 +463,6 @@
                                 BIC では，ペナルティ増加（$2.996$）が改善量（$2.880$）をわずかに上回るため，
                                 より簡潔な $x_2$ が選ばれます．
                             </p>
-                        </div>
 
                         <div class="concept-box" style="margin-top:0.8em;">
                             <div class="box-title"><i class="fas fa-map-pin"></i> AIC と BIC の比較：一般的な特徴</div>
@@ -526,7 +490,6 @@
                                 <li><strong>クロスバリデーション：</strong>データを $K$ 分割してテストデータでモデルの予測精度を評価する。Leave-one-out 法（$K=n$）は特別な場合。計算量は大きくなるが，過学習の検出に有効。</li>
                             </ol>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

@@ -30,20 +30,6 @@
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
 
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         .blank-box {
             display: inline-block;
             border: 2px solid #3498db;
@@ -66,12 +52,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -181,8 +169,7 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">二項分布を利用する</div>
+                            <h4 class="step-title">二項分布を利用する</h4>
                             <p>
                                 各株の検査は独立で，1 株でウイルス A が発見される確率が $p$，発見されない確率が $1-p$ です．
                                 $n$ 株のうちウイルス A が見つかる株数を $Y$ とすると，$Y \sim \mathrm{Bin}(n, p)$．
@@ -201,7 +188,6 @@
                                 $$\beta = 1 - (1-p)^n$$
                             </div>
                         </div>
-                    </div>
 
                     <!-- [2] -->
                     <div class="answer-block" id="q51-2">
@@ -215,8 +201,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：$\beta = 0.98$ の条件を整理する</div>
+                            <h4 class="step-title">Step 1：$\beta = 0.98$ の条件を整理する</h4>
                             <div class="formula-block">
                                 $$0.98 = 1 - (1 - 1/5000)^n$$
                             </div>
@@ -225,15 +210,12 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：両辺の自然対数をとる</div>
+                            <h4 class="step-title">Step 2：両辺の自然対数をとる</h4>
                             <div class="formula-block">
                                 $$n \log\!\left(1 - \frac{1}{5000}\right) = \log(0.02)$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 3：近似 $\log(1-p) \approx -p$ を適用する</div>
+                            <h4 class="step-title">Step 3：近似 $\log(1-p) \approx -p$ を適用する</h4>
                             <p>
                                 $p = 1/5000$ は十分 0 に近いので，$\log(1-1/5000) \approx -1/5000$ とおきます：
                             </p>
@@ -243,7 +225,6 @@
                             <div class="formula-block">
                                 $$n \approx \frac{-3.9}{-1/5000} = 3.9 \times 5000 = 19500$$
                             </div>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -252,7 +233,6 @@
                                 直感的には「発見率が 1/5000 と非常に低いが，19500 株を検査すれば 98% の確率でウイルス A を少なくとも 1 株発見できる」ということです．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -300,8 +280,7 @@
                             </table>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">確率関数の公式を適用する</div>
+                            <h4 class="step-title">確率関数の公式を適用する</h4>
                             <p>
                                 79 人から 25 人を選ぶ方法の総数：$\binom{79}{25}$
                             </p>
@@ -310,7 +289,6 @@
                             </p>
                             <div class="formula-block">
                                 $$P(X = x) = \frac{\displaystyle\binom{40}{x}\binom{39}{25-x}}{\displaystyle\binom{79}{25}}, \quad 0 \leq x \leq 25$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -356,8 +334,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$E[X_i]$ を求める</div>
+                            <h4 class="step-title">$E[X_i]$ を求める</h4>
                             <p>
                                 $X_i$ は 0 または 1 しかとらないので，$X_i^2 = X_i$（ベルヌーイ確率変数の性質）．
                             </p>
@@ -377,14 +354,12 @@
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
                             <p>$E[X_i^2] = \dfrac{1}{3}$</p>
                         </div>
-                    </div>
 
                     <!-- [2] -->
                     <div class="answer-block" id="q53-2">
                         <span class="prob-badge badge-a">[2] 解答・解説</span>
 
-                        <div class="step-box">
-                            <div class="step-title">$E[X_i X_j]$ を求める（$i \neq j$）</div>
+                            <h4 class="step-title">$E[X_i X_j]$ を求める（$i \neq j$）</h4>
                             <p>
                                 $X_i X_j = 1$ となるのは $X_i = 1$ かつ $X_j = 1$，すなわち「$i$ 番目も $j$ 番目も関東出身者が選ばれる」場合だけです（それ以外は 0）．
                             </p>
@@ -407,14 +382,12 @@
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
                             <p>$E[X_i X_j] = \dfrac{1}{12}$（$i \neq j$）</p>
                         </div>
-                    </div>
 
                     <!-- [3] -->
                     <div class="answer-block" id="q53-3">
                         <span class="prob-badge badge-a">[3] 解答・解説</span>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 1：$V[X_i]$ と $\mathrm{Cov}[X_i, X_j]$ を求める</div>
+                            <h4 class="step-title">Step 1：$V[X_i]$ と $\mathrm{Cov}[X_i, X_j]$ を求める</h4>
                             <p>
                                 $V[X_i] = E[X_i^2] - (E[X_i])^2 = \dfrac{1}{3} - \left(\dfrac{1}{3}\right)^2 = \dfrac{1}{3} - \dfrac{1}{9} = \dfrac{2}{9}$
                             </p>
@@ -426,8 +399,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 2：$V[X_1+X_2+X_3+X_4]$ を求める</div>
+                            <h4 class="step-title">Step 2：$V[X_1+X_2+X_3+X_4]$ を求める</h4>
                             <p>
                                 分散の展開公式 $V\!\left[\sum_i X_i\right] = \sum_i V[X_i] + \displaystyle\sum_{i \neq j}\mathrm{Cov}[X_i, X_j]$ を使います．
                             </p>
@@ -436,14 +408,11 @@
                             </p>
                             <div class="formula-block">
                                 $$V[X_1+\cdots+X_4] = 4 \times \frac{2}{9} + 12 \times \left(-\frac{1}{36}\right) = \frac{8}{9} - \frac{12}{36} = \frac{8}{9} - \frac{1}{3} = \frac{8-3}{9} = \frac{5}{9}$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">Step 3：$V[\bar{X}]$ を求める</div>
+                            <h4 class="step-title">Step 3：$V[\bar{X}]$ を求める</h4>
                             <div class="formula-block">
                                 $$V[\bar{X}] = V\!\left[\frac{X_1+\cdots+X_4}{4}\right] = \frac{1}{4^2} V[X_1+\cdots+X_4] = \frac{1}{16} \times \frac{5}{9} = \frac{5}{144}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -465,7 +434,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -499,8 +467,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">数値を代入する</div>
+                            <h4 class="step-title">数値を代入する</h4>
                             <p>
                                 $X \sim \mathrm{Po}(1.5)$，$Y \sim \mathrm{Po}(3)$，$X$ と $Y$ は独立なので：
                             </p>
@@ -525,8 +492,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">条件付き確率を計算して確認する</div>
+                            <h4 class="step-title">条件付き確率を計算して確認する</h4>
                             <p>$P(X=x \mid X+Y=5)$ を計算します：</p>
                             <div class="formula-block">
                                 $$P(X=x \mid X+Y=5) = \frac{P(X=x,\; Y=5-x)}{P(X+Y=5)}
@@ -548,14 +514,11 @@
                             <p>
                                 これは $\mathrm{Bin}(5, 1/3)$ の確率関数です．
                             </p>
-                        </div>
 
-                        <div class="step-box">
-                            <div class="step-title">条件付き期待値を求める</div>
+                            <h4 class="step-title">条件付き期待値を求める</h4>
                             <p>
                                 $\mathrm{Bin}(5, 1/3)$ の期待値は $5 \times \dfrac{1}{3} = \dfrac{5}{3}$ です．
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
@@ -564,7 +527,6 @@
                                 直感的には「合計5点のうち，T1が取った割合の期待値は $1.5/(1.5+3) = 1/3$ なので，平均5点中1/3の$5/3$点」と理解できます．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -599,8 +561,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">各段階の期待値を求めて合計する</div>
+                            <h4 class="step-title">各段階の期待値を求めて合計する</h4>
                             <table class="data-table" style="max-width:520px; margin:0 auto 10px;">
                                 <thead>
                                     <tr><th>段階</th><th>持っている種類数 $k$</th><th>新種が出る確率 $p_k$</th><th>この段階の期待値 $1/p_k$</th></tr>
@@ -614,7 +575,6 @@
                             </table>
                             <div class="formula-block">
                                 $$\text{合計} = \sum_{k=0}^{3}\frac{4}{4-k} = \frac{4}{4} + \frac{4}{3} + \frac{4}{2} + \frac{4}{1} = 1 + \frac{4}{3} + 2 + 4 = 7 + \frac{4}{3} = \frac{21+4}{3} = \frac{25}{3}$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -635,18 +595,15 @@
                             </ul>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$x$ を求める</div>
+                            <h4 class="step-title">$x$ を求める</h4>
                             <p>
                                 4 種類を揃えてから再購入を始めるとき，5 種目を得るまでの確率は $1/5$（5種類中1種類なので），期待値は $5$．
                             </p>
                             <div class="formula-block">
                                 $$x = \underbrace{\frac{25}{3}}_{\text{4種類を揃えるまで}} + \underbrace{5}_{\text{5種目を得るまで}} = \frac{25}{3} + \frac{15}{3} = \frac{40}{3} \approx 13.33$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$y$ を求める</div>
+                            <h4 class="step-title">$y$ を求める</h4>
                             <p>
                                 最初から 5 種類がある場合の期待値：$\displaystyle\sum_{k=0}^{4}\frac{5}{5-k}$
                             </p>
@@ -672,11 +629,9 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$x - y$ を計算する</div>
+                            <h4 class="step-title">$x - y$ を計算する</h4>
                             <div class="formula-block">
                                 $$x - y = \frac{40}{3} - \frac{137}{12} = \frac{160}{12} - \frac{137}{12} = \frac{23}{12} \approx 1.92$$
-                            </div>
                         </div>
 
                         <div class="concept-box">
@@ -703,7 +658,6 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->

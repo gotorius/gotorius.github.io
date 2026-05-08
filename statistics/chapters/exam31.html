@@ -30,21 +30,6 @@
         }
         .data-table tr:nth-child(even) { background: #f8f9fa; }
 
-        /* ステップボックス */
-        .step-box {
-            border-left: 4px solid #3498db;
-            background: #f0f6ff;
-            border-radius: 0 6px 6px 0;
-            padding: 10px 16px;
-            margin: 0.8em 0;
-        }
-        .step-box .step-title {
-            font-weight: 700;
-            color: #2471a3;
-            font-size: 0.95em;
-            margin-bottom: 4px;
-        }
-
         /* アルゴリズムボックス */
         .algo-box {
             background: #f8f9fa;
@@ -95,12 +80,14 @@
                     <a href="#" class="nav-dropdown-toggle active">Study <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
+                        <li><a href="../../papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
                     </ul>
                 </li>
                 <li class="nav-dropdown">
                     <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
                     <ul class="nav-dropdown-menu">
                         <li><a href="../../Typing/index.html"><i class="fas fa-keyboard"></i> タイピング道場</a></li>
+                        <li><a href="../../boardgames/index.html"><i class="fas fa-gamepad"></i> ボードゲーム</a></li>
                     </ul>
                 </li>
             </ul>
@@ -230,8 +217,7 @@
 
                         <h3>事後分布の導出</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">尤度関数と事前分布</div>
+                            <h4 class="step-title">尤度関数と事前分布</h4>
                             <p>
                                 $n=10$ 回中 $X=3$ 回当たりが出たときの尤度関数は，二項分布より：
                             </p>
@@ -244,8 +230,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">ベイズの定理で事後分布を求める</div>
+                            <h4 class="step-title">ベイズの定理で事後分布を求める</h4>
                             <p>
                                 事後分布は「尤度 × 事前分布」に比例するので：
                             </p>
@@ -257,7 +242,6 @@
                             <p>
                                 これは $Be(a,b)$ の核（$\theta^{a-1}(1-\theta)^{b-1}$）の形であり，$a=4, b=8$ に対応します．
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 結果</div>
@@ -283,7 +267,6 @@
                                 ベイズ推定量 $1/3$ は，観測した当たり率 $3/10$ とほぼ等しくなります（事前分布が無情報なため）．
                             </p>
                         </div>
-                    </div>
 
                     <!-- 解答 [2] -->
                     <div class="answer-block" id="q311-2">
@@ -291,8 +274,7 @@
 
                         <h3>事後分布の導出</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">Bさんの事前分布：$Be(1,4)$</div>
+                            <h4 class="step-title">Bさんの事前分布：$Be(1,4)$</h4>
                             <p>
                                 $Be(1,4)$ の確率密度関数は $\pi(\theta) \propto \theta^{1-1}(1-\theta)^{4-1} = (1-\theta)^3$．
                                 これはBさんが「過去の経験上，当たりは出にくい（$\theta$ は小さいほどあり得る）」
@@ -304,8 +286,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">ベイズの定理で事後分布を求める</div>
+                            <h4 class="step-title">ベイズの定理で事後分布を求める</h4>
                             <p>
                                 事後分布は：
                             </p>
@@ -318,7 +299,6 @@
                             <p>
                                 （$a = 1+3 = 4$，$b = 4+7 = 11$）
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 結果</div>
@@ -354,7 +334,6 @@
                                 A君のベイズ推定量（$= 1/3$）は事前情報が無情報なため，観測当たり率 $0.3$ に近い値になっています．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -404,16 +383,14 @@
 
                         <h3>事後分布の導出</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">観測データの確認</div>
+                            <h4 class="step-title">観測データの確認</h4>
                             <p>
                                 $\boldsymbol{x} = (5,3,4,1,2)^\top$ なので，
                                 $\sum_{i=1}^5 x_i = 5+3+4+1+2 = 15$，$n=5$．
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">尤度関数の核</div>
+                            <h4 class="step-title">尤度関数の核</h4>
                             <p>
                                 ポアソン分布の尤度関数の $\lambda$ に依存する部分（核）を取り出します：
                             </p>
@@ -421,21 +398,17 @@
                                 $$f(\boldsymbol{x}|\lambda) = \prod_{i=1}^5 \frac{\lambda^{x_i}e^{-\lambda}}{x_i!}
                                 \propto \lambda^{\sum x_i}\,e^{-n\lambda}
                                 = \lambda^{15}\,e^{-5\lambda}$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">事前分布の核</div>
+                            <h4 class="step-title">事前分布の核</h4>
                             <p>
                                 $Ga(2, 1/3)$（レート $\beta=3$）の確率密度関数の核：
                             </p>
                             <div class="formula-block">
                                 $$\pi(\lambda) \propto \lambda^{2-1}\,e^{-3\lambda} = \lambda\,e^{-3\lambda}$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">事後分布の核を計算する</div>
+                            <h4 class="step-title">事後分布の核を計算する</h4>
                             <p>
                                 事後分布は「尤度 × 事前分布」に比例します：
                             </p>
@@ -447,7 +420,6 @@
                             <p>
                                 これは $Ga(a,1/\beta)$ の核（$\lambda^{a-1}e^{-\beta\lambda}$）の形で，$a=17$，レート $\beta=8$（尺度 $1/8$）に対応します．
                             </p>
-                        </div>
 
                         <div class="concept-box">
                             <div class="box-title"><i class="fas fa-check-circle"></i> 結果</div>
@@ -475,7 +447,6 @@
                                 今回: $Ga(2, 1/3) \to Ga(2+15,\; 1/(3+5)) = Ga(17,\; 1/8)$ ✓
                             </p>
                         </div>
-                    </div>
 
                     <!-- 解答 [2] -->
                     <div class="answer-block" id="q312-2">
@@ -483,8 +454,7 @@
 
                         <h3>ベイズ予測分布の計算</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">積分の設定</div>
+                            <h4 class="step-title">積分の設定</h4>
                             <p>
                                 6日目のデータ $x_6$ は $\lambda$ が与えられたとき $Poisson(\lambda)$ に従うので，
                                 $f(x_6|\lambda) = \lambda^{x_6}e^{-\lambda}/x_6!$．
@@ -493,11 +463,9 @@
                             <div class="formula-block">
                                 $$f(x_6|\boldsymbol{x}) = \int_0^\infty \frac{\lambda^{x_6}e^{-\lambda}}{x_6!}\cdot\frac{8^{17}}{\Gamma(17)}\lambda^{16}e^{-8\lambda}\,d\lambda
                                 = \frac{8^{17}}{x_6!\cdot\Gamma(17)}\int_0^\infty \lambda^{x_6+16}\,e^{-9\lambda}\,d\lambda$$
-                            </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">ガンマ積分を使って計算する</div>
+                            <h4 class="step-title">ガンマ積分を使って計算する</h4>
                             <p>
                                 ガンマ関数の公式 $\displaystyle\int_0^\infty \lambda^{k}\,e^{-\beta\lambda}\,d\lambda = \dfrac{\Gamma(k+1)}{\beta^{k+1}}$ を用います．
                                 ここでは $k = x_6 + 16$，$\beta = 9$ なので：
@@ -539,7 +507,6 @@
                                 この分布はポアソン分布より裾が重く，<strong>λ のばらつき（不確実性）を考慮した予測分布</strong>となっています．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -595,8 +562,7 @@
                             </div>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">採択確率 (C) を求める</div>
+                            <h4 class="step-title">採択確率 (C) を求める</h4>
                             <p>
                                 酔歩連鎖のMH法での採択確率は $\alpha(x^{(t)}, y) = \min\!\left\{1,\, \dfrac{\pi(y)}{\pi(x^{(t)})}\right\}$ なので，
                                 $\pi(x)$ を代入します：
@@ -609,7 +575,6 @@
                                 小さい場合は確率 $\pi(y)/\pi(x^{(t)})$ で採択します．
                             </p>
                         </div>
-                    </div>
 
                     <!-- 解答 [2] -->
                     <div class="answer-block" id="q313-2">
@@ -702,8 +667,7 @@
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">詳細な説明</div>
+                            <h4 class="step-title">詳細な説明</h4>
                             <p>
                                 MH法ではマルコフ連鎖を十分に長く動かすと，チェーンの分布は目標分布（定常分布）に近づきます．
                                 しかし，最初の段階（$t = 1, \ldots, 1000$）では，チェーンは初期値 $x^{(0)}=0$ の付近にいることが多く，
@@ -715,7 +679,6 @@
                                 $t > 1000$ になって初めて，チェーンが定常状態に十分近づいたと判断し，サンプルとして利用します．
                             </p>
                         </div>
-                    </div>
                 </section>
 
                 <!-- ======================================================== -->
@@ -766,20 +729,17 @@
                             </p>
                             <div class="formula-block">
                                 $$X|Y=y \;\sim\; N\!\left(\mu_X + \frac{\rho\sigma_X}{\sigma_Y}(y - \mu_Y),\;\; \sigma_X^2(1-\rho^2)\right)$$
-                            </div>
                         </div>
 
                         <h3>(A) の確率分布の導出：$x^{(t+1)} | y^{(t)}$</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">パラメータの確認</div>
+                            <h4 class="step-title">パラメータの確認</h4>
                             <p>
                                 目標分布のパラメータ：$\mu_X = 0$，$\mu_Y = 2$，$\sigma_X = \sigma_Y = 1$，$\rho = 0.5$
                             </p>
                         </div>
 
-                        <div class="step-box">
-                            <div class="step-title">$X | Y = y^{(t)}$ の条件付き期待値と分散</div>
+                            <h4 class="step-title">$X | Y = y^{(t)}$ の条件付き期待値と分散</h4>
                             <p>
                                 条件付き期待値：
                             </p>
@@ -807,7 +767,6 @@
                                 すなわち，(A) は正規分布 $N\!\left(\dfrac{1}{2}y^{(t)} - 1,\, \dfrac{3}{4}\right)$ である．
                             </p>
                         </div>
-                    </div>
 
                     <!-- 解答 [2] -->
                     <div class="answer-block" id="q314-2">
@@ -815,8 +774,7 @@
 
                         <h3>(B) の確率分布の導出：$y^{(t+1)} | x^{(t+1)}$</h3>
 
-                        <div class="step-box">
-                            <div class="step-title">$Y | X = x^{(t+1)}$ の条件付き期待値と分散</div>
+                            <h4 class="step-title">$Y | X = x^{(t+1)}$ の条件付き期待値と分散</h4>
                             <p>
                                 対称的に，$X=x$ を与えた条件付き分布は：
                             </p>
@@ -876,7 +834,6 @@
                                 <li><strong>稼動検査期間（burn-in）：</strong>初期値の影響を除去するための期間。この期間のサンプルは捨てる。</li>
                             </ol>
                         </div>
-                    </div>
                 </section>
 
                 </div><!-- /chapter-content -->
