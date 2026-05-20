@@ -130,7 +130,7 @@
                         <div class="box-title"><i class="fas fa-book-open"></i> 第5章「離散型分布」のキーポイント</div>
                         <ul>
                             <li><strong>二項分布 $\mathrm{Bin}(n,p)$：</strong>独立なベルヌーイ試行を $n$ 回行ったときの成功回数．期待値 $np$，分散 $npq$．再生性あり（同じ $p$ の独立な二項の和は二項分布）．</li>
-                            <li><strong>超幾何分布 $\mathrm{HG}(N,M,n)$：</strong>$N$ 個中 $M$ 個が特定種の母集団から，非復元無作為抽出で $n$ 個を選ぶときの特定種の数．$P(Y=y)=\dfrac{\binom{M}{y}\binom{N-M}{n-y}}{\binom{N}{n}}$</li>
+                            <li><strong>超幾何分布 $\mathrm{HG}(N,M,n)$：</strong>$N$ 個中 $M$ 個が特定種の母集団から，非復元無作為抽出で $n$ 個を選ぶときの特定種の数．$P(Y=y)=\dfrac{{}_{M}C_{y}{}_{N-M}C_{n-y}}{{}_{N}C_{n}}$</li>
                             <li><strong>ポアソン分布 $\mathrm{Po}(\lambda)$：</strong>稀な事象の発生回数．期待値 $=$ 分散 $= \lambda$．再生性あり（独立な $\mathrm{Po}(\lambda_1)$ と $\mathrm{Po}(\lambda_2)$ の和は $\mathrm{Po}(\lambda_1+\lambda_2)$）．</li>
                             <li><strong>幾何分布 $\mathrm{Geo}(p)$：</strong>初めて成功するまでの失敗回数．期待値 $q/p$，分散 $q/p^2$．</li>
                             <li><strong>クーポン収集問題：</strong>$n$ 種類のカードを集めるまでの購入回数の期待値 $= \displaystyle\sum_{k=0}^{n-1}\frac{n}{n-k}$</li>
@@ -175,7 +175,7 @@
                                 $n$ 株のうちウイルス A が見つかる株数を $Y$ とすると，$Y \sim \mathrm{Bin}(n, p)$．
                             </p>
                             <div class="formula-block">
-                                $$P(\text{1株もみつからない}) = P(Y = 0) = \binom{n}{0} p^0 (1-p)^n = (1-p)^n$$
+                                $$P(\text{1株もみつからない}) = P(Y = 0) = {}_{n}C_{0} p^0 (1-p)^n = (1-p)^n$$
                             </div>
                             <div class="formula-block">
                                 $$\beta = P(Y \geq 1) = 1 - P(Y = 0) = 1 - (1-p)^n$$
@@ -282,13 +282,13 @@
 
                             <h4 class="step-title">確率関数の公式を適用する</h4>
                             <p>
-                                79 人から 25 人を選ぶ方法の総数：$\binom{79}{25}$
+                                79 人から 25 人を選ぶ方法の総数：${}_{79}C_{25}$
                             </p>
                             <p>
-                                $X = x$ となる（男性就業者 $x$ 人，それ以外 $25-x$ 人が選ばれる）方法の数：$\binom{40}{x} \times \binom{39}{25-x}$
+                                $X = x$ となる（男性就業者 $x$ 人，それ以外 $25-x$ 人が選ばれる）方法の数：${}_{40}C_{x} \times {}_{39}C_{25-x}$
                             </p>
                             <div class="formula-block">
-                                $$P(X = x) = \frac{\displaystyle\binom{40}{x}\binom{39}{25-x}}{\displaystyle\binom{79}{25}}, \quad 0 \leq x \leq 25$$
+                                $$P(X = x) = \frac{\displaystyle{}_{40}C_{x}{}_{39}C_{25-x}}{\displaystyle{}_{79}C_{25}}, \quad 0 \leq x \leq 25$$
                         </div>
 
                         <div class="concept-box">
@@ -506,10 +506,10 @@
                             </div>
                             <div class="formula-block">
                                 $$= \frac{5!}{x!\,(5-x)!}\cdot\frac{1.5^x \cdot 3^{5-x}}{4.5^5}
-                                = \binom{5}{x} \left(\frac{1.5}{4.5}\right)^x \left(\frac{3}{4.5}\right)^{5-x}$$
+                                = {}_{5}C_{x} \left(\frac{1.5}{4.5}\right)^x \left(\frac{3}{4.5}\right)^{5-x}$$
                             </div>
                             <div class="formula-block">
-                                $$= \binom{5}{x} \left(\frac{1}{3}\right)^x \left(\frac{2}{3}\right)^{5-x}$$
+                                $$= {}_{5}C_{x} \left(\frac{1}{3}\right)^x \left(\frac{2}{3}\right)^{5-x}$$
                             </div>
                             <p>
                                 これは $\mathrm{Bin}(5, 1/3)$ の確率関数です．

@@ -204,171 +204,154 @@
                         <span class="prob-badge badge-a">[1] 解答・解説</span>
 
                         <div class="concept-box">
-                            <div class="box-title"><i class="fas fa-map-pin"></i> 解法の方針</div>
+                            <div class="box-title"><i class="fas fa-map-pin"></i> まずこの推定量の意味</div>
                             <p>
-                                $\hat{\pi} = 4 \times \overline{\sqrt{1-U^2}}$（標本平均の4倍）なので，
-                                $\hat{\pi}$ の分散は $V[\sqrt{1-U_i^2}]$ の分散を計算すれば求まります．
+                                $U\sim U(0,1)$ のとき
+                                $E[\sqrt{1-U^2}]=\int_0^1\sqrt{1-u^2}\,du=\pi/4$ なので，
+                                標本平均
+                                $\frac{1}{n}\sum_{i=1}^n\sqrt{1-U_i^2}$ は $\pi/4$ の近似になります．
+                                その4倍が $\pi$ の推定量 $\hat\pi$ です．
                             </p>
+                            <div class="formula-block">
+                                $$\hat\pi=4\times\frac{1}{n}\sum_{i=1}^n\sqrt{1-U_i^2}$$
+                            </div>
                             <p>
-                                $V[\hat{\pi}] = V\!\left[4\cdot\frac{1}{n}\sum_{i=1}^n\sqrt{1-U_i^2}\right]
-                                = \frac{16}{n}\,V\!\left[\sqrt{1-U^2}\right]$
-                            </p>
-                            <p>
-                                したがって，$SD[\hat{\pi}] = \dfrac{4}{\sqrt{n}}\sqrt{V\!\left[\sqrt{1-U^2}\right]}$ を 0.01 以下にするために必要な $n$ を求めます．
+                                この問題は「$SD[\hat\pi]\approx0.01$ になるように $n$ を決める」だけです．
                             </p>
                         </div>
 
-                        <h3>$V\!\left[\sqrt{1-U^2}\right]$ の計算</h3>
+                        <h3>超ていねいに解く</h3>
 
-                            <h4 class="step-title">Step 1：$E\!\left[1-U^2\right]$ の計算</h4>
-                            <p>
-                                $U \sim U(0,1)$ のとき，$E[U^2] = \int_0^1 u^2\,du = \dfrac{1}{3}$ なので：
-                            </p>
-                            <div class="formula-block">
-                                $$E\!\left[1-U^2\right] = 1 - E[U^2] = 1 - \frac{1}{3} = \frac{2}{3}$$
+                        <h4 class="step-title">Step 1：各項の分散を出す</h4>
+                        <p>
+                            $X=\sqrt{1-U^2}$ と置くと，
+                            $V[X]=E[X^2]-(E[X])^2$ より
+                        </p>
+                        <div class="formula-block">
+                            $$V\!\left[\sqrt{1-U^2}\right]
+                            =E[1-U^2]-\left(\frac{\pi}{4}\right)^2$$
+                        </div>
+                        <p>
+                            $E[U^2]=\int_0^1u^2du=1/3$ なので
+                        </p>
+                        <div class="formula-block">
+                            $$E[1-U^2]=1-\frac{1}{3}=\frac{2}{3}$$
+                        </div>
+                        <div class="formula-block">
+                            $$V\!\left[\sqrt{1-U^2}\right]=\frac{2}{3}-\left(\frac{\pi}{4}\right)^2\approx0.0497\approx0.05$$
                         </div>
 
-                            <h4 class="step-title">Step 2：分散の計算式を展開する</h4>
-                            <p>
-                                分散の公式 $V[X] = E[X^2] - (E[X])^2$ を用います．
-                                $E\!\left[\sqrt{1-U^2}\right] = \pi/4$ が与えられているので：
-                            </p>
-                            <div class="formula-block">
-                                $$V\!\left[\sqrt{1-U^2}\right]
-                                = E\!\left[\left(\sqrt{1-U^2}\right)^2\right] - \left(E\!\left[\sqrt{1-U^2}\right]\right)^2
-                                = E\!\left[1-U^2\right] - \left(\frac{\pi}{4}\right)^2$$
-                            </div>
-                            <p>
-                                Step 1 の結果を代入すると：
-                            </p>
-                            <div class="formula-block">
-                                $$V\!\left[\sqrt{1-U^2}\right]
-                                = \frac{2}{3} - \left(\frac{\pi}{4}\right)^2
-                                \approx 0.6667 - 0.6169 = 0.0497 \approx 0.05$$
-                            </div>
+                        <h4 class="step-title">Step 2：$\hat\pi$ の標準偏差を書き下す</h4>
+                        <p>
+                            独立同分布なので
+                        </p>
+                        <div class="formula-block">
+                            $$V[\hat\pi]
+                            =V\!\left(4\cdot\frac{1}{n}\sum_{i=1}^nX_i\right)
+                            =\frac{16}{n}V[X]
+                            =\frac{16}{n}\times0.05$$
+                        </div>
+                        <p>
+                            よって
+                        </p>
+                        <div class="formula-block">
+                            $$SD[\hat\pi]=\sqrt{V[\hat\pi]}=\sqrt{\frac{16}{n}\times0.05}$$
                         </div>
 
-                            <h4 class="step-title">Step 3：$n$ を求める</h4>
-                            <p>
-                                $SD[\hat{\pi}] = \dfrac{4}{\sqrt{n}}\sqrt{0.05} = 0.01$ とおくと：
-                            </p>
-                            <div class="formula-block">
-                                $$\frac{16}{n} \times 0.05 = (0.01)^2 = 0.0001$$
-                            </div>
-                            <div class="formula-block">
-                                $$n = \frac{16 \times 0.05}{0.0001} = \frac{0.8}{0.0001} = \boldsymbol{8000}$$
-                            </div>
+                        <h4 class="step-title">Step 3：$SD[\hat\pi]=0.01$ から $n$ を逆算</h4>
+                        <div class="formula-block">
+                            $$\frac{16}{n}\times0.05=(0.01)^2=0.0001$$
+                        </div>
+                        <div class="formula-block">
+                            $$n=\frac{16\times0.05}{0.0001}=\frac{0.8}{0.0001}=\boldsymbol{8000}$$
+                        </div>
 
                         <div class="concept-box">
-                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
-                            <p>
-                                $n = \mathbf{8000}$ 組の乱数が必要．
-                            </p>
-                            <p style="margin-top:0.4em;">
-                                計算の流れをまとめると：
-                            </p>
-                            <div class="formula-block">
-                                $$V\!\left[\sqrt{1-U^2}\right] = \frac{2}{3} - \left(\frac{\pi}{4}\right)^2 \approx 0.05
-                                \;\Longrightarrow\;
-                                SD[\hat{\pi}] = \frac{4}{\sqrt{n}}\sqrt{0.05} = 0.01
-                                \;\Longrightarrow\;
-                                n = 8000$$
-                            </div>
+                            <div class="box-title"><i class="fas fa-check-circle"></i> [1] の答え</div>
+                            <p><strong>必要な乱数の組数は $n=8000$</strong></p>
                         </div>
+                        
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 初学者向けポイント</div>
+                            <p>
+                                モンテカルロ法では標準偏差が $1/\sqrt{n}$ で減るので，
+                                誤差を半分にしたければサンプル数は4倍必要になります．
+                            </p>
+                        </div>
+                    </div>
 
                     <!-- ===== 解答 [2] ===== -->
                     <div class="answer-block" id="q321-2">
                         <span class="prob-badge badge-a">[2] 解答・解説</span>
 
-                        <div class="concept-box">
-                            <div class="box-title"><i class="fas fa-map-pin"></i> [2] の方法の「仕掛け」を理解する</div>
-                            <p>
-                                [2] では $\tilde{\pi}$ を次のように変形して分散を減らしています：
-                            </p>
-                            <div class="formula-block">
-                                $$\tilde{\pi} = 4 \times \frac{1}{n}\sum_{i=1}^n \left(\sqrt{1-U_i^2} - \left(\frac{1}{2}-U_i\right)\right)$$
-                            </div>
-                            <p>
-                                $\left(\dfrac{1}{2}-U_i\right)$ を引いているのは，<strong>制御変量法（control variate method）</strong>のアイデアです．
-                            </p>
-                            <p>
-                                なぜ引けるのか？　$\int_0^1\!\left(\frac{1}{2}-u\right)du = 0$ なので，
-                                $E\!\left[\frac{1}{2}-U\right] = 0$ です．つまり，
-                                <strong>期待値が0の量</strong>を足し引きしても推定量 $\tilde{\pi}$ の期待値は変わりません（$E[\tilde{\pi}] = \pi$）．
-                            </p>
-                            <p>
-                                しかし，$\sqrt{1-u^2}$ と $\left(\frac{1}{2}-u\right)$ には<strong>正の相関</strong>があるため，
-                                $\sqrt{1-U^2} - \left(\frac{1}{2}-U\right)$ の分散は $\sqrt{1-U^2}$ 単独の分散より小さくなります．
-                            </p>
-                        </div>
-
-                        <h3>$V\!\left[\sqrt{1-U^2} + U - \tfrac{1}{2}\right]$ の計算</h3>
-
-                            <h4 class="step-title">問題の確率変数を整理する</h4>
-                            <p>
-                                $\tilde{\pi}$ の標本内の各項 $\sqrt{1-U_i^2} - \left(\frac{1}{2}-U_i\right)
-                                = \sqrt{1-U_i^2} + U_i - \frac{1}{2}$ の期待値は：
-                            </p>
-                            <div class="formula-block">
-                                $$E\!\left[\sqrt{1-U^2} + U - \frac{1}{2}\right]
-                                = \underbrace{E\!\left[\sqrt{1-U^2}\right]}_{=\,\pi/4}
-                                + \underbrace{E[U]}_{=\,1/2} - \frac{1}{2}
-                                = \frac{\pi}{4}$$
-                            </div>
-                            <p>
-                                したがって $E[\tilde{\pi}] = 4 \times \pi/4 = \pi$ であり，推定量は不偏です．
-                            </p>
-                        </div>
-
-                            <h4 class="step-title">分散を与えられた積分で求める</h4>
-                            <p>
-                                分散の定義 $V[X] = E\!\left[(X - E[X])^2\right]$ より：
-                            </p>
-                            <div class="formula-block">
-                                $$V\!\left[\sqrt{1-U^2}+U-\frac{1}{2}\right]
-                                = E\!\left[\left(\sqrt{1-U^2}+U-\frac{1}{2}-\frac{\pi}{4}\right)^2\right]
-                                = \int_0^1\!\left(\sqrt{1-u^2}+u-\frac{1}{2}-\frac{\pi}{4}\right)^2 du$$
-                            </div>
-                            <p>
-                                問題で与えられた積分値を用いると：
-                            </p>
-                            <div class="formula-block">
-                                $$V\!\left[\sqrt{1-U^2}+U-\frac{1}{2}\right]
-                                = \frac{68-12\pi-3\pi^2}{48} = 0.0144$$
-                            </div>
-
-                            <h4 class="step-title">$n$ を求める</h4>
-                            <p>
-                                $\tilde{\pi} = 4 \times \dfrac{1}{n}\displaystyle\sum_{i=1}^n\left(\sqrt{1-U_i^2}+U_i-\frac{1}{2}\right)$ なので，
-                            </p>
-                            <div class="formula-block">
-                                $$V[\tilde{\pi}] = \frac{16}{n} \times 0.0144$$
-                            </div>
-                            <p>
-                                $SD[\tilde{\pi}] = \dfrac{4}{\sqrt{n}}\sqrt{0.0144} = 0.01$ とおくと：
-                            </p>
-                            <div class="formula-block">
-                                $$\frac{16}{n} \times 0.0144 = (0.01)^2 = 0.0001$$
-                            </div>
-                            <div class="formula-block">
-                                $$n = \frac{16 \times 0.0144}{0.0001} = \frac{0.2304}{0.0001} = \boldsymbol{2304}$$
-                            </div>
 
                         <div class="concept-box">
-                            <div class="box-title"><i class="fas fa-check-circle"></i> 答え</div>
+                            <div class="box-title"><i class="fas fa-map-pin"></i> [2] の核心（なぜ速くなるか）</div>
                             <p>
-                                $n \approx \mathbf{2304}$ 組の乱数が必要．
+                                [2] は制御変量法です．
+                                $\left(\frac{1}{2}-U\right)$ は期待値が0なので，これを引いても推定量の平均は変わりませんが，
+                                分散は小さくできます．
                             </p>
                             <div class="formula-block">
-                                $$V\!\left[\sqrt{1-U^2}+U-\frac{1}{2}\right] = 0.0144
-                                \;\Longrightarrow\;
-                                SD[\tilde{\pi}] = \frac{4}{\sqrt{n}}\sqrt{0.0144} = 0.01
-                                \;\Longrightarrow\;
-                                n = 2304$$
+                                $$\tilde\pi
+                                =4\times\frac{1}{n}\sum_{i=1}^n\left(\sqrt{1-U_i^2}-\left(\frac{1}{2}-U_i\right)\right)
+                                =4\times\frac{1}{n}\sum_{i=1}^n\left(\sqrt{1-U_i^2}+U_i-\frac{1}{2}\right)$$
                             </div>
                         </div>
 
-                    <!-- ===== 2つの方法の比較 ===== -->
+                        <h3>超ていねいに解く</h3>
+
+                        <h4 class="step-title">Step 1：不偏性（平均はちゃんと $\pi$）を確認</h4>
+                        <div class="formula-block">
+                            $$E\!\left[\sqrt{1-U^2}+U-\frac{1}{2}\right]
+                            =E\!\left[\sqrt{1-U^2}\right]+E[U]-\frac{1}{2}
+                            =\frac{\pi}{4}+\frac{1}{2}-\frac{1}{2}
+                            =\frac{\pi}{4}$$
+                        </div>
+                        <p>
+                            したがって $E[\tilde\pi]=4\times\pi/4=\pi$ です．
+                        </p>
+
+                        <h4 class="step-title">Step 2：各項の分散を与えられた積分で求める</h4>
+                        <p>
+                            $Y=\sqrt{1-U^2}+U-\frac{1}{2}$ と置くと
+                        </p>
+                        <div class="formula-block">
+                            $$V[Y]
+                            =E\!\left[\left(Y-E[Y]\right)^2\right]
+                            =\int_0^1\left(\sqrt{1-u^2}+u-\frac{1}{2}-\frac{\pi}{4}\right)^2du$$
+                        </div>
+                        <p>
+                            問題の与式より
+                        </p>
+                        <div class="formula-block">
+                            $$V[Y]=\frac{68-12\pi-3\pi^2}{48}=0.0144$$
+                        </div>
+
+                        <h4 class="step-title">Step 3：$SD[\tilde\pi]=0.01$ から $n$ を求める</h4>
+                        <div class="formula-block">
+                            $$V[\tilde\pi]=\frac{16}{n}V[Y]=\frac{16}{n}\times0.0144$$
+                        </div>
+                        <div class="formula-block">
+                            $$\frac{16}{n}\times0.0144=(0.01)^2=0.0001$$
+                        </div>
+                        <div class="formula-block">
+                            $$n=\frac{16\times0.0144}{0.0001}=\frac{0.2304}{0.0001}=\boldsymbol{2304}$$
+                        </div>
+
+                        <div class="concept-box">
+                            <div class="box-title"><i class="fas fa-check-circle"></i> [2] の答え</div>
+                            <p><strong>必要な乱数の組数は $n\approx2304$</strong></p>
+                        </div>
+                        
+                        <div class="concept-box" style="margin-top:0.8em;">
+                            <div class="box-title"><i class="fas fa-lightbulb"></i> 初学者向けポイント</div>
+                            <p>
+                                [1] の 8000 組に対して [2] は 2304 組で同じ精度になります．
+                                つまり，制御変量法は「同じ精度をより少ない乱数で達成する」テクニックです．
+                            </p>
+                        </div>
+                    </div>
                     <div class="answer-block" id="comparison">
                         <span class="prob-badge badge-a">2つの方法の比較</span>
 

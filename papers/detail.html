@@ -116,6 +116,11 @@
                     <i class="fab fa-github"></i> GitHub
                 </a>`;
             }
+            if (links.project) {
+                html += `<a href="${links.project}" target="_blank" rel="noopener noreferrer" class="detail-link">
+                    <i class="fas fa-globe"></i> Project
+                </a>`;
+            }
             return html;
         }
 
@@ -193,12 +198,13 @@
                     ${paper.tags.map(t => `<span class="detail-tag">${esc(t)}</span>`).join('')}
                 </div>
             </div>
-            ${paper.links && (paper.links.arxiv || paper.links.github) ? `
+            ${paper.links && (paper.links.arxiv || paper.links.github || paper.links.project) ? `
             <div class="sidebar-card">
                 <h3>リンク</h3>
                 <div style="display:flex;flex-direction:column;gap:8px;">
                     ${paper.links.arxiv ? `<a href="${paper.links.arxiv}" target="_blank" rel="noopener noreferrer" class="detail-link primary" style="justify-content:center;"><i class="fas fa-file-pdf"></i> arXiv</a>` : ''}
                     ${paper.links.github ? `<a href="${paper.links.github}" target="_blank" rel="noopener noreferrer" class="detail-link" style="justify-content:center;"><i class="fab fa-github"></i> GitHub</a>` : ''}
+                    ${paper.links.project ? `<a href="${paper.links.project}" target="_blank" rel="noopener noreferrer" class="detail-link" style="justify-content:center;"><i class="fas fa-globe"></i> Project</a>` : ''}
                 </div>
             </div>` : ''}
             <a href="index.html" class="back-btn">
