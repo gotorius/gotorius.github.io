@@ -4,218 +4,121 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ryosuke Goto</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <a href="#" class="nav-logo">R.Goto</a>
-            <ul class="nav-menu">
-                <li><a href="#top">Home</a></li>
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-dropdown-toggle">Study <i class="fas fa-chevron-down"></i></a>
-                    <ul class="nav-dropdown-menu">
-                        <li><a href="statistics/index.html"><i class="fas fa-chart-bar"></i> 統計学ノート</a></li>
-                        <li><a href="papers/index.html"><i class="fas fa-file-alt"></i> 論文まとめ</a></li>
-                    </ul>
-                </li>
-                <li class="nav-dropdown">
-                    <a href="#" class="nav-dropdown-toggle">Application <i class="fas fa-chevron-down"></i></a>
-                    <ul class="nav-dropdown-menu">
-                        <li><a href="Typing/index.html">タイピング道場</a></li>
-                        <li><a href="boardgames/index.html">ボードゲーム</a></li>
-                    </ul>
-                </li>
-            </ul>
-            <button class="nav-toggle" aria-label="メニュー">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
+    <div class="wrapper">
+        <header>
+            <a class="site-name" href="#">Ryosuke Goto</a>
+            <nav>
+                <a href="statistics/index.html">Statistics</a>
+                <a href="papers/index.html">Papers</a>
+                <a href="Typing/index.html">Typing</a>
+                <a href="boardgames/index.html">Games</a>
+            </nav>
+        </header>
 
-    <main>
-        <section class="profile-hero" id="top">
-            <div class="container">
-                <div class="profile-hero-grid">
-                    <div class="profile-hero-icon">
-                        <i class="fas fa-user"></i>
-                    </div>
-                    <div class="profile-hero-body">
-                        <h1 class="profile-hero-name">後藤 良輔 <span class="profile-hero-name-en">Ryosuke Goto</span></h1>
-                        <p class="profile-hero-affiliation">筑波大学大学院 理工情報生命学術院 システム情報工学研究群 情報理工学位プログラム</p>
-                        <p class="profile-hero-affiliation">
-                            修士1年
-                        </p>
-
-                        <div class="profile-hero-links">
-                            <a href="https://github.com/gotorius" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
-                            <a href="mailto:gotorius1108@gmail.com" title="Mail"><i class="fas fa-envelope"></i></a>
-                            <a href="https://atcoder.jp/users/Tonakun" target="_blank" title="AtCoder" class="profile-hero-link-wide">
-                                <span>AtCoder</span>
-                            </a>
-                            <a href="https://www.kaggle.com/gotorius" target="_blank" title="Kaggle" class="profile-hero-link-wide">
-                                <span>Kaggle</span>
-                            </a>
-                        </div>
+        <main>
+            <section class="profile-section">
+                <div class="profile-text">
+                    <h1>後藤 良輔 <span class="name-en">Ryosuke Goto</span></h1>
+                    <p class="affil">
+                        筑波大学大学院 理工情報生命学術院<br>
+                        システム情報工学研究群 情報理工学位プログラム（修士1年）
+                    </p>
+                    <p class="contact-links">
+                        <a href="mailto:gotorius1108@gmail.com">Email</a> /
+                        <a href="https://github.com/gotorius" target="_blank">GitHub</a> /
+                        <a href="https://atcoder.jp/users/Tonakun" target="_blank">AtCoder</a> /
+                        <a href="https://www.kaggle.com/gotorius" target="_blank">Kaggle</a>
+                    </p>
+                    <p class="bio">
+                        2026年4月より筑波大学大学院 情報理工学位プログラムに在籍。
+                        学部（九州工業大学）では<strong>生命情報学</strong>・<strong>機械学習</strong>の基礎を学び、
+                        卒業研究では医用画像処理と AI セキュリティに取り組みました。
+                        現在は<strong>コンピュータビジョン</strong>の研究に従事しており、
+                        ドローンを活用した空撮データセット構築・環境認識・異常検知に強い関心を持っています。
+                        将来的には防災・救助活動分野への技術応用を目指しています。
+                    </p>
+                </div>
+                <div class="profile-photo">
+                    <div class="photo-box">
+                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#ccc">
+                            <circle cx="50" cy="36" r="20"/>
+                            <ellipse cx="50" cy="82" rx="34" ry="22"/>
+                        </svg>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class="section" id="about">
-            <div class="container">
-                <h2 class="section-title">About</h2>
+            <section>
+                <h2>Activities</h2>
 
-                <div class="about-content">
-                    <div class="about-card">
-                        <h3 class="about-card-title">
-                            <i class="fas fa-graduation-cap"></i>
-                            バックグラウンド
-                        </h3>
-                        <p>
-                            2026年3月まで<strong>九州工業大学 情報工学部 生命化学情報工学科</strong>に在籍し、
-                            学部では<strong>生命情報学</strong>や<strong>機械学習</strong>の基礎を学びながら、
-                            卒業研究では医用画像処理とAIセキュリティに関するテーマに取り組みました。
-                        </p>
-                        <p>
-                            2026年4月より<strong>筑波大学大学院 システム情報工学研究群 情報理工学位プログラム（修士1年）</strong>に在籍し、
-                            本格的に<strong>コンピュータビジョン</strong>の研究に取り組んでいます。
-                        </p>
+                <div class="entry">
+                    <div class="entry-meta">
+                        <span class="badge">Hackathon</span>
+                        <span class="year">2026</span>
                     </div>
-                    <div class="about-card">
-                        <h3 class="about-card-title">
-                            <i class="fas fa-lightbulb"></i>
-                            興味のあるテーマ
-                        </h3>
-                        <div class="interest-tags">
-                            <span class="interest-tag">ドローン</span>
-                            <span class="interest-tag">空撮データセット構築</span>
-                            <span class="interest-tag">環境認識</span>
-                            <span class="interest-tag">コンピュータビジョン</span>
-                            <span class="interest-tag">画像解析</span>
-                        </div>
-                        <p class="mt-2">
-                            ドローンを活用したデータセットの構築および解析に強い関心があります。
-                            特に、山岳や森林などの環境下においてデータを収集し、
-                            コンピュータビジョン技術を用いて環境認識や異常検知を行う研究に取り組みたいと考えています。
-                            将来的には、防災や救助活動などの分野で活用できる技術の実現を目指しています。
+                    <div class="entry-body">
+                        <h3>Progateハッカソン powered by AWS</h3>
+                        <p class="authors"><strong>後藤 良輔</strong> ほか2名</p>
+                        <p class="venue">企業賞 受賞 — 2026年4月</p>
+                        <p class="links">
+                            <a href="https://github.com/Miu0721/hackathon20260413" target="_blank">Code</a> /
+                            <a href="https://topaz.dev/projects/845d18ec1a23eb5b1052" target="_blank">アプリ概要</a> /
+                            <a href="https://progate.connpass.com/event/386402/" target="_blank">イベントページ</a>
                         </p>
                     </div>
                 </div>
-            </div>
-        </section>
 
-
-        <section class="section section-alt" id="projects">
-            <div class="container">
-
-                <div class="project-section">
-                    <h3 class="project-section-title">
-                        <i class="fas fa-trophy"></i>
-                        活動実績
-                    </h3>
-                    <div class="publications">
-                        <div class="publication-item">
-                            <span class="publication-badge domestic">ハッカソン</span>
-                            <h4 class="publication-title">
-                                Progateハッカソン powered by AWS
-                            </h4>
-                            <p class="publication-authors">
-                                <strong>後藤 良輔</strong> ほか2名
-                            </p>
-                            <p class="publication-venue">
-                                2026年4月 企業賞 受賞
-                            </p>
-                            <div class="publication-links">
-                                <a href="https://github.com/Miu0721/hackathon20260413" target="_blank" class="publication-link" title="GitHub">
-                                    <i class="fab fa-github"></i> Code
-                                </a>
-                                <a href="https://topaz.dev/projects/845d18ec1a23eb5b1052" target="_blank" class="publication-link" title="アプリ概要">
-                                    <i class="fas fa-external-link-alt"></i> アプリ概要
-                                </a>
-                                <a href="https://progate.connpass.com/event/386402/" target="_blank" class="publication-link" title="イベントページ">
-                                    <i class="fas fa-calendar-alt"></i> イベントページ
-                                </a>
-                            </div>
-                        </div>
-                        <div class="publication-item">
-                            <span class="publication-badge domestic">国内発表</span>
-                            <h4 class="publication-title">
-                                拡散モデルを用いた敵対的摂動除去による医用画像分類システム防御
-                            </h4>
-                            <p class="publication-authors">
-                                <strong>後藤 良輔</strong>
-                            </p>
-                            <p class="publication-venue">
-                                SIGBIO（情報処理学会 バイオ情報学研究会） 2026年3月 発表
-                            </p>
-                            <div class="publication-links">
-                                <a href="#" class="publication-link" title="PDF">
-                                    <i class="fas fa-file-pdf"></i> PDF
-                                </a>
-                                <a href="https://github.com/gotorius/projects" target="_blank" class="publication-link" title="GitHub">
-                                    <i class="fab fa-github"></i> Code
-                                </a>
-                                <a href="https://www.ipsj.or.jp/kenkyukai/event/bio84.html" target="_blank" class="publication-link" title="学会ページ">
-                                    <i class="fas fa-external-link-alt"></i> 学会ページ
-                                </a>
-                            </div>
-                        </div>
-                        <div class="publication-item">
-                            <span class="publication-badge matsuo">松尾研講座</span>
-                            <h4 class="publication-title">修了講座一覧</h4>
-                            <table class="publication-table">
-                                <thead>
-                                    <tr>
-                                        <th>講座名</th>
-                                        <th>主催</th>
-                                        <th>修了年</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>GCI 2024Winter</td>
-                                        <td>東京大学松尾研究室</td>
-                                        <td>2024年</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Deep Learning Basic 2025 Autumn</td>
-                                        <td>東京大学松尾研究室</td>
-                                        <td>2025年</td>
-                                    </tr>
-                                    <tr>
-                                        <td>大規模言語モデル講座2025基礎編</td>
-                                        <td>東京大学松尾研究室</td>
-                                        <td>2025年</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="entry">
+                    <div class="entry-meta">
+                        <span class="badge">国内発表</span>
+                        <span class="year">2026</span>
+                    </div>
+                    <div class="entry-body">
+                        <h3>拡散モデルを用いた敵対的摂動除去による医用画像分類システム防御</h3>
+                        <p class="authors"><strong>後藤 良輔</strong></p>
+                        <p class="venue">情報処理学会 バイオ情報学研究会（SIGBIO） — 2026年3月</p>
+                        <p class="links">
+                            <a href="sigbio_後藤.pdf" target="_blank">PDF</a> /
+                            <a href="https://github.com/gotorius/projects" target="_blank">Code</a> /
+                            <a href="https://www.ipsj.or.jp/kenkyukai/event/bio84.html" target="_blank">学会ページ</a>
+                        </p>
                     </div>
                 </div>
 
-                <div class="project-section">
-                    <h3 class="project-section-title">
-                        <i class="fas fa-certificate"></i>
-                        資格
-                    </h3>
-                    <div class="awards-list">
-                        <div class="award-item">
-                            <span class="award-year">2026年</span>
-                            <div class="award-content">
-                                <h4>統計検定準１級</h4>
-                                <p>日本統計学会</p>
-                            </div>
-                        </div>
+                <div class="entry">
+                    <div class="entry-meta">
+                        <span class="badge">講座</span>
+                        <span class="year">2024–25</span>
+                    </div>
+                    <div class="entry-body">
+                        <h3>東京大学 松尾研究室 修了講座</h3>
+                        <ul class="course-list">
+                            <li>GCI 2024 Winter（2024年）</li>
+                            <li>Deep Learning Basic 2025 Autumn（2025年）</li>
+                            <li>大規模言語モデル講座 2025 基礎編（2025年）</li>
+                        </ul>
                     </div>
                 </div>
+            </section>
 
+            <section>
+                <h2>Qualifications</h2>
+                <ul class="qual-list">
+                    <li>
+                        <span class="qual-year">2026</span>
+                        <span>統計検定準１級（日本統計学会）</span>
+                    </li>
+                </ul>
+            </section>
+        </main>
 
-            </div>
-        </section>
-    </main>
-
+        <footer>
+            <p>&copy; 2026 Ryosuke Goto</p>
+        </footer>
+    </div>
+</body>
+</html>
