@@ -1,0 +1,46 @@
+/* The hero is the 3D scene itself: no panel, controls, or visible captions. */
+.motion-hero {
+    position: relative;
+    width: 100%;
+    max-width: 1120px;
+    height: clamp(340px, 42vw, 490px);
+    margin: 0 auto;
+    background: #fff;
+    isolation: isolate;
+}
+
+#motion-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: grab;
+    touch-action: pan-y;
+    opacity: 0;
+}
+
+#motion-canvas:active { cursor: grabbing; }
+#motion-canvas:focus-visible { outline: 1px dashed #a7b7a5; outline-offset: -8px; }
+.motion-hero[data-state="ready"] #motion-canvas { opacity: 1; }
+
+.motion-fallback {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #365447;
+    font-family: 'Lato', sans-serif;
+    font-size: clamp(2rem, 5.5vw, 4rem);
+    line-height: 1.08;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+}
+
+.motion-fallback span { margin-top: 0.15em; }
+.motion-hero[data-state="ready"] .motion-fallback { display: none; }
+
+@media (max-width: 580px) {
+    .motion-hero { height: clamp(290px, 82vw, 340px); }
+}

@@ -3,144 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ryosuke Goto</title>
+    <title>Ryosuke Goto | Computer Vision &amp; Motion</title>
+    <meta name="description" data-i18n-content="meta.description" content="後藤良輔の研究プロフィール。コンピュータビジョンとText-to-3D Hand-Object Interactionの研究、経歴、活動を紹介します。">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=inline-github-17">
+    <link rel="stylesheet" href="motion.css?v=inline-affiliations-10">
 </head>
-<body>
-    <div class="wrapper">
-        <header>
-            <a class="site-name" href="#"></a>
-            <nav>
-                <a href="https://statistics-black.vercel.app/" target="_blank">Statistics</a>
-                <a href="https://papers-snowy.vercel.app/" target="_blank">Papers</a>
-                <a href="https://games-self-chi.vercel.app/" target="_blank">Games</a>
+<body id="top">
+    <header class="site-header">
+        <div class="nav-shell">
+            <a class="site-name" href="#top" aria-label="ページの先頭へ" data-i18n-aria-label="nav.homeAria">
+                <span class="site-name-text">Ryosuke Goto</span>
+            </a>
+            <nav class="site-nav" aria-label="メインメニュー" data-i18n-aria-label="nav.primaryAria">
+                <details class="apps-menu" id="apps-menu">
+                    <summary class="apps-trigger" id="apps-toggle" aria-controls="apps-panel" aria-expanded="false">
+                        <span>AI Apps</span>
+                        <svg class="apps-chevron" viewBox="0 0 16 16" aria-hidden="true"><path d="m4 6 4 4 4-4"/></svg>
+                    </summary>
+                    <div class="apps-panel" id="apps-panel">
+                        <p class="apps-note" data-i18n="apps.note">AIで作成したWebApp/Site</p>
+                        <a class="app-link" href="https://statistics-black.vercel.app/" target="_blank" rel="noopener noreferrer"><span class="app-link-copy"><strong>Statistics</strong><span data-i18n="apps.statistics.description">統計を学ぶ</span></span></a>
+                        <a class="app-link" href="https://papers-snowy.vercel.app/" target="_blank" rel="noopener noreferrer"><span class="app-link-copy"><strong>Papers</strong><span data-i18n="apps.papers.description">論文を読む</span></span></a>
+                        <a class="app-link" href="https://games-self-chi.vercel.app/" target="_blank" rel="noopener noreferrer"><span class="app-link-copy"><strong>Games</strong><span data-i18n="apps.games.description">遊んでみる</span></span></a>
+                    </div>
+                </details>
+                <span class="nav-divider" aria-hidden="true"></span>
+                <button type="button" class="language-toggle" id="language-toggle" aria-label="Switch to English">
+                    <span id="language-label">EN</span>
+                </button>
             </nav>
-        </header>
+        </div>
+    </header>
 
-        <main>            <section class="profile-section">
-                <div class="profile-text">
-                    <h1>後藤 良輔 <span class="name-en">Ryosuke Goto</span></h1>
-                    <p class="affil">
-                        筑波大学大学院 理工情報生命学術院<br>
-                        システム情報工学研究群 情報理工学位プログラム（修士1年）
-                    </p>
-                    <p class="contact-links">
-                        <a href="mailto:gotorius1108@gmail.com">Email</a> /
-                        <a href="https://github.com/gotorius" target="_blank">GitHub</a> /
-                        <a href="https://atcoder.jp/users/Tonakun" target="_blank">AtCoder</a> /
-                        <a href="https://www.kaggle.com/gotorius" target="_blank">Kaggle</a> /
-                        <a href="https://www.tsukubaowls.com/member/triathlon/goto-ryosuke" target="_blank">Triathlon</a>
-                    </p>
-                    <p class="bio">
-                        2026年4月より筑波大学大学院 情報理工学位プログラムに在籍しています。
-                        学部（九州工業大学）では生命情報学・機械学習の基礎を学び、卒業研究では医用画像処理とAIセキュリティに取り組みました。
-                        現在は筑波大学連携大学院として、産業技術総合研究所（AIST）ヒューマンセンタードビジョン研究室・佐藤研究室にて、コンピュータビジョンの研究に従事しています。
-                        現在の研究では、テキストで与えられた指示と物体形状情報をもとに、人の手と物体の3次元的な相互作用動作を生成するText-to-3D Hand-Object Interaction（Text2HOI）に関する研究に取り組んでいます。
-                    </p>
-                </div>
-                <div class="profile-photo">
-                    <div class="photo-box">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#ccc">
-                            <circle cx="50" cy="36" r="20"/>
-                            <ellipse cx="50" cy="82" rx="34" ry="22"/>
-                        </svg>
-                    </div>
-                </div>
-            </section>
+    <div class="motion-hero" id="motion-hero" data-state="loading">
+        <canvas id="motion-canvas" tabindex="0" role="img" data-i18n-aria-label="canvas.description" aria-label="黄色いロボットアームが手前に散らばったGOTOの文字ブロックを拾ってRYOSUKEの上に並べ、右から来たヒューマノイドが蹴りやパンチで崩し、最後は昇竜拳でGを打ち上げて去る、繰り返しのアニメーション。ドラッグまたは矢印キーで視点を回転。ロボットや文字のクリック、またはEnterキーで停止・再開。Escapeキーで停止します。"></canvas>
+        <p class="motion-fallback" aria-hidden="true">GOTO<span>RYOSUKE</span></p>
+    </div>
 
-            <section>
-                <h2>Internships</h2>
-
-                <div class="entry">
-                    <div class="entry-meta">
-                        <span class="badge">RA</span>
-                        <span class="year">2026–</span>
+    <div class="wrapper">
+        <main>
+            <section class="profile-section" aria-labelledby="profile-name">
+                <div class="profile-identity">
+                    <h1 id="profile-name"><span data-i18n="profile.name">後藤 良輔</span><span class="name-en" data-i18n="profile.secondaryName">Ryosuke Goto</span></h1>
+                    <div class="affiliations">
+                        <div class="affiliation-block">
+                            <p class="affiliation-name" data-i18n="affiliation.program">筑波大学</p>
+                            <p class="affiliation-detail"><span data-i18n="affiliation.schoolName">理工情報生命学術院</span><span data-i18n="affiliation.schoolGroup">システム情報工学研究群</span></p>
+                            <p class="degree-label"><span data-i18n="affiliation.degree">情報理工学位プログラム</span><span class="degree-status">（<span data-i18n="affiliation.year">修士1年</span>）</span></p>
+                        </div>
+                        <div class="affiliation-block">
+                            <p class="affiliation-name" data-i18n="affiliation.lab">ヒューマンセンタードビジョン研究室</p>
+                            <p class="affiliation-detail" data-i18n="affiliation.aist">産業技術総合研究所（AIST）</p>
+                        </div>
                     </div>
-                    <div class="entry-body">
-                        <h3>産業技術総合研究所（AIST） Research Assistant</h3>
-                        <p class="venue">2026年9月–</p>
-                        <p class="venue">コンピュータビジョン領域</p>
-                    </div>
-                </div>
-
-                <div class="entry">
-                    <div class="entry-meta">
-                        <span class="badge">Internship</span>
-                        <span class="year">2026</span>
-                    </div>
-                    <div class="entry-body">
-                        <h3>日本電気株式会社（NEC）</h3>
-                        <p class="venue">2026年7月–8月</p>
-                        <p class="venue">AIエンジニア</p>
-                    </div>
-                </div>
-        
-            </section>
-
-            <section>
-                <h2>Activities</h2>
-
-                <div class="entry">
-                    <div class="entry-meta">
-                        <span class="badge">Hackathon</span>
-                        <span class="year">2026</span>
-                    </div>
-                    <div class="entry-body">
-                        <h3>Progateハッカソン powered by AWS</h3>
-                        <p class="venue">企業賞 受賞 — 2026年4月</p>
-                        <p class="links">
-                            <a href="https://github.com/Miu0721/hackathon20260413" target="_blank">Code</a> /
-                            <a href="https://progate.connpass.com/event/386402/" target="_blank">イベントページ</a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="entry">
-                    <div class="entry-meta">
-                        <span class="badge">conference</span>
-                        <span class="year">2026</span>
-                    </div>
-                    <div class="entry-body">
-                        <h3>拡散モデルを用いた敵対的摂動除去による医用画像分類システム防御</h3>
-                        <p class="venue">情報処理学会 バイオ情報学研究会（SIGBIO） — 2026年3月</p>
-                        <p class="links">
-                            <a href="file/sigbio_後藤.pdf" target="_blank">PDF</a> /
-                            <a href="https://github.com/gotorius/projects" target="_blank">Code</a> /
-                            <a href="https://www.ipsj.or.jp/kenkyukai/event/bio84.html" target="_blank">学会ページ</a>
-                        </p>
-                    </div>
-                </div>
-
-                <div class="entry">
-                    <div class="entry-meta">
-                        <span class="badge">seminar</span>
-                        <span class="year">2024–25</span>
-                    </div>
-                    <div class="entry-body">
-                        <h3>東京大学 松尾研究室 修了講座</h3>
-                        <ul class="course-list">
-                            <li>GCI 2024 Winter（2024年）/
-                            Deep Learning Basic 2025 Autumn（2025年）/大規模言語モデル講座基礎編（2025年）</li>
+                    <nav class="contact-links" aria-label="連絡先・プロフィール" data-i18n-aria-label="contact.aria">
+                        <ul class="contact-list">
+                            <li><a href="mailto:gotorius1108@gmail.com">Email</a><span class="contact-separator" aria-hidden="true">/</span></li>
+                            <li><a href="https://github.com/gotorius" target="_blank" rel="noopener noreferrer">GitHub</a><span class="contact-separator" aria-hidden="true">/</span></li>
+                            <li><a href="https://atcoder.jp/users/Tonakun" target="_blank" rel="noopener noreferrer">AtCoder</a><span class="contact-separator" aria-hidden="true">/</span></li>
+                            <li><a href="https://www.kaggle.com/gotorius" target="_blank" rel="noopener noreferrer">Kaggle</a><span class="contact-separator" aria-hidden="true">/</span></li>
+                            <li><a href="https://www.tsukubaowls.com/member/triathlon/goto-ryosuke" target="_blank" rel="noopener noreferrer">Triathlon</a></li>
                         </ul>
+                    </nav>
+                </div>
+                <div class="profile-research">
+                    <div class="bio">
+                        <p><span data-i18n="bio.1.before">2026年4月より</span><a href="https://www.cs.tsukuba.ac.jp/" target="_blank" rel="noopener noreferrer" data-i18n="bio.1.program">筑波大学大学院 情報理工学位プログラム</a><span data-i18n="bio.1.after">に在籍しています。</span></p>
+                        <p data-i18n="bio.2">学部（九州工業大学）では生命情報学・機械学習の基礎を学び、卒業研究では医用画像処理とAIセキュリティに取り組みました。</p>
+                        <p><span data-i18n="bio.3.before">現在は筑波大学連携大学院として、</span><a href="https://www.aist.go.jp/" target="_blank" rel="noopener noreferrer" data-i18n="bio.3.aist">産業技術総合研究所（AIST）</a><span data-i18n="bio.3.between"> </span><a href="https://satoh-yutaka.github.io/univ.html" target="_blank" rel="noopener noreferrer" data-i18n="bio.3.lab">ヒューマンセンタードビジョン研究室・佐藤研究室</a><span data-i18n="bio.3.after">にて、コンピュータビジョンの研究に従事しています。</span></p>
+                        <p data-i18n="bio.4">現在の研究では、テキストで与えられた指示と物体形状情報をもとに、人の手と物体の3次元的な相互作用動作を生成するText-to-3D Hand-Object Interaction（Text2HOI）に関する研究に取り組んでいます。</p>
                     </div>
                 </div>
             </section>
 
-            <section>
-                <h2>Qualifications</h2>
-                <ul class="qual-list">
-                    <li>
-                        <span class="qual-year">2026</span>
-                        <span>統計検定準１級（日本統計学会）</span>
-                    </li>
-                </ul>
+            <section class="records-section" aria-labelledby="experience-title">
+                <div class="section-heading"><h2 id="experience-title" data-i18n="section.experience">Experience</h2></div>
+                <article class="entry">
+                    <div class="entry-meta"><span class="year">2026–</span><span class="badge" data-i18n="badge.ra">RA</span></div>
+                    <div class="entry-body"><h3><a href="https://www.aist.go.jp/" target="_blank" rel="noopener noreferrer" data-i18n="experience.aist.title">産業技術総合研究所（AIST）Research Assistant</a></h3><p class="venue" data-i18n="experience.aist.dates">2026年9月–</p><p class="entry-description" data-i18n="experience.aist.description">AIST FRONTia・Vision</p></div>
+                </article>
+                <article class="entry">
+                    <div class="entry-meta"><span class="year">2026</span><span class="badge" data-i18n="badge.internship">Internship</span></div>
+                    <div class="entry-body"><h3><a href="https://group.nec/global/ja/" target="_blank" rel="noopener noreferrer" data-i18n="experience.nec.title">日本電気株式会社（NEC）</a></h3><p class="venue" data-i18n="experience.nec.dates">2026年7月–8月</p><p class="entry-description" data-i18n="experience.nec.description">AI Engineer</p></div>
+                </article>
+            </section>
+
+            <section class="records-section" aria-labelledby="activities-title">
+                <div class="section-heading"><h2 id="activities-title" data-i18n="section.activities">Activities</h2></div>
+                <article class="entry">
+                    <div class="entry-meta"><span class="year">2026</span><span class="badge badge-gold" data-i18n="badge.hackathon">Hackathon</span></div>
+                    <div class="entry-body"><h3><a href="https://progate.connpass.com/event/386402/" target="_blank" rel="noopener noreferrer" data-i18n="activity.hackathon.title">Progateハッカソン powered by AWS</a></h3><p class="venue"><span data-i18n="activity.hackathon.award">企業賞 受賞 — 2026年4月</span> <a class="inline-link" href="https://github.com/Miu0721/hackathon20260413" target="_blank" rel="noopener noreferrer">（<span data-i18n="links.code">GitHub</span>）</a></p></div>
+                </article>
+                <article class="entry">
+                    <div class="entry-meta"><span class="year">2026</span><span class="badge" data-i18n="badge.conference">国内学会</span></div>
+                    <div class="entry-body"><h3 data-i18n="activity.paper.title">拡散モデルを用いた敵対的摂動除去による医用画像分類システム防御</h3><p class="venue"><a href="https://www.ipsj.or.jp/kenkyukai/event/bio84.html" target="_blank" rel="noopener noreferrer" data-i18n="activity.paper.venue">情報処理学会 バイオ情報学研究会（SIGBIO）— 2026年3月</a> <a class="inline-link" href="https://github.com/gotorius/projects" target="_blank" rel="noopener noreferrer">（<span data-i18n="links.code">GitHub</span>）</a></p></div>
+                </article>
+                <article class="entry">
+                    <div class="entry-meta"><span class="year">2024–25</span><span class="badge" data-i18n="badge.courses">講座</span></div>
+                    <div class="entry-body"><h3><a href="https://weblab.t.u-tokyo.ac.jp/" target="_blank" rel="noopener noreferrer" data-i18n="activity.courses.title">東京大学 松尾研究室 修了講座</a></h3><ul class="course-list"><li data-i18n="activity.courses.gci">GCI 2024 Winter（2024年）</li><li data-i18n="activity.courses.dl">Deep Learning Basic 2025 Autumn（2025年）</li><li data-i18n="activity.courses.llm">大規模言語モデル講座 基礎編（2025年）</li></ul></div>
+                </article>
+            </section>
+
+            <section class="records-section" aria-labelledby="qualifications-title">
+                <div class="section-heading"><h2 id="qualifications-title" data-i18n="section.qualifications">Qualifications</h2></div>
+                <ul class="qual-list"><li><span class="qual-year">2026</span><span data-i18n="qualification.statistics">統計検定準１級（日本統計学会）</span></li></ul>
             </section>
         </main>
-
-        <footer>
-            <p>&copy; 2026 Ryosuke Goto</p>
-        </footer>
+        <footer><p>&copy; 2026 Ryosuke Goto</p></footer>
     </div>
+    <script defer src="site-ui.js?v=entry-links-16"></script>
+    <script defer src="motion.bundle.js?v=uppercut-finale-15"></script>
 </body>
 </html>
